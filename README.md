@@ -11,13 +11,13 @@
 |---|---|---|
 | 阶段 0 | 仓库检查与计划 | ✅ 已完成（2026-10-12） |
 | 阶段 1 | 环境与数据管道 | ✅ 已完成（2026-10-12） |
-| 阶段 2 | 模型基线（ResNet18 训练/预测） | ⬜ 未开始 |
+| 阶段 2 | 模型基线（ResNet18 训练/预测） | ✅ 已完成（2026-10-13，最佳验证精度 0.8401） |
 | 阶段 3 | 评估实验（指标/混淆矩阵） | ⬜ 未开始 |
 | 阶段 4 | 后端 API（FastAPI） | ⬜ 未开始 |
 | 阶段 5 | 前端（Vue 3） | ⬜ 未开始 |
 | 阶段 6 | 联调、测试与文档 | ⬜ 未开始 |
 
-**当前可用命令**：数据集下载/划分/统计（见下文）。训练、推理、API、前端尚未实现。
+**当前可用命令**：数据集下载/划分/统计、模型训练、单图预测（见下文）。后端 API 与前端尚未实现。
 
 ## 环境要求（本机实测配置）
 
@@ -91,6 +91,30 @@ CatDogBreedNet/
 ├── requirements.txt
 └── README.md
 ```
+
+## 训练与预测（阶段 2）
+
+```powershell
+# 训练 ResNet18 基线（默认 10 epochs / batch 32；显存不足时减小 --batch-size）
+E:\CatDogBreedNet\.venv\Scripts\python.exe -m ml.train
+
+# 单图 Top-3 预测（使用 artifacts/best_model.pth）
+E:\CatDogBreedNet\.venv\Scripts\python.exe -m ml.predict --image data\processed\test\Siamese\Siamese_20.jpg --top-k 3
+```
+
+训练产物（`artifacts/`，权重不入 Git）：
+
+- `best_model.pth`：按验证集精度选择的最佳权重；
+- `last_model.pth`：最后一个 epoch 的权重；
+- `class_names.json`：37 个类别名（顺序与训练集 ImageFolder 一致）；
+- `experiment_config.json`：完整超参数、数据规模与软硬件环境。
+
+训练日志与曲线（`reports/`）：`train_log.csv`、`loss_curve.png`、`accuracy_curve.png`
+（由 `.gitignore` 排除，仅本机留存）；实验摘要见 [`reports/README.md`](reports/README.md)。
+
+**已完成的基线结果（真实运行）**：10 epochs 共 198.8s，最佳验证精度 **0.8401**（epoch 8）；
+对 6 个品种的测试图片抽样预测 Top-1 全部正确。测试集整体指标（Accuracy/Macro-F1/混淆矩阵）
+属阶段 3，尚未计算。
 
 ## 测试
 

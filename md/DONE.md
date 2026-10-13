@@ -24,6 +24,22 @@
 - **文档**：README.md（环境安装/数据命令/进度/限制）、reports/dataset.md（来源/许可原文/引用/划分/37 类统计）
 - **三文件**：TODO/PROGRESS/DONE 持续更新
 
-### 遗留事项
-- Git 未安装，`git init` 与首次提交待用户安装后执行
-- C 盘残留一份安装工具部署的 Python（`C:\Users\23547\.workbuddy\binaries\python\versions\3.11.9`），已向用户报告，是否删除待用户决定
+### 遗留事项（已处理）
+- Git：用户已手动安装（C:\Program Files\Git 2.55.0），完成 `git init` 与首次提交（commit 171688d，14 个文件，已验证）；调用 git 需用全路径（shell PATH 未刷新）
+- C 盘 Python 残留（126.4MB）：已于 2026-10-13 经用户批准删除，E 盘副本与 .venv 不受影响
+
+## 2026-10-13
+
+### 阶段 2：模型基线（已完成）
+- **新增代码**：
+  - `ml/dataset.py`：ImageFolder + transforms（训练用 RandomResizedCrop/水平翻转/轻旋转，评估用 Resize256+CenterCrop224，统一 ImageNet 归一化），三集 class_to_idx 一致性断言，num_workers=0 默认
+  - `ml/model.py`：build_model（ResNet18 IMAGENET1K_V1 预训练 + fc 换 37 类，权重下载失败明确报错不静默退化）、set_seed、save/load_checkpoint（架构记录 + 类数校验 + 严格 state_dict）、resolve_device
+  - `ml/train.py`：CLI 可配置 epochs/batch/lr/设备/种子等；AdamW + StepLR + CrossEntropyLoss；按 val_acc 存最佳权重；CSV 日志 + 损失/准确率曲线 + experiment_config.json；CUDA OOM 给出调整建议
+  - `ml/predict.py`：单图 Top-K 预测（默认 Top-3），inference_mode + softmax，输出品种名/分数/耗时；权重缺失、图片解码失败、top_k 越界均明确报错
+- **测试**：新增 `tests/test_model_predict.py` 20 个用例（合成图片 + 轻量玩具模型，不下载预训练权重、不依赖真实数据集）；`pytest tests/` **29/29 通过**
+- **训练（真实运行）**：
+  - 冒烟：1 epoch，val_acc 0.2520
+  - 完整：10 epochs 共 198.8s（约 19.9s/epoch，RTX 4060 8GB），最佳 **val_acc 0.8401（epoch 8）**，末轮 train_acc 0.9852 / val_acc 0.8293
+  - 预训练权重缓存在 E:\.cache\torch（验证 C 盘无缓存）
+- **预测（真实运行）**：6 个品种（Siamese/Bengal/beagle/pug/samoyed/boxer）测试图片 Top-1 全部正确，分数 0.8569–1.0000
+- **文档**：README 增加阶段 2 命令与产物说明；新增 `reports/README.md` 实验摘要（真实数字）；`.gitignore` 增加 reports/*.log；三文件更新；git 提交完成

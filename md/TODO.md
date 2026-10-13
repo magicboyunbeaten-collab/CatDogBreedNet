@@ -18,12 +18,22 @@
 - [x] class_to_idx 一致性、ID/内容 MD5 泄漏检查通过
 - [x] `reports/dataset.md` 记录来源、许可、引用、划分、类别统计
 - [x] 单元测试 9/9 通过；README 完成
-- [ ] Git 初始化与首次提交（等待用户安装 Git）
+- [ ] Git 初始化与首次提交（等待用户安装 Git）→ 用户已于 2026-10-13 前完成（commit 171688d，14 个文件，已验证）
 
-## 阶段 2：模型基线 [未开始]
-- [ ] `ml/dataset.py`、`ml/model.py`、`ml/train.py`：ResNet18 迁移学习
-- [ ] 训练并保存 `artifacts/best_model.pth`、`class_names.json`、`experiment_config.json`
-- [ ] 训练曲线与日志；单图预测脚本 `ml/predict.py`
+## 阶段 2：模型基线 [已完成]
+- [x] 删除 C 盘 Python 残留（126.4MB，已获用户批准）
+- [x] `ml/dataset.py`：ImageFolder + transforms + 类别映射一致性检查
+- [x] `ml/model.py`：ResNet18 预训练 + fc 换 37 类 + 检查点保存/加载校验
+- [x] `ml/train.py`：AdamW + 调度器 + 验证集选最佳 + 日志/曲线/实验配置
+- [x] `ml/predict.py`：单图 Top-3 预测
+- [x] 新增 `tests/test_model_predict.py`（29/29 通过）
+- [x] 冒烟训练 1 epoch → 完整训练 10 epochs（val_acc 0.8401）→ 真实图片预测 6/6 正确
+- [x] 更新 README 与三文件，git 提交
+
+## 阶段 3：评估实验 [未开始]
+- [ ] `ml/evaluate.py`：测试集 Accuracy/Precision/Recall/F1、Macro-F1、分类报告、混淆矩阵
+- [ ] 推理耗时测量（预热 + 重复测量，区分单张与批吞吐）
+- [ ] 可选：模型/增强对比实验
 
 ## 阶段 3：评估实验 [未开始]
 - [ ] `ml/evaluate.py`：测试集指标、分类报告、混淆矩阵

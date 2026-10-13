@@ -1,21 +1,23 @@
 # PROGRESS 当前进度
 
-> 最近更新：2026-10-12
+> 最近更新：2026-10-13
 
 ## 当前状态
-- 所处阶段：**阶段 1 已完成，等待进入阶段 2（模型基线）**
-- 计划状态：阶段 0/1 执行完毕；阶段 2 待用户确认后开始
+- 所处阶段：**阶段 2 已完成，等待进入阶段 3（评估实验）**
+- 计划状态：阶段 2 执行完毕（训练、预测、测试、文档、提交全部完成）
 
-## 环境实测记录
-- Python 3.11.9：`E:\CatDogBreedNet\tools\python`（python-build-standalone 独立包，SHA256 已验证；安装工具默认装在 C 盘，已按用户约束改用 E 盘方案）
-- 虚拟环境：`E:\CatDogBreedNet\.venv`（pip 26.2.1）
-- PyTorch 2.14.1+cu130 / torchvision 0.29.1+cu130，`torch.cuda.is_available() == True`（RTX 4060）
-- 缓存：`PIP_CACHE_DIR=E:\CatDogBreedNet\.cache\pip`、`TORCH_HOME=E:\CatDogBreedNet\.cache\torch`（用户级环境变量）
-- 数据集：`data/raw`（官方 tar.gz 791,918,971 + 19,173,078 字节）、`data/processed`（ImageFolder 37 类）
+## 阶段 2 完成情况（2026-10-13）
+- 代码：`ml/dataset.py`、`ml/model.py`、`ml/train.py`、`ml/predict.py`
+- 测试：`pytest tests/` 29/29 通过（9 个阶段 1 + 20 个阶段 2，全部使用合成数据）
+- 冒烟训练：1 epoch 成功（val_acc 0.2520），验证前向/反向/验证/保存链路
+- 完整训练：10 epochs / 198.8s，最佳 val_acc **0.8401**（epoch 8，按验证集选模）
+- 真实图片预测：6 个品种 Top-1 全部正确（0.8569–1.0000）
+- 产物：`artifacts/best_model.pth`、`last_model.pth`、`class_names.json`、`experiment_config.json`；`reports/train_log.csv`、曲线 PNG（不入 Git）；`reports/README.md` 实验摘要
+- 文档：README 增加训练/预测命令；三文件已更新；git 提交完成
 
 ## 阻塞 / 等待
-- Git 未安装（用户手动安装中）：`git init` 与首次提交待执行，其余工作不受影响
-- 阶段 2 开始前需用户确认（是否按计划进入 ResNet18 基线训练）
+- 无
 
-## 下一步（阶段 2 预览）
-- `ml/dataset.py`（ImageFolder + transforms）、`ml/model.py`（ResNet18 换头）、`ml/train.py`（AdamW、验证集选模、保存 artifacts）
+## 下一步（阶段 3 预览）
+- `ml/evaluate.py`：在官方 test 集（3669 张，未参与调参）上计算 Accuracy、Macro-F1、
+  分类报告、混淆矩阵；推理耗时预热与重复测量；结果写入 reports/
