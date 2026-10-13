@@ -54,3 +54,16 @@
 - **真实性能测试**：模型纯推理（batch 32，预热 10 + 计时 50 batch，CUDA 同步）27.01 ms/batch、1184.9 img/s、单张 2.95/2.20/4.93 ms（1600 次）；端到端（含预处理，100 张）7.18/5.78/13.65 ms、139.2 img/s；硬件与环境记录于 `inference_benchmark.json`
 - **测试**：`pytest tests/` **42/42 通过**；未重新训练、未覆盖阶段 2 权重与日志、未重下数据集、权重与数据未入 Git
 - **文档**：README 增加阶段 3 命令与真实结果；`reports/README.md` 补充测试集指标；`reports/evaluation_summary.md` 含易混淆品种对分析；三文件更新；git 提交完成
+
+## 2026-10-13（续）
+
+### 阶段 4：FastAPI 后端（已完成）
+- **新增代码**：
+  - `ml/predictor.py`：共享 `Predictor` 类（一次加载检查点，`predict_pil`/`predict_path`，`model.eval()` + `inference_mode` + softmax，GPU 推理锁），CLI 与后端共用
+  - `ml/predict.py`：`predict_image()` 重构为复用 `Predictor`（签名与返回结构不变，进程内仍只加载一次）
+  - `ml/model.py`：新增 `verify_class_mapping`（由 evaluate.py 迁入，避免后端依赖 sklearn）
+  - `backend/app/`：config（CATDOG_* 环境变量，默认 E 盘路径、10MB、25M 像素、本地 CORS）、schemas（Pydantic 响应模型）、database（SQLAlchemy engine/session/get_db）、models（`PredictionRecord` 7 字段，UTC ISO 8601 时间戳）、main（`create_app` 工厂 + lifespan 一次性加载 + CORS + 全局异常处理 + /api/health）、routes/predict（流式限大小→Pillow 实校验→随机名保存→共享推理→写库→返回 record_id；DB 失败 500 并清理孤立图片）、routes/history（分页/详情/删除，删除先提交 DB 再删受控目录内图片）、routes/stats（真实记录聚合，空库返回空统计）、services/predictor（PredictorService + class_names.json 映射校验）、services/image_utils（流式读取、格式/像素/解压炸弹校验、UUID 文件名、目录包含检查）
+- **测试**：`tests/test_api.py` 31 个用例（FakePredictor + 临时 SQLite + 临时上传目录，不下载权重不做真实推理）：health 正常/未就绪 503、合法预测结构与持久化、空文件/文本伪装/损坏 JPEG/BMP/超大/超高像素/ top_k 越界、推理失败与 DB 失败的孤立图片清理、历史分页与排序、详情 404、删除联动与目录外保护、统计空库与真实记录、image_utils 单元、CORS 放行/拒绝；全量 `pytest tests/` **73/73 通过**
+- **真实集成测试**（uvicorn 8000，2026-10-13）：health `model_loaded=true/37 类`（启动日志证实仅加载一次）；beagle_1.jpg → beagle 0.979491（record 1）；samoyed_1.jpg → samoyed 0.998949（稳态 inference 3.644ms）；错误码实测 400/400/400/413/400；DELETE 联动删图成功；history/stats 真实入库；**CLI 与 API 同图 Top-3 逐位一致**
+- **文档**：README 后端章节（API 表、三种计时口径、上传保留与重置策略、UTC 时区、配置说明）、`.env.example`、reports/README.md、三文件更新；git 提交完成
+- **未新增依赖**（fastapi/uvicorn/sqlalchemy/python-multipart/httpx 阶段 1 已安装）

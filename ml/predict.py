@@ -27,12 +27,7 @@ if str(_REPO_ROOT) not in sys.path:
 import torch  # noqa: E402
 from PIL import Image  # noqa: E402
 
-from ml.dataset import build_transforms  # noqa: E402
-from ml.model import (  # noqa: E402
-    BEST_WEIGHTS_PATH,
-    load_checkpoint,
-    resolve_device,
-)
+from ml.model import BEST_WEIGHTS_PATH  # noqa: E402
 
 
 def load_image(image_path: Path) -> Image.Image:
@@ -82,30 +77,29 @@ def predict_image(
     Returns a JSON-serialisable dict with the Top-K breeds, their softmax
     scores and the inference latency in milliseconds. Scores are normalized
     over the trained class set only -- they are not true probabilities.
-    """
-    device_obj = resolve_device(device)
-    model, class_names = load_checkpoint(weights_path, model_factory=model_factory,
-                                         device=device_obj)
-    if not 1 <= top_k <= len(class_names):
-        raise ValueError(
-            f"top_k must be between 1 and {len(class_names)}, got {top_k}")
 
+    Internally this builds the shared ``ml.predictor.Predictor`` service, so
+    the CLI and the FastAPI backend use exactly the same preprocessing, class
+    mapping and Top-K logic. A CLI process loads the checkpoint once.
+    """
+    from ml.predictor import Predictor  # local import avoids a module cycle
+
+    predictor = Predictor(weights_path=weights_path, device=device,
+                          model_factory=model_factory)
     started = time.perf_counter()
     image = load_image(image_path)
-    tensor = build_transforms(train=False)(image)
-    load_ms = (time.perf_counter() - started) * 1000
+    result = predictor.predict_pil(image, top_k=top_k)
+    total_ms = (time.perf_counter() - started) * 1000
 
-    result = predict_from_tensor(model, tensor, class_names,
-                                 top_k=top_k, device=device_obj)
     return {
         "success": True,
         "image_path": str(image_path),
         "top_k": top_k,
-        "num_classes": len(class_names),
+        "num_classes": predictor.num_classes,
         "predictions": result["predictions"],
-        "inference_ms": result["elapsed_ms"],
-        "preprocess_ms": round(load_ms, 3),
-        "device": str(device_obj),
+        "inference_ms": result["inference_ms"],
+        "preprocess_ms": result["preprocess_ms"],
+        "device": str(predictor.device),
         "note": ("confidence is a softmax score over the trained class set, "
                  "not a true probability"),
     }

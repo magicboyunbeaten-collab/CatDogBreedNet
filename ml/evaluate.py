@@ -65,32 +65,20 @@ from ml.model import (  # noqa: E402
     load_checkpoint,
     load_class_names,
     resolve_device,
+    verify_class_mapping,
 )
 
-
-# ---------------------------------------------------------------------------
-# Class mapping verification
-# ---------------------------------------------------------------------------
-
-def verify_class_mapping(model_class_names, dataset_class_names) -> None:
-    """Fail loudly when the checkpoint and dataset label mappings differ.
-
-    The order matters: index i of the model output must correspond to the
-    same breed in the dataset, otherwise metrics would be meaningless.
-    """
-    model_names = list(model_class_names)
-    dataset_names = list(dataset_class_names)
-    if len(model_names) != len(dataset_names):
-        raise ValueError(
-            f"class count mismatch: checkpoint has {len(model_names)} classes "
-            f"but the dataset has {len(dataset_names)}. Retrain or rebuild the "
-            f"dataset so both agree.")
-    for idx, (a, b) in enumerate(zip(model_names, dataset_names)):
-        if a != b:
-            raise ValueError(
-                f"class mapping mismatch at index {idx}: checkpoint='{a}' "
-                f"dataset='{b}'. The model was trained with a different label "
-                f"order; do not evaluate this checkpoint on this dataset.")
+__all__ = [
+    "benchmark_batch_inference",
+    "benchmark_end_to_end",
+    "build_summary_markdown",
+    "collect_predictions",
+    "compute_metrics",
+    "save_classification_report_csv",
+    "save_confusion_matrix",
+    "save_metrics",
+    "verify_class_mapping",
+]
 
 
 # ---------------------------------------------------------------------------

@@ -3,22 +3,23 @@
 > 最近更新：2026-10-13
 
 ## 当前状态
-- 所处阶段：**阶段 3 已完成，等待进入阶段 4（后端 API）**
-- 计划状态：阶段 3 执行完毕（评估、性能测试、单元测试、文档、提交全部完成）
+- 所处阶段：**阶段 4 已完成，等待进入阶段 5（Vue 3 前端）**
+- 计划状态：阶段 4 执行完毕（后端、测试、集成测试、文档、提交全部完成）
 
-## 阶段 3 完成情况（2026-10-13）
-- 代码：`ml/evaluate.py`（类别映射校验、全量 test 推理、指标、混淆矩阵 CSV/PNG、双口径 benchmark、CLI）
-- 测试：`pytest tests/` **42/42 通过**（阶段 1 的 9 + 阶段 2 的 20 + 阶段 3 新增 13）
-- 真实评估：3669 张官方 test 图全量推理（39.46s），Accuracy **0.8035**、Macro-F1 **0.8022**、Weighted-F1 **0.8026**
-- 零样本类别：无（37 类均被预测过；`zero_division=0` 策略已记录未生效）
-- 性能测试：模型纯推理 1184.9 img/s（batch 32，预热 10 + 计时 50 batch，CUDA 同步，单张平均 2.95/中位 2.20/P95 4.93 ms，1600 次）；端到端（含文件读取与预处理）平均 7.18/中位 5.78/P95 13.65 ms（100 张）
-- 产物：reports/ 下 test_metrics.json、classification_report.csv、confusion_matrix.csv、confusion_matrix.png、confusion_matrix_normalized.png、inference_benchmark.json、evaluation_summary.md
-- 易混淆：两种斗牛犬互混 35 次；Siamese/Birman/Ragdoll 互混 62 次；basset_hound→beagle 14 次
-- 文档：README、reports/README.md、evaluation_summary.md、三文件更新；git 提交完成
+## 阶段 4 完成情况（2026-10-13）
+- 代码：`backend/app/`（config/schemas/database/models/main + routes×3 + services×2）；`ml/predictor.py` 新增共享 Predictor 类，`ml/predict.py` CLI 重构为复用同一类（签名与返回结构不变）；`verify_class_mapping` 移至 `ml/model.py`
+- 测试：`tests/test_api.py` 31 个用例（假 Predictor + 临时 SQLite + 临时目录）；全量 `pytest tests/` **73/73 通过**（9+20+13+31）
+- 真实集成测试（uvicorn:8000，best_model.pth）：
+  - health：`model_loaded=true, num_classes=37`；启动日志证实模型仅加载一次；/docs 200
+  - predict：beagle_1.jpg → beagle 0.979491（record 1）；samoyed_1.jpg → samoyed 0.998949（record 2，稳态 inference 3.644ms）
+  - 错误场景：空文件/文本伪装/BMP 400，>10MB 413，top_k=99 400（无路径/堆栈泄露）
+  - DELETE /api/history/2 联动删图成功；history/stats 反映真实入库记录
+  - CLI 与 API 同图 Top-3 逐位一致
+- 配置：`.env.example`（CATDOG_* 环境变量，默认仅本地 CORS）；未新增依赖
+- 文档：README 后端章节（API 表、计时口径、上传保留策略、UTC 时区约定）、reports/README.md、三文件更新；git 提交完成
 
 ## 阻塞 / 等待
 - 无
 
-## 下一步（阶段 4 预览）
-- `backend/app/`：FastAPI 健康检查、`POST /api/predict`（复用 `ml.predict.predict_image`）、
-  文件校验（大小/格式/像素上限）、SQLite 历史记录与统计
+## 下一步（阶段 5 预览）
+- `frontend/`：Vue 3 + Vite + Element Plus；页面：上传识别（拖拽/预览/Top-K/耗时）、历史（分页/详情/删除）、统计（ECharts）；API base URL 走 `.env.development`；Node 安装需遵守非 C 盘约束

@@ -34,8 +34,7 @@
 | boxer | boxer | 0.9985 |
 
 抽样方式：每个品种取测试集第一张图片，命令
-`python -m ml.predict --image <图片> --top-k 3`。测试集整体指标（Accuracy、
-Macro-F1、混淆矩阵）属于阶段 3 范围，尚未计算。
+`python -m ml.predict --image <图片> --top-k 3`。测试集整体指标见下一节。
 
 ## 实验 1 补充：完整测试集评估（2026-10-13，阶段 3 完成）
 
@@ -65,6 +64,21 @@ Macro-F1、混淆矩阵）属于阶段 3 范围，尚未计算。
 `confusion_matrix.png`、`confusion_matrix_normalized.png`、
 `inference_benchmark.json`、`evaluation_summary.md`（详见该报告）。
 复现命令：`python -m ml.evaluate`。
+
+## 阶段 4：FastAPI 后端（2026-10-13，已完成）
+
+- 结构：`backend/app/`（main/config/schemas/database/models + routes/{predict,history,stats} + services/{predictor,image_utils}）
+- 模型生命周期：`PredictorService`（包装 `ml.predictor.Predictor`，与 CLI 同一实现）在 FastAPI lifespan 中加载一次；启动日志实测 "model ready: 37 classes on cuda"；类别映射与 `class_names.json` 校验一致
+- 上传安全：流式 10MB 限制（413）、JPEG/PNG/WebP 白名单 + Pillow 实解析（400）、2500 万像素上限（400）、随机 UUID 文件名、仅限 `uploads/` 目录
+- 数据库：SQLite（`data/app.db`）+ SQLAlchemy ORM `prediction_records` 表（id/image_path/predicted_breed/confidence/top_k_json/inference_ms/created_at，UTC ISO 8601）；历史分页/详情/删除（删除先提交 DB 再删目录内图片）；统计全部来自真实记录
+- 真实集成测试（uvicorn 8000 端口，2026-10-13）：
+  - `/api/health`：`model_loaded=true, num_classes=37`；`/docs` 200
+  - `POST /api/predict`（beagle_1.jpg）：Top-1 beagle 0.979491，record_id=1；稳态第二次（samoyed）inference_ms=3.644
+  - 错误场景实测：空文件 400、文本伪装 400、BMP 400、>10MB 413、top_k=99 400（错误信息不含路径与堆栈）
+  - `DELETE /api/history/2` 联动删除图片成功；历史与统计反映真实入库记录
+  - **CLI 与 API 同图 Top-3 逐位一致**（beagle 0.979491 / basset_hound 0.005011 / miniature_pinscher 0.00496）
+- 测试：`tests/test_api.py` 31 个用例（假 Predictor + 临时 SQLite + 临时目录，不下载权重）；全量 `pytest tests/` **73/73 通过**
+- 未新增依赖（fastapi/uvicorn/sqlalchemy/python-multipart/httpx 阶段 1 已安装）
 
 ## 已知限制
 

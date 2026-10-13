@@ -163,3 +163,24 @@ def load_class_names(path: Path = CLASS_NAMES_PATH) -> list[str]:
     if not path.exists():
         raise FileNotFoundError(f"class names file not found: {path}")
     return list(json.loads(path.read_text(encoding="utf-8")))
+
+
+def verify_class_mapping(model_class_names, dataset_class_names) -> None:
+    """Fail loudly when two label mappings differ.
+
+    The order matters: index i of the model output must correspond to the
+    same breed in the dataset, otherwise predictions would be mislabeled.
+    """
+    model_names = list(model_class_names)
+    dataset_names = list(dataset_class_names)
+    if len(model_names) != len(dataset_names):
+        raise ValueError(
+            f"class count mismatch: checkpoint has {len(model_names)} classes "
+            f"but the dataset has {len(dataset_names)}. Retrain or rebuild the "
+            f"dataset so both agree.")
+    for idx, (a, b) in enumerate(zip(model_names, dataset_names)):
+        if a != b:
+            raise ValueError(
+                f"class mapping mismatch at index {idx}: checkpoint='{a}' "
+                f"dataset='{b}'. The model was trained with a different label "
+                f"order; do not evaluate this checkpoint on this dataset.")

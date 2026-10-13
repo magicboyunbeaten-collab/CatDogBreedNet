@@ -13,11 +13,11 @@
 | 阶段 1 | 环境与数据管道 | ✅ 已完成（2026-10-12） |
 | 阶段 2 | 模型基线（ResNet18 训练/预测） | ✅ 已完成（2026-10-13，最佳验证精度 0.8401） |
 | 阶段 3 | 评估实验（指标/混淆矩阵/性能测试） | ✅ 已完成（2026-10-13，测试集 Accuracy 0.8035 / Macro-F1 0.8022） |
-| 阶段 4 | 后端 API（FastAPI） | ⬜ 未开始 |
+| 阶段 4 | 后端 API（FastAPI + SQLite） | ✅ 已完成（2026-10-13） |
 | 阶段 5 | 前端（Vue 3） | ⬜ 未开始 |
 | 阶段 6 | 联调、测试与文档 | ⬜ 未开始 |
 
-**当前可用命令**：数据集下载/划分/统计、模型训练、单图预测、测试集评估（见下文）。后端 API 与前端尚未实现。
+**当前可用命令**：数据集准备、模型训练、单图预测、测试集评估、FastAPI 后端（见下文）。前端尚未实现。
 
 ## 环境要求（本机实测配置）
 
@@ -77,17 +77,22 @@ E:\CatDogBreedNet\.venv\Scripts\python.exe scripts\prepare_dataset.py stats
 
 ```text
 CatDogBreedNet/
-├── ml/                     # 模型与数据代码（config.py 已就绪；dataset/model/train 等属阶段 2）
+├── ml/                     # 模型与数据代码（config/dataset/model/train/predict/evaluate/predictor）
 ├── scripts/
 │   └── prepare_dataset.py  # 数据管道：download / build / stats
+├── backend/
+│   └── app/                # FastAPI 后端（main/config/schemas/database/models + routes + services）
 ├── data/
 │   ├── raw/                # 官方压缩包与解压文件（不入 Git）
-│   └── processed/          # train/val/test/<品种>/ ImageFolder 结构（不入 Git）
-├── artifacts/              # 模型产物（阶段 2 起）
-├── reports/                # 数据集报告、训练指标（阶段 2 起）
-├── tests/                  # pytest 单元测试（合成小图，不依赖真实数据集）
+│   ├── processed/          # train/val/test/<品种>/ ImageFolder 结构（不入 Git）
+│   └── app.db              # SQLite 数据库（不入 Git，由后端自动创建）
+├── uploads/                # 上传图片（不入 Git，随机文件名）
+├── artifacts/              # 模型产物（best_model.pth 等，权重不入 Git）
+├── reports/                # 数据集报告、训练指标、评估报告
+├── tests/                  # pytest 单元测试（合成小图/假 Predictor，不依赖真实推理）
 ├── tools/python/           # E 盘独立 Python 3.11.9 运行时（不入 Git）
 ├── md/                     # 开发规范与三文件进度
+├── .env.example            # 后端配置样例（复制为 .env 使用，.env 不入 Git）
 ├── requirements.txt
 └── README.md
 ```
@@ -136,6 +141,61 @@ Macro-F1 **0.8022**、Weighted-F1 **0.8026**；混淆最严重的是两种斗牛
 Siamese/Birman/Ragdoll 长毛猫互混。推理性能：模型纯推理 1184.9 img/s（batch 32，
 单张平均 2.95ms），端到端（含预处理）平均 7.18ms/张——详见
 [`reports/evaluation_summary.md`](reports/evaluation_summary.md)。
+
+## 后端 API（阶段 4）
+
+```powershell
+# 启动（仓库根目录；模型在启动时加载一次，之后所有请求复用）
+E:\CatDogBreedNet\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --reload --port 8000
+```
+
+交互式文档：<http://127.0.0.1:8000/docs>（OpenAPI 自动生成）。
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| GET | `/api/health` | 服务状态、模型是否就绪、类别数 |
+| POST | `/api/predict` | 上传图片识别（multipart/form-data，字段 `file`，可选 `top_k`，默认 3） |
+| GET | `/api/history?page=&page_size=` | 识别历史（分页，按时间倒序） |
+| GET | `/api/history/{record_id}` | 单条记录详情 |
+| DELETE | `/api/history/{record_id}` | 删除记录及其上传图片 |
+| GET | `/api/stats` | 统计（总次数、品种分布、每日趋势、平均推理耗时） |
+
+预测响应示例（数值为真实格式示例，非固定结果）：
+
+```json
+{
+  "success": true,
+  "record_id": 1,
+  "predictions": [{"breed": "beagle", "confidence": 0.979491}],
+  "elapsed_ms": 56.8,
+  "inference_ms": 3.6,
+  "preprocess_ms": 1.7,
+  "top_k": 3,
+  "num_classes": 37,
+  "note": "confidence is a softmax score over the trained class set, not a true probability"
+}
+```
+
+计时口径：`elapsed_ms` = 服务端处理总耗时（上传校验 + 预处理 + 推理）；
+`inference_ms` = 仅模型前向；`preprocess_ms` = 仅图片解码与变换。三者不可互比。
+
+**上传安全与保留策略**：
+
+- 大小上限 10MB（读取时流式校验，超限返回 413）；支持 JPEG/PNG/WebP（Pillow 实解析，
+  不信扩展名与 Content-Type）；像素总数上限 2500 万（防解压炸弹）；损坏/伪造图片返回 400。
+- 服务端文件名随机生成（UUID），用户无法控制保存路径；只保存在 `uploads/` 目录内。
+- 图片保留策略：预测成功后图片保留在 `uploads/` 供历史记录引用，删除对应历史记录时
+  联动删除（且只允许删除上传目录内的文件）。重置方法：停止服务后删除 `data/app.db`
+  与 `uploads/` 下的文件。
+- 时间戳统一为 UTC ISO 8601（带 `+00:00` 偏移），如 `2026-10-13T10:51:36.341341+00:00`。
+- 配置通过环境变量覆盖（见 `.env.example`）：权重路径、设备、上传目录、大小/像素上限、
+  数据库路径、CORS 来源等；默认只放行 `http://localhost:5173` 与 `http://127.0.0.1:5173`。
+- 模型在应用 lifespan 启动时加载一次；加载失败时 `/api/health` 的 `model_loaded=false`
+  并给出简短原因，`/api/predict` 返回 503，不会返回伪造结果。
+- 数据库写入失败返回 500 并记录服务端日志，同时清理本次生成的孤立图片，不会静默声称成功。
+
+集成测试（真实运行，2026-10-13）：CLI 与 API 对同一张 `beagle_1.jpg` 的 Top-3 结果逐位一致
+（beagle 0.979491 / basset_hound 0.005011 / miniature_pinscher 0.00496）。
 
 ## 测试
 
