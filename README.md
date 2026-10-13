@@ -12,12 +12,12 @@
 | 阶段 0 | 仓库检查与计划 | ✅ 已完成（2026-10-12） |
 | 阶段 1 | 环境与数据管道 | ✅ 已完成（2026-10-12） |
 | 阶段 2 | 模型基线（ResNet18 训练/预测） | ✅ 已完成（2026-10-13，最佳验证精度 0.8401） |
-| 阶段 3 | 评估实验（指标/混淆矩阵） | ⬜ 未开始 |
+| 阶段 3 | 评估实验（指标/混淆矩阵/性能测试） | ✅ 已完成（2026-10-13，测试集 Accuracy 0.8035 / Macro-F1 0.8022） |
 | 阶段 4 | 后端 API（FastAPI） | ⬜ 未开始 |
 | 阶段 5 | 前端（Vue 3） | ⬜ 未开始 |
 | 阶段 6 | 联调、测试与文档 | ⬜ 未开始 |
 
-**当前可用命令**：数据集下载/划分/统计、模型训练、单图预测（见下文）。后端 API 与前端尚未实现。
+**当前可用命令**：数据集下载/划分/统计、模型训练、单图预测、测试集评估（见下文）。后端 API 与前端尚未实现。
 
 ## 环境要求（本机实测配置）
 
@@ -115,6 +115,27 @@ E:\CatDogBreedNet\.venv\Scripts\python.exe -m ml.predict --image data\processed\
 **已完成的基线结果（真实运行）**：10 epochs 共 198.8s，最佳验证精度 **0.8401**（epoch 8）；
 对 6 个品种的测试图片抽样预测 Top-1 全部正确。测试集整体指标（Accuracy/Macro-F1/混淆矩阵）
 属阶段 3，尚未计算。
+
+## 测试集评估（阶段 3）
+
+```powershell
+# 完整 test 集（3669 张）评估 + 推理性能测试
+E:\CatDogBreedNet\.venv\Scripts\python.exe -m ml.evaluate
+
+# 仅指标，跳过性能测试
+E:\CatDogBreedNet\.venv\Scripts\python.exe -m ml.evaluate --no-benchmark
+```
+
+产物（`reports/`，CSV/PNG 不入 Git）：`test_metrics.json`、
+`classification_report.csv`、`confusion_matrix.csv`、`confusion_matrix.png`、
+`confusion_matrix_normalized.png`、`inference_benchmark.json`、
+`evaluation_summary.md`。
+
+**测试集真实结果**（官方 test 划分 3669 张，未参与调参）：Accuracy **0.8035**、
+Macro-F1 **0.8022**、Weighted-F1 **0.8026**；混淆最严重的是两种斗牛犬互混与
+Siamese/Birman/Ragdoll 长毛猫互混。推理性能：模型纯推理 1184.9 img/s（batch 32，
+单张平均 2.95ms），端到端（含预处理）平均 7.18ms/张——详见
+[`reports/evaluation_summary.md`](reports/evaluation_summary.md)。
 
 ## 测试
 

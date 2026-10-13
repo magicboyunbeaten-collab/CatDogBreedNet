@@ -30,10 +30,16 @@
 - [x] 冒烟训练 1 epoch → 完整训练 10 epochs（val_acc 0.8401）→ 真实图片预测 6/6 正确
 - [x] 更新 README 与三文件，git 提交
 
-## 阶段 3：评估实验 [未开始]
-- [ ] `ml/evaluate.py`：测试集 Accuracy/Precision/Recall/F1、Macro-F1、分类报告、混淆矩阵
-- [ ] 推理耗时测量（预热 + 重复测量，区分单张与批吞吐）
-- [ ] 可选：模型/增强对比实验
+## 阶段 3：评估实验 [已完成]
+- [x] `ml/evaluate.py`：完整 test 集（3669 张）评估，Accuracy/逐类 P/R/F1/Macro/Weighted、混淆矩阵 CSV+双 PNG
+- [x] 推理耗时双口径测量（预热 + CUDA 同步；模型纯推理与端到端分开）
+- [x] 新增 `tests/test_evaluate.py`（pytest 42/42 通过）
+- [x] 真实结果：Accuracy 0.8035 / Macro-F1 0.8022 / Weighted-F1 0.8026
+- [x] `reports/evaluation_summary.md` 等 7 个产物生成并核对
+- [x] 文档更新与 git 提交
+
+## 阶段 4：后端 [未开始]
+- [ ] FastAPI：健康检查、预测 API、文件校验、SQLite 历史与统计
 
 ## 阶段 3：评估实验 [未开始]
 - [ ] `ml/evaluate.py`：测试集指标、分类报告、混淆矩阵

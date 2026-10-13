@@ -1,0 +1,52 @@
+{
+  "evaluated_at": "2026-10-13T10:00:17.488972+00:00",
+  "weights_path": "E:\\CatDogBreedNet\\artifacts\\best_model.pth",
+  "environment": {
+    "python": "3.11.9",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "platform": "Windows-10-10.0.22621-SP0"
+  },
+  "model_only_batch_benchmark": {
+    "scope": "model_only_forward_on_test_tensors",
+    "includes_preprocessing": false,
+    "includes_file_io": false,
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "cuda_synchronized": true,
+    "batch_size": 32,
+    "warmup_batches": 10,
+    "timed_batches": 50,
+    "measured_images": 1600,
+    "mean_batch_seconds": 0.027006772000459024,
+    "median_batch_seconds": 0.024082799995085225,
+    "p95_batch_seconds": 0.042462360003264615,
+    "throughput_images_per_second": 1184.8879977013214,
+    "single_image_latency_ms": {
+      "samples": 1600,
+      "mean": 2.954102812846031,
+      "median": 2.1956999989924952,
+      "p95": 4.929855005320859
+    }
+  },
+  "end_to_end_benchmark": {
+    "scope": "end_to_end_file_to_prediction",
+    "includes_preprocessing": true,
+    "includes_file_io": true,
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "cuda_synchronized": true,
+    "batch_size": 1,
+    "warmup_images": 5,
+    "measured_images": 100,
+    "single_image_latency_ms": {
+      "samples": 100,
+      "mean": 7.181986999639776,
+      "median": 5.7819000066956505,
+      "p95": 13.649605003593013
+    },
+    "throughput_images_per_second": 139.23723337986502
+  }
+}

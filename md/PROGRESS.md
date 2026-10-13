@@ -3,21 +3,22 @@
 > 最近更新：2026-10-13
 
 ## 当前状态
-- 所处阶段：**阶段 2 已完成，等待进入阶段 3（评估实验）**
-- 计划状态：阶段 2 执行完毕（训练、预测、测试、文档、提交全部完成）
+- 所处阶段：**阶段 3 已完成，等待进入阶段 4（后端 API）**
+- 计划状态：阶段 3 执行完毕（评估、性能测试、单元测试、文档、提交全部完成）
 
-## 阶段 2 完成情况（2026-10-13）
-- 代码：`ml/dataset.py`、`ml/model.py`、`ml/train.py`、`ml/predict.py`
-- 测试：`pytest tests/` 29/29 通过（9 个阶段 1 + 20 个阶段 2，全部使用合成数据）
-- 冒烟训练：1 epoch 成功（val_acc 0.2520），验证前向/反向/验证/保存链路
-- 完整训练：10 epochs / 198.8s，最佳 val_acc **0.8401**（epoch 8，按验证集选模）
-- 真实图片预测：6 个品种 Top-1 全部正确（0.8569–1.0000）
-- 产物：`artifacts/best_model.pth`、`last_model.pth`、`class_names.json`、`experiment_config.json`；`reports/train_log.csv`、曲线 PNG（不入 Git）；`reports/README.md` 实验摘要
-- 文档：README 增加训练/预测命令；三文件已更新；git 提交完成
+## 阶段 3 完成情况（2026-10-13）
+- 代码：`ml/evaluate.py`（类别映射校验、全量 test 推理、指标、混淆矩阵 CSV/PNG、双口径 benchmark、CLI）
+- 测试：`pytest tests/` **42/42 通过**（阶段 1 的 9 + 阶段 2 的 20 + 阶段 3 新增 13）
+- 真实评估：3669 张官方 test 图全量推理（39.46s），Accuracy **0.8035**、Macro-F1 **0.8022**、Weighted-F1 **0.8026**
+- 零样本类别：无（37 类均被预测过；`zero_division=0` 策略已记录未生效）
+- 性能测试：模型纯推理 1184.9 img/s（batch 32，预热 10 + 计时 50 batch，CUDA 同步，单张平均 2.95/中位 2.20/P95 4.93 ms，1600 次）；端到端（含文件读取与预处理）平均 7.18/中位 5.78/P95 13.65 ms（100 张）
+- 产物：reports/ 下 test_metrics.json、classification_report.csv、confusion_matrix.csv、confusion_matrix.png、confusion_matrix_normalized.png、inference_benchmark.json、evaluation_summary.md
+- 易混淆：两种斗牛犬互混 35 次；Siamese/Birman/Ragdoll 互混 62 次；basset_hound→beagle 14 次
+- 文档：README、reports/README.md、evaluation_summary.md、三文件更新；git 提交完成
 
 ## 阻塞 / 等待
 - 无
 
-## 下一步（阶段 3 预览）
-- `ml/evaluate.py`：在官方 test 集（3669 张，未参与调参）上计算 Accuracy、Macro-F1、
-  分类报告、混淆矩阵；推理耗时预热与重复测量；结果写入 reports/
+## 下一步（阶段 4 预览）
+- `backend/app/`：FastAPI 健康检查、`POST /api/predict`（复用 `ml.predict.predict_image`）、
+  文件校验（大小/格式/像素上限）、SQLite 历史记录与统计

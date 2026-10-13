@@ -37,6 +37,35 @@
 `python -m ml.predict --image <图片> --top-k 3`。测试集整体指标（Accuracy、
 Macro-F1、混淆矩阵）属于阶段 3 范围，尚未计算。
 
+## 实验 1 补充：完整测试集评估（2026-10-13，阶段 3 完成）
+
+对 `best_model.pth` 在**完整官方 test 集 3669 张**上重新推理（每张只评估一次，
+未用测试集调参）：
+
+| 指标 | 值 |
+|---|---|
+| Top-1 Accuracy | 0.8035 |
+| Macro Precision / Recall / **F1** | 0.8123 / 0.8031 / **0.8022** |
+| Weighted Precision / Recall / **F1** | 0.8127 / 0.8035 / **0.8026** |
+
+- 37 个类别均至少被预测过一次，`zero_division=0` 未实际生效（策略已在
+  `test_metrics.json` 中说明）。
+- 最好：keeshond F1 0.946、leonberger 0.945、japanese_chin 0.939；
+  最弱：american_pit_bull_terrier 0.533、staffordshire_bull_terrier 0.547。
+- 误判集中在近缘品种：两种斗牛犬互混 35 次；Siamese/Birman/Ragdoll 互混 62 次。
+
+推理性能（RTX 4060，torch 2.14.1+cu130，两个口径不可互比）：
+
+| 口径 | 内容 | 结果 |
+|---|---|---|
+| 模型纯推理 | batch 32，预热 10 + 计时 50 batch，CUDA 同步 | 27.01 ms/batch，1184.9 img/s；单张平均 2.95 / 中位 2.20 / P95 4.93 ms（1600 次） |
+| 端到端 | 含文件读取+PIL 解码+预处理，batch 1，100 张 | 平均 7.18 / 中位 5.78 / P95 13.65 ms，139.2 img/s |
+
+产物：`test_metrics.json`、`classification_report.csv`、`confusion_matrix.csv`、
+`confusion_matrix.png`、`confusion_matrix_normalized.png`、
+`inference_benchmark.json`、`evaluation_summary.md`（详见该报告）。
+复现命令：`python -m ml.evaluate`。
+
 ## 已知限制
 
 - 验证精度 0.84 为基线水平；尚未做模型对比（MobileNetV3 等）与增强对比实验；

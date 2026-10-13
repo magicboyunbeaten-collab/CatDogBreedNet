@@ -43,3 +43,14 @@
   - 预训练权重缓存在 E:\.cache\torch（验证 C 盘无缓存）
 - **预测（真实运行）**：6 个品种（Siamese/Bengal/beagle/pug/samoyed/boxer）测试图片 Top-1 全部正确，分数 0.8569–1.0000
 - **文档**：README 增加阶段 2 命令与产物说明；新增 `reports/README.md` 实验摘要（真实数字）；`.gitignore` 增加 reports/*.log；三文件更新；git 提交完成
+
+## 2026-10-13（续）
+
+### 阶段 3：模型评估实验（已完成）
+- **新增代码**：
+  - `ml/evaluate.py`：`verify_class_mapping`（检查点类别名/数量与数据集映射不一致即报错，含顺序校验）、`collect_predictions`（eval 模式 + no_grad，全量单次遍历，expected_total 防残缺评估）、`compute_metrics`（Top-1、逐类 P/R/F1/Support、Macro/Weighted 三套，`zero_division=0` 并列出无预测类别）、分类报告 CSV+JSON、混淆矩阵 CSV + 计数/行归一化双 PNG（37×37 标注类名）、`benchmark_batch_inference`（预热 + CUDA 同步，批吞吐与单张延迟 mean/median/P95）、`benchmark_end_to_end`（含文件读取+PIL 解码+预处理，口径分离）、自动生成 `evaluation_summary.md`
+  - `tests/test_evaluate.py` 13 个用例：手算 toy 指标校验、混淆矩阵形状/顺序/CSV、缺失类别 zero_division、产物文件有效性、eval 模式与无梯度、expected_total 防残缺、映射不匹配报错、双口径 benchmark CPU 冒烟
+- **真实评估（3669 张全量）**：Accuracy **0.8035**、Macro P/R/F1 = 0.8123/0.8031/**0.8022**、Weighted P/R/F1 = 0.8127/0.8035/**0.8026**；无零预测类别；最好 keeshond F1 0.946，最弱 american_pit_bull_terrier 0.533；斗牛犬两种互混 35 次、Siamese/Birman/Ragdoll 互混 62 次
+- **真实性能测试**：模型纯推理（batch 32，预热 10 + 计时 50 batch，CUDA 同步）27.01 ms/batch、1184.9 img/s、单张 2.95/2.20/4.93 ms（1600 次）；端到端（含预处理，100 张）7.18/5.78/13.65 ms、139.2 img/s；硬件与环境记录于 `inference_benchmark.json`
+- **测试**：`pytest tests/` **42/42 通过**；未重新训练、未覆盖阶段 2 权重与日志、未重下数据集、权重与数据未入 Git
+- **文档**：README 增加阶段 3 命令与真实结果；`reports/README.md` 补充测试集指标；`reports/evaluation_summary.md` 含易混淆品种对分析；三文件更新；git 提交完成
