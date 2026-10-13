@@ -1,0 +1,28 @@
+{
+  "name": "catdog-breed-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Vue 3 frontend for the cat/dog breed classification system",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "axios": "^1.12.0",
+    "echarts": "^6.1.0",
+    "element-plus": "^2.14.7",
+    "vue": "^3.5.44",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^26.0.0",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4"
+  }
+}

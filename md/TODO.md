@@ -46,8 +46,17 @@
 - [x] 真实集成测试：health/docs/真实预测/历史/统计/错误场景全部实测；CLI 与 API 同图 Top-3 逐位一致
 - [x] `.env.example`、README、reports/README.md、三文件更新；git 提交完成
 
-## 阶段 5：前端 [未开始]
-- [ ] Vue 3 + Vite + Element Plus：上传识别页、历史页、统计页（Node 需按非 C 盘规则安装）
+## 阶段 5：前端 [已完成]
+- [x] E 盘安装 Node.js v24.21.0 LTS（官方 ZIP，SHA256 校验；npm 缓存指向 E 盘）
+- [x] `frontend/`：Vue 3 + Vite + Vue Router + Element Plus + Axios + ECharts（纯 JS）
+- [x] API 层按后端真实 Schema 对接 + 统一错误规范化；`package-lock.json` 提交
+- [x] 识别/历史/统计三页 + 上传组件 + 结果组件
+- [x] Vitest 18/18 通过；`npm run build` 成功；后端 pytest 73/73 无回归
+- [x] 真实联调（真实 Chrome）：识别/历史/删除/统计/刷新持久化/CORS/后端降级全部实测
+- [x] README、reports/README.md、三文件更新；git 提交完成
+
+## 阶段 6：联调、测试与文档 [未开始]
+- [ ] 全流程手工测试表、论文素材（界面截图/功能测试表）、README 终稿
 
 ## 阶段 6：联调、测试与文档 [未开始]
 - [ ] 自动化测试与手工测试、README 与论文素材完善

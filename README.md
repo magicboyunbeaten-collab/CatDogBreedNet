@@ -14,10 +14,10 @@
 | 阶段 2 | 模型基线（ResNet18 训练/预测） | ✅ 已完成（2026-10-13，最佳验证精度 0.8401） |
 | 阶段 3 | 评估实验（指标/混淆矩阵/性能测试） | ✅ 已完成（2026-10-13，测试集 Accuracy 0.8035 / Macro-F1 0.8022） |
 | 阶段 4 | 后端 API（FastAPI + SQLite） | ✅ 已完成（2026-10-13） |
-| 阶段 5 | 前端（Vue 3） | ⬜ 未开始 |
+| 阶段 5 | 前端（Vue 3 + Element Plus） | ✅ 已完成（2026-10-13） |
 | 阶段 6 | 联调、测试与文档 | ⬜ 未开始 |
 
-**当前可用命令**：数据集准备、模型训练、单图预测、测试集评估、FastAPI 后端（见下文）。前端尚未实现。
+**当前可用命令**：数据集准备、模型训练、单图预测、测试集评估、FastAPI 后端、Vue 3 前端（见下文）。
 
 ## 环境要求（本机实测配置）
 
@@ -82,6 +82,7 @@ CatDogBreedNet/
 │   └── prepare_dataset.py  # 数据管道：download / build / stats
 ├── backend/
 │   └── app/                # FastAPI 后端（main/config/schemas/database/models + routes + services）
+├── frontend/               # Vue 3 前端（src + tests，node_modules/dist 不入 Git）
 ├── data/
 │   ├── raw/                # 官方压缩包与解压文件（不入 Git）
 │   ├── processed/          # train/val/test/<品种>/ ImageFolder 结构（不入 Git）
@@ -90,7 +91,9 @@ CatDogBreedNet/
 ├── artifacts/              # 模型产物（best_model.pth 等，权重不入 Git）
 ├── reports/                # 数据集报告、训练指标、评估报告
 ├── tests/                  # pytest 单元测试（合成小图/假 Predictor，不依赖真实推理）
-├── tools/python/           # E 盘独立 Python 3.11.9 运行时（不入 Git）
+├── tools/
+│   ├── python/             # E 盘独立 Python 3.11.9 运行时（不入 Git）
+│   └── node/               # E 盘 Node.js v24.21.0 LTS 运行时（不入 Git）
 ├── md/                     # 开发规范与三文件进度
 ├── .env.example            # 后端配置样例（复制为 .env 使用，.env 不入 Git）
 ├── requirements.txt
@@ -196,6 +199,56 @@ E:\CatDogBreedNet\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --rel
 
 集成测试（真实运行，2026-10-13）：CLI 与 API 对同一张 `beagle_1.jpg` 的 Top-3 结果逐位一致
 （beagle 0.979491 / basset_hound 0.005011 / miniature_pinscher 0.00496）。
+
+## 前端（阶段 5）
+
+前端为 Vue 3 + Vite + Vue Router + Element Plus + Axios + ECharts（JavaScript），
+源码位于 `frontend/`，所有数据均来自真实后端 API，无任何写死的演示数据。
+
+**Node.js 环境**（E 盘，避免占用 C 盘）：
+
+- 运行时：`tools/node/node-v24.21.0-win-x64/`（Node.js v24.21.0 LTS + npm 11.19.0，
+  官方 ZIP 安装，SHA256 已验证；已加入用户级 PATH）
+- npm 缓存：`.cache/npm`（用户级环境变量 `npm_config_cache` 指向 E 盘）
+- 前端依赖：`frontend/node_modules`（`package-lock.json` 已提交，锁住版本）
+
+```powershell
+# 启动后端（终端 1，仓库根目录）
+E:\CatDogBreedNet\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --port 8000
+
+# 启动前端（终端 2）
+cd E:\CatDogBreedNet\frontend
+npm install        # 首次
+npm run dev        # 开发服务器 http://127.0.0.1:5173
+```
+
+本地访问地址：<http://127.0.0.1:5173>（自动跳转 `/predict`）。
+后端地址通过 `frontend/.env.development` 的 `VITE_API_BASE_URL` 配置
+（默认 `http://127.0.0.1:8000/api`，样例见 `frontend/.env.example`；该文件不入 Git，
+代码内置了相同默认值作为回退）。端口 5173 已包含在后端 CORS 允许列表中。
+
+**页面**：
+
+| 页面 | 路径 | 功能 |
+|---|---|---|
+| 图片识别 | `/predict` | 点击/拖拽上传、本地预览（对象 URL 及时释放）、前端预检（服务端校验为准）、Top-3 品种与分数、三种耗时口径、错误提示与重试、一键清空 |
+| 识别历史 | `/history` | 后端分页（10/20/50 每页）、记录 ID/图片文件名/品种/置信度/UTC 时间、详情弹窗、删除二次确认并联动删图 |
+| 识别统计 | `/stats` | 总识别次数、平均推理耗时、覆盖品种数、品种分布图与每日趋势图（ECharts，组件卸载时销毁实例） |
+
+顶栏实时显示模型就绪状态（`/api/health`，30 秒轮询）；后端不可用时页面显示
+"无法连接后端服务"错误提示而非白屏。
+
+**前端测试与构建**：
+
+```powershell
+cd E:\CatDogBreedNet\frontend
+npm test           # Vitest：18 个用例（API 适配/错误规范化/文件预检，Mock 不依赖真实后端）
+npm run build      # 生产构建（dist/，不入 Git）
+```
+
+真实联调（2026-10-13，uvicorn:8000 + vite:5173 + 真实 Chrome 浏览器实测）：
+上传 `pug_1.jpg` → Top-1 pug 100.00%（记录入库）→ 历史页可见新记录 → 详情弹窗正常 →
+删除确认后列表与统计同步更新 → 刷新页面历史仍在 → 停止后端后前端显示连接错误且不白屏。
 
 ## 测试
 

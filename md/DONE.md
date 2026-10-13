@@ -67,3 +67,35 @@
 - **真实集成测试**（uvicorn 8000，2026-10-13）：health `model_loaded=true/37 类`（启动日志证实仅加载一次）；beagle_1.jpg → beagle 0.979491（record 1）；samoyed_1.jpg → samoyed 0.998949（稳态 inference 3.644ms）；错误码实测 400/400/400/413/400；DELETE 联动删图成功；history/stats 真实入库；**CLI 与 API 同图 Top-3 逐位一致**
 - **文档**：README 后端章节（API 表、三种计时口径、上传保留与重置策略、UTC 时区、配置说明）、`.env.example`、reports/README.md、三文件更新；git 提交完成
 - **未新增依赖**（fastapi/uvicorn/sqlalchemy/python-multipart/httpx 阶段 1 已安装）
+
+## 2026-10-13（续）
+
+### 阶段 5：Vue 3 前端（已完成）
+- **Node 环境（E 盘约束全部落实）**：Node.js v24.21.0 LTS + npm 11.19.0，官方 ZIP
+  （对照 index.json 确认 LTS、SHASUMS256 校验）解压至 `tools/node`；npm 缓存经用户级
+  环境变量 `npm_config_cache` 指向 `E:\CatDogBreedNet\.cache\npm`（实测 `npm config get cache`）；
+  依赖装于 `frontend/node_modules`；Chromium（agent-browser 测试浏览器，官方 CDN 超时后
+  改走 npmmirror 镜像）位于 `.cache/ms-playwright`；C 盘无 npm 缓存
+- **前端代码**：`frontend/`（Vue 3.5 + Vite 8 + Vue Router 4 + Element Plus 2.14 + Axios + ECharts 6，纯 JS）
+  - `src/api/http.js`：Axios 实例（`VITE_API_BASE_URL`，代码内置默认回退）+ `normalizeError`
+    统一错误规范化（网络/超时/400/413/500/503，优先展示后端 error/detail 消息）
+  - `src/api/{predict,history,stats,health}.js`：字段名与后端 Schema 逐字对齐；
+    FormData 字段 `file` + `top_k`，不手动设置 Content-Type
+  - `src/utils/fileValidation.js`：前端预检（10MB/JPEG/PNG/WebP），服务端校验为最终依据
+  - `src/components/ImageUploader.vue`：点击/拖拽、本地预览（`URL.revokeObjectURL` 及时释放）、
+    移除/重选、预检警告；`PredictionResult.vue`：Top-3 分数、三种耗时口径、Softmax 非概率声明
+  - `src/views/`：PredictView（加载防重、错误重试、一键清空）、HistoryView（后端分页、
+    详情弹窗、删除二次确认、删除后刷新）、StatsView（ECharts 分布/趋势图、实例 dispose、
+    空态/错误态）；`App.vue`：导航 + `/api/health` 就绪状态轮询
+- **测试**：Vitest **18/18 通过**（api 适配 7、错误规范化 5、文件预检 6，全 Mock 不依赖真实后端）；
+  `npm run build` 成功（dist/ 不入 Git）；后端 `pytest` **73/73 通过**（无回归）
+- **真实联调**（真实 Chrome 浏览器 + uvicorn:8000 + vite:5173，2026-10-13）：
+  - 上传 `pug_1.jpg` → Top-1 **pug 100.00%**（record 入库）；推理 5.8ms/预处理 2.9ms/总耗时 48.1ms
+  - 历史页：新记录可见（随机文件名、UTC 时间）、详情弹窗完整、删除二次确认后列表 Total 4→3
+  - 统计页：总次数 3、平均推理耗时 921.32ms、覆盖品种 2，图表正常渲染
+  - 刷新/直连 `/history` 数据持久化；CORS 预检与实请求均放行 vite 源（未绕过浏览器安全）
+  - 停止后端：顶栏"模型未就绪"、统计页显示"无法连接后端服务"错误提示，页面不白屏
+- **文档**：README 前端章节（Node 安装路径、前后端启动命令、环境变量、访问地址、页面清单、
+  真实联调结果）、reports/README.md、三文件更新；git 提交完成
+- **Git 核对**：`node_modules/`、`dist/`、`frontend/.env.development`、`data/app.db`、`uploads/`、
+  数据集与权重均未入库；`package-lock.json` 保留提交

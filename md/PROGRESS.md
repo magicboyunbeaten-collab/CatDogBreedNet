@@ -3,23 +3,23 @@
 > 最近更新：2026-10-13
 
 ## 当前状态
-- 所处阶段：**阶段 4 已完成，等待进入阶段 5（Vue 3 前端）**
-- 计划状态：阶段 4 执行完毕（后端、测试、集成测试、文档、提交全部完成）
+- 所处阶段：**阶段 5 已完成，等待进入阶段 6（联调、测试与文档）**
+- 计划状态：阶段 5 执行完毕（前端、测试、真实联调、文档、提交全部完成）
 
-## 阶段 4 完成情况（2026-10-13）
-- 代码：`backend/app/`（config/schemas/database/models/main + routes×3 + services×2）；`ml/predictor.py` 新增共享 Predictor 类，`ml/predict.py` CLI 重构为复用同一类（签名与返回结构不变）；`verify_class_mapping` 移至 `ml/model.py`
-- 测试：`tests/test_api.py` 31 个用例（假 Predictor + 临时 SQLite + 临时目录）；全量 `pytest tests/` **73/73 通过**（9+20+13+31）
-- 真实集成测试（uvicorn:8000，best_model.pth）：
-  - health：`model_loaded=true, num_classes=37`；启动日志证实模型仅加载一次；/docs 200
-  - predict：beagle_1.jpg → beagle 0.979491（record 1）；samoyed_1.jpg → samoyed 0.998949（record 2，稳态 inference 3.644ms）
-  - 错误场景：空文件/文本伪装/BMP 400，>10MB 413，top_k=99 400（无路径/堆栈泄露）
-  - DELETE /api/history/2 联动删图成功；history/stats 反映真实入库记录
-  - CLI 与 API 同图 Top-3 逐位一致
-- 配置：`.env.example`（CATDOG_* 环境变量，默认仅本地 CORS）；未新增依赖
-- 文档：README 后端章节（API 表、计时口径、上传保留策略、UTC 时区约定）、reports/README.md、三文件更新；git 提交完成
+## 阶段 5 完成情况（2026-10-13）
+- 环境：Node.js v24.21.0 LTS + npm 11.19.0 装于 `tools/node`（官方 ZIP + SHA256 校验）；npm 缓存 `E:\CatDogBreedNet\.cache\npm`；已加入用户级 PATH；Chromium（agent-browser 测试用）经 npmmirror 镜像装于 `.cache/ms-playwright`
+- 前端：`frontend/`（Vue 3.5 + Vite 8 + Element Plus 2.14 + Axios + ECharts 6 + Vue Router 4）；API 层与后端 Schema 逐字对齐；错误规范化覆盖 400/413/500/503/网络/超时
+- 测试：Vitest 18/18（API 适配/错误规范化/文件预检，全 Mock）；`npm run build` 成功；后端 pytest 73/73 无回归
+- 真实联调（真实 Chrome + uvicorn:8000 + vite:5173）：
+  - 预测：pug_1.jpg → Top-1 pug 100.00%，三种耗时口径展示正确
+  - 历史：分页/详情/删除（二次确认）正常，删除后列表与统计同步
+  - 统计：真实记录（3 次 / 921.32ms / 2 品种）；刷新与直连持久化
+  - CORS 实测放行；后端停止后前端显示连接错误、不白屏
+- 文档：README 前端章节（Node 路径/启动命令/环境变量/访问地址/联调结果）、reports/README.md、三文件更新；git 提交完成
 
 ## 阻塞 / 等待
 - 无
 
-## 下一步（阶段 5 预览）
-- `frontend/`：Vue 3 + Vite + Element Plus；页面：上传识别（拖拽/预览/Top-K/耗时）、历史（分页/详情/删除）、统计（ECharts）；API base URL 走 `.env.development`；Node 安装需遵守非 C 盘约束
+## 下一步（阶段 6 预览）
+- 全流程手工测试表、论文素材（界面截图、功能测试表、API 说明）、README 终稿、
+  论文材料与实现一致性核对（不写未实现功能）

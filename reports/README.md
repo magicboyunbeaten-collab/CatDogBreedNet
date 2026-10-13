@@ -80,6 +80,24 @@
 - 测试：`tests/test_api.py` 31 个用例（假 Predictor + 临时 SQLite + 临时目录，不下载权重）；全量 `pytest tests/` **73/73 通过**
 - 未新增依赖（fastapi/uvicorn/sqlalchemy/python-multipart/httpx 阶段 1 已安装）
 
+## 阶段 5：Vue 3 前端（2026-10-13，已完成）
+
+- 环境：Node.js v24.21.0 LTS + npm 11.19.0（官方 ZIP 装于 `tools/node`，SHA256 已验证；
+  npm 缓存 `E:\CatDogBreedNet\.cache\npm`，依赖 `frontend/node_modules`，均在 E 盘）
+- 技术栈：Vue 3.5 + Vite 8 + Vue Router 4 + Element Plus 2.14 + Axios + ECharts 6（纯 JS）；
+  `package-lock.json` 已提交
+- 结构：`frontend/src/{api,components,views,router,utils,assets}` + `tests/`（Vitest）
+- API 对接：全部字段与后端 Schema 逐字对齐；统一 Axios 实例 + 错误规范化
+  （400/413/500/503/网络/超时）；`VITE_API_BASE_URL` 环境变量（默认 `http://127.0.0.1:8000/api`）
+- 自动化测试：Vitest **18/18 通过**（API 适配 7、错误规范化 5、文件预检 6，全部 Mock）；
+  `npm run build` 成功；后端 `pytest` **73/73 通过**（无回归）
+- 真实联调（真实 Chrome 浏览器 + uvicorn:8000 + vite:5173）：
+  - 上传 `pug_1.jpg` → Top-1 **pug 100.00%**（record 入库）；三种耗时口径正确展示
+  - 历史页分页/详情/删除（二次确认）均正常；删除后列表与统计同步更新
+  - 统计页显示真实记录（总次数 3、平均推理耗时 921.32ms、覆盖品种 2）
+  - 刷新/直连 `/history` 数据持久化；CORS 实测放行 vite 源（未绕过浏览器安全机制）
+  - 停止后端后：顶栏变"模型未就绪"、页面显示"无法连接后端服务"错误提示，不白屏
+
 ## 已知限制
 
 - 验证精度 0.84 为基线水平；尚未做模型对比（MobileNetV3 等）与增强对比实验；
