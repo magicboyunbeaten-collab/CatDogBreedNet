@@ -37,6 +37,10 @@ reports/*.log
 !reports/.gitkeep
 !reports/dataset.md
 
+# Thesis figures & screenshots are binary outputs (kept locally, not committed)
+reports/diagrams/
+reports/screenshots/
+
 # Local caches and toolchains (kept on E: drive, not committed)
 .cache/
 tools/

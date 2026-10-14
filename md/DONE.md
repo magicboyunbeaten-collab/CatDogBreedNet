@@ -99,3 +99,26 @@
   真实联调结果）、reports/README.md、三文件更新；git 提交完成
 - **Git 核对**：`node_modules/`、`dist/`、`frontend/.env.development`、`data/app.db`、`uploads/`、
   数据集与权重均未入库；`package-lock.json` 保留提交
+
+## 2026-10-14
+
+### 阶段 6：系统联调、全面测试与论文素材（已完成）
+- **npm 依赖完整性**：`npm ls --depth=0` 顶层依赖完整；`npm ci` 按锁文件干净重装 164 包成功
+  （锁文件未改动；npm ci 触发 IDE 安全垫片对 node_modules 批量替换的拦截，已用一次性
+  环境变量 `CODEBUDDY_SAFE_DELETE_ENABLED=0` 对该命令显式关闭并如实记录）；
+  重装后 Vitest 18/18、`npm run build` 成功（产物哈希与重装前一致）
+- **临时隔离环境 E2E**（8001/8002 端口 + 临时 DB + 临时上传目录）：15 项全部通过——
+  空库统计、合法预测（samoyed 0.998949/Bengal）、空文件 400、文本伪装 400、BMP 400、
+  >10MB 413、top_k 越界 400、历史分页、详情 404、删除联动删图、删除 404、统计一致、
+  模型未就绪 health 与 503
+- **正式环境真实 Chrome 联调**：8 项全部通过；正式 `data/app.db` 测试前后逐字段一致
+  （3 条演示记录零损坏）；本轮测试记录（含一条来源无法追溯的时间窗内意外记录）全部清理
+- **缺陷修复**：`frontend/src/views/HistoryView.vue` 后端不可用时仅瞬期 toast →
+  增加持久错误横幅与"加载失败，请重试"空态；修复后实测通过，Vitest/构建复跑通过
+- **论文素材**：`reports/thesis_materials.md`（架构/流程/ER 图引用、API 说明、截图索引、
+  评估摘要、环境部署）；`reports/diagrams/` 三张 PNG；`reports/screenshots/` 4 张真实截图
+- **功能测试报告**：`reports/system_test_report.md`（自动化 73+18、Mock、真实联调分节；
+  统计耗时差异专项核查：DB 均值 921.32ms = 两条首次 CUDA 初始化记录（1441.2/1316.9ms）
+  与一条稳态记录（5.8ms）的平均，稳态 2.95–5.8ms，统计接口计算正确，口径已文档化区分）
+- **全量回归**：pytest 73/73、Vitest 18/18、build 成功；Git diff 与忽略规则核对通过；
+  阶段 6 独立提交

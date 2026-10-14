@@ -10,12 +10,21 @@
       以下记录来自后端数据库的真实识别历史（时间戳为 UTC）。删除记录会同时删除服务端保存的对应图片。
     </el-text>
 
+    <el-alert
+      v-if="loadError"
+      :title="loadError"
+      type="error"
+      :closable="false"
+      show-icon
+      class="history-error"
+    />
+
     <el-card shadow="never">
       <el-table
         v-loading="loading"
         :data="items"
         style="width: 100%"
-        empty-text="暂无识别记录"
+        :empty-text="loadError ? '加载失败，请重试' : '暂无识别记录'"
       >
         <el-table-column prop="id" label="记录 ID" width="90" />
         <el-table-column label="图片文件" min-width="200">
@@ -181,6 +190,10 @@ onMounted(loadHistory)
 .file-name {
   font-family: monospace;
   font-size: 12px;
+}
+
+.history-error {
+  margin-bottom: 16px;
 }
 
 .pagination-bar {

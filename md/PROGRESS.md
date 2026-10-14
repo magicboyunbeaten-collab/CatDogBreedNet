@@ -1,25 +1,29 @@
 # PROGRESS 当前进度
 
-> 最近更新：2026-10-13
+> 最近更新：2026-10-14
 
 ## 当前状态
-- 所处阶段：**阶段 5 已完成，等待进入阶段 6（联调、测试与文档）**
-- 计划状态：阶段 5 执行完毕（前端、测试、真实联调、文档、提交全部完成）
+- **全部 6 个阶段已完成**（阶段 0 仓库检查 → 阶段 6 联调测试与文档）
+- 项目达到 CODEBUDDY.md §16 定义的交付状态，等待用户最终验收
 
-## 阶段 5 完成情况（2026-10-13）
-- 环境：Node.js v24.21.0 LTS + npm 11.19.0 装于 `tools/node`（官方 ZIP + SHA256 校验）；npm 缓存 `E:\CatDogBreedNet\.cache\npm`；已加入用户级 PATH；Chromium（agent-browser 测试用）经 npmmirror 镜像装于 `.cache/ms-playwright`
-- 前端：`frontend/`（Vue 3.5 + Vite 8 + Element Plus 2.14 + Axios + ECharts 6 + Vue Router 4）；API 层与后端 Schema 逐字对齐；错误规范化覆盖 400/413/500/503/网络/超时
-- 测试：Vitest 18/18（API 适配/错误规范化/文件预检，全 Mock）；`npm run build` 成功；后端 pytest 73/73 无回归
-- 真实联调（真实 Chrome + uvicorn:8000 + vite:5173）：
-  - 预测：pug_1.jpg → Top-1 pug 100.00%，三种耗时口径展示正确
-  - 历史：分页/详情/删除（二次确认）正常，删除后列表与统计同步
-  - 统计：真实记录（3 次 / 921.32ms / 2 品种）；刷新与直连持久化
-  - CORS 实测放行；后端停止后前端显示连接错误、不白屏
-- 文档：README 前端章节（Node 路径/启动命令/环境变量/访问地址/联调结果）、reports/README.md、三文件更新；git 提交完成
+## 阶段 6 完成情况（2026-10-14）
+- npm 完整性：`npm ls --depth=0` 正常；`npm ci` 干净重装 164 包成功（锁文件未改动，
+  IDE 删除保护对 node_modules 替换的影响已用一次性环境变量绕过并如实记录）；
+  重装后 Vitest 18/18、build 成功
+- 临时隔离环境 E2E（8001/8002 + 临时 DB）：15 项全部通过（含空文件/伪造/BMP/超大 413/
+  top_k 越界/历史分页/详情 404/删除联动/统计/503 模型未就绪）
+- 正式环境真实 Chrome 联调：8 项全部通过；正式 DB 测试前后逐字段一致（3 条演示记录）；
+  本轮测试记录全部清理；发现并修复历史页降级提示缺陷（持久错误横幅）
+- 论文素材：reports/thesis_materials.md + diagrams/（架构/流程/ER）+ screenshots/（4 张真实截图）
+- 功能测试报告：reports/system_test_report.md（自动化/Mock/真实联调分节 + 耗时差异专项核查）
+- 全量回归：pytest 73/73、Vitest 18/18、build 成功
 
 ## 阻塞 / 等待
 - 无
 
-## 下一步（阶段 6 预览）
-- 全流程手工测试表、论文素材（界面截图、功能测试表、API 说明）、README 终稿、
-  论文材料与实现一致性核对（不写未实现功能）
+## 交付物清单
+- 代码：ml/（数据+模型+训练+评估+预测）、backend/（FastAPI）、frontend/（Vue 3）、tests/、scripts/
+- 产物（本机，不入 Git）：artifacts/best_model.pth、data/processed、data/app.db、reports 下 csv/png/日志
+- 文档（入 Git）：README、reports/{dataset,evaluation_summary,system_test_report,thesis_materials,README}.md、
+  diagrams/（PNG，gitignore）、screenshots/（PNG，gitignore）、md 三文件、.env.example、requirements.txt、
+  frontend/package-lock.json

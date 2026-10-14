@@ -15,7 +15,9 @@
 | 阶段 3 | 评估实验（指标/混淆矩阵/性能测试） | ✅ 已完成（2026-10-13，测试集 Accuracy 0.8035 / Macro-F1 0.8022） |
 | 阶段 4 | 后端 API（FastAPI + SQLite） | ✅ 已完成（2026-10-13） |
 | 阶段 5 | 前端（Vue 3 + Element Plus） | ✅ 已完成（2026-10-13） |
-| 阶段 6 | 联调、测试与文档 | ⬜ 未开始 |
+| 阶段 6 | 联调、测试与文档 | ✅ 已完成（2026-10-14） |
+
+**项目已完成全部 6 个阶段**：数据管道 → 模型基线 → 评估实验 → FastAPI 后端 → Vue 3 前端 → 系统联调与测试。测试集指标：Accuracy 0.8035 / Macro-F1 0.8022（37 类，3669 张）。
 
 **当前可用命令**：数据集准备、模型训练、单图预测、测试集评估、FastAPI 后端、Vue 3 前端（见下文）。
 
@@ -25,10 +27,11 @@
 - **Python**：3.11.9，独立运行时位于 `tools/python`（E 盘，不依赖 C 盘；由 python-build-standalone 独立包解压而来，SHA256 已验证）
 - **GPU**：NVIDIA RTX 4060 Laptop 8GB，驱动 610.47（CUDA UMD 13.3）
 - **PyTorch**：2.14.1+cu130 / torchvision 0.29.1+cu130（实测 `torch.cuda.is_available() == True`）
-- **Node.js**：阶段 5（前端）时再按同样"非 C 盘"规则安装
-- **Git**：需用户手动安装（尚未安装，因此仓库尚未 `git init`）
+- **Node.js**：v24.21.0 LTS 位于 `tools/node`（E 盘，官方 ZIP + SHA256 校验；npm 缓存 `E:\CatDogBreedNet\.cache\npm`）
+- **Git**：已安装（C:\Program Files\Git），仓库已初始化并分 6 次提交
 
-所有缓存（pip/torch）与数据均位于 E 盘：`PIP_CACHE_DIR=E:\CatDogBreedNet\.cache\pip`、`TORCH_HOME=E:\CatDogBreedNet\.cache\torch`（已设置为用户级环境变量）。
+所有缓存（pip/torch/npm）与数据均位于 E 盘：`PIP_CACHE_DIR`、`TORCH_HOME`、`npm_config_cache`
+均已设置为用户级环境变量并指向 `E:\CatDogBreedNet\.cache`。
 
 ## 安装步骤
 
@@ -253,10 +256,36 @@ npm run build      # 生产构建（dist/，不入 Git）
 ## 测试
 
 ```powershell
+# 后端（73 个用例：合成数据 + 假 Predictor + 临时 SQLite，不依赖真实推理）
 E:\CatDogBreedNet\.venv\Scripts\python.exe -m pytest tests/ -q
+
+# 前端（18 个 Vitest 用例：API 适配/错误规范化/文件预检，全 Mock）
+cd E:\CatDogBreedNet\frontend
+npm test
+
+# 前端生产构建
+npm run build
+
+# 依赖干净重装验证（按锁文件）
+npm ci
 ```
 
-测试只使用临时合成的微型图片验证软件逻辑，不作为模型实验数据。
+单元测试只使用临时合成的微型图片、假 Predictor 与临时数据库验证软件逻辑，
+不作为模型实验数据。
+
+## 系统测试与论文材料（阶段 6）
+
+- [`reports/system_test_report.md`](reports/system_test_report.md)：功能测试报告
+  （自动化 73+18、临时隔离环境 15 项真实接口用例、真实 Chrome 联调 8 项、
+  统计耗时差异专项核查）；
+- [`reports/thesis_materials.md`](reports/thesis_materials.md)：论文材料汇总
+  （架构图/业务流程图/ER 图 `reports/diagrams/`、API 说明、界面截图
+  `reports/screenshots/`、模型评估摘要、软件环境与部署说明）；
+- 计时口径说明：`inference_ms` 仅模型前向、`preprocess_ms` 仅解码与变换、
+  `elapsed_ms` 为服务端处理总耗时；数据库中的平均推理耗时为全部历史记录
+  （含每次服务进程首次 CUDA 初始化）的平均，稳态单张约 3–6ms，两者不可互比；
+- 数据保护：测试不删除既有识别记录；破坏性测试使用临时数据库
+  （`CATDOG_DB_PATH`/`CATDOG_UPLOAD_DIR` 环境变量隔离）。
 
 ## 已知限制
 
