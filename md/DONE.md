@@ -159,3 +159,59 @@
   `md/DONE.md` 中"来源无法追溯"已更正为该记录由用户本人手动识别测试产生
 - **回归**：pytest 73/73、Vitest 31/31、`npm run build` 成功；Git 核对无数据/权重/
   DB/上传/node_modules/dist/缓存入库；独立最终验收修复提交
+
+## 2026-10-14（续二）
+
+### 界面缺陷修复与模型诊断（已完成，commit 8d2f313 之后新一轮）
+
+- **Back 按钮无响应（用户报告）**：
+  - 复现：真实 Chrome 中三个页面左上角 Back 有指针但点击无效果；
+  - 根因：`el-page-header` 的 `back` 事件未绑定任何处理函数（组件默认样式造成
+    "可点击"错觉，与鼠标样式无关）；
+  - 修复：新增 `frontend/src/utils/navigation.js`（`canGoBack()` 依据
+    `history.state.back` 判断站内历史；`goBack()` 有历史走 `router.back()`，
+    无历史回退 `/predict`）；HistoryView/StatsView 绑定 `@back`；PredictView
+    （默认页）移除无用途的 Back 按钮改为普通标题栏；
+  - 实测（真实 Chrome）：/predict 无 Back 按钮；/history（菜单进入）→ Back 回到
+    /predict；直接打开 /stats → Back 落到 /predict；
+  - 测试：新增 `navigation.test.js` 6 个 + `router.test.js` 4 个
+- **统计页两张图表空白（用户报告）**：
+  - 复现：真实 Chrome 中"品种分布"与"每日识别趋势"两个区域空白；
+  - 根因：`StatsView.loadStats()` 在 `loading` 仍为 `true` 时调用 `renderCharts()`，
+    而图表行 `v-if="!loading && !errorMessage"` 尚未渲染容器——`echarts.init`
+    的 ref 为 null，图表从未初始化；`loading` 结束后没有任何再次渲染的调用；
+  - 修复：`finally` 中先解除 `loading`，`await nextTick()` 后再 `renderCharts()`；
+    图表行改为不随 loading 卸载，加载中显示"加载中…"占位；新增数据签名去重
+    （避免 watcher 与 loadStats 双重 init）；标题改为具体 Top N；x 轴品种名经
+    `breedNames.js` 中文映射（`interval: 0`）；新增分布/趋势合计口径说明；
+  - 实测（真实 Chrome）：canvas 534×320、着色像素 50228/4817；总次数 64、
+    Top 10、分布合计 32、趋势合计 64；识别 samoyed_1.jpg 后 64→65、分布合计
+    32→33、趋势合计 65=总数；刷新页面后仍为 65（数据库持久化）；
+  - 测试：新增 `statsView.test.js` 9 个（正常数据/中文轴/趋势升序/>10 品种 Top 10/
+    空数据空态/加载失败/口径一致 ×2/Back 回退）
+- **历史详情英文（用户报告）**：
+  - 修复：HistoryView 详情弹窗 `predicted_breed` 与 Top-K `breed` 经
+    `getBreedDisplayName` 映射中文；未映射回退英文；置信度/排名/耗时原样；
+    SQLite 英文标签、API 响应、`class_names.json`、模型权重均未改动；
+  - 实测（真实 Chrome）：记录 #65 详情"萨摩耶犬 99.89% / 荷兰毛狮犬 0.07% /
+    博美犬 0.02%"；主列表仍为英文（不影响布局，保留）；
+  - 测试：新增 `historyView.test.js` 4 个
+- **附带修复**：element-plus 2.14.7 的 `el-dialog` 在 `appendTo="body"` 时默认
+  **不** teleport（源码 `disabled: appendTo !== 'body' ? false : !appendToBody`），
+  详情弹窗渲染在 `.history-view` 内、固定定位被布局裁剪，关闭按钮被页头遮挡；
+  增加 `append-to-body` 后弹窗挂载到 body，关闭按钮可点击（已实测）；
+- **CLI 与 API 一致性**：samoyed_1.jpg CLI（samoyed 0.9989 / keeshond /
+  pomeranian）与 API（萨摩耶犬 99.89% / 荷兰毛狮犬 / 博美犬）Top-3 逐位一致
+- **模型诊断（未重新训练）**：`reports/model_improvement_plan.md`——
+  重新统计 train 3311（每类 84–90，均值 89.5）/ val 369 / test 3669；
+  交叉分析 classification_report.csv：最弱 american_pit_bull_terrier 0.533、
+  staffordshire_bull_terrier 0.547、chihuahua 0.604、Ragdoll 0.651、Birman 0.692；
+  Pearson corr(每类样本数, F1) = **-0.182**（弱负相关）→ 错误主因是近缘品种
+  外形相似度而非样本量分布；混淆对：两种斗牛犬互混 35 次、Siamese/Birman/Ragdoll
+  互混 62 次、basset_hound→beagle 14 次；报告区分 37 类样本补充（A1–A5 实验，
+  含哈希+pHash 去重防泄漏规则）与新类别扩充（B 方案，38 类重训与遗忘检查），
+  全部实验保留官方 test 集为唯一对照；**未重新训练、未覆盖 best_model.pth、
+  未改基线报告**
+- **回归**：后端 pytest **73/73**、前端 Vitest **54/54**、`npm run build` 成功；
+  README、reports/README.md、md 三文件更新；本轮正式库新增记录 #65
+  （真实识别联调产生，如实记录）

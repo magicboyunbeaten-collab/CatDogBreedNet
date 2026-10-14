@@ -1,6 +1,6 @@
 <template>
   <div class="history-view">
-    <el-page-header :icon="null" title="">
+    <el-page-header :icon="null" title="" @back="onBack">
       <template #content>
         <span class="page-title">识别历史</span>
       </template>
@@ -67,11 +67,11 @@
       </div>
     </el-card>
 
-    <el-dialog v-model="detailVisible" title="记录详情" width="480px">
+    <el-dialog v-model="detailVisible" title="记录详情" width="480px" append-to-body>
       <el-descriptions v-if="detail" :column="1" border>
         <el-descriptions-item label="记录 ID">{{ detail.id }}</el-descriptions-item>
         <el-descriptions-item label="图片文件">{{ detail.image_filename }}</el-descriptions-item>
-        <el-descriptions-item label="预测品种">{{ detail.predicted_breed }}</el-descriptions-item>
+        <el-descriptions-item label="预测品种">{{ breedLabel(detail.predicted_breed) }}</el-descriptions-item>
         <el-descriptions-item label="置信度">
           {{ (detail.confidence * 100).toFixed(2) }}%
         </el-descriptions-item>
@@ -89,7 +89,7 @@
           :key="index"
           class="detail-row"
         >
-          <span>{{ index + 1 }}. {{ item.breed }}</span>
+          <span>{{ index + 1 }}. {{ breedLabel(item.breed) }}</span>
           <span>{{ (item.confidence * 100).toFixed(2) }}%</span>
         </div>
       </div>
@@ -101,7 +101,11 @@
 import { onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { deleteHistory, fetchHistory, fetchHistoryDetail } from '../api/history'
+import { goBack } from '../utils/navigation'
+import { getBreedDisplayName } from '../utils/breedNames'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const items = ref([])
 const total = ref(0)
 const page = ref(1)
@@ -110,6 +114,17 @@ const loading = ref(false)
 const loadError = ref('')
 const detailVisible = ref(false)
 const detail = ref(null)
+
+// 返回上一个站内页面；直接打开本页时回退到默认识别页
+function onBack() {
+  goBack(router)
+}
+
+// 详情展示用中文品种名；未映射的标签回退到英文原名。
+// 仅用于展示：数据库存储与 API 响应仍为英文标签。
+function breedLabel(breed) {
+  return getBreedDisplayName(breed)
+}
 
 function formatTime(isoString) {
   if (!isoString) return '-'

@@ -130,8 +130,51 @@
   `system_test_report.md` 等文档如实修正）
 - 回归：后端 pytest 73/73、前端 Vitest 31/31、生产构建成功
 
+## 界面缺陷修复与模型诊断（2026-10-14，已完成，commit 8d2f313 之后新一轮）
+
+三个 UI 缺陷均已在真实 Chrome（uvicorn:8000 + vite:5173）复现并修复，验收截图
+`reports/screenshots/10_stats_fixed.png`、`11_history_detail_zh.png`（本地留存）：
+
+1. **Back 按钮无响应**：根因为 `el-page-header` 的 `back` 事件未绑定处理函数。
+   修复：新增 `frontend/src/utils/navigation.js`（有站内历史 `router.back()`；
+   直接打开 URL 回退 `/predict`）；默认识别页移除无用途 Back 按钮。
+   实测：/history → Back 回到 /predict；直接打开 /stats → Back 落到 /predict；
+   /predict 无 Back 按钮。新增导航/路由测试 10 个。
+2. **统计页两张图表空白**：根因——`renderCharts()` 在 `loading` 仍为 true 时执行，
+   图表行被 `v-if="!loading"` 隐藏，ECharts 容器不存在，从未初始化。
+   修复：先解除 loading 再初始化 + 加载占位 + 数据签名去重；标题显示具体
+   Top N；x 轴中文品种名；补充分布/趋势合计口径说明。实测：识别后统计 64→65、
+   分布合计 32→33、趋势合计 65=总数，刷新后仍为 65（来自数据库）。
+   新增 StatsView 组件测试 9 个（正常/多品种/多日期/空数据/失败/口径/Back）。
+3. **历史详情英文**：详情弹窗 `predicted_breed` 与 Top-K `breed` 经
+   `breedNames.js` 映射中文（未映射回退英文；数据库/API/权重不变）。
+   实测记录 #65：萨摩耶犬 99.89% / 荷兰毛狮犬 0.07% / 博美犬 0.02%。
+   新增 HistoryView 测试 4 个。
+4. **附带修复**：element-plus 2.14 的 `appendTo="body"` 默认不 teleport，
+   详情弹窗渲染在页内导致关闭按钮被页头遮挡；增加 `append-to-body` 后
+   关闭按钮可点击（已实测）。
+
+CLI 与 API 同图一致性（samoyed_1.jpg）：CLI `samoyed 0.9989 / keeshond /
+pomeranian`，API 萨摩耶犬 99.89% / 荷兰毛狮犬 / 博美犬——Top-3 逐位一致。
+
+回归：后端 pytest **73/73**、前端 Vitest **54/54**、`npm run build` 成功。
+
+## 模型改进计划（2026-10-14，诊断完成，未重新训练）
+
+[`model_improvement_plan.md`](model_improvement_plan.md) 基于真实统计：
+
+- train 3311（每类 84–90，均值 89.5）/ val 369 / test 3669，**无显著类别不平衡**；
+- 测试集 Macro-F1 0.8022；最弱：两种斗牛犬 0.533/0.547、吉娃娃 0.604、
+  Ragdoll 0.651；样本量与 F1 的 Pearson 相关系数仅 **-0.182**——错误主因是
+  近缘品种外形相似度，而非"哪类样本少"；
+- 报告区分"补充现有 37 类样本"（A1–A5 实验，含去重防泄漏规则）与
+  "新增品种类别"（B 方案，如边境牧羊犬，含 38 类重训与遗忘检查）；
+- 所有实验必须保留官方 test 集为唯一最终对照，禁止按测试集反复调参；
+- **未重新训练、未覆盖 `artifacts/best_model.pth`**；基线报告未改动。
+
 ## 已知限制
 
-- 验证精度 0.84 为基线水平；尚未做模型对比（MobileNetV3 等）与增强对比实验；
+- 验证精度 0.84 为基线水平；改进实验方案已制定（见
+  [`model_improvement_plan.md`](model_improvement_plan.md)）但尚未执行；
 - Softmax 分数是当前类别集合上的归一化分数，不是真实概率；
 - 不保证识别训练类别之外的动物或物体。

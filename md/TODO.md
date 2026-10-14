@@ -77,5 +77,15 @@
 - [x] 修正测试报告中记录来源描述（用户手动测试产生）
 - [x] 回归：pytest 73/73、Vitest 31/31、build 成功；独立提交
 
-## 阶段 6：联调、测试与文档 [未开始]
-- [ ] 自动化测试与手工测试、README 与论文素材完善
+## 界面缺陷修复与模型诊断（2026-10-14，已完成）
+- [x] Back 按钮无响应：新增 `frontend/src/utils/navigation.js`（站内历史 router.back() / 无历史回退 /predict）；默认识别页移除死按钮；新增 navigation + router 测试 10 个；真实 Chrome 三页面导航验证
+- [x] 统计页两张图表空白：根因 loading 期间 renderCharts 时图表行 v-if 隐藏、ECharts 从未初始化；修复渲染时机 + 加载占位 + 签名去重；标题具体 Top N；x 轴中文品种名；合计口径说明；新增 StatsView 测试 9 个（正常/多品种/多日期/空数据/失败/口径/Back）
+- [x] 历史详情中文：`predicted_breed` 与 Top-K `breed` 走 breedNames.js（未映射回退英文；DB/API/权重不变）；新增 HistoryView 测试 4 个；真实浏览器验证记录 #65（萨摩耶犬/荷兰毛狮犬/博美犬）
+- [x] 附带修复：element-plus 2.14 appendTo 默认不 teleport 导致详情弹窗关闭按钮被页头遮挡 → `append-to-body`，实测可点击
+- [x] 模型诊断：`reports/model_improvement_plan.md`（每类 84-90 张、corr(样本数,F1)=-0.182、最弱斗牛犬/吉娃娃/长毛猫；37 类改进实验 A1-A5 与新类别扩充 B 方案；防泄漏规则）——未重新训练、未覆盖权重
+- [x] 真实联调：识别 samoyed_1.jpg → 记录 #65 入库；统计 64→65、分布合计 32→33、趋势合计 65=总数；刷新后持久化；CLI 与 API 同图 Top-3 逐位一致
+- [x] 回归：pytest 73/73、Vitest 54/54、build 成功；README/reports/README.md/三文件更新；独立提交
+
+## 后续可选（未开始，需用户确认）
+- [ ] 执行 model_improvement_plan.md 中的 A1-A5 实验（补充数据/增强/微调策略/backbone 对比）
+- [ ] 新增品种类别（如边境牧羊犬）的 38 类重训方案（B 方案）

@@ -271,8 +271,8 @@ npm run dev        # 开发服务器 http://127.0.0.1:5173
 | 页面 | 路径 | 功能 |
 |---|---|---|
 | 图片识别 | `/predict` | 点击/拖拽上传、本地预览（对象 URL 及时释放）、前端预检（服务端校验为准）、Top-3 品种与分数（中文品种名，悬停显示英文原始标签）、三种耗时口径、错误提示与重试、一键清空 |
-| 识别历史 | `/history` | 后端分页（10/20/50 每页）、记录 ID/图片文件名/品种/置信度/UTC 时间、详情弹窗、删除二次确认并联动删图 |
-| 识别统计 | `/stats` | 总识别次数、平均推理耗时、覆盖品种数、品种分布图与每日趋势图（ECharts，组件卸载时销毁实例） |
+| 识别历史 | `/history` | 后端分页（10/20/50 每页）、记录 ID/图片文件名/品种/置信度/UTC 时间、详情弹窗（品种名为中文，含 Top-K 分数排名）、删除二次确认并联动删图 |
+| 识别统计 | `/stats` | 总识别次数、平均推理耗时、覆盖品种数、品种分布图（中文品种名、按次数降序 Top 10、标题显示具体数量）与每日趋势图（ECharts，UTC 日期，组件卸载时销毁实例） |
 
 顶栏实时显示模型就绪状态（`/api/health`，30 秒轮询）；后端不可用时页面显示
 "无法连接后端服务"错误提示而非白屏。
@@ -281,7 +281,7 @@ npm run dev        # 开发服务器 http://127.0.0.1:5173
 
 ```powershell
 cd E:\CatDogBreedNet\frontend
-npm test           # Vitest：18 个用例（API 适配/错误规范化/文件预检，Mock 不依赖真实后端）
+npm test           # Vitest：54 个用例（API 适配/错误规范化/文件预检/中文品种映射/上传组件回归/导航/统计页/历史详情/路由表，Mock 或组件挂载，不依赖真实后端）
 npm run build      # 生产构建（dist/，不入 Git）
 ```
 
@@ -289,13 +289,25 @@ npm run build      # 生产构建（dist/，不入 Git）
 上传 `pug_1.jpg` → Top-1 pug 100.00%（记录入库）→ 历史页可见新记录 → 详情弹窗正常 →
 删除确认后列表与统计同步更新 → 刷新页面历史仍在 → 停止后端后前端显示连接错误且不白屏。
 
+**界面修复记录（2026-10-14，真实 Chrome 浏览器复测通过）**：
+
+| 缺陷 | 根因 | 修复 |
+|---|---|---|
+| 三个页面 Back 按钮点击无响应 | `el-page-header` 的 `back` 事件未绑定处理函数 | 新增 `frontend/src/utils/navigation.js`：有站内历史时 `router.back()`，直接打开 URL 时回退 `/predict`；默认识别页移除无用途的 Back 按钮 |
+| 统计页两张图表空白 | `renderCharts()` 在 `loading` 仍为 `true` 时执行，图表行被 `v-if` 隐藏、ECharts 容器不存在，从未初始化 | 先解除 `loading` 再初始化；图表行不再随 loading 卸载，加载中显示占位；增加数据签名去重；标题显示具体 Top N，x 轴改中文品种名，补充合计口径说明 |
+| 历史详情弹窗品种名为英文 | 模板直接渲染数据库英文标签 | 详情弹窗 `predicted_breed` 与 Top-K `breed` 经 `breedNames.js` 映射中文（未映射回退英文；数据库/API/权重不变） |
+| 详情弹窗关闭按钮被页头遮挡（附带发现） | element-plus 2.14 的 `appendTo="body"` 默认**不** teleport，需显式 `append-to-body` | 历史详情弹窗增加 `append-to-body` |
+
+导航回归测试见 `frontend/tests/navigation.test.js`、`router.test.js`、`statsView.test.js`、
+`historyView.test.js`；浏览器验收截图保存于 `reports/screenshots/`（本地留存，不入 Git）。
+
 ## 测试
 
 ```powershell
 # 后端（73 个用例：合成数据 + 假 Predictor + 临时 SQLite，不依赖真实推理）
 E:\CatDogBreedNet\.venv\Scripts\python.exe -m pytest tests/ -q
 
-# 前端（31 个 Vitest 用例：API 适配/错误规范化/文件预检/中文品种映射/上传组件回归，全 Mock 或组件挂载）
+# 前端（54 个 Vitest 用例：API 适配/错误规范化/文件预检/中文品种映射/上传组件回归/导航/统计页/历史详情/路由表，全 Mock 或组件挂载）
 cd E:\CatDogBreedNet\frontend
 npm test
 
@@ -322,6 +334,15 @@ npm ci
   （含每次服务进程首次 CUDA 初始化）的平均，稳态单张约 3–6ms，两者不可互比；
 - 数据保护：测试不删除既有识别记录；破坏性测试使用临时数据库
   （`CATDOG_DB_PATH`/`CATDOG_UPLOAD_DIR` 环境变量隔离）。
+
+## 模型改进计划（2026-10-14 诊断）
+
+基于真实统计的诊断与后续实验设计见
+[`reports/model_improvement_plan.md`](reports/model_improvement_plan.md)：每类训练样本
+84–90 张（均值 89.5，无显著类别不平衡）；测试集 Macro-F1 0.8022，最弱品种为两种斗牛犬
+（0.533/0.547）与吉娃娃（0.604），错误集中于外形近缘品种；样本量与 F1 相关系数仅 -0.182。
+该报告区分"补充现有 37 类样本"与"新增品种类别"两条路线，列出实验设计与防泄漏规则；
+**尚未重新训练，基线权重与评估报告未改动**。
 
 ## 已知限制
 

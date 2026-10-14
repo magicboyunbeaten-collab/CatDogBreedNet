@@ -1,13 +1,10 @@
 <template>
   <div class="predict-view">
-    <el-page-header :icon="null" title="">
-      <template #content>
-        <span class="page-title">图片识别</span>
-      </template>
-      <template #extra>
-        <el-button type="primary" plain @click="goHistory">查看识别历史</el-button>
-      </template>
-    </el-page-header>
+    <!-- 默认识别页没有可返回的站内目标，不保留无实际用途的 Back 按钮 -->
+    <div class="page-header">
+      <span class="page-title">图片识别</span>
+      <el-button type="primary" plain @click="goHistory">查看识别历史</el-button>
+    </div>
 
     <el-text class="page-desc" type="info">
       上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。
@@ -122,6 +119,14 @@ function goHistory() {
 </script>
 
 <style scoped>
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  margin-bottom: 4px;
+}
+
 .page-title {
   font-size: 20px;
   font-weight: 600;
