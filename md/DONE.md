@@ -112,7 +112,7 @@
   >10MB 413、top_k 越界 400、历史分页、详情 404、删除联动删图、删除 404、统计一致、
   模型未就绪 health 与 503
 - **正式环境真实 Chrome 联调**：8 项全部通过；正式 `data/app.db` 测试前后逐字段一致
-  （3 条演示记录零损坏）；本轮测试记录（含一条来源无法追溯的时间窗内意外记录）全部清理
+  （3 条演示记录零损坏）；本轮测试记录（含用户本人手动识别测试产生的记录）全部清理
 - **缺陷修复**：`frontend/src/views/HistoryView.vue` 后端不可用时仅瞬期 toast →
   增加持久错误横幅与"加载失败，请重试"空态；修复后实测通过，Vitest/构建复跑通过
 - **论文素材**：`reports/thesis_materials.md`（架构/流程/ER 图引用、API 说明、截图索引、
@@ -122,3 +122,40 @@
   与一条稳态记录（5.8ms）的平均，稳态 2.95–5.8ms，统计接口计算正确，口径已文档化区分）
 - **全量回归**：pytest 73/73、Vitest 18/18、build 成功；Git diff 与忽略规则核对通过；
   阶段 6 独立提交
+
+## 2026-10-14（续）
+
+### 最终验收修复（已完成）
+
+- **重新上传缺陷（用户报告）**：
+  - 复现：真实 Chrome 中"上传→清除→再上传"后预览不出现、识别按钮禁用，
+    与用户描述一致（被 `on-exceed` 静默阻断）；
+  - 根因：`ImageUploader.vue` 的 `el-upload :limit="1"` 且内部 `uploadFiles` 列表
+    从未清空——清除只重置组件自身状态；原生 input value 未重置导致同文件无法
+    再次触发 change；`PredictView.handleReset()` 未联动上传组件导致一键清空后
+    预览残留；
+  - 修复（最小化改动）：change 处理中先安全取得 File → 校验 → 接受后
+    `nextTick` 中 `clearFiles()` 清空 el-upload 内部列表并重置原生 input；
+    清除操作同步释放 Object URL、清空文件引用与内部列表；一键清空经
+    `uploaderRef.clearSelection()` 联动；移除了造成阻断的 `limit/on-exceed`；
+  - 回归：新增 8 个组件测试（A 同文件清除后重传 / B 不清除换图 / C 清除后换图 /
+    D 连续切换无残留 / E 失败后可重传 / 原生 input 重置 / 暴露方法 / 重选按钮）；
+    真实 Chrome A–E 全序列实测无需刷新页面；本轮测试记录仅删除自建记录
+- **中文品种名**：新增 `frontend/src/utils/breedNames.js`（37 类中文映射，键与
+  `class_names.json` 逐项一致，未映射回退英文）；`PredictionResult.vue` Top-1/Top-3
+  显示中文（title 保留英文原始标签）；新增 5 个测试（含读取真实 class_names.json
+  的全量覆盖核对）；真实浏览器验收：比格犬 97.95% / 巴吉度猎犬 0.50% / 迷你杜宾 0.50%，
+  历史页保持英文标签
+- **边境牧羊犬范围核查**：`class_names.json` 逐项核对确认 **Border Collie 不在 37 类**；
+  错误 Top-3（havanese 0.1633）解释、37 类内性能 vs 类别外能力区分、改进建议
+  （泛化分析 / 扩充 38 类的完整流程 / 拒识机制及局限）写入 `reports/thesis_materials.md`
+  第 9 节；未改权重、未改指标、未改阶段 3 报告
+- **启动脚本**：新增 `启动系统.bat`、`启动后端.bat`、`启动前端.bat`
+  （`%~dp0` 定位根目录；检查 venv/前端项目/模型文件/Node（含 tools\node 回退）；
+  独立窗口启动；TORCH_HOME 与 npm 缓存指向 E 盘；等待提示；失败给清晰提示）；
+  实测：成功路径双服务正常拉起（health 200 + 前端 200），失败路径（缺失 venv）
+  exit 1 且提示完整；README 增加"快速启动"章节
+- **记录来源修正**：`reports/system_test_report.md`、`reports/README.md`、
+  `md/DONE.md` 中"来源无法追溯"已更正为该记录由用户本人手动识别测试产生
+- **回归**：pytest 73/73、Vitest 31/31、`npm run build` 成功；Git 核对无数据/权重/
+  DB/上传/node_modules/dist/缓存入库；独立最终验收修复提交

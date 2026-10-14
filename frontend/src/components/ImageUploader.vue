@@ -1,14 +1,14 @@
 <template>
   <div class="image-uploader">
     <el-upload
+      ref="uploadRef"
       class="upload-dragger"
       drag
       :auto-upload="false"
       :show-file-list="false"
+      :multiple="false"
       :accept="acceptAttr"
       :on-change="handleChange"
-      :on-exceed="handleExceed"
-      :limit="1"
     >
       <div v-if="!previewUrl" class="upload-placeholder">
         <el-icon class="upload-icon"><upload-filled /></el-icon>
@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { validateImageFile } from '../utils/fileValidation'
@@ -40,6 +40,7 @@ import { validateImageFile } from '../utils/fileValidation'
 const emit = defineEmits(['select', 'clear'])
 
 const acceptAttr = '.jpg,.jpeg,.png,.webp'
+const uploadRef = ref(null)
 const selectedFile = ref(null)
 const previewUrl = ref('')
 
@@ -56,37 +57,62 @@ function releasePreview() {
   }
 }
 
+// The native <input type="file"> rendered inside el-upload.
+function getNativeInput() {
+  const upload = uploadRef.value
+  if (!upload) return null
+  return upload.$refs?.input
+    || upload.$el?.querySelector('input[type="file"]')
+    || null
+}
+
+// Reset the native input so choosing the *same* file again fires `change`.
+function resetNativeInput() {
+  const input = getNativeInput()
+  if (input) input.value = ''
+}
+
+// Drop the file entry el-upload keeps internally (and reset the native
+// input) so the picker stays reusable without a page refresh.
+function resetPicker() {
+  uploadRef.value?.clearFiles()
+  resetNativeInput()
+}
+
 function handleChange(file) {
-  const raw = file.raw || file
+  // 1) Safely capture the user's File object first.
+  const raw = file?.raw || file
   const check = validateImageFile(raw)
   if (!check.ok) {
+    // 2) Rejected file: drop it from the picker but keep any previous
+    //    valid selection untouched.
     ElMessage.warning(check.reason)
-    clearSelection()
+    nextTick(resetPicker)
     return
   }
+  // 3) Accept: swap preview (releasing the old object URL) and notify.
   releasePreview()
   selectedFile.value = raw
   previewUrl.value = URL.createObjectURL(raw)
   emit('select', raw)
-}
-
-function handleExceed() {
-  ElMessage.warning('只能选择一张图片，请先移除当前图片')
+  // 4) Keep the picker reusable: clear el-upload's internal file list and
+  //    reset the native input after el-upload finished its own handling.
+  nextTick(resetPicker)
 }
 
 function clearSelection() {
   releasePreview()
   selectedFile.value = null
+  resetPicker()
   emit('clear')
 }
 
 function triggerReselect() {
-  // Re-open the file dialog through a fresh upload trigger.
-  const input = document.querySelector('.upload-dragger input[type="file"]')
-  if (input) {
-    input.value = ''
-    input.click()
-  }
+  // Reset everything first, then open a fresh file dialog.
+  clearSelection()
+  nextTick(() => {
+    getNativeInput()?.click()
+  })
 }
 
 // Defensive: release the object URL when the parent swaps files or unmounts.

@@ -19,7 +19,7 @@
           <template #header>
             <span>1. 选择图片</span>
           </template>
-          <image-uploader @select="handleSelect" @clear="handleClear" />
+          <image-uploader ref="uploader" @select="handleSelect" @clear="handleClear" />
 
           <div class="predict-actions">
             <el-button
@@ -77,6 +77,7 @@ import PredictionResult from '../components/PredictionResult.vue'
 import { predictImage } from '../api/predict'
 
 const router = useRouter()
+const uploader = ref(null)
 const selectedFile = ref(null)
 const submitting = ref(false)
 const result = ref(null)
@@ -107,6 +108,9 @@ async function handlePredict() {
 }
 
 function handleReset() {
+  // Clear the uploader first (it emits 'clear', which nulls selectedFile),
+  // then drop the previous prediction result and error state.
+  uploader.value?.clearSelection()
   selectedFile.value = null
   result.value = null
   errorMessage.value = ''

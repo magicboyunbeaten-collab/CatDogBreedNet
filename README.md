@@ -203,6 +203,42 @@ E:\CatDogBreedNet\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --rel
 集成测试（真实运行，2026-10-13）：CLI 与 API 对同一张 `beagle_1.jpg` 的 Top-3 结果逐位一致
 （beagle 0.979491 / basset_hound 0.005011 / miniature_pinscher 0.00496）。
 
+## 快速启动（Windows）
+
+项目根目录提供一键启动脚本（也可分别启动）：
+
+| 脚本 | 作用 |
+|---|---|
+| `启动系统.bat` | 一键检查依赖并分别在独立窗口启动后端（:8000）与前端（:5173） |
+| `启动后端.bat` | 仅启动 FastAPI 后端 |
+| `启动前端.bat` | 仅启动 Vite 前端（首次运行自动 `npm install`） |
+
+**首次启动**（按顺序确认）：
+
+1. Python 虚拟环境：`E:\CatDogBreedNet\.venv\Scripts\python.exe` 存在
+   （创建：`tools\python\python.exe -m venv .venv`，然后 `pip install -r requirements.txt`）；
+2. 模型文件：`artifacts\best_model.pth` 与 `artifacts\class_names.json` 存在
+   （未训练时先运行 `python -m ml.train`）；
+3. Node.js：PATH 中可用，或已将 Node LTS 解压到 `tools\node\`（脚本会自动查找）；
+4. 双击 `启动系统.bat`。
+
+**日常使用**：双击 `启动系统.bat` → 在后端窗口等待
+`Application startup complete`（模型加载完成）→ 在前端窗口等待出现
+`Local: http://127.0.0.1:5173/` → 浏览器打开 <http://127.0.0.1:5173>。
+
+**停止程序**：分别关闭"后端"与"前端"两个命令行窗口（或在窗口中按 Ctrl+C）。
+
+**查看错误**：两个窗口内的输出即为运行日志；后端详细请求日志同窗口显示。
+端口被占用（8000/5173）、依赖缺失、GPU 不可用（可设 `CATDOG_DEVICE=cpu`）等
+问题会在窗口中给出具体提示，不会静默退出。
+
+**配置缺失处理**：前端未创建 `.env.development` 时使用代码内置默认地址
+`http://127.0.0.1:8000/api`（可从 `frontend/.env.example` 复制创建）；
+后端配置项见 `.env.example`（`CATDOG_*`），均有安全默认值。
+
+> 启动脚本通过 `%~dp0` 定位项目根目录，不依赖双击时的当前目录；
+> 所有路径与缓存均在 E 盘，不会写入 C 盘；脚本不会清除数据库、上传图片或模型权重。
+
 ## 前端（阶段 5）
 
 前端为 Vue 3 + Vite + Vue Router + Element Plus + Axios + ECharts（JavaScript），
@@ -234,7 +270,7 @@ npm run dev        # 开发服务器 http://127.0.0.1:5173
 
 | 页面 | 路径 | 功能 |
 |---|---|---|
-| 图片识别 | `/predict` | 点击/拖拽上传、本地预览（对象 URL 及时释放）、前端预检（服务端校验为准）、Top-3 品种与分数、三种耗时口径、错误提示与重试、一键清空 |
+| 图片识别 | `/predict` | 点击/拖拽上传、本地预览（对象 URL 及时释放）、前端预检（服务端校验为准）、Top-3 品种与分数（中文品种名，悬停显示英文原始标签）、三种耗时口径、错误提示与重试、一键清空 |
 | 识别历史 | `/history` | 后端分页（10/20/50 每页）、记录 ID/图片文件名/品种/置信度/UTC 时间、详情弹窗、删除二次确认并联动删图 |
 | 识别统计 | `/stats` | 总识别次数、平均推理耗时、覆盖品种数、品种分布图与每日趋势图（ECharts，组件卸载时销毁实例） |
 
@@ -259,7 +295,7 @@ npm run build      # 生产构建（dist/，不入 Git）
 # 后端（73 个用例：合成数据 + 假 Predictor + 临时 SQLite，不依赖真实推理）
 E:\CatDogBreedNet\.venv\Scripts\python.exe -m pytest tests/ -q
 
-# 前端（18 个 Vitest 用例：API 适配/错误规范化/文件预检，全 Mock）
+# 前端（31 个 Vitest 用例：API 适配/错误规范化/文件预检/中文品种映射/上传组件回归，全 Mock 或组件挂载）
 cd E:\CatDogBreedNet\frontend
 npm test
 
@@ -289,6 +325,11 @@ npm ci
 
 ## 已知限制
 
+- **模型仅支持训练时的 37 个品种**（12 猫 + 25 狗）。边境牧羊犬（Border Collie）等
+  训练类别之外的品种不在支持范围内，系统会给出一个低置信度的错误猜测——
+  详见 [`reports/thesis_materials.md`](reports/thesis_materials.md) 第 9 节；
 - 普通分类器不保证识别训练类别之外的动物、物体或无效图片；
 - Softmax 分数是模型在当前类别集合上的归一化分数，不应宣称为真实正确概率；
+- 识别页品种名显示为中文（映射见 `frontend/src/utils/breedNames.js`，未映射标签
+  回退显示英文原名）；历史与统计页保持数据库原始英文标签；
 - 数据集仅限研究用途，图片版权归原始网站所有。

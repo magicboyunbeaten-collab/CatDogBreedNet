@@ -15,7 +15,9 @@
         :class="{ 'is-top': index === 0 }"
       >
         <div class="prediction-rank">{{ index === 0 ? 'Top-1' : `Top-${index + 1}` }}</div>
-        <div class="prediction-breed">{{ item.breed }}</div>
+        <div class="prediction-breed" :title="item.breed">
+          {{ getBreedDisplayName(item.breed) }}
+        </div>
         <div class="prediction-score">
           <el-progress
             :percentage="Math.round(item.confidence * 1000) / 10"
@@ -53,6 +55,8 @@
 </template>
 
 <script setup>
+import { getBreedDisplayName } from '../utils/breedNames'
+
 defineProps({
   result: {
     type: Object,
