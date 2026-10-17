@@ -26,6 +26,7 @@ from ml.evaluate import (  # noqa: E402
     build_summary_markdown,
     collect_predictions,
     compute_metrics,
+    parse_args,
     save_classification_report_csv,
     save_confusion_matrix,
     save_metrics,
@@ -244,3 +245,86 @@ def test_benchmark_end_to_end_cpu_includes_preprocessing(tmp_path):
     assert result["measured_images"] == 2
     assert result["single_image_latency_ms"]["mean"] > 0
     assert result["throughput_images_per_second"] > 0
+
+
+# ---------------------------------------------------------------------------
+# --split: evaluating the validation / training split without touching test
+# ---------------------------------------------------------------------------
+
+def test_parse_args_split_defaults_to_test():
+    """默认必须是 'test'，保证既有调用行为完全不变。"""
+    args = parse_args([])
+    assert args.split == "test"
+
+
+@pytest.mark.parametrize("split", ["test", "val", "train"])
+def test_parse_args_accepts_each_split(split):
+    assert parse_args(["--split", split]).split == split
+
+
+def test_parse_args_rejects_unknown_split():
+    with pytest.raises(SystemExit):
+        parse_args(["--split", "dev"])
+
+
+def test_benchmark_batch_inference_scope_follows_split():
+    model, loader = _toy_model_and_loader(num_classes=4, batch_size=4,
+                                          samples=8)
+    result = benchmark_batch_inference(model, loader, torch.device("cpu"),
+                                       warmup_batches=1, timed_batches=2,
+                                       split="val")
+    assert result["scope"] == "model_only_forward_on_val_tensors"
+
+
+def test_save_confusion_matrix_accepts_split_without_changing_matrix(tmp_path):
+    """split 只影响图标题，不得改变矩阵内容。"""
+    from ml.evaluate import _plot_confusion_matrix
+
+    cm_a = save_confusion_matrix(Y_TRUE, Y_PRED, TOY_CLASSES,
+                                 tmp_path / "a.csv", tmp_path / "a.png")
+    cm_b = save_confusion_matrix(Y_TRUE, Y_PRED, TOY_CLASSES,
+                                 tmp_path / "b.csv", tmp_path / "b.png",
+                                 split="val")
+    assert cm_a.tolist() == cm_b.tolist()
+    # 直接调用绘图函数，确认 split 参数可用
+    _plot_confusion_matrix(cm_b, TOY_CLASSES, tmp_path / "c.png",
+                           normalize=False, split="val")
+    assert (tmp_path / "c.png").stat().st_size > 5000
+
+
+def test_build_summary_markdown_split_aware():
+    metrics = toy_metrics()
+    bench = {"scope": "model_only", "device": "cpu", "gpu": None,
+             "cuda_synchronized": False, "batch_size": 4, "warmup_batches": 1,
+             "timed_batches": 2, "mean_batch_seconds": 0.01,
+             "throughput_images_per_second": 100.0,
+             "single_image_latency_ms": {"samples": 8, "mean": 10.0,
+                                         "median": 9.0, "p95": 12.0}}
+    e2e = {"scope": "end_to_end", "device": "cpu", "gpu": None,
+           "cuda_synchronized": False, "batch_size": 1, "warmup_images": 1,
+           "measured_images": 2,
+           "single_image_latency_ms": {"mean": 20.0, "median": 19.0,
+                                       "p95": 25.0},
+           "throughput_images_per_second": 50.0}
+    base_env = {"evaluated_at": "now", "weights_path": "w.pth",
+                "dataset": "toy", "python": "3.11", "torch": "2",
+                "torchvision": "0", "gpu": "CPU", "platform": "win"}
+
+    # 未提供 split 时默认按 test 口径
+    default_text = build_summary_markdown(metrics, bench, e2e, dict(base_env),
+                                          {})
+    assert "官方 test 划分" in default_text
+    assert "未用于训练或模型选择" in default_text
+
+    val_env = dict(base_env, split="val")
+    val_text = build_summary_markdown(metrics, bench, e2e, val_env, {})
+    assert "验证集" in val_text
+    assert "`val` 划分" in val_text
+    # 注意正文里的 markdown 强调符号：实际为 "**不能**替代官方 test 集"
+    assert "替代官方 test 集" in val_text
+    assert "**不能**" in val_text
+
+    train_env = dict(base_env, split="train")
+    train_text = build_summary_markdown(metrics, bench, e2e, train_env, {})
+    assert "训练集" in train_text
+    assert "衡量泛化能力" in train_text

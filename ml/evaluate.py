@@ -1,15 +1,23 @@
 #!/usr/bin/env python
-"""Evaluate the trained ResNet18 baseline on the held-out test set.
+"""Evaluate the trained model on a chosen dataset split.
 
 Usage (from the repository root):
 
     python -m ml.evaluate                       # full test-set evaluation + benchmark
     python -m ml.evaluate --no-benchmark        # metrics only
     python -m ml.evaluate --timed-batches 100   # longer inference benchmark
+    python -m ml.evaluate --split val           # validation-split metrics
+                                                   (for model/strategy selection
+                                                   without touching the test split)
 
 The test split is the official Oxford-IIIT test split (3669 images) and was
 never used for training or model selection. This script only *measures* the
 already-selected best checkpoint; it never re-trains or re-selects models.
+
+``--split`` defaults to ``test`` so the default behaviour is unchanged; ``val``
+and ``train`` exist so a checkpoint can be scored on the validation split
+(e.g. to report validation Macro-F1 for strategy selection) without ever
+reading the test split.
 
 Products (written to reports/):
     test_metrics.json           accuracy, macro/weighted P-R-F1, per-class rows
@@ -197,7 +205,8 @@ def save_classification_report_csv(metrics: dict, csv_path: Path) -> None:
 
 
 def save_confusion_matrix(y_true, y_pred, class_names, csv_path: Path,
-                          png_path: Path, normalized_png_path: Path | None = None):
+                          png_path: Path, normalized_png_path: Path | None = None,
+                          split: str = "test"):
     """Save the raw confusion matrix as CSV and annotated heatmaps as PNG."""
     labels = list(range(len(class_names)))
     cm = confusion_matrix(y_true, y_pred, labels=labels)
@@ -210,15 +219,16 @@ def save_confusion_matrix(y_true, y_pred, class_names, csv_path: Path,
         for name, row in zip(class_names, cm):
             writer.writerow([name] + [int(v) for v in row])
 
-    _plot_confusion_matrix(cm, class_names, png_path, normalize=False)
+    _plot_confusion_matrix(cm, class_names, png_path, normalize=False,
+                           split=split)
     if normalized_png_path is not None:
         _plot_confusion_matrix(cm, class_names, normalized_png_path,
-                               normalize=True)
+                               normalize=True, split=split)
     return cm
 
 
 def _plot_confusion_matrix(cm, class_names, png_path: Path,
-                           normalize: bool) -> None:
+                           normalize: bool, split: str = "test") -> None:
     matrix = cm.astype(float)
     if normalize:
         row_sums = matrix.sum(axis=1, keepdims=True)
@@ -239,7 +249,8 @@ def _plot_confusion_matrix(cm, class_names, png_path: Path,
     ax.set_ylabel("true breed")
     title = "Confusion matrix (row-normalized)" if normalize \
         else "Confusion matrix (counts)"
-    ax.set_title(f"{title} - test set, {int(cm.sum())} images, {n} breeds")
+    ax.set_title(f"{title} - {split} split, {int(cm.sum())} images, "
+                 f"{n} breeds")
 
     threshold = (matrix.max() / 2) if matrix.max() > 0 else 0.5
     for i in range(n):
@@ -274,12 +285,14 @@ def _percentile(values: list[float], pct: float) -> float:
 
 
 def benchmark_batch_inference(model, loader, device, warmup_batches: int = 10,
-                              timed_batches: int = 50) -> dict:
-    """Model-only timing on real test tensors (no file IO, no preprocessing).
+                              timed_batches: int = 50,
+                              split: str = "test") -> dict:
+    """Model-only timing on real split tensors (no file IO, no preprocessing).
 
     CUDA events are synchronized around every timed region; the first
     ``warmup_batches`` batches are discarded so CUDA initialization and
-    autotuning do not pollute the measurements.
+    autotuning do not pollute the measurements. ``split`` only labels the
+    reported scope; the timing itself is identical for any split.
     """
     model.eval()
     batches: list[torch.Tensor] = []
@@ -320,7 +333,7 @@ def benchmark_batch_inference(model, loader, device, warmup_batches: int = 10,
     total_images = int(batch_size * timed_batches)
     mean_batch = statistics.mean(batch_seconds)
     return {
-        "scope": "model_only_forward_on_test_tensors",
+        "scope": f"model_only_forward_on_{split}_tensors",
         "includes_preprocessing": False,
         "includes_file_io": False,
         "device": str(device),
@@ -405,12 +418,23 @@ def _collect_test_image_paths(test_dataset, count: int) -> list[Path]:
 def build_summary_markdown(metrics: dict, batch_bench: dict, e2e_bench: dict,
                            env: dict, product_paths: dict) -> str:
     lines: list[str] = []
-    lines.append("# 测试集评估报告（阶段 3）")
+    split = env.get("split", "test")
+    split_zh = {"test": "测试集", "val": "验证集", "train": "训练集"}.get(
+        split, split)
+    lines.append(f"# {split_zh}评估报告（split={split}）")
     lines.append("")
     lines.append(f"- 评估时间：{env['evaluated_at']}")
-    lines.append(f"- 权重文件：`{env['weights_path']}`"
-                 f"（阶段 2 按验证集选择，未使用测试集调参）")
-    lines.append(f"- 数据集：{env['dataset']}，官方 test 划分 "
+    lines.append(f"- 权重文件：`{env['weights_path']}`")
+    if split == "test":
+        lines.append("- 口径：官方 test 划分，**未**用于训练或模型选择；"
+                     "阶段 2 按验证集选模")
+    elif split == "val":
+        lines.append("- 口径：**验证集**指标，用于模型/策略选择；"
+                     "与最终测试集指标必须分开解读")
+    else:
+        lines.append("- 口径：**训练集**指标，仅反映拟合程度，"
+                     "**不能**用于衡量泛化能力")
+    lines.append(f"- 数据集：{env['dataset']}，`{split}` 划分 "
                  f"{metrics['num_samples']} 张，{metrics['num_classes']} 类")
     lines.append(f"- 环境：{env['python']} / torch {env['torch']} / "
                  f"torchvision {env['torchvision']} / {env['gpu']} / "
@@ -508,8 +532,12 @@ def build_summary_markdown(metrics: dict, batch_bench: dict, e2e_bench: dict,
     lines.append("")
     lines.append("## 已知限制")
     lines.append("")
-    lines.append("- 以上指标仅反映该基线模型在官方 test 划分上的表现；"
-                 "未做模型对比与增强对比实验；")
+    if split == "test":
+        lines.append("- 以上指标仅反映该权重在官方 test 划分上的表现；"
+                     "test 划分未用于训练或模型选择；")
+    else:
+        lines.append(f"- 以上指标仅反映该权重在 **{split_zh}（split={split}）**"
+                     f"划分上的表现；该划分**不能**替代官方 test 集的最终评估；")
     lines.append("- Softmax 分数是当前类别集合上的归一化分数，不是真实概率；")
     lines.append("- 不保证识别训练类别之外的动物、物体或无效图片。")
     lines.append("")
@@ -532,6 +560,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         choices=["auto", "cpu", "cuda"])
     parser.add_argument("--num-workers", type=int, default=0)
     parser.add_argument("--reports-dir", type=Path, default=REPORTS_DIR)
+    parser.add_argument("--split", default="test",
+                        choices=["test", "val", "train"],
+                        help="which split to evaluate; defaults to 'test' so "
+                             "the default behaviour is unchanged. Use 'val' "
+                             "to score a checkpoint on the validation split "
+                             "(e.g. to report validation Macro-F1 for model "
+                             "selection without touching the test split).")
     parser.add_argument("--no-benchmark", action="store_true",
                         help="skip the inference benchmark")
     parser.add_argument("--warmup-batches", type=int, default=10)
@@ -556,23 +591,32 @@ def main(argv: list[str] | None = None) -> int:
     loaders, dataset_class_names = build_dataloaders(
         processed_dir=args.data_dir, batch_size=args.batch_size,
         num_workers=args.num_workers)
-    test_loader = loaders["test"]
+    if args.split not in loaders:
+        raise ValueError(
+            f"split '{args.split}' not found in {args.data_dir}; "
+            f"available: {sorted(loaders)}")
+    eval_loader = loaders[args.split]
     verify_class_mapping(checkpoint_class_names, dataset_class_names)
     num_classes = len(dataset_class_names)
-    expected_total = len(test_loader.dataset)
-    print(f"[evaluate] device={device} test_images={expected_total} "
-          f"classes={num_classes}")
+    expected_total = len(eval_loader.dataset)
+    print(f"[evaluate] device={device} split={args.split} "
+          f"images={expected_total} classes={num_classes}")
 
     started = time.time()
     y_true, y_pred = collect_predictions(
-        model, test_loader, device, expected_total=expected_total,
+        model, eval_loader, device, expected_total=expected_total,
         progress_every=20)
     metrics = compute_metrics(y_true, y_pred, dataset_class_names)
     metrics["weights_path"] = str(args.weights)
     metrics["data_dir"] = str(args.data_dir)
+    metrics["split"] = args.split
     metrics["split_policy"] = (
-        "test = official test split; never used for training or model "
-        f"selection (seed={SEED}, val_ratio={VAL_RATIO} for train/val)")
+        f"split='{args.split}' of {args.data_dir}. For split='test' this is "
+        "the official test split, never used for training or model selection "
+        f"(seed={SEED}, val_ratio={VAL_RATIO} for train/val). For split='val' "
+        "these are validation-split metrics used for model/strategy "
+        "selection; for split='train' they are training-split metrics and "
+        "say nothing about generalisation.")
     metrics["evaluated_at"] = datetime.now(timezone.utc).isoformat()
     metrics["evaluation_seconds"] = round(time.time() - started, 2)
     print(f"[evaluate] done: {metrics['num_samples']} images in "
@@ -594,7 +638,7 @@ def main(argv: list[str] | None = None) -> int:
     save_metrics(metrics, metrics_path)
     save_classification_report_csv(metrics, report_csv_path)
     save_confusion_matrix(y_true, y_pred, dataset_class_names, cm_csv_path,
-                          cm_png_path, cm_norm_png_path)
+                          cm_png_path, cm_norm_png_path, split=args.split)
     print(f"[evaluate] saved {metrics_path.name}, {report_csv_path.name}, "
           f"{cm_csv_path.name}, {cm_png_path.name}, "
           f"{cm_norm_png_path.name}")
@@ -616,11 +660,11 @@ def main(argv: list[str] | None = None) -> int:
     }
     if not args.no_benchmark:
         batch_bench = benchmark_batch_inference(
-            model, test_loader, device,
+            model, eval_loader, device,
             warmup_batches=args.warmup_batches,
-            timed_batches=args.timed_batches)
+            timed_batches=args.timed_batches, split=args.split)
         image_paths = _collect_test_image_paths(
-            test_loader.dataset, args.e2e_images + 5)
+            eval_loader.dataset, args.e2e_images + 5)
         e2e_bench = benchmark_end_to_end(
             model, image_paths, device, warmup=5)
         benchmark["model_only_batch_benchmark"] = batch_bench
@@ -643,6 +687,7 @@ def main(argv: list[str] | None = None) -> int:
         "evaluated_at": metrics["evaluated_at"],
         "weights_path": str(args.weights),
         "dataset": f"Oxford-IIIT Pet Dataset ({args.data_dir})",
+        "split": args.split,
         "python": platform.python_version(),
         "torch": torch.__version__,
         "torchvision": torchvision.__version__,
