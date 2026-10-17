@@ -82,7 +82,10 @@ afterEach(() => {
 })
 
 function dialogBody(wrapper) {
-  // 本测试环境中 ElDialog 渲染在 wrapper 内（未 teleport 到 body）
+  // ElDialog 设置了 append-to-body：jsdom 中内容被 teleport 到 document.body。
+  // 优先从 document 查询；若未 teleport 再回退到 wrapper 内查找。
+  const el = document.querySelector('.el-dialog__body')
+  if (el) return { text: () => el.textContent }
   return wrapper.find('.el-dialog__body')
 }
 
