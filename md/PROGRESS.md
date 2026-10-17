@@ -25,7 +25,28 @@
 - 本轮测试在正式库新增 1 条记录（#65，用户要求的真实识别联调产生）
 
 ## 阻塞 / 等待
-- 无（改进实验待用户确认是否执行）
+- 无（A3b 替换基线权重待用户确认 + 多 seed 验证）
+
+## 模型升级 U1-U2（2026-10-17，依据 md/MODEL_UPGRADE_PLAN (1).md）
+- **U1 诊断**：`scripts/diagnose_dataset.py`（只读）+ `reports/model_diagnostics.md`。
+  坏图 0；MD5 跨子集重复 0 组；**pHash 近重复 45 对（25 对跨子集、全同品种）**；
+  corr(样本量, F1) = -0.182，**corr(跨子集近重复数, F1) = 0.4807**；
+  末轮 train/val 差距 0.156（过拟合）；`split_summary.json` 为占位内容已披露
+- **U2 训练管线扩展**：多架构（resnet18/50、convnext_tiny、efficientnet_b0）、
+  增强预设、冻结策略、分层 LR、label smoothing、Mixup；默认值与基线逐项一致；
+  修复 `save_checkpoint` 未传 `arch` 的缺陷（A4_resnet50 评估失败根因）
+- **A2-A5 实验（10 个全部真实完成）**：
+  - **A3b 分层学习率最优：Macro-F1 0.8807（+0.0785），延迟与基线持平**
+  - A3a 解冻 layer4 +0.0610；A3c label smoothing +0.0166
+  - A4 EfficientNet-B0 +0.0651 但延迟 +122% 超预算；ConvNeXt-Tiny/ResNet50 显著更差
+    （证明基线配方无法迁移，非架构容量结论）
+  - A2c RandomErasing +0.0040（噪声边缘）；A2b ColorJitter -0.0069
+  - A2d Mixup -0.2034（轮数不足）；A3d 20 轮+早停 -0.2146（早停过早）
+  - A5：147 个难例无一存在 train/val 近重复 → 误分类与泄漏无关
+  - 发现运行间非确定性（噪声 ±0.02-0.05），±0.01 内差异不下结论
+- **测试**：pytest **114/114**（73 旧 + 14 诊断 + 27 训练管线）
+- **基线权重未替换**；A3b 候选在 `artifacts/exp_A3b_layered_lr/`；
+  A1/B/U3-U5 因缺合规数据未执行
 
 ## 交付物清单
 

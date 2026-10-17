@@ -215,3 +215,84 @@
 - **回归**：后端 pytest **73/73**、前端 Vitest **54/54**、`npm run build` 成功；
   README、reports/README.md、md 三文件更新；本轮正式库新增记录 #65
   （真实识别联调产生，如实记录）
+
+## 2026-10-17（模型升级 U1-U2）
+
+依据 `md/MODEL_UPGRADE_PLAN (1).md` 推进；分三个独立提交
+（U1 诊断 `c1de0ca`、训练管线扩展 `308cef4`、A2-A5 实验与文档）。
+
+### U1 模型诊断（只读，未重训）
+- 新增 `scripts/diagnose_dataset.py` + `tests/test_diagnose_dataset.py`（14 用例）；
+  产出 `reports/model_diagnostics.md`、`reports/diagnostics_details.json`
+- 样本数重新扫描：train 3311（84–90）/ val 369 / test 3669；标签映射三子集一致
+- 坏图：7349 张全部可解码，**0 坏图**
+- MD5 跨子集完全重复 **0 组**；**pHash（灰度+DCT+8×8 低频）近重复 45 对，
+  其中 25 对跨子集且全部同品种，距离 0 占 39 对**
+  → Oxford-IIIT 官方划分固有的视觉重复，基线对相关品种可能偏乐观
+- **corr(每类 train 样本数, F1) = -0.182**；**corr(跨子集近重复数, F1) = 0.4807**
+  （keeshond 0.946/10 对、japanese_chin 0.939/12 对、leonberger 0.945/4 对
+  均为 F1 前列且有泄漏；两种斗牛犬 0 对却最弱）→ 列为**待验证假设**，
+  建议双口径并列，不删官方 test 图
+- 训练曲线：最佳 epoch 8 / val 0.8401；末轮 train 0.9852 vs val 0.8293（差 0.156，
+  过拟合形态）
+- 披露 `reports/split_summary.json` 为早期占位内容（3 类 Breed_A/B/C、27/3/6 张），
+  与真实 37 类数据不符；真实统计以重新扫描与 `split_stats.json` 为准
+
+### U2 训练管线扩展（向后兼容）
+- `ml/model.py`：`SUPPORTED_ARCHS`（resnet18 / resnet50 / convnext_tiny /
+  efficientnet_b0）；`build_model(arch, num_classes, pretrained)`；
+  `_default_factory` 按 checkpoint 的 arch 分发
+- `ml/dataset.py`：`build_transforms(image_size, train, augment)`，
+  预设 baseline / +colorjitter / +randomerasing；baseline 与阶段 2 逐项一致；
+  评估/推理管线恒定确定性；`build_datasets`/`build_dataloaders` 透传
+- `ml/train.py`：新增 `--arch`、`--augment`、`--freeze-strategy`、
+  `--lr-head`、`--lr-backbone`、`--label-smoothing`、`--mixup-alpha`；
+  `apply_freeze_strategy`（none/layer4/head，返回可训练参数统计）、
+  `build_optimizer`（分层 LR，跳过冻结参数）、`train_one_epoch`（Mixup 软标签）；
+  `experiment_config.json` 完整记录全部设置
+- 默认参数与基线逐项一致（已用默认参数冒烟运行核对配置 JSON）
+- **修复缺陷**：`save_checkpoint` 未传 `arch`（默认 resnet18）导致非 resnet18
+  权重被误标，`load_checkpoint` 用错架构加载报形状不匹配——
+  这是 A4_resnet50 首次评估失败的真实根因；已改为 `arch=args.arch`
+  并新增 3 个回归测试（resnet50/convnext_tiny/efficientnet_b0 存取往返）
+- 新增 `scripts/run_improvement_experiments.py`（实验矩阵、断点续跑、
+  `--skip-train` 只重跑评估）
+- 测试：`tests/test_train_extensions.py` 27 用例；**pytest 114/114 全过**
+
+### A2-A5 实验（10 个全部真实完成，test 集各只评估一次）
+基线 resnet18：val 0.8401 / Acc 0.8035 / Macro-F1 0.8022 / 2.95 ms
+
+| 实验 | 变更 | val_acc | test Acc | test Macro-F1 | ΔMacro-F1 | ms/img |
+|---|---|---|---|---|---|---|
+| **A3b** | 分层 LR head 1e-3 / bb 1e-4 | **0.8970** | **0.8828** | **0.8807** | **+0.0785** | 2.19 |
+| A4_effnet | EfficientNet-B0 bs16 | 0.9051 | 0.8686 | 0.8673 | +0.0651 | 6.55 |
+| A3a | 解冻 layer4, lr 5e-4 | 0.8889 | 0.8643 | 0.8632 | +0.0610 | 2.15 |
+| A3c | label smoothing 0.1 | 0.8455 | 0.8204 | 0.8188 | +0.0166 | 2.31 |
+| A2c | RandomErasing(0.25) | 0.8537 | 0.8084 | 0.8062 | +0.0040 | 2.19 |
+| A2b | ColorJitter(0.2) | 0.8455 | 0.7975 | 0.7953 | -0.0069 | 2.30 |
+| A4_convnext | ConvNeXt-Tiny bs16 | 0.7507 | 0.6901 | 0.6800 | -0.1222 | 4.51 |
+| A2d | Mixup(0.2) | 0.6531 | 0.6154 | 0.5988 | -0.2034 | 2.15 |
+| A3d | 20 轮 + 早停(3) | 0.6396 | 0.5898 | 0.5876 | -0.2146 | 2.29 |
+| A4_resnet50 | ResNet50 bs16 | 0.3279 | 0.2537 | 0.2305 | -0.5717 | 5.44 |
+
+- **结论 1（最重要）**：降低主干学习率最有效。A3b +0.0785 且 val→test 落差最小
+  （0.0142），延迟与基线持平。根因与 U1 的过拟合诊断一致：基线 lr=1e-3 全网络
+  训练破坏了预训练特征
+- **结论 2**：A4 三个 backbone **没有一个**同时满足计划验收标准
+  （Macro-F1 ≥ +0.02 且延迟增幅 ≤ 50%）。EfficientNet-B0 精度最高但延迟 +122%；
+  ResNet50 10 轮后 train_acc 仅 0.29（严重欠训练）、ConvNeXt-Tiny 第 2 轮即过拟合
+  → **只证明基线配方无法迁移，未建立架构排名**
+- **结论 3**：早停 patience=3 过激（A3d 第 5 轮即停，没等到 LR 衰减后收敛）；
+  Mixup 在 10 轮下远不够（A2d）
+- **结论 4（A5）**：8 个混淆对抽样 147 个难例，**无一在 train/val 存在 pHash 近重复**
+  → 误分类与数据泄漏无关，是细粒度相似品种的真实难点；
+  图片已复制到 `.cache/A5_review/` 供人工目检；**未下"官方标注错误"结论**
+- **方法论发现**：同种子（42）下不同运行的 epoch 轨迹不同（cuDNN 非确定性），
+  噪声量级约 ±0.02–0.05；因此 ±0.01 内的差异（A2b/A2c）不下结论，
+  需多 seed 确认；超过 ±0.05 的效应结论稳健
+- **基线 `artifacts/best_model.pth` 未被替换**；A3b 候选在
+  `artifacts/exp_A3b_layered_lr/`，替换需用户确认 + 多 seed 验证
+- 产出：`reports/model_experiments_report.md`、`reports/A5_hard_examples.{md,json}`、
+  `reports/exp_results/`；更新 `model_improvement_plan.md`（待验证→已验证）、
+  README、reports/README.md、md 三文件
+- **未执行**：A1（补充真实数据）、B/U3–U5（新增类别）——缺合规图片数据

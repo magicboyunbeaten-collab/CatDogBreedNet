@@ -1,0 +1,22 @@
+[train] device=cuda arch=resnet18 classes=37 augment=baseline freeze=layer4 mixup_alpha=0.0 label_smoothing=0.0 train=3311 val=369 test=3669
+[train] gpu=NVIDIA GeForce RTX 4060 Laptop GPU vram=8.0 GiB
+[train] freeze strategy 'layer4': trainable modules=['fc', 'layer4']; trainable params 8412709/11195493 (75.1%)
+[epoch   1/10] train_loss=1.0610 train_acc=0.7158 val_loss=0.5730 val_acc=0.8374 lr=5.00e-04 (16.1s)
+[train] new best val_acc=0.8374 at epoch 1; saved best_model.pth
+[epoch   2/10] train_loss=0.3420 train_acc=0.9043 val_loss=0.5130 val_acc=0.8266 lr=5.00e-04 (16.3s)
+[epoch   3/10] train_loss=0.2163 train_acc=0.9348 val_loss=0.5668 val_acc=0.8184 lr=5.00e-04 (16.3s)
+[epoch   4/10] train_loss=0.1375 train_acc=0.9659 val_loss=0.5365 val_acc=0.8455 lr=5.00e-04 (16.4s)
+[train] new best val_acc=0.8455 at epoch 4; saved best_model.pth
+[epoch   5/10] train_loss=0.1221 train_acc=0.9665 val_loss=0.4520 val_acc=0.8753 lr=5.00e-05 (16.2s)
+[train] new best val_acc=0.8753 at epoch 5; saved best_model.pth
+[epoch   6/10] train_loss=0.0513 train_acc=0.9918 val_loss=0.3754 val_acc=0.8835 lr=5.00e-05 (16.9s)
+[train] new best val_acc=0.8835 at epoch 6; saved best_model.pth
+[epoch   7/10] train_loss=0.0347 train_acc=0.9937 val_loss=0.3865 val_acc=0.8672 lr=5.00e-05 (17.1s)
+[epoch   8/10] train_loss=0.0251 train_acc=0.9970 val_loss=0.3716 val_acc=0.8862 lr=5.00e-05 (16.1s)
+[train] new best val_acc=0.8862 at epoch 8; saved best_model.pth
+[epoch   9/10] train_loss=0.0221 train_acc=0.9982 val_loss=0.3592 val_acc=0.8889 lr=5.00e-05 (16.0s)
+[train] new best val_acc=0.8889 at epoch 9; saved best_model.pth
+[epoch  10/10] train_loss=0.0203 train_acc=0.9970 val_loss=0.3662 val_acc=0.8808 lr=5.00e-06 (16.2s)
+[train] done in 164.8s; best_val_acc=0.8889 (epoch 9)
+[train] artifacts: E:\CatDogBreedNet\artifacts\exp_A3a_freeze_layer4/ (best_model.pth, last_model.pth, class_names.json, experiment_config.json)
+[train] reports: E:\CatDogBreedNet\reports\exp_A3a_freeze_layer4\train_log.csv, loss_curve.png, accuracy_curve.png

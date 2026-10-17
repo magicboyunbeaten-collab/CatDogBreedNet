@@ -159,9 +159,9 @@ pomeranian`，API 萨摩耶犬 99.89% / 荷兰毛狮犬 / 博美犬——Top-3 �
 
 回归：后端 pytest **73/73**、前端 Vitest **54/54**、`npm run build` 成功。
 
-## 模型改进计划（2026-10-14，诊断完成，未重新训练）
+## 模型改进计划与 V1.1 实验（2026-10-17）
 
-[`model_improvement_plan.md`](model_improvement_plan.md) 基于真实统计：
+**诊断与计划**：[`model_improvement_plan.md`](model_improvement_plan.md)（2026-10-14）
 
 - train 3311（每类 84–90，均值 89.5）/ val 369 / test 3669，**无显著类别不平衡**；
 - 测试集 Macro-F1 0.8022；最弱：两种斗牛犬 0.533/0.547、吉娃娃 0.604、
@@ -169,12 +169,33 @@ pomeranian`，API 萨摩耶犬 99.89% / 荷兰毛狮犬 / 博美犬——Top-3 �
   近缘品种外形相似度，而非"哪类样本少"；
 - 报告区分"补充现有 37 类样本"（A1–A5 实验，含去重防泄漏规则）与
   "新增品种类别"（B 方案，如边境牧羊犬，含 38 类重训与遗忘检查）；
-- 所有实验必须保留官方 test 集为唯一最终对照，禁止按测试集反复调参；
-- **未重新训练、未覆盖 `artifacts/best_model.pth`**；基线报告未改动。
+- 所有实验必须保留官方 test 集为唯一最终对照，禁止按测试集反复调参。
+
+**数据诊断（U1）**：[`model_diagnostics.md`](model_diagnostics.md)
+
+- 7349 张图片全部可正常解码，**坏图 0**；MD5 跨子集完全重复 **0** 组；
+- **pHash 近重复 45 对，其中 25 对跨子集且全部同品种**（距离 0 占 39 对）——
+  Oxford-IIIT 官方划分固有的视觉重复，意味着基线对相关品种可能偏乐观；
+- corr(跨子集近重复数, F1) = **0.4807**：keeshond/japanese_chin/leonberger 等
+  F1 前列品种恰恰存在泄漏（列为待验证假设，双口径并列，未删官方 test 图）；
+- corr(每类 train 样本数, F1) = −0.182；末轮 train/val 差距 0.156（过拟合形态）；
+- `split_summary.json` 为早期占位内容（3 类/27 张），与真实数据不符，已披露。
+
+**实验结果（U2）**：[`model_experiments_report.md`](model_experiments_report.md)
+
+- 10 个实验全部真实完成，`pytest 114/114` 通过；
+- **最优：A3b 分层学习率（head 1e-3 / backbone 1e-4），test Macro-F1 0.8807（+0.0785）**，
+  延迟与基线持平；其次 A3a 解冻 layer4（+0.0610）、A4 EfficientNet-B0（+0.0651 但延迟 +122%）；
+- 反向结果同样重要：A3d 早停过早（−0.2146）、A2d Mixup 轮数不足（−0.2034）、
+  A4 ResNet50/ConvNeXt-Tiny 证明**基线配方无法迁移到其他架构**；
+- 发现运行间非确定性（同种子轨迹不同），噪声量级约 ±0.02–0.05，
+  故 ±0.01 内的差异不下结论；
+- **基线权重未被替换**，A3b 候选在 `artifacts/exp_A3b_layered_lr/`；
+  A1（补充真实数据）与 B/U3–U5（新增类别）**未执行**（缺合规数据）。
 
 ## 已知限制
 
-- 验证精度 0.84 为基线水平；改进实验方案已制定（见
-  [`model_improvement_plan.md`](model_improvement_plan.md)）但尚未执行；
+- 验证精度 0.84 为基线水平；A2–A4 实验已完成，最优候选 A3b 达 0.8807，
+  但**尚未替换为默认模型**（需用户确认与多 seed 验证）；
 - Softmax 分数是当前类别集合上的归一化分数，不是真实概率；
 - 不保证识别训练类别之外的动物或物体。

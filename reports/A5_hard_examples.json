@@ -1,0 +1,1456 @@
+{
+  "generated_at": "2026-10-17T03:55:00.943851+00:00",
+  "weights": "E:\\CatDogBreedNet\\artifacts\\best_model.pth",
+  "phash_threshold": 5,
+  "seed": 42,
+  "test_total": 3669,
+  "test_errors": 721,
+  "pairs_analysed": 8,
+  "train_val_images_hashed": 3680,
+  "review_folder": "E:\\CatDogBreedNet\\.cache\\A5_review",
+  "pairs": [
+    {
+      "true": "Siamese",
+      "pred": "Birman",
+      "total_errors_in_pair": 26,
+      "sampled": 20,
+      "mean_confidence_of_errors": 0.7328,
+      "cases": [
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_63.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.644332,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_63.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_240.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.578718,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_240.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_21.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.582543,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_21.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_39.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.538547,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_39.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_36.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.791563,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_36.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_78.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.812756,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_78.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_28.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.541763,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_28.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_88.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.738664,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_88.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_56.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.977595,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_56.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_228.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.926509,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_228.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_51.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.977469,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_51.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_84.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.85894,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_84.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_52.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.918121,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_52.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_227.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.936616,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_227.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_58.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.5,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_58.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_48.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.75541,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_48.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_81.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.958857,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_81.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_53.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.867108,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_53.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_47.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.864661,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_47.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Siamese\\Siamese_32.jpg",
+          "true": "Siamese",
+          "pred": "Birman",
+          "confidence": 0.341515,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Siamese_to_Birman\\Siamese_32.jpg"
+        }
+      ]
+    },
+    {
+      "true": "american_pit_bull_terrier",
+      "pred": "staffordshire_bull_terrier",
+      "total_errors_in_pair": 19,
+      "sampled": 19,
+      "mean_confidence_of_errors": 0.5899,
+      "cases": [
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_1.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.679743,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_1.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_23.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.342581,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_23.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_27.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.55933,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_27.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_32.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.646628,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_32.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_38.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.231607,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_38.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_4.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.788804,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_4.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_43.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.671154,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_43.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_46.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.709099,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_46.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_48.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.336548,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_48.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_54.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.979985,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_54.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_57.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.656448,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_57.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_64.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.905352,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_64.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_65.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.806471,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_65.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_66.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.746563,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_66.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_7.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.361836,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_7.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_88.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.57208,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_88.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_89.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.39802,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_89.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_90.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.512191,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_90.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\american_pit_bull_terrier\\american_pit_bull_terrier_99.jpg",
+          "true": "american_pit_bull_terrier",
+          "pred": "staffordshire_bull_terrier",
+          "confidence": 0.304237,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\american_pit_bull_terrier_to_staffordshire_bull_terrier\\american_pit_bull_terrier_99.jpg"
+        }
+      ]
+    },
+    {
+      "true": "Birman",
+      "pred": "Ragdoll",
+      "total_errors_in_pair": 18,
+      "sampled": 18,
+      "mean_confidence_of_errors": 0.7152,
+      "cases": [
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_196.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.756466,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_196.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_197.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.569812,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_197.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_26.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.66555,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_26.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_28.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.513977,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_28.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_3.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.841901,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_3.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_30.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.689617,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_30.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_36.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.952942,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_36.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_37.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.865629,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_37.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_38.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.70594,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_38.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_54.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.703754,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_54.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_59.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.671634,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_59.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_67.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.719126,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_67.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_79.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.94158,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_79.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_82.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.691942,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_82.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_92.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.565397,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_92.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_94.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.772017,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_94.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_98.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.575989,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_98.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_99.jpg",
+          "true": "Birman",
+          "pred": "Ragdoll",
+          "confidence": 0.670264,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Birman_to_Ragdoll\\Birman_99.jpg"
+        }
+      ]
+    },
+    {
+      "true": "Ragdoll",
+      "pred": "Birman",
+      "total_errors_in_pair": 18,
+      "sampled": 18,
+      "mean_confidence_of_errors": 0.7515,
+      "cases": [
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_203.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.625445,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_203.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_208.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.881654,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_208.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_219.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.986469,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_219.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_228.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.974477,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_228.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_24.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.933436,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_24.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_245.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.540899,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_245.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_252.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.969837,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_252.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_255.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.238109,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_255.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_29.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.892206,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_29.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_35.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.698431,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_35.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_49.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.503903,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_49.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_52.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.920657,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_52.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_53.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.921038,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_53.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_57.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.826486,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_57.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_67.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.369896,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_67.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_81.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.895951,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_81.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_88.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.636576,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_88.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Ragdoll\\Ragdoll_94.jpg",
+          "true": "Ragdoll",
+          "pred": "Birman",
+          "confidence": 0.711022,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\Ragdoll_to_Birman\\Ragdoll_94.jpg"
+        }
+      ]
+    },
+    {
+      "true": "wheaten_terrier",
+      "pred": "havanese",
+      "total_errors_in_pair": 17,
+      "sampled": 17,
+      "mean_confidence_of_errors": 0.6404,
+      "cases": [
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_1.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.669849,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_1.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_19.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.436667,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_19.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_198.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.838656,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_198.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_28.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.837634,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_28.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_3.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.583501,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_3.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_36.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.450047,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_36.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_47.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.387592,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_47.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_57.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.879131,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_57.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_67.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.646323,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_67.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_73.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.462927,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_73.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_74.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.784191,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_74.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_79.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.405059,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_79.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_80.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.88639,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_80.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_9.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.693083,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_9.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_90.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.904144,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_90.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_92.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.396068,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_92.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\wheaten_terrier\\wheaten_terrier_98.jpg",
+          "true": "wheaten_terrier",
+          "pred": "havanese",
+          "confidence": 0.625562,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\wheaten_terrier_to_havanese\\wheaten_terrier_98.jpg"
+        }
+      ]
+    },
+    {
+      "true": "staffordshire_bull_terrier",
+      "pred": "american_pit_bull_terrier",
+      "total_errors_in_pair": 16,
+      "sampled": 16,
+      "mean_confidence_of_errors": 0.6034,
+      "cases": [
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_24.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.428448,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_24.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_27.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.635105,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_27.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_3.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.519136,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_3.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_32.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.699616,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_32.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_38.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.544698,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_38.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_40.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.521021,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_40.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_42.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.500388,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_42.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_47.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.486895,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_47.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_49.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.543198,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_49.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_54.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.527495,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_54.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_59.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.76256,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_59.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_62.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.413731,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_62.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_66.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.817218,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_66.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_70.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.885709,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_70.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_71.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.885102,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_71.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\staffordshire_bull_terrier\\staffordshire_bull_terrier_93.jpg",
+          "true": "staffordshire_bull_terrier",
+          "pred": "american_pit_bull_terrier",
+          "confidence": 0.483856,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\staffordshire_bull_terrier_to_american_pit_bull_terrier\\staffordshire_bull_terrier_93.jpg"
+        }
+      ]
+    },
+    {
+      "true": "chihuahua",
+      "pred": "Sphynx",
+      "total_errors_in_pair": 15,
+      "sampled": 15,
+      "mean_confidence_of_errors": 0.6717,
+      "cases": [
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_19.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.951528,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_19.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_25.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.90493,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_25.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_28.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.477828,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_28.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_36.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.451977,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_36.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_41.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.576775,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_41.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_42.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.573799,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_42.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_60.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.65614,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_60.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_63.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.901951,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_63.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_65.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.460525,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_65.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_67.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.730256,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_67.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_75.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.35998,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_75.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_80.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.790636,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_80.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_90.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.633477,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_90.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_91.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.619813,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_91.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\chihuahua\\chihuahua_98.jpg",
+          "true": "chihuahua",
+          "pred": "Sphynx",
+          "confidence": 0.985567,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\chihuahua_to_Sphynx\\chihuahua_98.jpg"
+        }
+      ]
+    },
+    {
+      "true": "basset_hound",
+      "pred": "beagle",
+      "total_errors_in_pair": 14,
+      "sampled": 14,
+      "mean_confidence_of_errors": 0.7183,
+      "cases": [
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_198.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.470173,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_198.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_20.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.55706,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_20.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_200.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.979815,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_200.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_23.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.867002,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_23.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_30.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.853339,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_30.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_32.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.83426,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_32.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_4.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.737012,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_4.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_40.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.659087,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_40.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_66.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.525746,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_66.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_68.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.965619,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_68.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_7.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.795836,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_7.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_71.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.474122,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_71.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_81.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.930777,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_81.jpg"
+        },
+        {
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\basset_hound\\basset_hound_96.jpg",
+          "true": "basset_hound",
+          "pred": "beagle",
+          "confidence": 0.406873,
+          "near_duplicates_in_train_val": [],
+          "near_duplicates_same_label": 0,
+          "near_duplicates_other_label": 0,
+          "review_copy": "E:\\CatDogBreedNet\\.cache\\A5_review\\basset_hound_to_beagle\\basset_hound_96.jpg"
+        }
+      ]
+    }
+  ],
+  "runtime_seconds": 23.08
+}

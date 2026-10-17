@@ -1,0 +1,26 @@
+[train] device=cuda arch=resnet50 classes=37 augment=baseline freeze=none mixup_alpha=0.0 label_smoothing=0.0 train=3311 val=369 test=3669
+[train] gpu=NVIDIA GeForce RTX 4060 Laptop GPU vram=8.0 GiB
+[train] freeze strategy 'none': all parameters trainable
+[epoch   1/10] train_loss=3.6658 train_acc=0.0396 val_loss=3.5380 val_acc=0.0407 lr=1.00e-03 (33.5s)
+[train] new best val_acc=0.0407 at epoch 1; saved best_model.pth
+[epoch   2/10] train_loss=3.5220 train_acc=0.0523 val_loss=3.5347 val_acc=0.0759 lr=1.00e-03 (33.3s)
+[train] new best val_acc=0.0759 at epoch 2; saved best_model.pth
+[epoch   3/10] train_loss=3.4499 train_acc=0.0776 val_loss=3.3721 val_acc=0.0894 lr=1.00e-03 (33.5s)
+[train] new best val_acc=0.0894 at epoch 3; saved best_model.pth
+[epoch   4/10] train_loss=3.3397 train_acc=0.0994 val_loss=3.4267 val_acc=0.0976 lr=1.00e-03 (33.3s)
+[train] new best val_acc=0.0976 at epoch 4; saved best_model.pth
+[epoch   5/10] train_loss=3.2105 train_acc=0.1232 val_loss=3.2848 val_acc=0.1165 lr=1.00e-04 (33.4s)
+[train] new best val_acc=0.1165 at epoch 5; saved best_model.pth
+[epoch   6/10] train_loss=2.9475 train_acc=0.1803 val_loss=2.8717 val_acc=0.1789 lr=1.00e-04 (33.4s)
+[train] new best val_acc=0.1789 at epoch 6; saved best_model.pth
+[epoch   7/10] train_loss=2.7844 train_acc=0.2141 val_loss=2.7515 val_acc=0.2060 lr=1.00e-04 (33.3s)
+[train] new best val_acc=0.2060 at epoch 7; saved best_model.pth
+[epoch   8/10] train_loss=2.6855 train_acc=0.2332 val_loss=2.7167 val_acc=0.2602 lr=1.00e-04 (33.3s)
+[train] new best val_acc=0.2602 at epoch 8; saved best_model.pth
+[epoch   9/10] train_loss=2.5770 train_acc=0.2567 val_loss=2.5714 val_acc=0.2683 lr=1.00e-04 (33.0s)
+[train] new best val_acc=0.2683 at epoch 9; saved best_model.pth
+[epoch  10/10] train_loss=2.4127 train_acc=0.2939 val_loss=2.4482 val_acc=0.3279 lr=1.00e-05 (33.6s)
+[train] new best val_acc=0.3279 at epoch 10; saved best_model.pth
+[train] done in 336.2s; best_val_acc=0.3279 (epoch 10)
+[train] artifacts: E:\CatDogBreedNet\artifacts\exp_A4_resnet50/ (best_model.pth, last_model.pth, class_names.json, experiment_config.json)
+[train] reports: E:\CatDogBreedNet\reports\exp_A4_resnet50\train_log.csv, loss_curve.png, accuracy_curve.png

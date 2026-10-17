@@ -388,14 +388,18 @@ def main(argv: list[str] | None = None) -> int:
                   f"lr={row['lr']:.2e} ({epoch_seconds:.1f}s)", flush=True)
 
             # Keep the latest weights every epoch; best weights by val accuracy.
+            # ``arch`` must be passed explicitly: save_checkpoint defaults to
+            # the baseline resnet18, which would mislabel non-resnet18
+            # checkpoints and break load_checkpoint's architecture dispatch.
             save_checkpoint(model, args.output_dir / "last_model.pth",
-                            class_names, extra={"epoch": epoch})
+                            class_names, arch=args.arch,
+                            extra={"epoch": epoch})
             if val_acc > best_val_acc:
                 best_val_acc = val_acc
                 best_epoch = epoch
                 epochs_without_improvement = 0
                 save_checkpoint(model, args.output_dir / "best_model.pth",
-                                class_names,
+                                class_names, arch=args.arch,
                                 extra={"epoch": epoch, "val_acc": val_acc})
                 print(f"[train] new best val_acc={val_acc:.4f} at epoch {epoch}; "
                       f"saved best_model.pth", flush=True)

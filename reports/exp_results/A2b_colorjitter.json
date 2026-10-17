@@ -1,0 +1,33 @@
+{
+  "id": "A2b_colorjitter",
+  "group": "A2",
+  "label": "ColorJitter(0.2, 0.2, 0.2)",
+  "args": [
+    "--augment",
+    "+colorjitter"
+  ],
+  "artifact_dir": "E:\\CatDogBreedNet\\artifacts\\exp_A2b_colorjitter",
+  "reports_dir": "E:\\CatDogBreedNet\\reports\\exp_A2b_colorjitter",
+  "started_at": "2026-10-17T02:57:22.572261+00:00",
+  "status": "completed",
+  "train_seconds": 330.56,
+  "train_returncode": 0,
+  "evaluate_seconds": 28.94,
+  "evaluate_returncode": 0,
+  "arch": "resnet18",
+  "augment_preset": "+colorjitter",
+  "freeze_strategy": "none",
+  "epochs_completed": 10,
+  "best_epoch": 10,
+  "best_val_acc": 0.8455284552845529,
+  "final_train_val_gap": 0.13484,
+  "test_accuracy": 0.797492504769692,
+  "test_macro_f1": 0.7953284853221714,
+  "test_weighted_f1": 0.7958645279638686,
+  "test_macro_precision": 0.8080488315252815,
+  "test_macro_recall": 0.7970808647509349,
+  "single_image_latency_ms_mean": 2.2992585944393795,
+  "throughput_images_per_second": 1408.0707975601658,
+  "total_seconds": 359.5,
+  "finished_at": "2026-10-17T03:03:22.108146+00:00"
+}

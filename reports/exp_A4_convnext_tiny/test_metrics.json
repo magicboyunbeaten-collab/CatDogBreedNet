@@ -1,0 +1,242 @@
+{
+  "num_samples": 3669,
+  "num_classes": 37,
+  "accuracy": 0.6901062959934587,
+  "macro_precision": 0.7546929386145311,
+  "macro_recall": 0.6894151279716635,
+  "macro_f1": 0.680029629406374,
+  "weighted_precision": 0.7545142605645586,
+  "weighted_recall": 0.6901062959934587,
+  "weighted_f1": 0.6801895745765102,
+  "per_class": {
+    "Abyssinian": {
+      "precision": 0.7755102040816326,
+      "recall": 0.7755102040816326,
+      "f1": 0.7755102040816326,
+      "support": 98
+    },
+    "Bengal": {
+      "precision": 0.47761194029850745,
+      "recall": 0.96,
+      "f1": 0.6378737541528239,
+      "support": 100
+    },
+    "Birman": {
+      "precision": 0.5089820359281437,
+      "recall": 0.85,
+      "f1": 0.6367041198501873,
+      "support": 100
+    },
+    "Bombay": {
+      "precision": 0.8470588235294118,
+      "recall": 0.8181818181818182,
+      "f1": 0.8323699421965318,
+      "support": 88
+    },
+    "British_Shorthair": {
+      "precision": 0.7745098039215687,
+      "recall": 0.79,
+      "f1": 0.7821782178217822,
+      "support": 100
+    },
+    "Egyptian_Mau": {
+      "precision": 0.8958333333333334,
+      "recall": 0.44329896907216493,
+      "f1": 0.593103448275862,
+      "support": 97
+    },
+    "Maine_Coon": {
+      "precision": 0.9310344827586207,
+      "recall": 0.54,
+      "f1": 0.6835443037974683,
+      "support": 100
+    },
+    "Persian": {
+      "precision": 0.9365079365079365,
+      "recall": 0.59,
+      "f1": 0.7239263803680982,
+      "support": 100
+    },
+    "Ragdoll": {
+      "precision": 0.6666666666666666,
+      "recall": 0.32,
+      "f1": 0.43243243243243246,
+      "support": 100
+    },
+    "Russian_Blue": {
+      "precision": 0.8433734939759037,
+      "recall": 0.7,
+      "f1": 0.7650273224043715,
+      "support": 100
+    },
+    "Siamese": {
+      "precision": 0.7264150943396226,
+      "recall": 0.77,
+      "f1": 0.7475728155339806,
+      "support": 100
+    },
+    "Sphynx": {
+      "precision": 0.6423841059602649,
+      "recall": 0.97,
+      "f1": 0.7729083665338645,
+      "support": 100
+    },
+    "american_bulldog": {
+      "precision": 0.38967136150234744,
+      "recall": 0.83,
+      "f1": 0.5303514376996805,
+      "support": 100
+    },
+    "american_pit_bull_terrier": {
+      "precision": 0.5094339622641509,
+      "recall": 0.54,
+      "f1": 0.5242718446601942,
+      "support": 100
+    },
+    "basset_hound": {
+      "precision": 0.6496350364963503,
+      "recall": 0.89,
+      "f1": 0.7510548523206751,
+      "support": 100
+    },
+    "beagle": {
+      "precision": 0.7941176470588235,
+      "recall": 0.27,
+      "f1": 0.40298507462686567,
+      "support": 100
+    },
+    "boxer": {
+      "precision": 0.9032258064516129,
+      "recall": 0.2828282828282828,
+      "f1": 0.4307692307692308,
+      "support": 99
+    },
+    "chihuahua": {
+      "precision": 0.8813559322033898,
+      "recall": 0.52,
+      "f1": 0.6540880503144654,
+      "support": 100
+    },
+    "english_cocker_spaniel": {
+      "precision": 0.8253968253968254,
+      "recall": 0.52,
+      "f1": 0.6380368098159509,
+      "support": 100
+    },
+    "english_setter": {
+      "precision": 0.5664335664335665,
+      "recall": 0.81,
+      "f1": 0.6666666666666666,
+      "support": 100
+    },
+    "german_shorthaired": {
+      "precision": 0.9358974358974359,
+      "recall": 0.73,
+      "f1": 0.8202247191011236,
+      "support": 100
+    },
+    "great_pyrenees": {
+      "precision": 0.8148148148148148,
+      "recall": 0.88,
+      "f1": 0.8461538461538461,
+      "support": 100
+    },
+    "havanese": {
+      "precision": 0.5058139534883721,
+      "recall": 0.87,
+      "f1": 0.6397058823529411,
+      "support": 100
+    },
+    "japanese_chin": {
+      "precision": 1.0,
+      "recall": 0.57,
+      "f1": 0.7261146496815286,
+      "support": 100
+    },
+    "keeshond": {
+      "precision": 0.5987654320987654,
+      "recall": 0.9797979797979798,
+      "f1": 0.7432950191570882,
+      "support": 99
+    },
+    "leonberger": {
+      "precision": 0.8247422680412371,
+      "recall": 0.8,
+      "f1": 0.8121827411167513,
+      "support": 100
+    },
+    "miniature_pinscher": {
+      "precision": 0.7289719626168224,
+      "recall": 0.78,
+      "f1": 0.7536231884057971,
+      "support": 100
+    },
+    "newfoundland": {
+      "precision": 0.7377049180327869,
+      "recall": 0.9,
+      "f1": 0.8108108108108109,
+      "support": 100
+    },
+    "pomeranian": {
+      "precision": 0.8,
+      "recall": 0.84,
+      "f1": 0.8195121951219512,
+      "support": 100
+    },
+    "pug": {
+      "precision": 0.5833333333333334,
+      "recall": 0.91,
+      "f1": 0.7109375,
+      "support": 100
+    },
+    "saint_bernard": {
+      "precision": 1.0,
+      "recall": 0.32,
+      "f1": 0.48484848484848486,
+      "support": 100
+    },
+    "samoyed": {
+      "precision": 0.9791666666666666,
+      "recall": 0.47,
+      "f1": 0.6351351351351351,
+      "support": 100
+    },
+    "scottish_terrier": {
+      "precision": 0.8125,
+      "recall": 0.9191919191919192,
+      "f1": 0.8625592417061612,
+      "support": 99
+    },
+    "shiba_inu": {
+      "precision": 0.7049180327868853,
+      "recall": 0.86,
+      "f1": 0.7747747747747747,
+      "support": 100
+    },
+    "staffordshire_bull_terrier": {
+      "precision": 0.6666666666666666,
+      "recall": 0.3595505617977528,
+      "f1": 0.46715328467153283,
+      "support": 89
+    },
+    "wheaten_terrier": {
+      "precision": 0.6851851851851852,
+      "recall": 0.74,
+      "f1": 0.7115384615384616,
+      "support": 100
+    },
+    "yorkshire_terrier": {
+      "precision": 1.0,
+      "recall": 0.39,
+      "f1": 0.5611510791366906,
+      "support": 100
+    }
+  },
+  "classes_without_predictions": [],
+  "zero_division_policy": "classes with no predicted samples receive precision=0.0 (sklearn zero_division=0); recall and f1 remain defined by the ground-truth support",
+  "weights_path": "E:\\CatDogBreedNet\\artifacts\\exp_A4_convnext_tiny\\best_model.pth",
+  "data_dir": "E:\\CatDogBreedNet\\data\\processed",
+  "split_policy": "test = official test split; never used for training or model selection (seed=42, val_ratio=0.1 for train/val)",
+  "evaluated_at": "2026-10-17T03:45:58.466886+00:00",
+  "evaluation_seconds": 20.48
+}

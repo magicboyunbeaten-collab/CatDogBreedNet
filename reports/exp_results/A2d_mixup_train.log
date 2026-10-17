@@ -1,0 +1,14 @@
+[train] device=cuda arch=resnet18 classes=37 augment=baseline freeze=none mixup_alpha=0.2 label_smoothing=0.0 train=3311 val=369 test=3669
+[train] gpu=NVIDIA GeForce RTX 4060 Laptop GPU vram=8.0 GiB
+[train] freeze strategy 'none': all parameters trainable
+[epoch   1/10] train_loss=2.0202 train_acc=0.4666 val_loss=1.8471 val_acc=0.4878 lr=1.00e-03 (19.4s)
+[train] new best val_acc=0.4878 at epoch 1; saved best_model.pth
+[epoch   2/10] train_loss=1.6470 train_acc=0.6146 val_loss=1.2183 val_acc=0.6531 lr=1.00e-03 (19.8s)
+[train] new best val_acc=0.6531 at epoch 2; saved best_model.pth
+[epoch   3/10] train_loss=1.3320 train_acc=0.7351 val_loss=1.5070 val_acc=0.5501 lr=1.00e-03 (19.6s)
+[epoch   4/10] train_loss=1.2237 train_acc=0.7816 val_loss=1.5656 val_acc=0.5556 lr=1.00e-03 (19.6s)
+[epoch   5/10] train_loss=1.0761 train_acc=0.8124 val_loss=1.4040 val_acc=0.6206 lr=1.00e-04 (19.6s)
+[train] early stopping: no val_acc improvement for 3 epochs
+[train] done in 98.8s; best_val_acc=0.6531 (epoch 2)
+[train] artifacts: E:\CatDogBreedNet\artifacts\exp_A2d_mixup/ (best_model.pth, last_model.pth, class_names.json, experiment_config.json)
+[train] reports: E:\CatDogBreedNet\reports\exp_A2d_mixup\train_log.csv, loss_curve.png, accuracy_curve.png

@@ -1,0 +1,33 @@
+{
+  "id": "A3d_epochs20_earlystop",
+  "group": "A3",
+  "label": "20 epochs + early stop(patience 3)",
+  "args": [
+    "--epochs",
+    "20"
+  ],
+  "artifact_dir": "E:\\CatDogBreedNet\\artifacts\\exp_A3d_epochs20_earlystop",
+  "reports_dir": "E:\\CatDogBreedNet\\reports\\exp_A3d_epochs20_earlystop",
+  "started_at": "2026-10-17T03:20:03.491369+00:00",
+  "status": "completed",
+  "train_seconds": 104.69,
+  "train_returncode": 0,
+  "evaluate_seconds": 28.37,
+  "evaluate_returncode": 0,
+  "arch": "resnet18",
+  "augment_preset": "baseline",
+  "freeze_strategy": "none",
+  "epochs_completed": 5,
+  "best_epoch": 2,
+  "best_val_acc": 0.6395663956639567,
+  "final_train_val_gap": 0.203928,
+  "test_accuracy": 0.5898064867811392,
+  "test_macro_f1": 0.5875745287803947,
+  "test_weighted_f1": 0.5875334002479803,
+  "test_macro_precision": 0.678401138947255,
+  "test_macro_recall": 0.5905506864719025,
+  "single_image_latency_ms_mean": 2.2869671877288056,
+  "throughput_images_per_second": 1425.5380237068728,
+  "total_seconds": 133.06,
+  "finished_at": "2026-10-17T03:22:16.576719+00:00"
+}

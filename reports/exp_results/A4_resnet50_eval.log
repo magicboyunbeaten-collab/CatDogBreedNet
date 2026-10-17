@@ -1,0 +1,11 @@
+[evaluate] class_names.json matches the checkpoint (37 classes)
+[evaluate] device=cuda test_images=3669 classes=37
+[evaluate] 20/115 batches, 640 images
+[evaluate] 40/115 batches, 1280 images
+[evaluate] 60/115 batches, 1920 images
+[evaluate] 80/115 batches, 2560 images
+[evaluate] 100/115 batches, 3200 images
+[evaluate] done: 3669 images in 21.05s; accuracy=0.2537 macro_f1=0.2305 weighted_f1=0.2300
+[evaluate] saved test_metrics.json, classification_report.csv, confusion_matrix.csv, confusion_matrix.png, confusion_matrix_normalized.png
+[evaluate] benchmark: batch throughput 513.6 img/s, single-image mean 5.44 ms, end-to-end mean 8.50 ms
+[evaluate] saved evaluation_summary.md

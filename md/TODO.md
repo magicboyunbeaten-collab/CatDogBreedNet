@@ -86,6 +86,42 @@
 - [x] 真实联调：识别 samoyed_1.jpg → 记录 #65 入库；统计 64→65、分布合计 32→33、趋势合计 65=总数；刷新后持久化；CLI 与 API 同图 Top-3 逐位一致
 - [x] 回归：pytest 73/73、Vitest 54/54、build 成功；README/reports/README.md/三文件更新；独立提交
 
+## 模型升级 U1-U2（2026-10-17，已完成）
+依据 `md/MODEL_UPGRADE_PLAN (1).md` 推进。
+
+### U1 模型诊断（已完成）
+- [x] 新增 `scripts/diagnose_dataset.py`（只读）+ `tests/test_diagnose_dataset.py` 14 个用例
+- [x] 逐品种 train/val/test 样本数重新扫描；三个子集标签映射一致（37 类）
+- [x] 坏图扫描 7349 张全部可解码（0 坏图）
+- [x] MD5 跨子集完全重复 0 组；**pHash 近重复 45 对，其中 25 对跨子集且全部同品种**（距离 0 占 39 对）
+- [x] corr(每类 train 样本数, F1) = -0.182；**corr(跨子集近重复数, F1) = 0.4807**（泄漏或抬高相关品种测试分，列为待验证）
+- [x] 训练曲线复核：最佳 epoch 8 / val 0.8401；末轮 train/val 差距 0.156（过拟合形态）
+- [x] 披露 `reports/split_summary.json` 为早期占位内容（3 类/27 张），与真实数据不符
+- [x] 产出 `reports/model_diagnostics.md` + `reports/diagnostics_details.json`；独立提交
+
+### U2 V1.1 训练管线扩展（已完成）
+- [x] `ml/model.py`：SUPPORTED_ARCHS（resnet18/resnet50/convnext_tiny/efficientnet_b0），build_model(arch,...) 与 _default_factory 支持新架构
+- [x] `ml/dataset.py`：build_transforms 增加 baseline/+colorjitter/+randomerasing 预设；评估管线恒定确定性
+- [x] `ml/train.py`：新增 --arch/--augment/--freeze-strategy/--lr-head/--lr-backbone/--label-smoothing/--mixup-alpha；分层 LR 优化器；Mixup 软标签；experiment_config.json 完整记录
+- [x] 默认参数与基线逐项一致（已用默认参数冒烟核对 experiment_config.json）
+- [x] 修复缺陷：save_checkpoint 未传 arch 导致非 resnet18 权重被误标（A4_resnet50 评估失败根因）；新增 3 个回归测试
+- [x] 新增 `scripts/run_improvement_experiments.py`（矩阵 + 断点续跑 + --skip-train）
+- [x] `tests/test_train_extensions.py` 27 个用例；pytest **114/114** 全过
+
+### U2 A2-A5 实验（已完成，真实结果）
+- [x] A2 增强对照：ColorJitter -0.0069（无提升）、RandomErasing +0.0040（噪声边缘）、Mixup -0.2034（10 轮不适配）
+- [x] A3 微调对照：**A3b 分层学习率 +0.0785（val 0.8970 / test 0.8807）**、A3a 解冻 layer4 +0.0610、A3c label smoothing +0.0166、A3d 20 轮+早停 -0.2146（早停过早）
+- [x] A4 backbone 对比：EfficientNet-B0 +0.0651 但延迟 +122% 超预算；ConvNeXt-Tiny -0.1222；ResNet50 -0.5717（欠训练，非容量结论）
+- [x] A5 难例分析：8 个混淆对抽样 147 个，**无一在 train/val 存在近重复**（误分类与泄漏无关）；图片复制到 `.cache/A5_review/`
+- [x] 发现运行间非确定性（同种子轨迹不同，噪声约 ±0.02-0.05），已写入报告作为解读边界
+- [x] 产出 `reports/model_experiments_report.md`、`reports/A5_hard_examples.{md,json}`、`reports/exp_results/`
+- [x] **基线 `artifacts/best_model.pth` 未被替换**；A3b 候选保存在 `artifacts/exp_A3b_layered_lr/`
+
 ## 后续可选（未开始，需用户确认）
-- [ ] 执行 model_improvement_plan.md 中的 A1-A5 实验（补充数据/增强/微调策略/backbone 对比）
-- [ ] 新增品种类别（如边境牧羊犬）的 38 类重训方案（B 方案）
+- [ ] **A3b 替换基线权重**：需用户确认 + 多 seed（3-5 个）验证稳健性
+- [ ] 组合实验：A3b + RandomErasing / + label smoothing 是否叠加
+- [ ] EfficientNet-B0 单独调参后在延迟预算内与 ResNet18 公平比较
+- [ ] Mixup 延长到 50+ 轮再评估；A2c 多 seed 确认
+- [ ] A1 补充真实数据（需许可合规图片 + pHash 去重报告）
+- [ ] U3 V2 数据审查（Stanford Dogs 等，需下载与许可审查）
+- [ ] U4 V2 训练与评估、U5 可切换版本集成、未知品种拒识

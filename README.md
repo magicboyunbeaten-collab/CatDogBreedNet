@@ -335,14 +335,34 @@ npm ci
 - 数据保护：测试不删除既有识别记录；破坏性测试使用临时数据库
   （`CATDOG_DB_PATH`/`CATDOG_UPLOAD_DIR` 环境变量隔离）。
 
-## 模型改进计划（2026-10-14 诊断）
+## 模型改进计划与 V1.1 实验（2026-10-17）
 
-基于真实统计的诊断与后续实验设计见
-[`reports/model_improvement_plan.md`](reports/model_improvement_plan.md)：每类训练样本
-84–90 张（均值 89.5，无显著类别不平衡）；测试集 Macro-F1 0.8022，最弱品种为两种斗牛犬
-（0.533/0.547）与吉娃娃（0.604），错误集中于外形近缘品种；样本量与 F1 相关系数仅 -0.182。
-该报告区分"补充现有 37 类样本"与"新增品种类别"两条路线，列出实验设计与防泄漏规则；
-**尚未重新训练，基线权重与评估报告未改动**。
+诊断与实验设计见 [`reports/model_improvement_plan.md`](reports/model_improvement_plan.md)，
+数据诊断见 [`reports/model_diagnostics.md`](reports/model_diagnostics.md)，
+**A2/A3/A4/A5 实验结果见 [`reports/model_experiments_report.md`](reports/model_experiments_report.md)**。
+
+诊断要点（真实统计）：每类训练样本 84–90 张（均值 89.5，无显著类别不平衡）；
+测试集 Macro-F1 0.8022，最弱品种为两种斗牛犬（0.533/0.547）与吉娃娃（0.604），
+错误集中于外形近缘品种；样本量与 F1 相关系数仅 -0.182。
+
+已执行实验的关键真实结果（`resnet18` 基线 Acc 0.8035 / Macro-F1 0.8022）：
+
+| 实验 | 变更 | test Macro-F1 | Δ |
+|---|---|---|---|
+| A3b | 分层学习率 head 1e-3 / backbone 1e-4 | **0.8807** | **+0.0785** |
+| A4 | EfficientNet-B0（bs 16） | 0.8673 | +0.0651（延迟 +122%，超预算） |
+| A3a | 解冻 layer4，lr 5e-4 | 0.8632 | +0.0610 |
+| A3c | label smoothing 0.1 | 0.8188 | +0.0166 |
+| A2c | RandomErasing(0.25) | 0.8062 | +0.0040（噪声边缘） |
+| A2b | ColorJitter(0.2) | 0.7953 | −0.0069 |
+| A3d | 20 轮 + 早停(patience 3) | 0.5876 | −0.2146（早停过早） |
+| A2d | Mixup(0.2) | 0.5988 | −0.2034（轮数不适配） |
+| A4 | ConvNeXt-Tiny / ResNet50 | 0.6800 / 0.2305 | 基线配方无法迁移 |
+
+**当前 `artifacts/best_model.pth` 仍为原始基线，未被替换**；
+A3b 作为 V1.1 候选已保存于 `artifacts/exp_A3b_layered_lr/`，
+替换需用户确认并先做多 seed 验证。A1（补充真实数据）与 B/U3–U5（新增类别）
+因缺合规图片数据**未执行**。
 
 ## 已知限制
 
@@ -351,6 +371,11 @@ npm ci
   详见 [`reports/thesis_materials.md`](reports/thesis_materials.md) 第 9 节；
 - 普通分类器不保证识别训练类别之外的动物、物体或无效图片；
 - Softmax 分数是模型在当前类别集合上的归一化分数，不应宣称为真实正确概率；
+- **默认模型仍为阶段 2 基线**（test Macro-F1 0.8022）。A2–A4 实验已完成
+  （见 [`reports/model_experiments_report.md`](reports/model_experiments_report.md)），
+  最优候选为 A3b 分层学习率（0.8807），保存在
+  `artifacts/exp_A3b_layered_lr/`，但**尚未替换为默认模型**
+  （需用户确认并先做多 seed 验证）；
 - 识别页品种名显示为中文（映射见 `frontend/src/utils/breedNames.js`，未映射标签
   回退显示英文原名）；历史与统计页保持数据库原始英文标签；
 - 数据集仅限研究用途，图片版权归原始网站所有。

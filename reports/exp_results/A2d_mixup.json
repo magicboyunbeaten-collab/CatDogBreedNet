@@ -1,0 +1,33 @@
+{
+  "id": "A2d_mixup",
+  "group": "A2",
+  "label": "Mixup(alpha=0.2)",
+  "args": [
+    "--mixup-alpha",
+    "0.2"
+  ],
+  "artifact_dir": "E:\\CatDogBreedNet\\artifacts\\exp_A2d_mixup",
+  "reports_dir": "E:\\CatDogBreedNet\\reports\\exp_A2d_mixup",
+  "started_at": "2026-10-17T03:07:14.929261+00:00",
+  "status": "completed",
+  "train_seconds": 102.96,
+  "train_returncode": 0,
+  "evaluate_seconds": 28.15,
+  "evaluate_returncode": 0,
+  "arch": "resnet18",
+  "augment_preset": "baseline",
+  "freeze_strategy": "none",
+  "epochs_completed": 5,
+  "best_epoch": 2,
+  "best_val_acc": 0.6531165311653117,
+  "final_train_val_gap": 0.191847,
+  "test_accuracy": 0.6154265467429817,
+  "test_macro_f1": 0.5987518790697339,
+  "test_weighted_f1": 0.6001999677151356,
+  "test_macro_precision": 0.7022556875279988,
+  "test_macro_recall": 0.6147866246788984,
+  "single_image_latency_ms_mean": 2.151836094162718,
+  "throughput_images_per_second": 1440.53234845418,
+  "total_seconds": 131.11,
+  "finished_at": "2026-10-17T03:09:26.063245+00:00"
+}

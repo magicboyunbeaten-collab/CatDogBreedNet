@@ -1,0 +1,33 @@
+{
+  "id": "A2c_randomerasing",
+  "group": "A2",
+  "label": "RandomErasing(p=0.25)",
+  "args": [
+    "--augment",
+    "+randomerasing"
+  ],
+  "artifact_dir": "E:\\CatDogBreedNet\\artifacts\\exp_A2c_randomerasing",
+  "reports_dir": "E:\\CatDogBreedNet\\reports\\exp_A2c_randomerasing",
+  "started_at": "2026-10-17T03:03:22.108146+00:00",
+  "status": "completed",
+  "train_seconds": 203.9,
+  "train_returncode": 0,
+  "evaluate_seconds": 28.89,
+  "evaluate_returncode": 0,
+  "arch": "resnet18",
+  "augment_preset": "+randomerasing",
+  "freeze_strategy": "none",
+  "epochs_completed": 10,
+  "best_epoch": 10,
+  "best_val_acc": 0.8536585365853658,
+  "final_train_val_gap": 0.096507,
+  "test_accuracy": 0.8083946579449441,
+  "test_macro_f1": 0.8061552228249818,
+  "test_weighted_f1": 0.8065885687537439,
+  "test_macro_precision": 0.8152432759257161,
+  "test_macro_recall": 0.8082998054842805,
+  "single_image_latency_ms_mean": 2.1908431244810345,
+  "throughput_images_per_second": 1554.5926796539677,
+  "total_seconds": 232.79,
+  "finished_at": "2026-10-17T03:07:14.920525+00:00"
+}

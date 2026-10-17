@@ -70,6 +70,32 @@ def test_build_model_rejects_single_class():
         build_model(num_classes=1, pretrained=False)
 
 
+@pytest.mark.parametrize("arch", ["resnet50", "convnext_tiny",
+                                  "efficientnet_b0"])
+def test_save_checkpoint_records_arch_and_round_trips(tmp_path, arch):
+    """Regression: 非默认架构必须把 arch 写入 checkpoint。
+
+    ``save_checkpoint`` 的 ``arch`` 默认值是基线的 resnet18；若训练时忘记
+    显式传入，checkpoint 会被误标成 resnet18，``load_checkpoint`` 随即用错误
+    架构加载并报形状不匹配（A4_resnet50 评估失败的真实原因）。
+    """
+    from ml.model import load_checkpoint, save_checkpoint
+
+    class_names = ["a", "b", "c"]
+    model = build_model(arch=arch, num_classes=3, pretrained=False)
+    path = tmp_path / "model.pth"
+    save_checkpoint(model, path, class_names, arch=arch)
+
+    payload = torch.load(path, map_location="cpu", weights_only=False)
+    assert payload["arch"] == arch
+
+    loaded, loaded_names = load_checkpoint(path, device=torch.device("cpu"))
+    assert loaded_names == class_names
+    loaded.eval()
+    with torch.no_grad():
+        assert loaded(torch.zeros(1, 3, 224, 224)).shape == (1, 3)
+
+
 # ---------------------------------------------------------------------------
 # A2: 增强预设
 # ---------------------------------------------------------------------------
