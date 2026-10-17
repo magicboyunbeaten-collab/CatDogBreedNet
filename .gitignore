@@ -18,6 +18,7 @@ dist/
 # Datasets and uploads (never committed)
 data/raw/
 data/processed/
+data/processed_clean/
 uploads/
 
 # Databases
@@ -34,6 +35,10 @@ artifacts/**/*.pth
 reports/*.csv
 reports/*.png
 reports/split_*.json
+
+# 近重复联系表图片：由 scripts/review_near_duplicates.py 生成，可随时重建；
+# 保留报告（.md/.json/.csv）与人工判定记录（visual_verification.json）
+reports/leakage_review/*.png
 reports/*.log
 !reports/.gitkeep
 !reports/dataset.md

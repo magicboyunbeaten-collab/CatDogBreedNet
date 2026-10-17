@@ -1,0 +1,2007 @@
+{
+  "summary": {
+    "generated_at": "2026-10-17T04:21:42.227085+00:00",
+    "threshold": 5,
+    "total_pairs": 45,
+    "cross_split_pairs": 25,
+    "within_split_pairs": 20,
+    "identical_md5_pairs": 0,
+    "distance_mismatches": 0,
+    "grade_counts": {
+      "极可能同一照片变体": 39,
+      "很可能同一照片变体": 4,
+      "疑似 pHash 误报": 0,
+      "需人工确认": 2
+    },
+    "visual_verification": {
+      "verdicts_provided": true,
+      "verified_pairs": 25,
+      "cross_split_confirmed_same_photo": 25,
+      "cross_split_false_positive": 0,
+      "cross_split_unverified": 0
+    },
+    "note": "初步分级仅基于 pHash 距离与像素相关度；目视核验结论以 visual_verdict 字段为准。两者都不替代用户本人的最终复核。"
+  },
+  "pairs": [
+    {
+      "index": 1,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "大白熊犬同一姿态坐于同一草地背景，仅裁切不同",
+      "pixel_evidence": {
+        "grey_mae": 0.06,
+        "grey_corr": 0.99997,
+        "rgb_mae": 0.081
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\great_pyrenees\\great_pyrenees_173.jpg",
+        "split": "train",
+        "class": "great_pyrenees",
+        "md5": "482bedd09c2cbf940ab9b4516f4e3070",
+        "width": 500,
+        "height": 357,
+        "mean_rgb": [
+          102.54,
+          117.64,
+          83.32
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\great_pyrenees\\great_pyrenees_89.jpg",
+        "split": "test",
+        "class": "great_pyrenees",
+        "md5": "2bcfab8943366ab0016901bf3a53144b",
+        "width": 500,
+        "height": 357,
+        "mean_rgb": [
+          102.54,
+          117.64,
+          83.32
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.06,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.08
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_194.jpg",
+        "split": "test",
+        "class": "japanese_chin",
+        "md5": "f6f15999d5443c1292f62c93150b5b87",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          133.27,
+          102.38,
+          85.27
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_79.jpg",
+        "split": "test",
+        "class": "japanese_chin",
+        "md5": "4ef7e5b2cfb1e7a02a54d9cf4321c2c6",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          133.26,
+          102.38,
+          85.26
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "keeshond 同一犬只、同一厨房背景、蓝色项圈，姿态一致",
+      "pixel_evidence": {
+        "grey_mae": 0.067,
+        "grey_corr": 0.99998,
+        "rgb_mae": 0.087
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_140.jpg",
+        "split": "train",
+        "class": "keeshond",
+        "md5": "ee7db21d0cf5c454d5475a2039249c53",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          145.58,
+          139.04,
+          138.52
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\keeshond\\keeshond_97.jpg",
+        "split": "test",
+        "class": "keeshond",
+        "md5": "8baa9040e8e5ab92dc0dd1b42696d2b3",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          145.58,
+          139.04,
+          138.52
+        ]
+      }
+    },
+    {
+      "index": 4,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 3.76,
+        "grey_corr": 0.98225,
+        "rgb_mae": 4.176
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_113.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "c499473bf76328174a609124607e68ba",
+        "width": 473,
+        "height": 568,
+        "mean_rgb": [
+          60.27,
+          52.07,
+          50.73
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_157.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "44354c7545202cbd06c51d86c9fa14d8",
+        "width": 704,
+        "height": 849,
+        "mean_rgb": [
+          61.09,
+          52.87,
+          51.23
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "英国短毛猫同一只、同一粉色靠垫背景，头部角度几乎一致",
+      "pixel_evidence": {
+        "grey_mae": 0.058,
+        "grey_corr": 0.99998,
+        "rgb_mae": 0.069
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\British_Shorthair\\British_Shorthair_160.jpg",
+        "split": "train",
+        "class": "British_Shorthair",
+        "md5": "6e0ee9d2bdda555a8ec3d8811879e774",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          192.69,
+          181.39,
+          195.83
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\British_Shorthair\\British_Shorthair_278.jpg",
+        "split": "test",
+        "class": "British_Shorthair",
+        "md5": "d65b22917bd6da8dc6fbde70001a5553",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          192.7,
+          181.4,
+          195.83
+        ]
+      }
+    },
+    {
+      "index": 6,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "keeshond 同一犬只俯身于同一草地，背景花丛一致",
+      "pixel_evidence": {
+        "grey_mae": 0.059,
+        "grey_corr": 0.99998,
+        "rgb_mae": 0.078
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_175.jpg",
+        "split": "train",
+        "class": "keeshond",
+        "md5": "76a2d134001494819bf68e62c4250b76",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          86.62,
+          98.06,
+          74.7
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\keeshond\\keeshond_27.jpg",
+        "split": "test",
+        "class": "keeshond",
+        "md5": "c540049ed80ad6b3055776217bf20013",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          86.62,
+          98.06,
+          74.7
+        ]
+      }
+    },
+    {
+      "index": 7,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "keeshond 同一犬只趴于同一木地板，前伸姿势一致",
+      "pixel_evidence": {
+        "grey_mae": 0.051,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.073
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_152.jpg",
+        "split": "train",
+        "class": "keeshond",
+        "md5": "d2f5acadb415338ef4eb98b4a81785c0",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          115.21,
+          95.85,
+          79.59
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\keeshond\\keeshond_99.jpg",
+        "split": "test",
+        "class": "keeshond",
+        "md5": "7d01394e716914ffbbfc7401dc643f3d",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          115.21,
+          95.84,
+          79.58
+        ]
+      }
+    },
+    {
+      "index": 8,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 2.047,
+        "grey_corr": 0.99979,
+        "rgb_mae": 2.143
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_11.jpg",
+        "split": "train",
+        "class": "Abyssinian",
+        "md5": "5f3f36b8e9f5a852829a69f3ffb0e065",
+        "width": 192,
+        "height": 288,
+        "mean_rgb": [
+          182.63,
+          159.73,
+          126.29
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_177.jpg",
+        "split": "train",
+        "class": "Abyssinian",
+        "md5": "2fa766d434629836e001c06818b8116c",
+        "width": 214,
+        "height": 320,
+        "mean_rgb": [
+          180.48,
+          157.74,
+          124.25
+        ]
+      }
+    },
+    {
+      "index": 9,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "leonberger 同一犬只同一仰头角度，背景一致",
+      "pixel_evidence": {
+        "grey_mae": 0.076,
+        "grey_corr": 0.99998,
+        "rgb_mae": 0.084
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\leonberger\\leonberger_189.jpg",
+        "split": "train",
+        "class": "leonberger",
+        "md5": "c857d3567bb258c640148d945cdb0f75",
+        "width": 500,
+        "height": 334,
+        "mean_rgb": [
+          196.7,
+          180.29,
+          162.59
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\leonberger\\leonberger_2.jpg",
+        "split": "test",
+        "class": "leonberger",
+        "md5": "acfcbdae71c4d0f92cd66db97c771bc3",
+        "width": 500,
+        "height": 334,
+        "mean_rgb": [
+          196.7,
+          180.29,
+          162.58
+        ]
+      }
+    },
+    {
+      "index": 10,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "日本狆同一犬只吐舌，同一门廊背景",
+      "pixel_evidence": {
+        "grey_mae": 0.057,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.067
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_188.jpg",
+        "split": "train",
+        "class": "japanese_chin",
+        "md5": "9808a86ddef4700d515e29cc4d645783",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          87.03,
+          72.95,
+          64.85
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_78.jpg",
+        "split": "test",
+        "class": "japanese_chin",
+        "md5": "a07c1b8769e1be7d93e88b70f6f7dbc8",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          87.03,
+          72.95,
+          64.84
+        ]
+      }
+    },
+    {
+      "index": 11,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "keeshond 同一犬只趴于同一草地",
+      "pixel_evidence": {
+        "grey_mae": 0.06,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.077
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_141.jpg",
+        "split": "train",
+        "class": "keeshond",
+        "md5": "5b150ae4f155ca10c830d04f6a6bab7c",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          101.11,
+          114.54,
+          88.93
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\keeshond\\keeshond_47.jpg",
+        "split": "test",
+        "class": "keeshond",
+        "md5": "952000b51205de36d3a0c24396b15460",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          101.1,
+          114.54,
+          88.92
+        ]
+      }
+    },
+    {
+      "index": 12,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.069,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.088
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_103.jpg",
+        "split": "train",
+        "class": "keeshond",
+        "md5": "844469fd5b95e6b35e528425bd9c8857",
+        "width": 500,
+        "height": 401,
+        "mean_rgb": [
+          122.49,
+          120.41,
+          118.08
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_167.jpg",
+        "split": "train",
+        "class": "keeshond",
+        "md5": "66fe69c60eac63dfc7f70fc8b0453480",
+        "width": 500,
+        "height": 401,
+        "mean_rgb": [
+          122.48,
+          120.41,
+          118.08
+        ]
+      }
+    },
+    {
+      "index": 13,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "日本狆同一犬只立于同一泥土地",
+      "pixel_evidence": {
+        "grey_mae": 0.074,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.09
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_140.jpg",
+        "split": "train",
+        "class": "japanese_chin",
+        "md5": "ff0dc409abd42d1aa1100f6c531aca74",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          113.97,
+          113.81,
+          99.63
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_88.jpg",
+        "split": "test",
+        "class": "japanese_chin",
+        "md5": "e8b657ffcb2896fff6dc083cd3fa0e14",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          113.97,
+          113.81,
+          99.63
+        ]
+      }
+    },
+    {
+      "index": 14,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.062,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.073
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_104.jpg",
+        "split": "train",
+        "class": "keeshond",
+        "md5": "c970e442368af479709b4092be2337ff",
+        "width": 500,
+        "height": 426,
+        "mean_rgb": [
+          145.27,
+          126.19,
+          122.57
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_170.jpg",
+        "split": "train",
+        "class": "keeshond",
+        "md5": "411568d6bf0427816732f7ab1e815209",
+        "width": 500,
+        "height": 426,
+        "mean_rgb": [
+          145.27,
+          126.2,
+          122.58
+        ]
+      }
+    },
+    {
+      "index": 15,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.162,
+        "grey_corr": 0.99998,
+        "rgb_mae": 0.299
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_38.jpg",
+        "split": "test",
+        "class": "Bombay",
+        "md5": "6495973a099840b52141f98b90aa7a28",
+        "width": 350,
+        "height": 249,
+        "mean_rgb": [
+          103.34,
+          99.54,
+          102.62
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_57.jpg",
+        "split": "test",
+        "class": "Bombay",
+        "md5": "b7a2cb02ae3da8a1aab33d9b46481675",
+        "width": 536,
+        "height": 382,
+        "mean_rgb": [
+          103.33,
+          99.53,
+          102.64
+        ]
+      }
+    },
+    {
+      "index": 16,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "德国短毛指示犬同一犬只吐舌，同一小径背景",
+      "pixel_evidence": {
+        "grey_mae": 0.069,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.1
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\german_shorthaired\\german_shorthaired_179.jpg",
+        "split": "train",
+        "class": "german_shorthaired",
+        "md5": "14f9ecd59795e9709166d5c740f6691f",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          113.66,
+          122.56,
+          81.72
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\german_shorthaired\\german_shorthaired_19.jpg",
+        "split": "test",
+        "class": "german_shorthaired",
+        "md5": "118e2e2404f557e6a0d865096a627d4f",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          113.63,
+          122.55,
+          81.72
+        ]
+      }
+    },
+    {
+      "index": 17,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.22,
+        "grey_corr": 0.99997,
+        "rgb_mae": 0.543
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_199.jpg",
+        "split": "test",
+        "class": "Birman",
+        "md5": "12bfa7ac50022edb31ad429498fc0d9a",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          131.37,
+          133.74,
+          128.24
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_25.jpg",
+        "split": "test",
+        "class": "Birman",
+        "md5": "6eedee0365dc4e05351bb2618b1fa085",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          131.21,
+          133.86,
+          128.03
+        ]
+      }
+    },
+    {
+      "index": 18,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.805,
+        "grey_corr": 0.99992,
+        "rgb_mae": 1.277
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_107.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "87647547fdd8e14a3b7358f348a61e6b",
+        "width": 300,
+        "height": 225,
+        "mean_rgb": [
+          112.3,
+          120.47,
+          118.68
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_19.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "3d1f4a196f690563eb18bf04782d1a51",
+        "width": 420,
+        "height": 315,
+        "mean_rgb": [
+          111.8,
+          120.08,
+          118.19
+        ]
+      }
+    },
+    {
+      "index": 19,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 2.324,
+        "grey_corr": 0.99984,
+        "rgb_mae": 2.31
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_122.jpg",
+        "split": "train",
+        "class": "Abyssinian",
+        "md5": "5ffcf726628c35da8fa1e1a682c3fc50",
+        "width": 300,
+        "height": 278,
+        "mean_rgb": [
+          179.97,
+          175.47,
+          174.24
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_172.jpg",
+        "split": "train",
+        "class": "Abyssinian",
+        "md5": "a3a2d7a5843e0144cc67438989edb421",
+        "width": 768,
+        "height": 712,
+        "mean_rgb": [
+          182.0,
+          177.9,
+          176.2
+        ]
+      }
+    },
+    {
+      "index": 20,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "德国短毛指示犬同一犬只低头嗅同一彩色球，背景房屋一致",
+      "pixel_evidence": {
+        "grey_mae": 0.058,
+        "grey_corr": 0.99995,
+        "rgb_mae": 0.073
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\german_shorthaired\\german_shorthaired_150.jpg",
+        "split": "train",
+        "class": "german_shorthaired",
+        "md5": "c7cec636d12942eabdccf48fecacb8b6",
+        "width": 333,
+        "height": 500,
+        "mean_rgb": [
+          89.97,
+          110.8,
+          68.02
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\german_shorthaired\\german_shorthaired_3.jpg",
+        "split": "test",
+        "class": "german_shorthaired",
+        "md5": "b71aded8550dbfc4b898910303ab3a2f",
+        "width": 333,
+        "height": 500,
+        "mean_rgb": [
+          89.96,
+          110.8,
+          68.02
+        ]
+      }
+    },
+    {
+      "index": 21,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 12.584,
+        "grey_corr": 0.99978,
+        "rgb_mae": 12.084
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\scottish_terrier\\scottish_terrier_78.jpg",
+        "split": "test",
+        "class": "scottish_terrier",
+        "md5": "d5fa832f71183b7f8efaf05ec22dfc39",
+        "width": 375,
+        "height": 500,
+        "mean_rgb": [
+          150.22,
+          140.17,
+          131.59
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\scottish_terrier\\scottish_terrier_94.jpg",
+        "split": "test",
+        "class": "scottish_terrier",
+        "md5": "94ddd766d228148042a098b2953c6b7e",
+        "width": 375,
+        "height": 500,
+        "mean_rgb": [
+          135.3,
+          129.54,
+          127.42
+        ]
+      }
+    },
+    {
+      "index": 22,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "纽芬兰犬同一幼犬趴于同一橙色坐垫，客厅背景一致",
+      "pixel_evidence": {
+        "grey_mae": 0.07,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.095
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\newfoundland\\newfoundland_149.jpg",
+        "split": "train",
+        "class": "newfoundland",
+        "md5": "64a36d51964d71d02e6a02906b5fd5ec",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          116.31,
+          102.01,
+          93.83
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\newfoundland\\newfoundland_2.jpg",
+        "split": "test",
+        "class": "newfoundland",
+        "md5": "0e60e87fcba58392296ce8fc97df90d2",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          116.29,
+          102.01,
+          93.83
+        ]
+      }
+    },
+    {
+      "index": 23,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "日本狆同一犬只坐于同一草地，背景灌木一致",
+      "pixel_evidence": {
+        "grey_mae": 0.055,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.082
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_137.jpg",
+        "split": "train",
+        "class": "japanese_chin",
+        "md5": "c7181b90b1b7a3f6ecfa03fc06dbc14a",
+        "width": 500,
+        "height": 428,
+        "mean_rgb": [
+          99.91,
+          95.23,
+          52.32
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_85.jpg",
+        "split": "test",
+        "class": "japanese_chin",
+        "md5": "548312a084d12679e6089e75417a0e3c",
+        "width": 500,
+        "height": 428,
+        "mean_rgb": [
+          99.92,
+          95.23,
+          52.35
+        ]
+      }
+    },
+    {
+      "index": 24,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "埃及猫同一只、同一蓝色展台背景、左上角同一赛事标志",
+      "pixel_evidence": {
+        "grey_mae": 0.285,
+        "grey_corr": 0.99985,
+        "rgb_mae": 1.138
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Egyptian_Mau\\Egyptian_Mau_186.jpg",
+        "split": "train",
+        "class": "Egyptian_Mau",
+        "md5": "9fe88428077f695b415eb9a51547af0b",
+        "width": 183,
+        "height": 275,
+        "mean_rgb": [
+          33.98,
+          119.38,
+          177.4
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Egyptian_Mau\\Egyptian_Mau_6.jpg",
+        "split": "test",
+        "class": "Egyptian_Mau",
+        "md5": "cc3d735d7edd381cc75f581bf348c7a4",
+        "width": 183,
+        "height": 275,
+        "mean_rgb": [
+          34.63,
+          119.28,
+          177.39
+        ]
+      }
+    },
+    {
+      "index": 25,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "日本狆同一犬只立于同一花纹垫子",
+      "pixel_evidence": {
+        "grey_mae": 0.062,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.085
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_158.jpg",
+        "split": "train",
+        "class": "japanese_chin",
+        "md5": "6864ceefe6f057d49245f619beec6d0e",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          78.73,
+          66.44,
+          57.85
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_81.jpg",
+        "split": "test",
+        "class": "japanese_chin",
+        "md5": "3280125345f7483a2d904d7e0cda1f12",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          78.74,
+          66.43,
+          57.86
+        ]
+      }
+    },
+    {
+      "index": 26,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "keeshond 同一犬只叼同一树枝；注意本对是 train↔val 泄漏，影响验证集选模",
+      "pixel_evidence": {
+        "grey_mae": 0.064,
+        "grey_corr": 0.99996,
+        "rgb_mae": 0.092
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_162.jpg",
+        "split": "train",
+        "class": "keeshond",
+        "md5": "252d3c7143e11e3ea0e05663b5aea94e",
+        "width": 375,
+        "height": 500,
+        "mean_rgb": [
+          158.76,
+          146.26,
+          131.88
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\val\\keeshond\\keeshond_101.jpg",
+        "split": "val",
+        "class": "keeshond",
+        "md5": "e51dd3aaf4b1d5e6b5320367c7e302f8",
+        "width": 375,
+        "height": 500,
+        "mean_rgb": [
+          158.75,
+          146.25,
+          131.88
+        ]
+      }
+    },
+    {
+      "index": 27,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "leonberger 同一犬只同一头部特写",
+      "pixel_evidence": {
+        "grey_mae": 0.055,
+        "grey_corr": 0.99997,
+        "rgb_mae": 0.076
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\leonberger\\leonberger_187.jpg",
+        "split": "train",
+        "class": "leonberger",
+        "md5": "c92cda60970edd4e2bb44f7003cfe76b",
+        "width": 396,
+        "height": 500,
+        "mean_rgb": [
+          139.3,
+          124.47,
+          89.44
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\leonberger\\leonberger_1.jpg",
+        "split": "test",
+        "class": "leonberger",
+        "md5": "aceeecc5aa75ff636b99382489183eed",
+        "width": 396,
+        "height": 500,
+        "mean_rgb": [
+          139.3,
+          124.46,
+          89.44
+        ]
+      }
+    },
+    {
+      "index": 28,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "德国短毛指示犬同一犬只与同一红蓝球，人手入镜一致",
+      "pixel_evidence": {
+        "grey_mae": 0.076,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.115
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\german_shorthaired\\german_shorthaired_180.jpg",
+        "split": "train",
+        "class": "german_shorthaired",
+        "md5": "9ae84b3ece43c3941e181253f525fdb8",
+        "width": 375,
+        "height": 500,
+        "mean_rgb": [
+          110.56,
+          128.15,
+          76.03
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\german_shorthaired\\german_shorthaired_20.jpg",
+        "split": "test",
+        "class": "german_shorthaired",
+        "md5": "94764c883a5b5b941c9baca0b449f252",
+        "width": 375,
+        "height": 500,
+        "mean_rgb": [
+          110.54,
+          128.13,
+          76.1
+        ]
+      }
+    },
+    {
+      "index": 29,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "日本狆同一犬只（穿同款毛衣）坐于同一棕色沙发",
+      "pixel_evidence": {
+        "grey_mae": 0.055,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.076
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_176.jpg",
+        "split": "train",
+        "class": "japanese_chin",
+        "md5": "29406a83f9567c0762843ceaa8dde356",
+        "width": 375,
+        "height": 500,
+        "mean_rgb": [
+          52.6,
+          36.69,
+          29.46
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_20.jpg",
+        "split": "test",
+        "class": "japanese_chin",
+        "md5": "6ed5bb3682fc784751f7a47cc167549f",
+        "width": 375,
+        "height": 500,
+        "mean_rgb": [
+          52.6,
+          36.69,
+          29.47
+        ]
+      }
+    },
+    {
+      "index": 30,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.577,
+        "grey_corr": 0.9999,
+        "rgb_mae": 1.466
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_5.jpg",
+        "split": "test",
+        "class": "Abyssinian",
+        "md5": "f08ca797f97fed6c074062db4714626f",
+        "width": 200,
+        "height": 150,
+        "mean_rgb": [
+          126.05,
+          100.92,
+          87.31
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_87.jpg",
+        "split": "test",
+        "class": "Abyssinian",
+        "md5": "be9403c0cfc689f0c2036d67738baaf2",
+        "width": 400,
+        "height": 300,
+        "mean_rgb": [
+          126.0,
+          100.9,
+          87.37
+        ]
+      }
+    },
+    {
+      "index": 31,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 1.056,
+        "grey_corr": 0.99994,
+        "rgb_mae": 1.424
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_132.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "b5f8926083a78e89b3b1ce05898ad719",
+        "width": 600,
+        "height": 450,
+        "mean_rgb": [
+          113.05,
+          120.83,
+          119.59
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_19.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "3d1f4a196f690563eb18bf04782d1a51",
+        "width": 420,
+        "height": 315,
+        "mean_rgb": [
+          111.8,
+          120.08,
+          118.19
+        ]
+      }
+    },
+    {
+      "index": 32,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.778,
+        "grey_corr": 0.99994,
+        "rgb_mae": 1.215
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_107.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "87647547fdd8e14a3b7358f348a61e6b",
+        "width": 300,
+        "height": 225,
+        "mean_rgb": [
+          112.3,
+          120.47,
+          118.68
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_132.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "b5f8926083a78e89b3b1ce05898ad719",
+        "width": 600,
+        "height": 450,
+        "mean_rgb": [
+          113.05,
+          120.83,
+          119.59
+        ]
+      }
+    },
+    {
+      "index": 33,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "英国短毛猫同一只、琥珀色眼睛、同一趴姿（取景略不同）",
+      "pixel_evidence": {
+        "grey_mae": 6.327,
+        "grey_corr": 0.99993,
+        "rgb_mae": 6.352
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\British_Shorthair\\British_Shorthair_186.jpg",
+        "split": "train",
+        "class": "British_Shorthair",
+        "md5": "4b82922cfeac8b6ceac400079c42b3d2",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          148.19,
+          146.72,
+          147.36
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\British_Shorthair\\British_Shorthair_271.jpg",
+        "split": "test",
+        "class": "British_Shorthair",
+        "md5": "828e0a320a28aeee38660b599a27a7f7",
+        "width": 636,
+        "height": 477,
+        "mean_rgb": [
+          150.7,
+          149.08,
+          149.92
+        ]
+      }
+    },
+    {
+      "index": 34,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "孟买猫同一只黑猫趴于同花纹沙发，嘴里同叼一物",
+      "pixel_evidence": {
+        "grey_mae": 2.271,
+        "grey_corr": 0.99969,
+        "rgb_mae": 2.563
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_146.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "c37fae12311a742c4a776bcf13de0562",
+        "width": 220,
+        "height": 165,
+        "mean_rgb": [
+          93.28,
+          81.24,
+          81.31
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_82.jpg",
+        "split": "test",
+        "class": "Bombay",
+        "md5": "f83413f30df41f827ea71085b217643d",
+        "width": 240,
+        "height": 180,
+        "mean_rgb": [
+          95.53,
+          83.51,
+          83.54
+        ]
+      }
+    },
+    {
+      "index": 35,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "埃及猫同一幼猫伸懒腰于同一条纹床品",
+      "pixel_evidence": {
+        "grey_mae": 0.181,
+        "grey_corr": 0.99997,
+        "rgb_mae": 1.257
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Egyptian_Mau\\Egyptian_Mau_138.jpg",
+        "split": "train",
+        "class": "Egyptian_Mau",
+        "md5": "cb95df42b08c09768802fec01cedbf26",
+        "width": 448,
+        "height": 336,
+        "mean_rgb": [
+          137.93,
+          126.5,
+          122.43
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Egyptian_Mau\\Egyptian_Mau_219.jpg",
+        "split": "test",
+        "class": "Egyptian_Mau",
+        "md5": "38d321f5b11af1ca8317e3bd0dab400d",
+        "width": 448,
+        "height": 336,
+        "mean_rgb": [
+          137.91,
+          126.5,
+          122.41
+        ]
+      }
+    },
+    {
+      "index": 36,
+      "cross_split": true,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "日本狆同一犬只吐舌立于同一门前",
+      "pixel_evidence": {
+        "grey_mae": 0.053,
+        "grey_corr": 0.99999,
+        "rgb_mae": 0.074
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_187.jpg",
+        "split": "train",
+        "class": "japanese_chin",
+        "md5": "c6af8c62b4729608f951a21cfc572ca8",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          84.71,
+          70.03,
+          61.32
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_200.jpg",
+        "split": "test",
+        "class": "japanese_chin",
+        "md5": "7a2ac8afc9fa462bfbc845649c883647",
+        "width": 500,
+        "height": 375,
+        "mean_rgb": [
+          84.71,
+          70.02,
+          61.33
+        ]
+      }
+    },
+    {
+      "index": 37,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.49,
+        "grey_corr": 0.99997,
+        "rgb_mae": 0.642
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_79.jpg",
+        "split": "test",
+        "class": "Bombay",
+        "md5": "84947d2143253e330d9fb6252815ad93",
+        "width": 600,
+        "height": 456,
+        "mean_rgb": [
+          124.56,
+          99.17,
+          92.09
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_97.jpg",
+        "split": "test",
+        "class": "Bombay",
+        "md5": "12005a632fb6bf4becffa322e935e0a1",
+        "width": 450,
+        "height": 342,
+        "mean_rgb": [
+          124.12,
+          98.71,
+          91.65
+        ]
+      }
+    },
+    {
+      "index": 38,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 2.748,
+        "grey_corr": 0.99485,
+        "rgb_mae": 3.977
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_40.jpg",
+        "split": "test",
+        "class": "Abyssinian",
+        "md5": "64ffd4d4c1d3a4cb03b8e5b31a83b02a",
+        "width": 1646,
+        "height": 1278,
+        "mean_rgb": [
+          88.9,
+          86.58,
+          90.57
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_63.jpg",
+        "split": "test",
+        "class": "Abyssinian",
+        "md5": "817db6a52cee8aeb7a6599a9c56219f1",
+        "width": 150,
+        "height": 116,
+        "mean_rgb": [
+          89.24,
+          86.89,
+          90.98
+        ]
+      }
+    },
+    {
+      "index": 39,
+      "cross_split": false,
+      "phash_distance_recorded": 0,
+      "phash_distance_recomputed": 0,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "极可能为同一照片的变体（pHash 完全相同）",
+      "basis": "pHash 距离为 0，两张图的感知哈希逐位相同",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.289,
+        "grey_corr": 0.99997,
+        "rgb_mae": 0.372
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_136.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "09c130a94417e66b5730faf0e211b24c",
+        "width": 200,
+        "height": 182,
+        "mean_rgb": [
+          78.6,
+          79.45,
+          75.88
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_150.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "9107d7662d528fd4d0420fcdc5705ea7",
+        "width": 200,
+        "height": 182,
+        "mean_rgb": [
+          78.58,
+          79.43,
+          75.86
+        ]
+      }
+    },
+    {
+      "index": 40,
+      "cross_split": false,
+      "phash_distance_recorded": 2,
+      "phash_distance_recomputed": 2,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "很可能为同一照片的变体（pHash 距离 2）",
+      "basis": "像素相关度 0.997 ≥ 0.9 且平均灰度差 1.45 ≤ 12.0",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 1.446,
+        "grey_corr": 0.99745,
+        "rgb_mae": 1.746
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_24.jpg",
+        "split": "test",
+        "class": "Abyssinian",
+        "md5": "6dff9e07a3ea61516eb8b4c579c58bd8",
+        "width": 800,
+        "height": 600,
+        "mean_rgb": [
+          135.34,
+          88.66,
+          66.47
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_56.jpg",
+        "split": "test",
+        "class": "Abyssinian",
+        "md5": "33266149c738ba21b649bab5d4245340",
+        "width": 250,
+        "height": 188,
+        "mean_rgb": [
+          136.49,
+          89.85,
+          67.5
+        ]
+      }
+    },
+    {
+      "index": 41,
+      "cross_split": false,
+      "phash_distance_recorded": 2,
+      "phash_distance_recomputed": 2,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "很可能为同一照片的变体（pHash 距离 2）",
+      "basis": "像素相关度 0.979 ≥ 0.9 且平均灰度差 8.59 ≤ 12.0",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 8.591,
+        "grey_corr": 0.97917,
+        "rgb_mae": 22.197
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\boxer\\boxer_162.jpg",
+        "split": "train",
+        "class": "boxer",
+        "md5": "924a20d0535fb4beb61ec5bb34dd6ee0",
+        "width": 400,
+        "height": 500,
+        "mean_rgb": [
+          237.79,
+          191.08,
+          198.7
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\boxer\\boxer_172.jpg",
+        "split": "train",
+        "class": "boxer",
+        "md5": "de5f852d0d183f9b123c84ed47dae6b6",
+        "width": 400,
+        "height": 500,
+        "mean_rgb": [
+          211.22,
+          211.41,
+          211.52
+        ]
+      }
+    },
+    {
+      "index": 42,
+      "cross_split": false,
+      "phash_distance_recorded": 2,
+      "phash_distance_recomputed": 2,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "很可能为同一照片的变体（pHash 距离 2）",
+      "basis": "像素相关度 0.999 ≥ 0.9 且平均灰度差 0.37 ≤ 12.0",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 0.373,
+        "grey_corr": 0.99872,
+        "rgb_mae": 0.398
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_114.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "13e01a73ca7d21f88d434e652c507e87",
+        "width": 500,
+        "height": 330,
+        "mean_rgb": [
+          66.91,
+          68.14,
+          71.5
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_139.jpg",
+        "split": "train",
+        "class": "Bombay",
+        "md5": "c65fd58884e010c0f3d434e5189dec84",
+        "width": 450,
+        "height": 297,
+        "mean_rgb": [
+          66.75,
+          67.98,
+          71.32
+        ]
+      }
+    },
+    {
+      "index": 43,
+      "cross_split": false,
+      "phash_distance_recorded": 4,
+      "phash_distance_recomputed": 4,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "需人工确认（pHash 距离 4）",
+      "basis": "像素相关度 0.90962，证据不充分，必须人工目检",
+      "visual_verdict": "未核验",
+      "visual_verdict_note": "",
+      "pixel_evidence": {
+        "grey_mae": 18.086,
+        "grey_corr": 0.90962,
+        "rgb_mae": 18.774
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\newfoundland\\newfoundland_149.jpg",
+        "split": "train",
+        "class": "newfoundland",
+        "md5": "64a36d51964d71d02e6a02906b5fd5ec",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          116.31,
+          102.01,
+          93.83
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\newfoundland\\newfoundland_172.jpg",
+        "split": "train",
+        "class": "newfoundland",
+        "md5": "edc5ff4ca8424b404ad31bc323d6f4d5",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          117.97,
+          102.04,
+          95.78
+        ]
+      }
+    },
+    {
+      "index": 44,
+      "cross_split": true,
+      "phash_distance_recorded": 4,
+      "phash_distance_recomputed": 4,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "需人工确认（pHash 距离 4）",
+      "basis": "像素相关度 0.90957，证据不充分，必须人工目检",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "纽芬兰犬同一幼犬趴于同一橙色坐垫，取景与缩放不同",
+      "pixel_evidence": {
+        "grey_mae": 18.089,
+        "grey_corr": 0.90957,
+        "rgb_mae": 18.774
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\newfoundland\\newfoundland_172.jpg",
+        "split": "train",
+        "class": "newfoundland",
+        "md5": "edc5ff4ca8424b404ad31bc323d6f4d5",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          117.97,
+          102.04,
+          95.78
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\newfoundland\\newfoundland_2.jpg",
+        "split": "test",
+        "class": "newfoundland",
+        "md5": "0e60e87fcba58392296ce8fc97df90d2",
+        "width": 500,
+        "height": 333,
+        "mean_rgb": [
+          116.29,
+          102.01,
+          93.83
+        ]
+      }
+    },
+    {
+      "index": 45,
+      "cross_split": true,
+      "phash_distance_recorded": 4,
+      "phash_distance_recomputed": 4,
+      "distance_match": true,
+      "identical_md5": false,
+      "preliminary_grade": "很可能为同一照片的变体（pHash 距离 4）",
+      "basis": "像素相关度 0.983 ≥ 0.9 且平均灰度差 2.81 ≤ 12.0",
+      "visual_verdict": "同一照片变体（构成泄漏）",
+      "visual_verdict_note": "阿比西尼亚猫同一只坐于同一柳条家具旁，两张均带同一 superstock.com 水印（同一张库存照片）",
+      "pixel_evidence": {
+        "grey_mae": 2.81,
+        "grey_corr": 0.98288,
+        "rgb_mae": 3.198
+      },
+      "contact_sheet": null,
+      "a": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_151.jpg",
+        "split": "train",
+        "class": "Abyssinian",
+        "md5": "5379c28032efa03615166bd8059b7486",
+        "width": 350,
+        "height": 233,
+        "mean_rgb": [
+          103.37,
+          60.99,
+          35.62
+        ]
+      },
+      "b": {
+        "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_99.jpg",
+        "split": "test",
+        "class": "Abyssinian",
+        "md5": "5771e5911f11291a3fcc7d48ac0eb36d",
+        "width": 450,
+        "height": 299,
+        "mean_rgb": [
+          102.59,
+          59.75,
+          33.03
+        ]
+      }
+    }
+  ]
+}

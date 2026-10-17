@@ -1,0 +1,38 @@
+{
+  "verified_by": "代码 Agent（Claude）目视核验",
+  "verified_at": "2026-10-17",
+  "method": "逐张打开 reports/leakage_review/contact_sheet_*.png，左右并排人工比对个体、姿态、场景、背景与拍摄特征",
+  "verdict_scale": {
+    "same_photo_variant": "同一照片的变体（同一个体、同一拍摄场景，仅重编码/重裁切不同）——构成跨集合泄漏",
+    "phash_false_positive": "不同个体，仅品种与构图相似——pHash 误报，不构成泄漏",
+    "uncertain": "证据不足，需用户人工复核"
+  },
+  "note": "本文件是 review_near_duplicates.py --verdicts 的输入；重新生成报告时会把这些判定渲染进联系表。用户的最终复核结论可覆盖此处。",
+  "verdicts": {
+    "1":  {"verdict": "same_photo_variant", "note": "大白熊犬同一姿态坐于同一草地背景，仅裁切不同"},
+    "3":  {"verdict": "same_photo_variant", "note": "keeshond 同一犬只、同一厨房背景、蓝色项圈，姿态一致"},
+    "5":  {"verdict": "same_photo_variant", "note": "英国短毛猫同一只、同一粉色靠垫背景，头部角度几乎一致"},
+    "6":  {"verdict": "same_photo_variant", "note": "keeshond 同一犬只俯身于同一草地，背景花丛一致"},
+    "7":  {"verdict": "same_photo_variant", "note": "keeshond 同一犬只趴于同一木地板，前伸姿势一致"},
+    "9":  {"verdict": "same_photo_variant", "note": "leonberger 同一犬只同一仰头角度，背景一致"},
+    "10": {"verdict": "same_photo_variant", "note": "日本狆同一犬只吐舌，同一门廊背景"},
+    "11": {"verdict": "same_photo_variant", "note": "keeshond 同一犬只趴于同一草地"},
+    "13": {"verdict": "same_photo_variant", "note": "日本狆同一犬只立于同一泥土地"},
+    "16": {"verdict": "same_photo_variant", "note": "德国短毛指示犬同一犬只吐舌，同一小径背景"},
+    "20": {"verdict": "same_photo_variant", "note": "德国短毛指示犬同一犬只低头嗅同一彩色球，背景房屋一致"},
+    "22": {"verdict": "same_photo_variant", "note": "纽芬兰犬同一幼犬趴于同一橙色坐垫，客厅背景一致"},
+    "23": {"verdict": "same_photo_variant", "note": "日本狆同一犬只坐于同一草地，背景灌木一致"},
+    "24": {"verdict": "same_photo_variant", "note": "埃及猫同一只、同一蓝色展台背景、左上角同一赛事标志"},
+    "25": {"verdict": "same_photo_variant", "note": "日本狆同一犬只立于同一花纹垫子"},
+    "26": {"verdict": "same_photo_variant", "note": "keeshond 同一犬只叼同一树枝；注意本对是 train↔val 泄漏，影响验证集选模"},
+    "27": {"verdict": "same_photo_variant", "note": "leonberger 同一犬只同一头部特写"},
+    "28": {"verdict": "same_photo_variant", "note": "德国短毛指示犬同一犬只与同一红蓝球，人手入镜一致"},
+    "29": {"verdict": "same_photo_variant", "note": "日本狆同一犬只（穿同款毛衣）坐于同一棕色沙发"},
+    "33": {"verdict": "same_photo_variant", "note": "英国短毛猫同一只、琥珀色眼睛、同一趴姿（取景略不同）"},
+    "34": {"verdict": "same_photo_variant", "note": "孟买猫同一只黑猫趴于同花纹沙发，嘴里同叼一物"},
+    "35": {"verdict": "same_photo_variant", "note": "埃及猫同一幼猫伸懒腰于同一条纹床品"},
+    "36": {"verdict": "same_photo_variant", "note": "日本狆同一犬只吐舌立于同一门前"},
+    "44": {"verdict": "same_photo_variant", "note": "纽芬兰犬同一幼犬趴于同一橙色坐垫，取景与缩放不同"},
+    "45": {"verdict": "same_photo_variant", "note": "阿比西尼亚猫同一只坐于同一柳条家具旁，两张均带同一 superstock.com 水印（同一张库存照片）"}
+  }
+}

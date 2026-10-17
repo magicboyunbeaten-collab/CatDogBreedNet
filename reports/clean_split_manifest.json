@@ -1,0 +1,623 @@
+{
+  "generated_at": "2026-10-17T04:38:15.115921+00:00",
+  "algorithm": "test = 官方 test.txt 原样全量复制（不排除、不改名、不改标签）；train/val = 官方 trainval.txt，先剔除与任一官方 test 图片 MD5 相同或 pHash 距离 <= threshold 的样本，再在剩余样本内按 pHash 阈值构建近重复簇（并查集 + 多索引分块检索），整簇按'原划分多数决、平局归 train'分配到 train/val；最后保证每个类别在 val 至少 1 个样本",
+  "parameters": {
+    "phash_threshold": 5,
+    "seed": 42,
+    "val_ratio": 0.1,
+    "phash_algorithm": "灰度 32x32 + 二维 DCT + 低频 8x8 中位数比特"
+  },
+  "source": {
+    "raw_dir": "E:\\CatDogBreedNet\\data\\raw",
+    "dataset": "Oxford-IIIT Pet Dataset (official archives)",
+    "official_test_ids": 3669,
+    "official_trainval_ids": 3680
+  },
+  "output_dir": "E:\\CatDogBreedNet\\data\\processed_clean",
+  "totals": {
+    "train": 3288,
+    "val": 368,
+    "test": 3669
+  },
+  "num_classes": 37,
+  "per_class_counts": {
+    "train": {
+      "Abyssinian": 89,
+      "Bengal": 90,
+      "Birman": 90,
+      "Bombay": 85,
+      "British_Shorthair": 88,
+      "Egyptian_Mau": 82,
+      "Maine_Coon": 90,
+      "Persian": 90,
+      "Ragdoll": 90,
+      "Russian_Blue": 90,
+      "Siamese": 89,
+      "Sphynx": 90,
+      "american_bulldog": 90,
+      "american_pit_bull_terrier": 90,
+      "basset_hound": 90,
+      "beagle": 90,
+      "boxer": 90,
+      "chihuahua": 90,
+      "english_cocker_spaniel": 86,
+      "english_setter": 90,
+      "german_shorthaired": 87,
+      "great_pyrenees": 89,
+      "havanese": 90,
+      "japanese_chin": 84,
+      "keeshond": 87,
+      "leonberger": 88,
+      "miniature_pinscher": 90,
+      "newfoundland": 84,
+      "pomeranian": 90,
+      "pug": 90,
+      "saint_bernard": 90,
+      "samoyed": 90,
+      "scottish_terrier": 90,
+      "shiba_inu": 90,
+      "staffordshire_bull_terrier": 90,
+      "wheaten_terrier": 90,
+      "yorkshire_terrier": 90
+    },
+    "val": {
+      "Abyssinian": 10,
+      "Bengal": 10,
+      "Birman": 10,
+      "Bombay": 10,
+      "British_Shorthair": 10,
+      "Egyptian_Mau": 9,
+      "Maine_Coon": 10,
+      "Persian": 10,
+      "Ragdoll": 10,
+      "Russian_Blue": 10,
+      "Siamese": 10,
+      "Sphynx": 10,
+      "american_bulldog": 10,
+      "american_pit_bull_terrier": 10,
+      "basset_hound": 10,
+      "beagle": 10,
+      "boxer": 10,
+      "chihuahua": 10,
+      "english_cocker_spaniel": 10,
+      "english_setter": 10,
+      "german_shorthaired": 10,
+      "great_pyrenees": 10,
+      "havanese": 10,
+      "japanese_chin": 10,
+      "keeshond": 9,
+      "leonberger": 10,
+      "miniature_pinscher": 10,
+      "newfoundland": 10,
+      "pomeranian": 10,
+      "pug": 10,
+      "saint_bernard": 10,
+      "samoyed": 10,
+      "scottish_terrier": 10,
+      "shiba_inu": 10,
+      "staffordshire_bull_terrier": 10,
+      "wheaten_terrier": 10,
+      "yorkshire_terrier": 10
+    },
+    "test": {
+      "Abyssinian": 98,
+      "Bengal": 100,
+      "Birman": 100,
+      "Bombay": 88,
+      "British_Shorthair": 100,
+      "Egyptian_Mau": 97,
+      "Maine_Coon": 100,
+      "Persian": 100,
+      "Ragdoll": 100,
+      "Russian_Blue": 100,
+      "Siamese": 100,
+      "Sphynx": 100,
+      "american_bulldog": 100,
+      "american_pit_bull_terrier": 100,
+      "basset_hound": 100,
+      "beagle": 100,
+      "boxer": 99,
+      "chihuahua": 100,
+      "english_cocker_spaniel": 100,
+      "english_setter": 100,
+      "german_shorthaired": 100,
+      "great_pyrenees": 100,
+      "havanese": 100,
+      "japanese_chin": 100,
+      "keeshond": 99,
+      "leonberger": 100,
+      "miniature_pinscher": 100,
+      "newfoundland": 100,
+      "pomeranian": 100,
+      "pug": 100,
+      "saint_bernard": 100,
+      "samoyed": 100,
+      "scottish_terrier": 99,
+      "shiba_inu": 100,
+      "staffordshire_bull_terrier": 89,
+      "wheaten_terrier": 100,
+      "yorkshire_terrier": 100
+    }
+  },
+  "excluded_from_trainval": {
+    "count": 24,
+    "by_reason": {
+      "near_duplicate_with_test": 24
+    },
+    "by_class": {
+      "Abyssinian": 1,
+      "Bombay": 1,
+      "British_Shorthair": 2,
+      "Egyptian_Mau": 2,
+      "german_shorthaired": 3,
+      "great_pyrenees": 1,
+      "japanese_chin": 6,
+      "keeshond": 4,
+      "leonberger": 2,
+      "newfoundland": 2
+    },
+    "details": [
+      {
+        "image_id": "Bombay_146",
+        "class": "Bombay",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "Bombay_82"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "Egyptian_Mau_138",
+        "class": "Egyptian_Mau",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "Egyptian_Mau_219"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "japanese_chin_137",
+        "class": "japanese_chin",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "japanese_chin_85"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "japanese_chin_140",
+        "class": "japanese_chin",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "japanese_chin_88"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "keeshond_140",
+        "class": "keeshond",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "keeshond_97"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "keeshond_141",
+        "class": "keeshond",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "keeshond_47"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "Abyssinian_151",
+        "class": "Abyssinian",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "Abyssinian_99"
+        ],
+        "phash_distance": 4
+      },
+      {
+        "image_id": "British_Shorthair_160",
+        "class": "British_Shorthair",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "British_Shorthair_278"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "British_Shorthair_186",
+        "class": "British_Shorthair",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "British_Shorthair_271"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "Egyptian_Mau_186",
+        "class": "Egyptian_Mau",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "Egyptian_Mau_6"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "german_shorthaired_150",
+        "class": "german_shorthaired",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "german_shorthaired_3"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "german_shorthaired_179",
+        "class": "german_shorthaired",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "german_shorthaired_19"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "german_shorthaired_180",
+        "class": "german_shorthaired",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "german_shorthaired_20"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "great_pyrenees_173",
+        "class": "great_pyrenees",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "great_pyrenees_89"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "japanese_chin_158",
+        "class": "japanese_chin",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "japanese_chin_81"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "japanese_chin_176",
+        "class": "japanese_chin",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "japanese_chin_20"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "japanese_chin_187",
+        "class": "japanese_chin",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "japanese_chin_200"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "japanese_chin_188",
+        "class": "japanese_chin",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "japanese_chin_78"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "keeshond_152",
+        "class": "keeshond",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "keeshond_99"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "keeshond_175",
+        "class": "keeshond",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "keeshond_27"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "leonberger_187",
+        "class": "leonberger",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "leonberger_1"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "leonberger_189",
+        "class": "leonberger",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "leonberger_2"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "newfoundland_149",
+        "class": "newfoundland",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "newfoundland_2"
+        ],
+        "phash_distance": 0
+      },
+      {
+        "image_id": "newfoundland_172",
+        "class": "newfoundland",
+        "reason": "near_duplicate_with_test",
+        "matched_test_ids": [
+          "newfoundland_2"
+        ],
+        "phash_distance": 4
+      }
+    ]
+  },
+  "near_duplicate_clusters": {
+    "pair_count": 12,
+    "cluster_count": 3645,
+    "multi_image_cluster_count": 10,
+    "reassigned_clusters": [
+      {
+        "cluster_id": 13,
+        "members": [
+          {
+            "image_id": "Abyssinian_11",
+            "class": "Abyssinian",
+            "original_split": "train"
+          },
+          {
+            "image_id": "Abyssinian_177",
+            "class": "Abyssinian",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "train": 2,
+          "val": 0
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      },
+      {
+        "cluster_id": 27,
+        "members": [
+          {
+            "image_id": "Abyssinian_122",
+            "class": "Abyssinian",
+            "original_split": "train"
+          },
+          {
+            "image_id": "Abyssinian_172",
+            "class": "Abyssinian",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "train": 2,
+          "val": 0
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      },
+      {
+        "cluster_id": 307,
+        "members": [
+          {
+            "image_id": "Bombay_107",
+            "class": "Bombay",
+            "original_split": "train"
+          },
+          {
+            "image_id": "Bombay_132",
+            "class": "Bombay",
+            "original_split": "train"
+          },
+          {
+            "image_id": "Bombay_19",
+            "class": "Bombay",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "train": 3,
+          "val": 0
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      },
+      {
+        "cluster_id": 313,
+        "members": [
+          {
+            "image_id": "Bombay_113",
+            "class": "Bombay",
+            "original_split": "train"
+          },
+          {
+            "image_id": "Bombay_157",
+            "class": "Bombay",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "train": 2,
+          "val": 0
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      },
+      {
+        "cluster_id": 314,
+        "members": [
+          {
+            "image_id": "Bombay_114",
+            "class": "Bombay",
+            "original_split": "train"
+          },
+          {
+            "image_id": "Bombay_139",
+            "class": "Bombay",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "train": 2,
+          "val": 0
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      },
+      {
+        "cluster_id": 336,
+        "members": [
+          {
+            "image_id": "Bombay_136",
+            "class": "Bombay",
+            "original_split": "train"
+          },
+          {
+            "image_id": "Bombay_150",
+            "class": "Bombay",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "train": 2,
+          "val": 0
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      },
+      {
+        "cluster_id": 1645,
+        "members": [
+          {
+            "image_id": "boxer_162",
+            "class": "boxer",
+            "original_split": "train"
+          },
+          {
+            "image_id": "boxer_172",
+            "class": "boxer",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "train": 2,
+          "val": 0
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      },
+      {
+        "cluster_id": 2363,
+        "members": [
+          {
+            "image_id": "keeshond_101",
+            "class": "keeshond",
+            "original_split": "val"
+          },
+          {
+            "image_id": "keeshond_162",
+            "class": "keeshond",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "val": 1,
+          "train": 1
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      },
+      {
+        "cluster_id": 2365,
+        "members": [
+          {
+            "image_id": "keeshond_103",
+            "class": "keeshond",
+            "original_split": "train"
+          },
+          {
+            "image_id": "keeshond_167",
+            "class": "keeshond",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "train": 2,
+          "val": 0
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      },
+      {
+        "cluster_id": 2366,
+        "members": [
+          {
+            "image_id": "keeshond_104",
+            "class": "keeshond",
+            "original_split": "train"
+          },
+          {
+            "image_id": "keeshond_170",
+            "class": "keeshond",
+            "original_split": "train"
+          }
+        ],
+        "votes": {
+          "train": 2,
+          "val": 0
+        },
+        "decision": "train",
+        "rule": "簇内原划分多数决；平局归 train"
+      }
+    ]
+  },
+  "val_repairs": [],
+  "verification": {
+    "class_sets_identical": true,
+    "class_order_alphabetical": true,
+    "md5_cross_split_duplicates": 0,
+    "phash_cross_split_pairs": 0,
+    "cluster_straddles": 0,
+    "ok": true
+  },
+  "original_split_comparison": {
+    "processed": {
+      "train": 3311,
+      "val": 369,
+      "test": 3669,
+      "source": "reports/split_stats.json（U1 重新扫描）"
+    },
+    "processed_clean": {
+      "train": 3288,
+      "val": 368,
+      "test": 3669
+    },
+    "note": "test 数量不变；train/val 因排除泄漏样本而减少。两套划分的训练数据与选模过程已不同，指标不可作为同条件直接比较。"
+  }
+}
