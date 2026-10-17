@@ -1,0 +1,1506 @@
+{
+  "generated_at": "2026-10-17T02:44:55.855639+00:00",
+  "data_dir": "E:\\CatDogBreedNet\\data\\processed",
+  "scan": {
+    "train": {
+      "total": 3311,
+      "classes": {
+        "Abyssinian": 90,
+        "Bengal": 90,
+        "Birman": 90,
+        "Bombay": 86,
+        "British_Shorthair": 90,
+        "Egyptian_Mau": 84,
+        "Maine_Coon": 90,
+        "Persian": 90,
+        "Ragdoll": 90,
+        "Russian_Blue": 90,
+        "Siamese": 89,
+        "Sphynx": 90,
+        "american_bulldog": 90,
+        "american_pit_bull_terrier": 90,
+        "basset_hound": 90,
+        "beagle": 90,
+        "boxer": 90,
+        "chihuahua": 90,
+        "english_cocker_spaniel": 86,
+        "english_setter": 90,
+        "german_shorthaired": 90,
+        "great_pyrenees": 90,
+        "havanese": 90,
+        "japanese_chin": 90,
+        "keeshond": 90,
+        "leonberger": 90,
+        "miniature_pinscher": 90,
+        "newfoundland": 86,
+        "pomeranian": 90,
+        "pug": 90,
+        "saint_bernard": 90,
+        "samoyed": 90,
+        "scottish_terrier": 90,
+        "shiba_inu": 90,
+        "staffordshire_bull_terrier": 90,
+        "wheaten_terrier": 90,
+        "yorkshire_terrier": 90
+      }
+    },
+    "val": {
+      "total": 369,
+      "classes": {
+        "Abyssinian": 10,
+        "Bengal": 10,
+        "Birman": 10,
+        "Bombay": 10,
+        "British_Shorthair": 10,
+        "Egyptian_Mau": 9,
+        "Maine_Coon": 10,
+        "Persian": 10,
+        "Ragdoll": 10,
+        "Russian_Blue": 10,
+        "Siamese": 10,
+        "Sphynx": 10,
+        "american_bulldog": 10,
+        "american_pit_bull_terrier": 10,
+        "basset_hound": 10,
+        "beagle": 10,
+        "boxer": 10,
+        "chihuahua": 10,
+        "english_cocker_spaniel": 10,
+        "english_setter": 10,
+        "german_shorthaired": 10,
+        "great_pyrenees": 10,
+        "havanese": 10,
+        "japanese_chin": 10,
+        "keeshond": 10,
+        "leonberger": 10,
+        "miniature_pinscher": 10,
+        "newfoundland": 10,
+        "pomeranian": 10,
+        "pug": 10,
+        "saint_bernard": 10,
+        "samoyed": 10,
+        "scottish_terrier": 10,
+        "shiba_inu": 10,
+        "staffordshire_bull_terrier": 10,
+        "wheaten_terrier": 10,
+        "yorkshire_terrier": 10
+      }
+    },
+    "test": {
+      "total": 3669,
+      "classes": {
+        "Abyssinian": 98,
+        "Bengal": 100,
+        "Birman": 100,
+        "Bombay": 88,
+        "British_Shorthair": 100,
+        "Egyptian_Mau": 97,
+        "Maine_Coon": 100,
+        "Persian": 100,
+        "Ragdoll": 100,
+        "Russian_Blue": 100,
+        "Siamese": 100,
+        "Sphynx": 100,
+        "american_bulldog": 100,
+        "american_pit_bull_terrier": 100,
+        "basset_hound": 100,
+        "beagle": 100,
+        "boxer": 99,
+        "chihuahua": 100,
+        "english_cocker_spaniel": 100,
+        "english_setter": 100,
+        "german_shorthaired": 100,
+        "great_pyrenees": 100,
+        "havanese": 100,
+        "japanese_chin": 100,
+        "keeshond": 99,
+        "leonberger": 100,
+        "miniature_pinscher": 100,
+        "newfoundland": 100,
+        "pomeranian": 100,
+        "pug": 100,
+        "saint_bernard": 100,
+        "samoyed": 100,
+        "scottish_terrier": 99,
+        "shiba_inu": 100,
+        "staffordshire_bull_terrier": 89,
+        "wheaten_terrier": 100,
+        "yorkshire_terrier": 100
+      }
+    }
+  },
+  "label_consistency": {
+    "num_classes_per_split": {
+      "train": 37,
+      "val": 37,
+      "test": 37
+    },
+    "class_sets_identical": true,
+    "classes_missing_per_split": {},
+    "orders_identical_across_splits": true,
+    "train_order_is_alphabetical": true
+  },
+  "class_names_consistency": {
+    "class_names_json_count": 37,
+    "dataset_class_count": 37,
+    "identical": true,
+    "only_in_json": [],
+    "only_in_dataset": [],
+    "order_matches": true
+  },
+  "broken_images": {
+    "checked": 7349,
+    "broken_count": 0,
+    "broken": [],
+    "seconds": 68.98
+  },
+  "exact_duplicates": {
+    "images_scanned": 7349,
+    "duplicate_groups": 0,
+    "cross_split_groups": [],
+    "within_split_groups": [],
+    "seconds": 3.92
+  },
+  "near_duplicates": {
+    "available": true,
+    "threshold": 5,
+    "images_hashed": 7349,
+    "hash_failures": [],
+    "candidate_pairs_verified": 1176763,
+    "pair_count": 45,
+    "cross_split_pair_count": 25,
+    "pairs": [
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "great_pyrenees",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\great_pyrenees\\great_pyrenees_173.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "great_pyrenees",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\great_pyrenees\\great_pyrenees_89.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "test",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_194.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_79.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_140.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\keeshond\\keeshond_97.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_113.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_157.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "British_Shorthair",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\British_Shorthair\\British_Shorthair_160.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "British_Shorthair",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\British_Shorthair\\British_Shorthair_278.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_175.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\keeshond\\keeshond_27.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_152.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\keeshond\\keeshond_99.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_11.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_177.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "leonberger",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\leonberger\\leonberger_189.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "leonberger",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\leonberger\\leonberger_2.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_188.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_78.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_141.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\keeshond\\keeshond_47.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_103.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_167.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_140.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_88.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_104.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_170.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "test",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_38.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_57.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "german_shorthaired",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\german_shorthaired\\german_shorthaired_179.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "german_shorthaired",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\german_shorthaired\\german_shorthaired_19.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "test",
+          "class": "Birman",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_199.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Birman",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Birman\\Birman_25.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_107.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_19.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_122.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_172.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "german_shorthaired",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\german_shorthaired\\german_shorthaired_150.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "german_shorthaired",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\german_shorthaired\\german_shorthaired_3.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "test",
+          "class": "scottish_terrier",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\scottish_terrier\\scottish_terrier_78.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "scottish_terrier",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\scottish_terrier\\scottish_terrier_94.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "newfoundland",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\newfoundland\\newfoundland_149.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "newfoundland",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\newfoundland\\newfoundland_2.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_137.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_85.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Egyptian_Mau",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Egyptian_Mau\\Egyptian_Mau_186.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Egyptian_Mau",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Egyptian_Mau\\Egyptian_Mau_6.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_158.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_81.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\keeshond\\keeshond_162.jpg"
+        },
+        "b": {
+          "split": "val",
+          "class": "keeshond",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\val\\keeshond\\keeshond_101.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "leonberger",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\leonberger\\leonberger_187.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "leonberger",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\leonberger\\leonberger_1.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "german_shorthaired",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\german_shorthaired\\german_shorthaired_180.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "german_shorthaired",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\german_shorthaired\\german_shorthaired_20.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_176.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_20.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "test",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_5.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_87.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_132.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_19.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_107.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_132.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "British_Shorthair",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\British_Shorthair\\British_Shorthair_186.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "British_Shorthair",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\British_Shorthair\\British_Shorthair_271.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_146.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_82.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Egyptian_Mau",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Egyptian_Mau\\Egyptian_Mau_138.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Egyptian_Mau",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Egyptian_Mau\\Egyptian_Mau_219.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\japanese_chin\\japanese_chin_187.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "japanese_chin",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\japanese_chin\\japanese_chin_200.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "test",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_79.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Bombay\\Bombay_97.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "test",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_40.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_63.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 0,
+        "a": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_136.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_150.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 2,
+        "a": {
+          "split": "test",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_24.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_56.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 2,
+        "a": {
+          "split": "train",
+          "class": "boxer",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\boxer\\boxer_162.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "boxer",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\boxer\\boxer_172.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 2,
+        "a": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_114.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "Bombay",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Bombay\\Bombay_139.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 4,
+        "a": {
+          "split": "train",
+          "class": "newfoundland",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\newfoundland\\newfoundland_149.jpg"
+        },
+        "b": {
+          "split": "train",
+          "class": "newfoundland",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\newfoundland\\newfoundland_172.jpg"
+        },
+        "cross_split": false
+      },
+      {
+        "distance": 4,
+        "a": {
+          "split": "train",
+          "class": "newfoundland",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\newfoundland\\newfoundland_172.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "newfoundland",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\newfoundland\\newfoundland_2.jpg"
+        },
+        "cross_split": true
+      },
+      {
+        "distance": 4,
+        "a": {
+          "split": "train",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\train\\Abyssinian\\Abyssinian_151.jpg"
+        },
+        "b": {
+          "split": "test",
+          "class": "Abyssinian",
+          "path": "E:\\CatDogBreedNet\\data\\processed\\test\\Abyssinian\\Abyssinian_99.jpg"
+        },
+        "cross_split": true
+      }
+    ],
+    "seconds": 13.39
+  },
+  "near_duplicate_breed_counts": {
+    "great_pyrenees": {
+      "total": 2,
+      "cross_split": 2
+    },
+    "japanese_chin": {
+      "total": 14,
+      "cross_split": 12
+    },
+    "keeshond": {
+      "total": 14,
+      "cross_split": 10
+    },
+    "Bombay": {
+      "total": 18,
+      "cross_split": 2
+    },
+    "British_Shorthair": {
+      "total": 4,
+      "cross_split": 4
+    },
+    "Abyssinian": {
+      "total": 12,
+      "cross_split": 2
+    },
+    "leonberger": {
+      "total": 4,
+      "cross_split": 4
+    },
+    "german_shorthaired": {
+      "total": 6,
+      "cross_split": 6
+    },
+    "Birman": {
+      "total": 2,
+      "cross_split": 0
+    },
+    "scottish_terrier": {
+      "total": 2,
+      "cross_split": 0
+    },
+    "newfoundland": {
+      "total": 6,
+      "cross_split": 4
+    },
+    "Egyptian_Mau": {
+      "total": 4,
+      "cross_split": 4
+    },
+    "boxer": {
+      "total": 2,
+      "cross_split": 0
+    }
+  },
+  "near_duplicate_f1_correlation": 0.4807103443330544,
+  "stage3_overall_metrics": {
+    "accuracy": 0.8034886890160807,
+    "macro_f1": 0.8021840608214845,
+    "weighted_f1": 0.8026010206407562,
+    "num_samples": 3669,
+    "num_classes": 37
+  },
+  "per_class_metrics": [
+    {
+      "class": "Abyssinian",
+      "precision": 0.722222,
+      "recall": 0.795918,
+      "f1": 0.757282,
+      "support": 98
+    },
+    {
+      "class": "Bengal",
+      "precision": 0.661017,
+      "recall": 0.78,
+      "f1": 0.715596,
+      "support": 100
+    },
+    {
+      "class": "Birman",
+      "precision": 0.604478,
+      "recall": 0.81,
+      "f1": 0.692308,
+      "support": 100
+    },
+    {
+      "class": "Bombay",
+      "precision": 0.845361,
+      "recall": 0.931818,
+      "f1": 0.886486,
+      "support": 88
+    },
+    {
+      "class": "British_Shorthair",
+      "precision": 0.886364,
+      "recall": 0.78,
+      "f1": 0.829787,
+      "support": 100
+    },
+    {
+      "class": "Egyptian_Mau",
+      "precision": 0.9,
+      "recall": 0.835052,
+      "f1": 0.86631,
+      "support": 97
+    },
+    {
+      "class": "Maine_Coon",
+      "precision": 0.791209,
+      "recall": 0.72,
+      "f1": 0.753927,
+      "support": 100
+    },
+    {
+      "class": "Persian",
+      "precision": 0.804124,
+      "recall": 0.78,
+      "f1": 0.791878,
+      "support": 100
+    },
+    {
+      "class": "Ragdoll",
+      "precision": 0.623853,
+      "recall": 0.68,
+      "f1": 0.650718,
+      "support": 100
+    },
+    {
+      "class": "Russian_Blue",
+      "precision": 0.94186,
+      "recall": 0.81,
+      "f1": 0.870968,
+      "support": 100
+    },
+    {
+      "class": "Siamese",
+      "precision": 0.953125,
+      "recall": 0.61,
+      "f1": 0.743902,
+      "support": 100
+    },
+    {
+      "class": "Sphynx",
+      "precision": 0.741379,
+      "recall": 0.86,
+      "f1": 0.796296,
+      "support": 100
+    },
+    {
+      "class": "american_bulldog",
+      "precision": 0.677966,
+      "recall": 0.8,
+      "f1": 0.733945,
+      "support": 100
+    },
+    {
+      "class": "american_pit_bull_terrier",
+      "precision": 0.583333,
+      "recall": 0.49,
+      "f1": 0.532609,
+      "support": 100
+    },
+    {
+      "class": "basset_hound",
+      "precision": 0.868132,
+      "recall": 0.79,
+      "f1": 0.827225,
+      "support": 100
+    },
+    {
+      "class": "beagle",
+      "precision": 0.669231,
+      "recall": 0.87,
+      "f1": 0.756522,
+      "support": 100
+    },
+    {
+      "class": "boxer",
+      "precision": 0.705882,
+      "recall": 0.848485,
+      "f1": 0.770642,
+      "support": 99
+    },
+    {
+      "class": "chihuahua",
+      "precision": 0.73913,
+      "recall": 0.51,
+      "f1": 0.60355,
+      "support": 100
+    },
+    {
+      "class": "english_cocker_spaniel",
+      "precision": 0.835165,
+      "recall": 0.76,
+      "f1": 0.795812,
+      "support": 100
+    },
+    {
+      "class": "english_setter",
+      "precision": 0.875,
+      "recall": 0.77,
+      "f1": 0.819149,
+      "support": 100
+    },
+    {
+      "class": "german_shorthaired",
+      "precision": 0.818966,
+      "recall": 0.95,
+      "f1": 0.87963,
+      "support": 100
+    },
+    {
+      "class": "great_pyrenees",
+      "precision": 0.94382,
+      "recall": 0.84,
+      "f1": 0.888889,
+      "support": 100
+    },
+    {
+      "class": "havanese",
+      "precision": 0.661765,
+      "recall": 0.9,
+      "f1": 0.762712,
+      "support": 100
+    },
+    {
+      "class": "japanese_chin",
+      "precision": 0.958333,
+      "recall": 0.92,
+      "f1": 0.938776,
+      "support": 100
+    },
+    {
+      "class": "keeshond",
+      "precision": 0.915094,
+      "recall": 0.979798,
+      "f1": 0.946341,
+      "support": 99
+    },
+    {
+      "class": "leonberger",
+      "precision": 0.949495,
+      "recall": 0.94,
+      "f1": 0.944724,
+      "support": 100
+    },
+    {
+      "class": "miniature_pinscher",
+      "precision": 0.879518,
+      "recall": 0.73,
+      "f1": 0.797814,
+      "support": 100
+    },
+    {
+      "class": "newfoundland",
+      "precision": 0.897959,
+      "recall": 0.88,
+      "f1": 0.888889,
+      "support": 100
+    },
+    {
+      "class": "pomeranian",
+      "precision": 0.875,
+      "recall": 0.84,
+      "f1": 0.857143,
+      "support": 100
+    },
+    {
+      "class": "pug",
+      "precision": 0.965517,
+      "recall": 0.84,
+      "f1": 0.898396,
+      "support": 100
+    },
+    {
+      "class": "saint_bernard",
+      "precision": 0.92,
+      "recall": 0.92,
+      "f1": 0.92,
+      "support": 100
+    },
+    {
+      "class": "samoyed",
+      "precision": 0.866071,
+      "recall": 0.97,
+      "f1": 0.915094,
+      "support": 100
+    },
+    {
+      "class": "scottish_terrier",
+      "precision": 0.836538,
+      "recall": 0.878788,
+      "f1": 0.857143,
+      "support": 99
+    },
+    {
+      "class": "shiba_inu",
+      "precision": 0.775862,
+      "recall": 0.9,
+      "f1": 0.833333,
+      "support": 100
+    },
+    {
+      "class": "staffordshire_bull_terrier",
+      "precision": 0.611111,
+      "recall": 0.494382,
+      "f1": 0.546584,
+      "support": 89
+    },
+    {
+      "class": "wheaten_terrier",
+      "precision": 0.855263,
+      "recall": 0.65,
+      "f1": 0.738636,
+      "support": 100
+    },
+    {
+      "class": "yorkshire_terrier",
+      "precision": 0.894737,
+      "recall": 0.85,
+      "f1": 0.871795,
+      "support": 100
+    }
+  ],
+  "confusion_pairs_top50": [
+    {
+      "true": "Siamese",
+      "pred": "Birman",
+      "count": 26,
+      "true_class_correct": 61
+    },
+    {
+      "true": "american_pit_bull_terrier",
+      "pred": "staffordshire_bull_terrier",
+      "count": 19,
+      "true_class_correct": 49
+    },
+    {
+      "true": "Birman",
+      "pred": "Ragdoll",
+      "count": 18,
+      "true_class_correct": 81
+    },
+    {
+      "true": "Ragdoll",
+      "pred": "Birman",
+      "count": 18,
+      "true_class_correct": 68
+    },
+    {
+      "true": "wheaten_terrier",
+      "pred": "havanese",
+      "count": 17,
+      "true_class_correct": 65
+    },
+    {
+      "true": "staffordshire_bull_terrier",
+      "pred": "american_pit_bull_terrier",
+      "count": 16,
+      "true_class_correct": 44
+    },
+    {
+      "true": "chihuahua",
+      "pred": "Sphynx",
+      "count": 15,
+      "true_class_correct": 51
+    },
+    {
+      "true": "basset_hound",
+      "pred": "beagle",
+      "count": 14,
+      "true_class_correct": 79
+    },
+    {
+      "true": "Egyptian_Mau",
+      "pred": "Bengal",
+      "count": 13,
+      "true_class_correct": 81
+    },
+    {
+      "true": "pug",
+      "pred": "boxer",
+      "count": 13,
+      "true_class_correct": 84
+    },
+    {
+      "true": "Abyssinian",
+      "pred": "Bengal",
+      "count": 11,
+      "true_class_correct": 78
+    },
+    {
+      "true": "american_pit_bull_terrier",
+      "pred": "american_bulldog",
+      "count": 11,
+      "true_class_correct": 49
+    },
+    {
+      "true": "english_setter",
+      "pred": "english_cocker_spaniel",
+      "count": 11,
+      "true_class_correct": 77
+    },
+    {
+      "true": "yorkshire_terrier",
+      "pred": "havanese",
+      "count": 11,
+      "true_class_correct": 85
+    },
+    {
+      "true": "Bengal",
+      "pred": "Maine_Coon",
+      "count": 10,
+      "true_class_correct": 78
+    },
+    {
+      "true": "staffordshire_bull_terrier",
+      "pred": "american_bulldog",
+      "count": 10,
+      "true_class_correct": 44
+    },
+    {
+      "true": "american_pit_bull_terrier",
+      "pred": "german_shorthaired",
+      "count": 8,
+      "true_class_correct": 49
+    },
+    {
+      "true": "chihuahua",
+      "pred": "shiba_inu",
+      "count": 8,
+      "true_class_correct": 51
+    },
+    {
+      "true": "great_pyrenees",
+      "pred": "samoyed",
+      "count": 8,
+      "true_class_correct": 84
+    },
+    {
+      "true": "Bengal",
+      "pred": "Abyssinian",
+      "count": 7,
+      "true_class_correct": 78
+    },
+    {
+      "true": "Maine_Coon",
+      "pred": "Ragdoll",
+      "count": 7,
+      "true_class_correct": 72
+    },
+    {
+      "true": "Persian",
+      "pred": "Ragdoll",
+      "count": 7,
+      "true_class_correct": 78
+    },
+    {
+      "true": "boxer",
+      "pred": "american_bulldog",
+      "count": 7,
+      "true_class_correct": 84
+    },
+    {
+      "true": "Maine_Coon",
+      "pred": "Bengal",
+      "count": 6,
+      "true_class_correct": 72
+    },
+    {
+      "true": "Maine_Coon",
+      "pred": "Persian",
+      "count": 6,
+      "true_class_correct": 72
+    },
+    {
+      "true": "Sphynx",
+      "pred": "chihuahua",
+      "count": 6,
+      "true_class_correct": 86
+    },
+    {
+      "true": "american_bulldog",
+      "pred": "Sphynx",
+      "count": 6,
+      "true_class_correct": 80
+    },
+    {
+      "true": "english_cocker_spaniel",
+      "pred": "english_setter",
+      "count": 6,
+      "true_class_correct": 76
+    },
+    {
+      "true": "pomeranian",
+      "pred": "samoyed",
+      "count": 6,
+      "true_class_correct": 84
+    },
+    {
+      "true": "Ragdoll",
+      "pred": "Persian",
+      "count": 5,
+      "true_class_correct": 68
+    },
+    {
+      "true": "Russian_Blue",
+      "pred": "Abyssinian",
+      "count": 5,
+      "true_class_correct": 81
+    },
+    {
+      "true": "Russian_Blue",
+      "pred": "British_Shorthair",
+      "count": 5,
+      "true_class_correct": 81
+    },
+    {
+      "true": "american_bulldog",
+      "pred": "american_pit_bull_terrier",
+      "count": 5,
+      "true_class_correct": 80
+    },
+    {
+      "true": "beagle",
+      "pred": "basset_hound",
+      "count": 5,
+      "true_class_correct": 87
+    },
+    {
+      "true": "chihuahua",
+      "pred": "american_bulldog",
+      "count": 5,
+      "true_class_correct": 51
+    },
+    {
+      "true": "chihuahua",
+      "pred": "miniature_pinscher",
+      "count": 5,
+      "true_class_correct": 51
+    },
+    {
+      "true": "english_cocker_spaniel",
+      "pred": "newfoundland",
+      "count": 5,
+      "true_class_correct": 76
+    },
+    {
+      "true": "miniature_pinscher",
+      "pred": "chihuahua",
+      "count": 5,
+      "true_class_correct": 73
+    },
+    {
+      "true": "pomeranian",
+      "pred": "shiba_inu",
+      "count": 5,
+      "true_class_correct": 84
+    },
+    {
+      "true": "scottish_terrier",
+      "pred": "havanese",
+      "count": 5,
+      "true_class_correct": 87
+    },
+    {
+      "true": "staffordshire_bull_terrier",
+      "pred": "boxer",
+      "count": 5,
+      "true_class_correct": 44
+    },
+    {
+      "true": "British_Shorthair",
+      "pred": "Abyssinian",
+      "count": 4,
+      "true_class_correct": 78
+    },
+    {
+      "true": "British_Shorthair",
+      "pred": "Persian",
+      "count": 4,
+      "true_class_correct": 78
+    },
+    {
+      "true": "chihuahua",
+      "pred": "beagle",
+      "count": 4,
+      "true_class_correct": 51
+    },
+    {
+      "true": "english_cocker_spaniel",
+      "pred": "havanese",
+      "count": 4,
+      "true_class_correct": 76
+    },
+    {
+      "true": "english_setter",
+      "pred": "beagle",
+      "count": 4,
+      "true_class_correct": 77
+    },
+    {
+      "true": "havanese",
+      "pred": "wheaten_terrier",
+      "count": 4,
+      "true_class_correct": 90
+    },
+    {
+      "true": "miniature_pinscher",
+      "pred": "american_pit_bull_terrier",
+      "count": 4,
+      "true_class_correct": 73
+    },
+    {
+      "true": "miniature_pinscher",
+      "pred": "boxer",
+      "count": 4,
+      "true_class_correct": 73
+    },
+    {
+      "true": "miniature_pinscher",
+      "pred": "shiba_inu",
+      "count": 4,
+      "true_class_correct": 73
+    }
+  ],
+  "train_count_f1_correlation": -0.18244235165042752,
+  "training_review": {
+    "available": true,
+    "epochs_completed": 10,
+    "best_epoch": 8,
+    "best_val_acc": 0.840108,
+    "final_epoch": 10,
+    "final_val_acc": 0.829268,
+    "final_train_acc": 0.985201,
+    "final_train_val_gap": 0.155933,
+    "mean_epoch_seconds": 19.73,
+    "total_train_seconds": 197.33
+  },
+  "experiment_config": {
+    "started_at": "2026-10-13T09:15:52.861892+00:00",
+    "finished_at": "2026-10-13T09:19:11.647485+00:00",
+    "total_seconds": 198.79,
+    "arch": "resnet18",
+    "pretrained_weights": "IMAGENET1K_V1",
+    "fine_tuning": "full model (backbone not frozen)",
+    "num_classes": 37,
+    "seed": 42,
+    "epochs_requested": 10,
+    "epochs_completed": 10,
+    "best_epoch": 8,
+    "best_val_acc": 0.8401084010840109,
+    "batch_size": 32,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "optimizer": "AdamW",
+    "scheduler": "StepLR(step_size=5, gamma=0.1)",
+    "loss": "CrossEntropyLoss",
+    "early_stopping_patience": 3,
+    "image_size": 224,
+    "train_augmentation": "RandomResizedCrop(224, scale=(0.8,1.0)) + RandomHorizontalFlip(0.5) + RandomRotation(10)",
+    "eval_transform": "Resize(256) + CenterCrop(224) + Normalize(ImageNet)",
+    "normalization": "ImageNet mean/std",
+    "data_dir": "E:\\CatDogBreedNet\\data\\processed",
+    "dataset_split_policy": "test = official test split; train/val = official trainval split stratified per class, seed=42, val_ratio=0.1",
+    "dataset_sizes": {
+      "train": 3311,
+      "val": 369,
+      "test": 3669
+    },
+    "environment": {
+      "python": "3.11.9",
+      "torch": "2.14.1+cu130",
+      "torchvision": "0.29.1+cu130",
+      "cuda_available": true,
+      "device": "cuda",
+      "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "platform": "Windows-10-10.0.22621-SP0"
+    }
+  },
+  "stale_reports": {
+    "stale": [
+      {
+        "file": "E:\\CatDogBreedNet\\reports\\split_summary.json",
+        "declared_totals": {
+          "train": 27,
+          "val": 3,
+          "test": 6
+        },
+        "actual_totals": {
+          "train": 3311,
+          "val": 369,
+          "test": 3669
+        },
+        "declared_num_classes": 3,
+        "actual_num_classes": 37,
+        "note": "该文件为早期占位/模板内容，与当前 37 类真实数据不一致；真实统计以重新扫描磁盘的结果与 split_stats.json 为准"
+      }
+    ]
+  },
+  "runtime_seconds": 86.93
+}
