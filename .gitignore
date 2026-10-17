@@ -39,6 +39,10 @@ reports/split_*.json
 # 近重复联系表图片：由 scripts/review_near_duplicates.py 生成，可随时重建；
 # 保留报告（.md/.json/.csv）与人工判定记录（visual_verification.json）
 reports/leakage_review/*.png
+
+# 种子验证实验的曲线/混淆矩阵图片：由 ml.evaluate 生成，可随时重建；
+# 保留 test_metrics.json、classification_report.csv、train_log.csv 等文本产物
+reports/exp_seed_*/*.png
 reports/*.log
 !reports/.gitkeep
 !reports/dataset.md

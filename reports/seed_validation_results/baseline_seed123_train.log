@@ -1,0 +1,24 @@
+[train] device=cuda arch=resnet18 classes=37 augment=baseline freeze=none mixup_alpha=0.0 label_smoothing=0.0 train=3288 val=368 test=3669
+[train] gpu=NVIDIA GeForce RTX 4060 Laptop GPU vram=8.0 GiB
+[train] freeze strategy 'none': all parameters trainable
+[epoch   1/10] train_loss=1.5890 train_acc=0.5313 val_loss=1.5309 val_acc=0.5435 lr=1.00e-03 (20.1s)
+[train] new best val_acc=0.5435 at epoch 1; saved best_model.pth
+[epoch   2/10] train_loss=0.9934 train_acc=0.6880 val_loss=1.7628 val_acc=0.5489 lr=1.00e-03 (19.7s)
+[train] new best val_acc=0.5489 at epoch 2; saved best_model.pth
+[epoch   3/10] train_loss=0.7237 train_acc=0.7713 val_loss=1.7917 val_acc=0.5489 lr=1.00e-03 (19.8s)
+[epoch   4/10] train_loss=0.6228 train_acc=0.8078 val_loss=1.5770 val_acc=0.5625 lr=1.00e-03 (19.8s)
+[train] new best val_acc=0.5625 at epoch 4; saved best_model.pth
+[epoch   5/10] train_loss=0.4869 train_acc=0.8464 val_loss=1.5560 val_acc=0.5978 lr=1.00e-04 (20.0s)
+[train] new best val_acc=0.5978 at epoch 5; saved best_model.pth
+[epoch   6/10] train_loss=0.2593 train_acc=0.9185 val_loss=0.6428 val_acc=0.7935 lr=1.00e-04 (20.0s)
+[train] new best val_acc=0.7935 at epoch 6; saved best_model.pth
+[epoch   7/10] train_loss=0.1313 train_acc=0.9705 val_loss=0.6010 val_acc=0.8043 lr=1.00e-04 (20.0s)
+[train] new best val_acc=0.8043 at epoch 7; saved best_model.pth
+[epoch   8/10] train_loss=0.1054 train_acc=0.9735 val_loss=0.5804 val_acc=0.8261 lr=1.00e-04 (20.1s)
+[train] new best val_acc=0.8261 at epoch 8; saved best_model.pth
+[epoch   9/10] train_loss=0.0827 train_acc=0.9854 val_loss=0.5687 val_acc=0.8261 lr=1.00e-04 (20.0s)
+[epoch  10/10] train_loss=0.0711 train_acc=0.9842 val_loss=0.5539 val_acc=0.8288 lr=1.00e-05 (20.0s)
+[train] new best val_acc=0.8288 at epoch 10; saved best_model.pth
+[train] done in 200.8s; best_val_acc=0.8288 (epoch 10)
+[train] artifacts: E:\CatDogBreedNet\artifacts\exp_seed_baseline_seed123/ (best_model.pth, last_model.pth, class_names.json, experiment_config.json)
+[train] reports: E:\CatDogBreedNet\reports\exp_seed_baseline_seed123\train_log.csv, loss_curve.png, accuracy_curve.png

@@ -1,0 +1,23 @@
+[train] device=cuda arch=resnet18 classes=37 augment=baseline freeze=none mixup_alpha=0.0 label_smoothing=0.0 train=3288 val=368 test=3669
+[train] gpu=NVIDIA GeForce RTX 4060 Laptop GPU vram=8.0 GiB
+[train] freeze strategy 'none': all parameters trainable
+[epoch   1/10] train_loss=1.6467 train_acc=0.5052 val_loss=1.4652 val_acc=0.5489 lr=1.00e-03 (19.4s)
+[train] new best val_acc=0.5489 at epoch 1; saved best_model.pth
+[epoch   2/10] train_loss=0.9628 train_acc=0.7029 val_loss=1.3362 val_acc=0.5842 lr=1.00e-03 (19.2s)
+[train] new best val_acc=0.5842 at epoch 2; saved best_model.pth
+[epoch   3/10] train_loss=0.7328 train_acc=0.7740 val_loss=1.5445 val_acc=0.5408 lr=1.00e-03 (19.4s)
+[epoch   4/10] train_loss=0.5823 train_acc=0.8096 val_loss=1.3238 val_acc=0.6005 lr=1.00e-03 (19.5s)
+[train] new best val_acc=0.6005 at epoch 4; saved best_model.pth
+[epoch   5/10] train_loss=0.5099 train_acc=0.8327 val_loss=1.2127 val_acc=0.6793 lr=1.00e-04 (20.0s)
+[train] new best val_acc=0.6793 at epoch 5; saved best_model.pth
+[epoch   6/10] train_loss=0.2473 train_acc=0.9227 val_loss=0.5732 val_acc=0.8342 lr=1.00e-04 (19.4s)
+[train] new best val_acc=0.8342 at epoch 6; saved best_model.pth
+[epoch   7/10] train_loss=0.1358 train_acc=0.9681 val_loss=0.5731 val_acc=0.8370 lr=1.00e-04 (19.6s)
+[train] new best val_acc=0.8370 at epoch 7; saved best_model.pth
+[epoch   8/10] train_loss=0.1056 train_acc=0.9754 val_loss=0.5629 val_acc=0.8397 lr=1.00e-04 (19.6s)
+[train] new best val_acc=0.8397 at epoch 8; saved best_model.pth
+[epoch   9/10] train_loss=0.0902 train_acc=0.9781 val_loss=0.5757 val_acc=0.8261 lr=1.00e-04 (19.5s)
+[epoch  10/10] train_loss=0.0683 train_acc=0.9869 val_loss=0.5492 val_acc=0.8370 lr=1.00e-05 (19.5s)
+[train] done in 196.4s; best_val_acc=0.8397 (epoch 8)
+[train] artifacts: E:\CatDogBreedNet\artifacts\exp_seed_baseline_seed2024/ (best_model.pth, last_model.pth, class_names.json, experiment_config.json)
+[train] reports: E:\CatDogBreedNet\reports\exp_seed_baseline_seed2024\train_log.csv, loss_curve.png, accuracy_curve.png

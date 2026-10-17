@@ -1,0 +1,410 @@
+{
+  "configs": {
+    "a3b": {
+      "label": "A3b 分层学习率（head 1e-3 / backbone 1e-4）",
+      "seeds": [
+        7,
+        42,
+        123,
+        2024,
+        20261017
+      ],
+      "n": 5,
+      "accuracy": {
+        "mean": 0.8728808939765603,
+        "std": 0.018457952243034
+      },
+      "macro_f1": {
+        "mean": 0.8715255076369711,
+        "std": 0.018177321214465168
+      },
+      "weighted_f1": {
+        "mean": 0.872263152796981,
+        "std": 0.01822873803201206
+      },
+      "best_val_acc": {
+        "mean": 0.8972826086956524,
+        "std": 0.0067662497815156025
+      },
+      "latency_ms_mean": {
+        "mean": 2.1911732812532136,
+        "std": 0.165293920273944
+      },
+      "train_seconds": {
+        "mean": 154.19400000000002,
+        "std": 64.71935861857717
+      },
+      "per_run": {
+        "7": {
+          "accuracy": 0.8868901608067593,
+          "macro_f1": 0.8857892929706579,
+          "weighted_f1": 0.8864449622088467,
+          "best_val_acc": 0.8967391304347826,
+          "best_epoch": 8,
+          "epochs_completed": 10,
+          "latency_ms_mean": 2.0319948436281265,
+          "train_seconds": 200.9
+        },
+        "42": {
+          "accuracy": 0.8620877623330607,
+          "macro_f1": 0.8598464232953351,
+          "weighted_f1": 0.860729064181275,
+          "best_val_acc": 0.8994565217391305,
+          "best_epoch": 1,
+          "epochs_completed": 4,
+          "latency_ms_mean": 2.0683992189788114,
+          "train_seconds": 82.61
+        },
+        "123": {
+          "accuracy": 0.8833469610248024,
+          "macro_f1": 0.8817581597932783,
+          "weighted_f1": 0.8826138960621774,
+          "best_val_acc": 0.9021739130434783,
+          "best_epoch": 8,
+          "epochs_completed": 10,
+          "latency_ms_mean": 2.4520782807485375,
+          "train_seconds": 200.7
+        },
+        "2024": {
+          "accuracy": 0.8454619787408013,
+          "macro_f1": 0.8451800058138467,
+          "weighted_f1": 0.8457218310243342,
+          "best_val_acc": 0.8858695652173914,
+          "best_epoch": 1,
+          "epochs_completed": 4,
+          "latency_ms_mean": 2.1846067191745533,
+          "train_seconds": 84.0
+        },
+        "20261017": {
+          "accuracy": 0.886617606977378,
+          "macro_f1": 0.8850536563117383,
+          "weighted_f1": 0.8858060105082717,
+          "best_val_acc": 0.9021739130434783,
+          "best_epoch": 7,
+          "epochs_completed": 10,
+          "latency_ms_mean": 2.2187873437360395,
+          "train_seconds": 202.76
+        }
+      }
+    },
+    "baseline": {
+      "label": "原始 ResNet18 基线配置（全网络 lr=1e-3）",
+      "seeds": [
+        7,
+        42,
+        123,
+        2024,
+        20261017
+      ],
+      "n": 5,
+      "accuracy": {
+        "mean": 0.8076860179885529,
+        "std": 0.0013296604979722603
+      },
+      "macro_f1": {
+        "mean": 0.8055228300186845,
+        "std": 0.0014333757345563604
+      },
+      "weighted_f1": {
+        "mean": 0.805947732311161,
+        "std": 0.0014549066682985415
+      },
+      "best_val_acc": {
+        "mean": 0.8369565217391305,
+        "std": 0.0060762716779885866
+      },
+      "latency_ms_mean": {
+        "mean": 2.285676593592143,
+        "std": 0.0904773407821215
+      },
+      "train_seconds": {
+        "mean": 207.118,
+        "std": 10.279242189967121
+      },
+      "per_run": {
+        "7": {
+          "accuracy": 0.809212319433088,
+          "macro_f1": 0.8071058710058077,
+          "weighted_f1": 0.807531065479988,
+          "best_val_acc": 0.845108695652174,
+          "best_epoch": 10,
+          "epochs_completed": 10,
+          "latency_ms_mean": 2.3873317180914455,
+          "train_seconds": 201.95
+        },
+        "42": {
+          "accuracy": 0.8062142273098937,
+          "macro_f1": 0.8034134252574079,
+          "weighted_f1": 0.8037770965284946,
+          "best_val_acc": 0.8369565217391305,
+          "best_epoch": 9,
+          "epochs_completed": 10,
+          "latency_ms_mean": 2.2053506246265897,
+          "train_seconds": 225.28
+        },
+        "123": {
+          "accuracy": 0.8067593349686563,
+          "macro_f1": 0.8057934869204642,
+          "weighted_f1": 0.8061774685697748,
+          "best_val_acc": 0.8288043478260869,
+          "best_epoch": 10,
+          "epochs_completed": 10,
+          "latency_ms_mean": 2.213781562340955,
+          "train_seconds": 204.92
+        },
+        "2024": {
+          "accuracy": 0.807304442627419,
+          "macro_f1": 0.8048901873631386,
+          "weighted_f1": 0.8053742839979339,
+          "best_val_acc": 0.8396739130434783,
+          "best_epoch": 8,
+          "epochs_completed": 10,
+          "latency_ms_mean": 2.2419985941724008,
+          "train_seconds": 200.5
+        },
+        "20261017": {
+          "accuracy": 0.8089397656037067,
+          "macro_f1": 0.8064111795466038,
+          "weighted_f1": 0.8068787469796136,
+          "best_val_acc": 0.8342391304347826,
+          "best_epoch": 10,
+          "epochs_completed": 10,
+          "latency_ms_mean": 2.379920468729324,
+          "train_seconds": 202.94
+        }
+      }
+    }
+  },
+  "paired": {
+    "seeds": [
+      7,
+      42,
+      123,
+      2024,
+      20261017
+    ],
+    "n": 5,
+    "accuracy": {
+      "deltas": {
+        "7": 0.077678,
+        "42": 0.055874,
+        "123": 0.076588,
+        "2024": 0.038158,
+        "20261017": 0.077678
+      },
+      "mean": 0.065195,
+      "std": 0.017744,
+      "min": 0.038158,
+      "max": 0.077678,
+      "all_positive": true
+    },
+    "macro_f1": {
+      "deltas": {
+        "7": 0.078683,
+        "42": 0.056433,
+        "123": 0.075965,
+        "2024": 0.04029,
+        "20261017": 0.078642
+      },
+      "mean": 0.066003,
+      "std": 0.017121,
+      "min": 0.04029,
+      "max": 0.078683,
+      "all_positive": true
+    },
+    "weighted_f1": {
+      "deltas": {
+        "7": 0.078914,
+        "42": 0.056952,
+        "123": 0.076436,
+        "2024": 0.040348,
+        "20261017": 0.078927
+      },
+      "mean": 0.066315,
+      "std": 0.017192,
+      "min": 0.040348,
+      "max": 0.078927,
+      "all_positive": true
+    }
+  },
+  "paired_per_class_f1": {
+    "Abyssinian": {
+      "mean_delta": 0.076943,
+      "n": 5
+    },
+    "Bengal": {
+      "mean_delta": 0.041859,
+      "n": 5
+    },
+    "Birman": {
+      "mean_delta": 0.038717,
+      "n": 5
+    },
+    "Bombay": {
+      "mean_delta": 0.017005,
+      "n": 5
+    },
+    "British_Shorthair": {
+      "mean_delta": 0.037572,
+      "n": 5
+    },
+    "Egyptian_Mau": {
+      "mean_delta": 0.007293,
+      "n": 5
+    },
+    "Maine_Coon": {
+      "mean_delta": -0.020787,
+      "n": 5
+    },
+    "Persian": {
+      "mean_delta": 0.039798,
+      "n": 5
+    },
+    "Ragdoll": {
+      "mean_delta": 0.019582,
+      "n": 5
+    },
+    "Russian_Blue": {
+      "mean_delta": 0.035197,
+      "n": 5
+    },
+    "Siamese": {
+      "mean_delta": 0.070038,
+      "n": 5
+    },
+    "Sphynx": {
+      "mean_delta": 0.062161,
+      "n": 5
+    },
+    "american_bulldog": {
+      "mean_delta": 0.079852,
+      "n": 5
+    },
+    "american_pit_bull_terrier": {
+      "mean_delta": 0.069148,
+      "n": 5
+    },
+    "basset_hound": {
+      "mean_delta": 0.095278,
+      "n": 5
+    },
+    "beagle": {
+      "mean_delta": 0.107815,
+      "n": 5
+    },
+    "boxer": {
+      "mean_delta": 0.096577,
+      "n": 5
+    },
+    "chihuahua": {
+      "mean_delta": 0.180412,
+      "n": 5
+    },
+    "english_cocker_spaniel": {
+      "mean_delta": 0.134389,
+      "n": 5
+    },
+    "english_setter": {
+      "mean_delta": 0.088644,
+      "n": 5
+    },
+    "german_shorthaired": {
+      "mean_delta": 0.029601,
+      "n": 5
+    },
+    "great_pyrenees": {
+      "mean_delta": 0.066206,
+      "n": 5
+    },
+    "havanese": {
+      "mean_delta": 0.098957,
+      "n": 5
+    },
+    "japanese_chin": {
+      "mean_delta": 0.073374,
+      "n": 5
+    },
+    "keeshond": {
+      "mean_delta": 0.049333,
+      "n": 5
+    },
+    "leonberger": {
+      "mean_delta": 0.061769,
+      "n": 5
+    },
+    "miniature_pinscher": {
+      "mean_delta": 0.072288,
+      "n": 5
+    },
+    "newfoundland": {
+      "mean_delta": 0.101461,
+      "n": 5
+    },
+    "pomeranian": {
+      "mean_delta": 0.058846,
+      "n": 5
+    },
+    "pug": {
+      "mean_delta": 0.047282,
+      "n": 5
+    },
+    "saint_bernard": {
+      "mean_delta": 0.052099,
+      "n": 5
+    },
+    "samoyed": {
+      "mean_delta": 0.059856,
+      "n": 5
+    },
+    "scottish_terrier": {
+      "mean_delta": 0.072935,
+      "n": 5
+    },
+    "shiba_inu": {
+      "mean_delta": 0.083521,
+      "n": 5
+    },
+    "staffordshire_bull_terrier": {
+      "mean_delta": 0.027269,
+      "n": 5
+    },
+    "wheaten_terrier": {
+      "mean_delta": 0.131752,
+      "n": 5
+    },
+    "yorkshire_terrier": {
+      "mean_delta": 0.078056,
+      "n": 5
+    }
+  },
+  "generated_at": "2026-10-17T05:29:59.264610+00:00",
+  "data_dir": "E:\\CatDogBreedNet\\data\\processed_clean",
+  "seeds": [
+    42,
+    2024,
+    7,
+    123,
+    20261017
+  ],
+  "config_names": [
+    "baseline",
+    "a3b"
+  ],
+  "shared_train_args": [
+    "--arch",
+    "resnet18",
+    "--augment",
+    "baseline",
+    "--freeze-strategy",
+    "none",
+    "--batch-size",
+    "32",
+    "--epochs",
+    "10",
+    "--patience",
+    "3"
+  ],
+  "completed": 10,
+  "total": 10,
+  "note": "test 指标为每个预计划运行的唯一一次最终评估结果，未用于任何模型/epoch/种子选择；选模依据是 val_acc。"
+}
