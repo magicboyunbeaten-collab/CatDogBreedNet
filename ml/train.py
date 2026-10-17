@@ -33,6 +33,7 @@ if str(_REPO_ROOT) not in sys.path:
 
 import torch  # noqa: E402
 import torch.nn as nn  # noqa: E402
+import numpy as np  # noqa: E402
 import torchvision  # noqa: E402
 from matplotlib import pyplot as plt  # noqa: E402
 from torch.optim import AdamW  # noqa: E402
@@ -46,10 +47,11 @@ from ml.config import (  # noqa: E402
     SEED,
     VAL_RATIO,
 )
-from ml.dataset import build_dataloaders  # noqa: E402
+from ml.dataset import AUGMENT_PRESETS, build_dataloaders  # noqa: E402
 from ml.model import (  # noqa: E402
     ARCH,
     PRETRAINED_WEIGHTS,
+    SUPPORTED_ARCHS,
     build_model,
     resolve_device,
     save_checkpoint,
@@ -84,6 +86,27 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         help="use only the first N validation samples (debugging)")
     parser.add_argument("--output-dir", type=Path, default=ARTIFACTS_DIR)
     parser.add_argument("--reports-dir", type=Path, default=REPORTS_DIR)
+    parser.add_argument("--arch", default=ARCH, choices=sorted(SUPPORTED_ARCHS),
+                        help="backbone architecture (A4 experiment)")
+    parser.add_argument("--augment", default="baseline",
+                        choices=list(AUGMENT_PRESETS),
+                        help="training augmentation preset (A2 experiment)")
+    parser.add_argument("--freeze-strategy", default="none",
+                        choices=["none", "layer4", "head"],
+                        help="which modules stay trainable (A3 experiment): "
+                             "none=full fine-tune (baseline), "
+                             "layer4=last backbone stage + head, "
+                             "head=classifier only")
+    parser.add_argument("--lr-head", type=float, default=None,
+                        help="learning rate for the classification head; "
+                             "enables per-group learning rates")
+    parser.add_argument("--lr-backbone", type=float, default=None,
+                        help="learning rate for the backbone; "
+                             "enables per-group learning rates")
+    parser.add_argument("--label-smoothing", type=float, default=0.0,
+                        help="label smoothing factor (0 disables, baseline)")
+    parser.add_argument("--mixup-alpha", type=float, default=0.0,
+                        help="Mixup Beta(alpha, alpha); 0 disables (baseline)")
     return parser.parse_args(argv)
 
 
@@ -96,15 +119,147 @@ def _subset_loader(loader, limit, shuffle):
         num_workers=loader.num_workers)
 
 
-def train_one_epoch(model, loader, criterion, optimizer, device):
-    """Run one training epoch; return (avg_loss, accuracy)."""
+FREEZE_STRATEGIES = ("none", "layer4", "head")
+
+#: 人类可读的增强描述，写入 experiment_config.json 以便复现。
+AUGMENT_DESCRIPTIONS = {
+    "baseline": ("RandomResizedCrop(224, scale=(0.8,1.0)) + "
+                 "RandomHorizontalFlip(0.5) + RandomRotation(10)"),
+    "+colorjitter": ("ColorJitter(0.2,0.2,0.2) + RandomResizedCrop(224, "
+                     "scale=(0.8,1.0)) + RandomHorizontalFlip(0.5) + "
+                     "RandomRotation(10)"),
+    "+randomerasing": ("RandomResizedCrop(224, scale=(0.8,1.0)) + "
+                       "RandomHorizontalFlip(0.5) + RandomRotation(10) + "
+                       "RandomErasing(p=0.25)"),
+}
+
+
+def _head_module_names(arch: str) -> set[str]:
+    """Top-level module names that form the classification head."""
+    return {"fc"} if arch.startswith("resnet") else {"classifier"}
+
+
+def apply_freeze_strategy(model: nn.Module, arch: str,
+                          strategy: str = "none") -> str:
+    """Freeze parameters and return a human-readable description.
+
+    * ``"none"``   -- every parameter trainable (baseline, unchanged).
+    * ``"head"``   -- only the classification head is trainable.
+    * ``"layer4"`` -- the last backbone stage plus the head are trainable
+      (ResNet: ``layer4`` + ``fc``; ConvNeXt/EfficientNet: the final block of
+      ``features`` + ``classifier``).
+
+    The returned description is recorded in ``experiment_config.json`` so the
+    exact trainable parameter count is reproducible.
+    """
+    if strategy not in FREEZE_STRATEGIES:
+        raise ValueError(
+            f"unknown freeze strategy '{strategy}'; expected one of "
+            f"{list(FREEZE_STRATEGIES)}")
+    if strategy == "none":
+        for param in model.parameters():
+            param.requires_grad = True
+        return "all parameters trainable"
+
+    for param in model.parameters():
+        param.requires_grad = False
+
+    head_names = _head_module_names(arch)
+    unfrozen: list[str] = []
+    for name, module in model.named_children():
+        if name in head_names:
+            unfrozen.append(name)
+            for param in module.parameters():
+                param.requires_grad = True
+
+    if strategy == "layer4":
+        if arch.startswith("resnet"):
+            for name, module in model.named_children():
+                if name == "layer4":
+                    unfrozen.append(name)
+                    for param in module.parameters():
+                        param.requires_grad = True
+        else:
+            # ConvNeXt/EfficientNet 把主干放在单个 features Sequential 中，
+            # 解冻其最后一个子块（最后一级）作为 layer4 的对应物。
+            last_block = list(model.features.children())[-1]
+            unfrozen.append("features[-1]")
+            for param in last_block.parameters():
+                param.requires_grad = True
+
+    if not unfrozen:
+        raise ValueError(
+            f"arch '{arch}' exposes no head module among {sorted(head_names)}; "
+            f"cannot apply freeze strategy '{strategy}'")
+
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    total = sum(p.numel() for p in model.parameters())
+    return (f"trainable modules={sorted(unfrozen)}; "
+            f"trainable params {trainable}/{total} ({trainable / total:.1%})")
+
+
+def _split_head_backbone_params(model: nn.Module, arch: str):
+    """Split parameters into (head, backbone) by top-level module name."""
+    head_names = _head_module_names(arch)
+    head, backbone = [], []
+    for name, module in model.named_children():
+        params = [p for p in module.parameters() if p.requires_grad]
+        (head if name in head_names else backbone).extend(params)
+    return head, backbone
+
+
+def build_optimizer(model: nn.Module, arch: str, lr: float,
+                    weight_decay: float, lr_head: float | None = None,
+                    lr_backbone: float | None = None) -> AdamW:
+    """Build AdamW, optionally with separate head/backbone learning rates.
+
+    When both ``lr_head`` and ``lr_backbone`` are ``None`` the behaviour is
+    identical to the baseline single-group optimizer.
+    """
+    if lr_head is None and lr_backbone is None:
+        return AdamW([p for p in model.parameters() if p.requires_grad],
+                     lr=lr, weight_decay=weight_decay)
+
+    head_params, backbone_params = _split_head_backbone_params(model, arch)
+    groups = []
+    if head_params:
+        groups.append({"params": head_params, "name": "head",
+                       "lr": lr if lr_head is None else lr_head})
+    if backbone_params:
+        groups.append({"params": backbone_params, "name": "backbone",
+                       "lr": lr if lr_backbone is None else lr_backbone})
+    if not groups:
+        raise ValueError(
+            "no trainable parameters for per-group optimizer; check "
+            "--freeze-strategy")
+    return AdamW(groups, lr=lr, weight_decay=weight_decay)
+
+
+def train_one_epoch(model, loader, criterion, optimizer, device,
+                    mixup_alpha: float = 0.0):
+    """Run one training epoch; return (avg_loss, accuracy).
+
+    When ``mixup_alpha > 0`` each batch is mixed with a shuffled copy using
+    ``lam ~ Beta(alpha, alpha)`` (clipped so ``lam >= 0.5``) and the loss uses
+    both labels. The reported accuracy is measured against the dominant label,
+    which is only meaningful as a rough progress signal while Mixup is on.
+    """
     model.train()
     total_loss, total_correct, total_samples = 0.0, 0, 0
     for images, labels in loader:
         images, labels = images.to(device), labels.to(device)
         optimizer.zero_grad()
-        logits = model(images)
-        loss = criterion(logits, labels)
+        if mixup_alpha > 0:
+            lam = float(np.random.beta(mixup_alpha, mixup_alpha))
+            lam = max(lam, 1.0 - lam)
+            shuffled = torch.randperm(images.size(0), device=device)
+            mixed = lam * images + (1.0 - lam) * images[shuffled]
+            logits = model(mixed)
+            loss = (lam * criterion(logits, labels)
+                    + (1.0 - lam) * criterion(logits, labels[shuffled]))
+        else:
+            logits = model(images)
+            loss = criterion(logits, labels)
         loss.backward()
         optimizer.step()
         total_loss += loss.item() * labels.size(0)
@@ -168,6 +323,7 @@ def main(argv: list[str] | None = None) -> int:
         processed_dir=args.data_dir,
         batch_size=args.batch_size,
         num_workers=args.num_workers,
+        augment=args.augment,
     )
     train_loader, val_loader = loaders["train"], loaders["val"]
     if args.limit_train is not None:
@@ -176,17 +332,26 @@ def main(argv: list[str] | None = None) -> int:
         val_loader = _subset_loader(val_loader, args.limit_val, shuffle=False)
 
     num_classes = len(class_names)
-    print(f"[train] device={device} classes={num_classes} "
+    print(f"[train] device={device} arch={args.arch} classes={num_classes} "
+          f"augment={args.augment} freeze={args.freeze_strategy} "
+          f"mixup_alpha={args.mixup_alpha} "
+          f"label_smoothing={args.label_smoothing} "
           f"train={len(train_loader.dataset)} val={len(val_loader.dataset)} "
           f"test={len(loaders['test'].dataset)}")
     if device.type == "cuda":
         print(f"[train] gpu={torch.cuda.get_device_name(device)} "
               f"vram={torch.cuda.get_device_properties(device).total_memory / 1024**3:.1f} GiB")
 
-    model = build_model(num_classes=num_classes, pretrained=True).to(device)
-    criterion = nn.CrossEntropyLoss()
-    optimizer = AdamW(model.parameters(), lr=args.lr,
-                      weight_decay=args.weight_decay)
+    model = build_model(arch=args.arch, num_classes=num_classes,
+                        pretrained=True).to(device)
+    freeze_description = apply_freeze_strategy(
+        model, args.arch, args.freeze_strategy)
+    print(f"[train] freeze strategy '{args.freeze_strategy}': "
+          f"{freeze_description}")
+    criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
+    optimizer = build_optimizer(
+        model, arch=args.arch, lr=args.lr, weight_decay=args.weight_decay,
+        lr_head=args.lr_head, lr_backbone=args.lr_backbone)
     scheduler = StepLR(optimizer, step_size=args.step_size, gamma=args.gamma)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -201,7 +366,8 @@ def main(argv: list[str] | None = None) -> int:
         for epoch in range(1, args.epochs + 1):
             epoch_started = time.time()
             train_loss, train_acc = train_one_epoch(
-                model, train_loader, criterion, optimizer, device)
+                model, train_loader, criterion, optimizer, device,
+                mixup_alpha=args.mixup_alpha)
             val_loss, val_acc = evaluate(model, val_loader, criterion, device)
             scheduler.step()
             epoch_seconds = time.time() - epoch_started
@@ -263,9 +429,11 @@ def main(argv: list[str] | None = None) -> int:
         "started_at": started_at,
         "finished_at": datetime.now(timezone.utc).isoformat(),
         "total_seconds": round(time.time() - started, 2),
-        "arch": ARCH,
+        "arch": args.arch,
         "pretrained_weights": PRETRAINED_WEIGHTS,
-        "fine_tuning": "full model (backbone not frozen)",
+        "fine_tuning": freeze_description,
+        "freeze_strategy": args.freeze_strategy,
+        "augment_preset": args.augment,
         "num_classes": num_classes,
         "seed": args.seed,
         "epochs_requested": args.epochs,
@@ -274,14 +442,21 @@ def main(argv: list[str] | None = None) -> int:
         "best_val_acc": best_val_acc,
         "batch_size": args.batch_size,
         "lr": args.lr,
+        "lr_head": args.lr_head,
+        "lr_backbone": args.lr_backbone,
         "weight_decay": args.weight_decay,
-        "optimizer": "AdamW",
+        "optimizer": (
+            "AdamW (per-group lr: head/backbone)"
+            if (args.lr_head is not None or args.lr_backbone is not None)
+            else "AdamW"),
         "scheduler": f"StepLR(step_size={args.step_size}, gamma={args.gamma})",
-        "loss": "CrossEntropyLoss",
+        "loss": ("CrossEntropyLoss"
+                 + (f"(label_smoothing={args.label_smoothing})"
+                    if args.label_smoothing else "")),
+        "mixup_alpha": args.mixup_alpha,
         "early_stopping_patience": args.patience,
         "image_size": IMAGE_SIZE,
-        "train_augmentation": ("RandomResizedCrop(224, scale=(0.8,1.0)) + "
-                               "RandomHorizontalFlip(0.5) + RandomRotation(10)"),
+        "train_augmentation": AUGMENT_DESCRIPTIONS[args.augment],
         "eval_transform": "Resize(256) + CenterCrop(224) + Normalize(ImageNet)",
         "normalization": "ImageNet mean/std",
         "data_dir": str(args.data_dir),

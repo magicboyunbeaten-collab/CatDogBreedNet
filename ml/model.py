@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import random
 from pathlib import Path
+from typing import Callable, NamedTuple
 
 import numpy as np
 import torch
@@ -23,6 +24,70 @@ EXPERIMENT_CONFIG_PATH = ARTIFACTS_DIR / "experiment_config.json"
 
 ARCH = "resnet18"
 PRETRAINED_WEIGHTS = "IMAGENET1K_V1"
+
+
+class _ArchSpec(NamedTuple):
+    """How to build one supported backbone and swap its classification head."""
+
+    factory: Callable[..., nn.Module]
+    weights: object  # torchvision weights enum, or None when not pretrained
+    head_in_features: Callable[[nn.Module], int]
+    set_head: Callable[[nn.Module, int], None]
+
+
+def _set_fc_head(model: nn.Module, num_classes: int) -> None:
+    """Replace a ResNet-style ``fc`` linear head."""
+    model.fc = nn.Linear(model.fc.in_features, num_classes)
+
+
+def _last_linear_in_features(sequential: nn.Sequential) -> int:
+    """Return ``in_features`` of the final ``nn.Linear`` in a Sequential."""
+    for module in reversed(sequential):
+        if isinstance(module, nn.Linear):
+            return module.in_features
+    raise ValueError("classifier Sequential contains no nn.Linear")
+
+
+def _set_sequential_head(model: nn.Module, num_classes: int) -> None:
+    """Replace the final linear of a ConvNeXt/EfficientNet-style classifier."""
+    classifier = model.classifier
+    if not isinstance(classifier, nn.Sequential):
+        raise ValueError("expected a Sequential classifier")
+    indices = [i for i, m in enumerate(classifier) if isinstance(m, nn.Linear)]
+    if not indices:
+        raise ValueError("classifier Sequential contains no nn.Linear")
+    idx = indices[-1]
+    classifier[idx] = nn.Linear(classifier[idx].in_features, num_classes)
+
+
+#: Architectures available for the A4 backbone comparison experiment.
+#: ``resnet18`` is the baseline and the default for every existing caller.
+SUPPORTED_ARCHS: dict[str, _ArchSpec] = {
+    "resnet18": _ArchSpec(
+        factory=models.resnet18,
+        weights=models.ResNet18_Weights.IMAGENET1K_V1,
+        head_in_features=lambda m: m.fc.in_features,
+        set_head=_set_fc_head,
+    ),
+    "resnet50": _ArchSpec(
+        factory=models.resnet50,
+        weights=models.ResNet50_Weights.IMAGENET1K_V1,
+        head_in_features=lambda m: m.fc.in_features,
+        set_head=_set_fc_head,
+    ),
+    "convnext_tiny": _ArchSpec(
+        factory=models.convnext_tiny,
+        weights=models.ConvNeXt_Tiny_Weights.IMAGENET1K_V1,
+        head_in_features=lambda m: _last_linear_in_features(m.classifier),
+        set_head=_set_sequential_head,
+    ),
+    "efficientnet_b0": _ArchSpec(
+        factory=models.efficientnet_b0,
+        weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1,
+        head_in_features=lambda m: _last_linear_in_features(m.classifier),
+        set_head=_set_sequential_head,
+    ),
+}
 
 
 def set_seed(seed: int = 42) -> None:
@@ -50,25 +115,35 @@ def resolve_device(device: str = "auto") -> torch.device:
     raise ValueError(f"unknown device '{device}'; expected auto|cpu|cuda")
 
 
-def build_model(num_classes: int, pretrained: bool = True) -> nn.Module:
-    """Build ResNet18 with an ``num_classes``-way classification head.
+def build_model(arch: str = ARCH, num_classes: int = 37,
+                pretrained: bool = True) -> nn.Module:
+    """Build a backbone with an ``num_classes``-way classification head.
 
-    Raises ``RuntimeError`` if the pretrained weights cannot be obtained
+    ``arch`` must be a key of :data:`SUPPORTED_ARCHS`; it defaults to
+    ``"resnet18"`` so every existing caller keeps the baseline behaviour.
+
+    Raises ``ValueError`` for unknown architectures or ``num_classes < 2``,
+    and ``RuntimeError`` if the pretrained weights cannot be obtained
     (e.g. download failure) -- we never silently fall back to random
     initialization (CODEBUDDY.md 6.4).
     """
+    if arch not in SUPPORTED_ARCHS:
+        raise ValueError(
+            f"unsupported arch '{arch}'; expected one of {sorted(SUPPORTED_ARCHS)}")
     if num_classes < 2:
         raise ValueError(f"num_classes must be >= 2, got {num_classes}")
+    spec = SUPPORTED_ARCHS[arch]
     try:
-        weights = (models.ResNet18_Weights.IMAGENET1K_V1 if pretrained else None)
-        model = models.resnet18(weights=weights)
+        weights = spec.weights if pretrained else None
+        model = spec.factory(weights=weights)
     except Exception as exc:  # download / hub errors surface here
         raise RuntimeError(
-            f"failed to obtain pretrained ResNet18 weights ({type(exc).__name__}: {exc}). "
+            f"failed to obtain pretrained {arch} weights "
+            f"({type(exc).__name__}: {exc}). "
             "Check network access to download.pytorch.org and that TORCH_HOME "
             "points to a writable directory. Refusing to fall back to random "
             "weights silently.") from exc
-    model.fc = nn.Linear(model.fc.in_features, num_classes)
+    spec.set_head(model, num_classes)
     return model
 
 
@@ -95,11 +170,11 @@ def save_checkpoint(
 
 def _default_factory(arch: str):
     """Return the default model factory for a checkpoint architecture."""
-    if arch == ARCH:
-        return lambda num_classes: build_model(num_classes, pretrained=False)
-    raise ValueError(
-        f"unsupported checkpoint arch '{arch}'; pass an explicit "
-        f"model_factory(num_classes) to load_checkpoint().")
+    if arch not in SUPPORTED_ARCHS:
+        raise ValueError(
+            f"unsupported checkpoint arch '{arch}'; pass an explicit "
+            f"model_factory(num_classes) to load_checkpoint().")
+    return lambda num_classes: build_model(arch, num_classes, pretrained=False)
 
 
 def load_checkpoint(

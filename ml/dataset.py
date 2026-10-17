@@ -28,25 +28,45 @@ from ml.config import (
 
 SPLITS = ("train", "val", "test")
 
+#: 训练增强预设（A2 增强对照实验用）。
+#: ``"baseline"`` 与阶段 2 基线逐项一致；其余为待验证候选。
+#: Mixup/CutMix 不是 transform，见 ``ml.train`` 的 ``--mixup-alpha``。
+AUGMENT_PRESETS = ("baseline", "+colorjitter", "+randomerasing")
 
-def build_transforms(image_size: int = IMAGE_SIZE, train: bool = False):
+
+def build_transforms(image_size: int = IMAGE_SIZE, train: bool = False,
+                     augment: str = "baseline"):
     """Return the transform pipeline for a split.
 
-    ``train=True``  -> moderate augmentation: RandomResizedCrop + horizontal
+    ``train=True``  -> augmentation selected by ``augment`` (one of
+                       :data:`AUGMENT_PRESETS`). ``"baseline"`` reproduces the
+                       stage-2 pipeline exactly: RandomResizedCrop + horizontal
                        flip + slight rotation (CODEBUDDY.md 5.4).
     ``train=False`` -> deterministic eval/inference pipeline: Resize(256) +
-                       CenterCrop(224). Both paths end with the same ImageNet
-                       normalization used by the ResNet18 pretrained weights.
+                       CenterCrop(224). ``augment`` is ignored here so
+                       evaluation and inference stay reproducible.
+    Both paths end with the same ImageNet normalization used by the
+    pretrained weights.
     """
+    if augment not in AUGMENT_PRESETS:
+        raise ValueError(
+            f"unknown augment preset '{augment}'; expected one of "
+            f"{list(AUGMENT_PRESETS)}")
     normalize = transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD)
     if train:
-        return transforms.Compose([
+        steps = [
             transforms.RandomResizedCrop(image_size, scale=(0.8, 1.0)),
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.RandomRotation(10),
-            transforms.ToTensor(),
-            normalize,
-        ])
+        ]
+        if augment == "+colorjitter":
+            # 颜色抖动作用于原图，置于裁剪之前
+            steps.insert(0, transforms.ColorJitter(0.2, 0.2, 0.2))
+        steps.extend([transforms.ToTensor(), normalize])
+        if augment == "+randomerasing":
+            # RandomErasing 需要张量输入，故置于 ToTensor/Normalize 之后
+            steps.append(transforms.RandomErasing(p=0.25))
+        return transforms.Compose(steps)
     return transforms.Compose([
         transforms.Resize(256),
         transforms.CenterCrop(image_size),
@@ -60,12 +80,14 @@ def class_names_from_class_to_idx(class_to_idx: dict[str, int]) -> list[str]:
     return [name for name, _ in sorted(class_to_idx.items(), key=lambda kv: kv[1])]
 
 
-def build_datasets(processed_dir: Path = PROCESSED_DATA_DIR):
+def build_datasets(processed_dir: Path = PROCESSED_DATA_DIR,
+                   augment: str = "baseline"):
     """Build train/val/test ``ImageFolder`` datasets.
 
     Raises ``FileNotFoundError`` with setup instructions when a split
     directory is missing, and ``ValueError`` when the class-to-index
-    mappings differ between splits.
+    mappings differ between splits. ``augment`` only affects the training
+    transform (see :func:`build_transforms`).
     """
     processed_dir = Path(processed_dir)
     for split in SPLITS:
@@ -77,7 +99,8 @@ def build_datasets(processed_dir: Path = PROCESSED_DATA_DIR):
                 f"'python scripts/prepare_dataset.py build' first.")
 
     train_ds = ImageFolder(root=str(processed_dir / "train"),
-                           transform=build_transforms(train=True))
+                           transform=build_transforms(train=True,
+                                                      augment=augment))
     val_ds = ImageFolder(root=str(processed_dir / "val"),
                          transform=build_transforms(train=False))
     test_ds = ImageFolder(root=str(processed_dir / "test"),
@@ -97,14 +120,17 @@ def build_dataloaders(
     batch_size: int = 32,
     num_workers: int = 0,
     pin_memory: bool | None = None,
+    augment: str = "baseline",
 ) -> tuple[dict[str, DataLoader], list[str]]:
     """Build dataloaders for all splits plus the ordered class names.
 
     ``num_workers`` defaults to 0 so the pipeline runs on Windows without
     multiprocessing issues (CODEBUDDY.md section 3). ``pin_memory`` defaults
-    to True only when CUDA is available.
+    to True only when CUDA is available. ``augment`` selects the training
+    augmentation preset; validation/test loaders always use the deterministic
+    eval transform.
     """
-    train_ds, val_ds, test_ds = build_datasets(processed_dir)
+    train_ds, val_ds, test_ds = build_datasets(processed_dir, augment=augment)
     if pin_memory is None:
         pin_memory = torch.cuda.is_available()
 
