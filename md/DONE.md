@@ -296,3 +296,74 @@
   `reports/exp_results/`；更新 `model_improvement_plan.md`（待验证→已验证）、
   README、reports/README.md、md 三文件
 - **未执行**：A1（补充真实数据）、B/U3–U5（新增类别）——缺合规图片数据
+
+## 2026-10-17（泄漏审查与多种子配对验证，A3b 替换默认模型的前置检查）
+
+用户要求"在决定是否替换默认模型前，先完成数据泄漏风险检查与多随机种子对比"。
+分三个独立提交：阶段一 `b751c11`、阶段二 `728281f`、阶段三（本文档与报告更新）。
+
+### 阶段一：近重复审查 + 去重划分
+- 新增 `scripts/review_near_duplicates.py`：对 U1 发现的 25 对跨 train/val/test
+  近重复，计算 MD5/尺寸/均色差/灰度相关度并做初步分级，生成 45 张并排联系表 PNG
+  与 `reports/leakage_review_contact_sheet.{md,json,csv}`；
+  `--verdicts` 支持把人工/目视判定固化进报告
+- **逐张目视核验结论：25/25 全部为同一照片的变体**（同一个体、同一场景，
+  仅重编码/重裁切），**0 例 pHash 误报**；其中 24 对 train/val→test、
+  1 对 train↔val（影响验证集选模）。判定记录
+  `reports/leakage_review/visual_verification.json`
+- 新增 `scripts/build_clean_split.py`：官方 test 3669 张**原样全量复制**；
+  从官方 trainval 剔除 24 张与 test 近重复的样本；剩余 3656 张按 pHash 阈值
+  构建近重复簇（并查集 + 多索引分块检索），整簇按"原划分多数决、平局归 train"
+  分配，确保簇不跨集合
+- 去重划分 `data/processed_clean/`：train 3288 / val 368 / test 3669，37 类；
+  **校验全通过**：类别集合与顺序一致、MD5 跨划分重复 0、
+  **pHash 跨划分近重复 0**（train/val↔test 与 train↔val 均 0）、跨集合簇 0
+- 修复 2 个真实缺陷：
+  1. `find_near_duplicate_pairs` 原按字符串排序返回配对，丢失 left/right 归属，
+     导致当 test 图片名字母序小于 train 图片名时排除步骤把两侧弄反、漏排样本
+     （25 对只排除 23 对，清洁划分校验不通过）；
+  2. `_blocks` 对 (8,8) 二维数组按扁平索引切片越界产生空块，使分块索引退化
+     为全量扫描。新增 `tests/test_leakage_review.py` 10 个用例固化回归点
+- `sync_directory` 改为增量同步（覆盖应有文件 + 只删多余文件 + 清理空目录），
+  不用 `shutil.rmtree` 整目录删除（会被一次删上万文件的安全策略拦截）
+
+### 阶段二：5 种子配对实验（真实结果）
+- 新增 `scripts/run_seed_validation.py`：baseline 与 A3b 两个预指定配置
+  × 种子 42/2024/7/123/20261017，共 10 个运行；同一 `data/processed_clean`、
+  同一预处理与评估协议，两配置仅差学习率策略；每 epoch 按 val_acc 选模，
+  test 每运行仅评估一次，汇总在全部运行结束后才生成
+- **baseline（去重划分，n=5）**：Acc 0.8077±0.0013 / Macro-F1 0.8055±0.0014 /
+  Weighted-F1 0.8059±0.0015 / val_acc 0.8370±0.0061 / 2.286ms / 207s
+- **A3b（去重划分，n=5）**：Acc 0.8729±0.0185 / Macro-F1 0.8715±0.0182 /
+  Weighted-F1 0.8723±0.0182 / val_acc 0.8973±0.0068 / 2.191ms / 154s
+- **配对差值（A3b − baseline）**：Acc +0.0652±0.0177 / Macro-F1 +0.0660±0.0171 /
+  Weighted-F1 +0.0663±0.0172；范围 [+0.0382, +0.0789]；
+  **5/5 种子全部为正**
+- 稳健性：baseline 种子间 std 仅 0.0014，A3b 最小配对差值 +0.0403 约为其
+  **29 倍**；val_acc 排序与 test 一致，无据 test 选模迹象
+- 逐类 **36/37 提升**（最大 chihuahua +0.180、english_cocker_spaniel +0.134、
+  wheaten_terrier +0.132），唯一下降 Maine_Coon −0.021
+- **泄漏对总体指标影响很小**：同配置下原始划分 0.8035/0.8022 vs 去重划分
+  0.8077/0.8055，仅差约 +0.004；但少数品种被抬高
+  （japanese_chin 0.9388→0.8778、leonberger 0.9447→0.9231、keeshond 0.9463→0.9333）
+- 附带发现：A3b 对早停敏感——2/5 种子在 epoch 1 即达最佳 val_acc 后回落
+  （train_acc 已 0.975，头部过拟合），patience=3 于第 4 轮触发；另 3/5 跑满
+  10 轮。这使 A3b 种子 std(0.0182)远大于 baseline(0.0014)，
+  **+0.066 应视为稳健下界**
+- 修复 3 个脚本缺陷：`summary['configs']` 被 `list` 覆盖导致统计不可读；
+  `per_class_f1` 混入 CSV 汇总行（40 项而非 37 项）；以及阶段一的配对归属缺陷
+
+### 阶段三：结论与文档
+- `reports/seed_validation_report.md`：完整记录协议、逐运行/汇总/配对/逐类
+  指标、泄漏影响量化、附带发现、缺陷修复与建议
+- `reports/model_improvement_plan.md` 新增第 11 节；更新 README、
+  reports/README.md、md 三文件
+- **结论：A3b 提升稳健且无推理代价，建议设为默认模型；但按约定未自动替换，
+  等待用户确认**。替换前建议先定 A3b 的早停策略（对比 patience 3/5/10）
+
+### 约束遵守与回归
+- `artifacts/best_model.pth`、`class_names.json`、历史报告**未改动**
+  （mtime 仍为 2026-10-13）；`data/processed/` **未改动**（仍 3311/369/3669）
+- 未据 test 调整任何 epoch/种子/参数；未替换默认模型
+- A5 的 147 个难例**仍保留为人工审查任务**，未修改任何标签
+- `pytest tests/` **124/124** 通过（114 旧 + 10 新增）

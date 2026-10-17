@@ -364,6 +364,38 @@ A3b 作为 V1.1 候选已保存于 `artifacts/exp_A3b_layered_lr/`，
 替换需用户确认并先做多 seed 验证。A1（补充真实数据）与 B/U3–U5（新增类别）
 因缺合规图片数据**未执行**。
 
+### 泄漏审查与多种子配对验证（2026-10-17）
+
+完整报告见 [`reports/seed_validation_report.md`](reports/seed_validation_report.md)。
+
+**数据泄漏（已确认存在，官方数据集固有）**：U1 发现的 25 对跨 train/val/test
+的 pHash 近重复，已逐张目视核验，**25/25 为同一照片的变体**（24 对
+train/val→test、1 对 train↔val，0 例误报）。审查联系表在
+`reports/leakage_review/`，判定记录在 `visual_verification.json`。
+
+**去重划分**：`data/processed_clean/`（train 3288 / val 368 / test 3669，
+官方 test 原样保留；pHash 跨划分近重复 0）。清单见
+`reports/clean_split_manifest.json`。
+
+**泄漏对指标的影响很小**：同配置下原始划分 0.8035/0.8022 vs 去重划分
+0.8077/0.8055，总体仅差约 +0.004；但少数品种分数被抬高
+（japanese_chin 0.9388→0.8778）。
+
+**A3b 的多种子配对验证（去重划分，5 种子，两配置仅差学习率策略）**：
+
+| 配置 | Accuracy | Macro-F1 | Weighted-F1 | val_acc | 延迟 |
+|---|---|---|---|---|---|
+| baseline | 0.8077 ± 0.0013 | 0.8055 ± 0.0014 | 0.8059 ± 0.0015 | 0.8370 ± 0.0061 | 2.286 ms |
+| a3b | 0.8729 ± 0.0185 | 0.8715 ± 0.0182 | 0.8723 ± 0.0182 | 0.8973 ± 0.0068 | 2.191 ms |
+| **配对差值** | **+0.0652 ± 0.0177** | **+0.0660 ± 0.0171** | +0.0663 ± 0.0172 | — | — |
+
+**5/5 种子全部为正**，最小差值 +0.0403 约为基线种子噪声（0.0014）的 29 倍；
+val_acc 与 test 排序一致，无据 test 选模迹象；逐类 36/37 提升。
+
+**结论**：A3b 的提升稳健且无推理代价，**建议设为默认模型，但按约定未自动
+替换，等待用户确认**。替换前建议先确定 A3b 的早停策略（patience 3 对 A3b
+偏早，2/5 种子在第 1 轮即最佳后回落）。
+
 ## 已知限制
 
 - **模型仅支持训练时的 37 个品种**（12 猫 + 25 狗）。边境牧羊犬（Border Collie）等
@@ -371,11 +403,13 @@ A3b 作为 V1.1 候选已保存于 `artifacts/exp_A3b_layered_lr/`，
   详见 [`reports/thesis_materials.md`](reports/thesis_materials.md) 第 9 节；
 - 普通分类器不保证识别训练类别之外的动物、物体或无效图片；
 - Softmax 分数是模型在当前类别集合上的归一化分数，不应宣称为真实正确概率；
-- **默认模型仍为阶段 2 基线**（test Macro-F1 0.8022）。A2–A4 实验已完成
-  （见 [`reports/model_experiments_report.md`](reports/model_experiments_report.md)），
-  最优候选为 A3b 分层学习率（0.8807），保存在
-  `artifacts/exp_A3b_layered_lr/`，但**尚未替换为默认模型**
-  （需用户确认并先做多 seed 验证）；
+- **默认模型仍为阶段 2 基线**（test Macro-F1 0.8022）。A2–A4 实验与 5 种子
+  配对验证均已完成（见
+  [`reports/model_experiments_report.md`](reports/model_experiments_report.md)、
+  [`reports/seed_validation_report.md`](reports/seed_validation_report.md)），
+  最优候选为 A3b 分层学习率（去重划分上 Macro-F1 0.8715 ± 0.0182，
+  配对 5/5 全正），保存在 `artifacts/exp_A3b_layered_lr/`，
+  但**尚未替换为默认模型**（需用户确认；替换前建议先定早停策略）；
 - 识别页品种名显示为中文（映射见 `frontend/src/utils/breedNames.js`，未映射标签
   回退显示英文原名）；历史与统计页保持数据库原始英文标签；
 - 数据集仅限研究用途，图片版权归原始网站所有。

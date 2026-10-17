@@ -117,11 +117,27 @@
 - [x] 产出 `reports/model_experiments_report.md`、`reports/A5_hard_examples.{md,json}`、`reports/exp_results/`
 - [x] **基线 `artifacts/best_model.pth` 未被替换**；A3b 候选保存在 `artifacts/exp_A3b_layered_lr/`
 
+## 泄漏审查与多种子配对验证（2026-10-17，已完成）
+依据用户要求"在决定是否替换默认模型前，先完成数据泄漏风险检查与多随机种子对比"。
+- [x] 编写 `scripts/review_near_duplicates.py`：25 对跨划分近重复的 MD5/尺寸/均色差/灰度相关度/初步分级 + 45 张并排联系表 PNG；`--verdicts` 支持把人工/目视判定固化进报告
+- [x] **逐张目视核验 25/25 对，全部确认为同一照片变体（0 例 pHash 误报）**：24 对 train/val→test、1 对 train↔val；判定记录 `reports/leakage_review/visual_verification.json`
+- [x] 编写 `scripts/build_clean_split.py`：官方 test 3669 张原样保留；剔除 24 张与 test 近重复的 trainval 样本；剩余按 pHash 近重复簇整簇分配（多数决、平局归 train）；产出 `data/processed_clean/`（train 3288 / val 368 / test 3669，37 类）与 `reports/clean_split_manifest.json`
+- [x] 清洁划分校验全通过：类别集合/顺序一致、MD5 跨划分重复 0、**pHash 跨划分近重复 0**、跨集合簇 0
+- [x] 修复 2 个真实缺陷：`find_near_duplicate_pairs` 丢失 left/right 归属导致漏排（25 对只排除 23 对）；`_blocks` 对 2D 数组扁平切片越界；新增 `tests/test_leakage_review.py` 10 个回归用例
+- [x] 编写 `scripts/run_seed_validation.py` 并跑完 10 个配对运行（baseline 与 A3b × 种子 42/2024/7/123/20261017），同一 `data/processed_clean`，val 选模、test 每运行仅评估一次
+- [x] 配对结果（mean±std，n=5）：baseline Macro-F1 0.8055±0.0014 → A3b 0.8715±0.0182；**配对差值 +0.0660±0.0171，5/5 种子全部为正**，最小差值约为基线种子噪声的 29 倍；val_acc 与 test 排序一致；逐类 36/37 提升；A3b 无推理代价（2.191ms vs 2.286ms）
+- [x] 泄漏影响量化：原始划分 0.8035/0.8022 vs 去重划分 0.8077/0.8055，总体仅差约 +0.004；少数品种被抬高（japanese_chin 0.9388→0.8778、leonberger 0.9447→0.9231、keeshond 0.9463→0.9333）
+- [x] 附带发现：A3b 对早停敏感（2/5 种子 epoch 1 即最佳后回落，patience=3 过早触发），+0.066 应视为稳健下界
+- [x] 产出 `reports/seed_validation_report.md`；更新 `model_improvement_plan.md`（新增第 11 节）、README、reports/README.md、md 三文件
+- [x] 回归：pytest **124/124**；核验 `data/processed` 仍为 3311/369/3669、基线 `best_model.pth` mtime 仍为 2026-10-13，零改动
+- [x] 三个独立提交：阶段一 `b751c11`、阶段二 `728281f`、阶段三（本文档更新）
+- [x] **未替换默认模型**（按约定等用户确认）；未据 test 调整任何参数；A5 的 147 个难例保留为人工审查任务
+
 ## 后续可选（未开始，需用户确认）
-- [ ] **A3b 替换基线权重**：需用户确认 + 多 seed（3-5 个）验证稳健性
+- [ ] **A3b 替换基线权重**：证据已充分（配对 5/5 全正、幅度远超噪声、无延迟代价），但按约定等用户确认；**替换前建议先定 A3b 的早停策略**（对比 patience 3/5/10）
 - [ ] 组合实验：A3b + RandomErasing / + label smoothing 是否叠加
 - [ ] EfficientNet-B0 单独调参后在延迟预算内与 ResNet18 公平比较
 - [ ] Mixup 延长到 50+ 轮再评估；A2c 多 seed 确认
-- [ ] A1 补充真实数据（需许可合规图片 + pHash 去重报告）
+- [ ] A1 补充真实数据（需许可合规图片 + pHash 去重报告；新增数据须以 `data/processed_clean` 为泄漏检查基准）
 - [ ] U3 V2 数据审查（Stanford Dogs 等，需下载与许可审查）
 - [ ] U4 V2 训练与评估、U5 可切换版本集成、未知品种拒识
