@@ -1,0 +1,48 @@
+{
+  "version_id": "v1_1_37_optimized",
+  "created_at": "2026-10-18T06:32:48.204030+00:00",
+  "arch": "resnet18",
+  "num_classes": 37,
+  "training": {
+    "strategy": "A3b 分层学习率（head lr=1e-3 / backbone lr=1e-4）",
+    "optimizer": "AdamW（head/backbone 分组学习率）",
+    "scheduler": "StepLR(step_size=5, gamma=0.1)",
+    "epochs": 30,
+    "patience": 10,
+    "seed": 42,
+    "batch_size": 32,
+    "augment": "baseline（RandomResizedCrop + 水平翻转 + 轻旋转）",
+    "label_smoothing": 0.0,
+    "mixup_alpha": 0.0,
+    "data_dir": "data/processed_clean",
+    "dataset_sizes": {
+      "train": 3288,
+      "val": 368,
+      "test": 3669
+    }
+  },
+  "selection": {
+    "method": "按验证集准确率选模；patience 策略由验证集指标选定（patience=10 在 5 种子配对中 5/5 全正）",
+    "seed_choice": "seed 42 为预定义种子之一，依据验证集表现而非测试集表现挑选",
+    "best_epoch": 9,
+    "epochs_completed": 19
+  },
+  "source_checkpoint": "artifacts\\exp_esp_p10_seed42\\best_model.pth",
+  "source_run": "reports/earlystop_results/p10_seed42.json",
+  "sha256": "89ef468f199c6d1550fec2638c5ea6f8ef7ad543e57f8ec82c4263c121b1a256",
+  "reported_metrics": {
+    "note": "以下为该 seed42 模型在 data/processed_clean 清洁划分上的已报告结果，并非所有运行环境下的性能保证。",
+    "val_accuracy": 0.9158,
+    "val_macro_f1": 0.9151,
+    "test_accuracy": 0.8885,
+    "test_macro_f1": 0.8875,
+    "test_weighted_f1": 0.8883,
+    "single_image_latency_ms": 2.354
+  },
+  "previous_default": {
+    "version_id": "v1_37_baseline",
+    "description": "阶段 2 训练的 ResNet18 基线（原始 data/processed 划分）",
+    "backup_dir": "artifacts/backup_v1_20261018",
+    "sha256": "3051ab73ea96743c3aebd6df5eb82d911d0dc59b3fb2acacca552fcd118bab48"
+  }
+}

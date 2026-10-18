@@ -4,9 +4,16 @@ Wraps the shared ``ml.predictor.Predictor`` (the exact class used by the
 CLI) and adds the production safety check against the persisted
 ``class_names.json`` mapping: the checkpoint class count, order and names
 must match the saved mapping, otherwise the service refuses to start.
+
+It also reads an optional ``model_version.json`` next to the weights so the
+startup log can state *which* model version is serving traffic. Only the
+version id and the weights **file name** are logged — never a full server
+path — so the log stays useful for operators without leaking deployment
+details.
 """
 from __future__ import annotations
 
+import json
 import logging
 from pathlib import Path
 
@@ -14,6 +21,26 @@ from ml.model import CLASS_NAMES_PATH, verify_class_mapping
 from ml.predictor import Predictor
 
 logger = logging.getLogger("uvicorn.error")
+
+VERSION_FILE_NAME = "model_version.json"
+
+
+def read_model_version(weights_path: Path) -> dict | None:
+    """Read ``model_version.json`` next to the weights, if present.
+
+    Returns ``None`` when the file is absent or unreadable; callers must keep
+    working in that case (deployments without a version file still start).
+    """
+    version_file = Path(weights_path).parent / VERSION_FILE_NAME
+    if not version_file.exists():
+        return None
+    try:
+        payload = json.loads(version_file.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 - 版本文件损坏不应阻止服务启动
+        logger.warning("model version file unreadable: %s",
+                       VERSION_FILE_NAME)
+        return None
+    return payload if isinstance(payload, dict) else None
 
 
 class PredictorService:
@@ -26,21 +53,24 @@ class PredictorService:
 
     def __init__(self, weights_path: Path, device: str = "auto",
                  class_names_path: Path = CLASS_NAMES_PATH) -> None:
-        self.predictor = Predictor(weights_path=weights_path, device=device)
+        self.weights_path = Path(weights_path)
+        self.predictor = Predictor(weights_path=self.weights_path, device=device)
         self.class_names = self.predictor.class_names
         self.num_classes = self.predictor.num_classes
         self.device = str(self.predictor.device)
+        self.model_version = read_model_version(self.weights_path)
+        version_id = (self.model_version or {}).get("version_id", "unknown")
 
         if class_names_path and Path(class_names_path).exists():
-            import json
-
             saved = json.loads(Path(class_names_path).read_text("utf-8"))
             verify_class_mapping(self.class_names, saved)
             logger.info("class mapping verified against %s (%d classes)",
                         class_names_path.name, self.num_classes)
-        logger.info("model ready: %d classes on %s (weights: %s)",
-                    self.num_classes, self.device,
-                    Path(weights_path).name)
+        # 只打印版本 ID 与权重文件名，不暴露完整服务器路径
+        logger.info("model ready: version=%s arch=resnet18 classes=%d "
+                    "device=%s (weights: %s)",
+                    version_id, self.num_classes, self.device,
+                    self.weights_path.name)
 
     def predict_pil(self, image, top_k: int = 3) -> dict:
         """Predict one decoded image; see ``ml.predictor.Predictor``."""

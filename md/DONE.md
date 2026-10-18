@@ -457,3 +457,93 @@ Ragdoll 0.7154；最强：japanese_chin 0.9881、keeshond 0.9867。
 - `pytest tests/` **133/133** 通过
 - 产物：`reports/earlystop_patience_report.md`、`reports/earlystop_results/`、
   `reports/exp_esp_*/`、`artifacts/exp_esp_*/`（权重不入 Git）
+
+## 2026-10-18（正式模型切换：V1 基线 → V1.1）
+
+用户确认采用 **A3b 分层学习率 + patience=10**，指定候选
+`artifacts/exp_esp_p10_seed42/best_model.pth`（依据**验证集**表现选种子，
+非测试集）。**已正式切换为默认模型。**
+
+### 切换方式（默认路径不变 + 版本化目录）
+- **默认加载路径保持 `artifacts/best_model.pth`**：`启动系统.bat`、
+  `启动后端.bat`、`backend/app/config.py` 均依赖该路径，
+  **未修改任何启动脚本**
+- 新建**版本化生产目录** `artifacts/v1_1_37_optimized/`（含
+  `best_model.pth`、`last_model.pth`、`class_names.json`、
+  `experiment_config.json`、`model_version.json`），与训练实验目录
+  `artifacts/exp_esp_*` **明确分离**
+- 在 `artifacts/` 下同步放置 `model_version.json`（内容与版本目录相同），
+  使启动日志能读出当前默认版本
+- **V1 可回滚备份** `artifacts/backup_v1_20261018/` +
+  `BACKUP_MANIFEST.json`（SHA256 / 字节数 / 来源 / 时间戳 / 回滚命令，
+  **不依赖 Git**，因权重本就不入 Git）
+
+### 18 项切换闸门（全部通过）
+`arch=resnet18`、`num_classes=37`、`class_names` 37 项、
+`fc.weight (37,512)`（非 ResNet50 的 2048）、`layer4.1.conv1 (512,512,3,3)`、
+**候选类别顺序与正式 `class_names.json` 逐项相同（顺序敏感）**、
+`load_checkpoint` 真实加载成功、前向输出 `(1,37)`、
+预处理输出 `(3,224,224)` 且确定性、`verify_class_mapping` 硬校验通过、
+Git 工作区干净。
+
+哈希凭据：候选 `89ef468f199c6d15...`；V1 `3051ab73ea96743c...`；
+`class_names.json` 两侧同为 `24120035f4af1c49...`。
+
+### 启动校验与日志
+```
+INFO:     class mapping verified against class_names.json (37 classes)
+INFO:     model ready: version=v1_1_37_optimized arch=resnet18 classes=37 device=cuda (weights: best_model.pth)
+```
+版本 ID 与类别数明确；**只打印权重文件名，不暴露完整服务器路径**
+（`/api/health` 响应体也未加版本字段）。
+过程中曾因版本文件只放在版本目录而导致日志显示 `version=unknown`，
+已在 `artifacts/` 补放一份后重启验证通过。
+
+### 冒烟测试（8 张真实图片，覆盖猫/狗与最弱、最强品种）
+- CLI（默认路径）：**8/8 推理成功，7/8 Top-1 正确**；
+  唯一 MISS 是 `american_pit_bull_terrier → staffordshire_bull_terrier`，
+  即 U1/A5 诊断中已知最弱的斗牛犬混淆对（F1 0.58/0.62），属预期行为
+- HTTP API：**8/8 成功，7/8 正确**，新入库记录 ID 82–89
+- **三端一致性：8/8 图片的 Top-3 品种序列与 CLI 逐位相同（连置信度都一致）**
+- 真实浏览器：上传 samoyed_1.jpg → **记录 #90，Top-1 萨摩耶犬 99.9%**，
+  Top-2 大白熊犬 0.03% / Top-3 荷兰毛狮犬 0.03%，推理 3.5 ms；
+  中文品种名正确；历史页 10 行正常；统计页总数 90、2 张图表正常渲染
+- 数据库：81 → **90** 条（API 8 + 浏览器 1），`integrity_check: ok`，
+  ID 连续；历史/统计接口与数据库完全一致
+
+### 回归
+- `pytest tests/` **142/142**（新增 `tests/test_predictor_service.py` 9 个用例）
+- 前端 Vitest **54/54**（9 个文件）
+- `npm run build` 成功（仅既有的 chunk >500kB 告警）
+
+### 新增改动
+- `backend/app/services/predictor.py`：新增 `read_model_version()`；
+  `PredictorService` 增加 `weights_path`/`model_version` 属性；
+  启动日志改为 `version=<id> arch=resnet18 classes=<n> device=<dev>
+  (weights: <文件名>)`；版本文件缺失/损坏时服务仍可启动
+- `tests/test_predictor_service.py`：新增 9 个用例（版本文件读取 4 种情形、
+  启动日志含版本与类别数且不含完整路径、无版本文件时 `version=unknown`、
+  类别映射不一致时拒绝启动）
+
+### 三类指标口径（互不相同条件，不可直接互比）
+| 口径 | 划分 | test Acc | test Macro-F1 |
+|---|---|---|---|
+| V1 基线（阶段 2/3，单次） | 原始 `data/processed` | 0.8035 | 0.8022 |
+| A3b 多种子汇总（n=5） | `data/processed_clean` | 0.8851 ± 0.0035 | 0.8836 ± 0.0036 |
+| **V1.1 seed42（正式部署）** | `data/processed_clean` | **0.8885** | **0.8875** |
+
+seed42 已报告指标：val Acc 0.9158 / val Macro-F1 0.9151；
+test Acc 0.8885 / test Macro-F1 0.8875 / test Weighted-F1 0.8883；
+单张延迟 2.354 ms。
+**口径声明**：为该 seed42 模型在 `data/processed_clean` 清洁划分上的
+已报告结果，**并非所有运行环境下的性能保证**。
+
+### 约束遵守
+- **未重新训练**（只用 copy 候选权重）、**未修改原始数据**
+  （`data/processed` 仍 3311/369/3669、`data/processed_clean` 仍 3288/368/3669）、
+  **未清除演示数据库**（仅新增 9 条真实识别记录）、
+  **未覆盖历史评估报告**（阶段 3 四件套未动）
+- V1 保留在 `artifacts/backup_v1_20261018/`，可按清单回滚
+- A5 的 147 个难例仍保留为人工审查任务，未修改任何标签
+- 产物：`reports/model_switch_v1_1_report.md`；
+  `reports/model_improvement_plan.md` 第 12 节；README/reports/README.md/md 三文件

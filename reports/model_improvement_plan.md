@@ -293,3 +293,75 @@ val_acc 后回落（train_acc 已 0.975，头部过拟合），`patience=3` 于�
 - **未据 test 调整**任何 epoch/种子/参数；汇总在全部运行结束后才生成；
 - A5 的 147 个难例**仍保留为人工审查任务**，未修改任何标签；
 - `pytest tests/` **124/124** 通过。
+
+## 12. 正式模型切换（2026-10-18，已完成）
+
+完整报告：[`reports/model_switch_v1_1_report.md`](model_switch_v1_1_report.md)。
+
+用户确认采用 **A3b 分层学习率 + patience=10**，指定候选
+`artifacts/exp_esp_p10_seed42/best_model.pth`（依据**验证集**表现选种子，
+非测试集），**已正式切换为默认模型**。
+
+### 12.1 切换方式（默认路径不变 + 版本化目录）
+
+- **默认加载路径保持 `artifacts/best_model.pth`**（`启动系统.bat`、
+  `启动后端.bat`、`backend/app/config.py` 均依赖它，**未修改任何启动脚本**）；
+- 新建**版本化生产目录** `artifacts/v1_1_37_optimized/`
+  （含 `best_model.pth`、`last_model.pth`、`class_names.json`、
+  `experiment_config.json`、`model_version.json`），与训练实验目录
+  `artifacts/exp_esp_*` **明确分离**；
+- 在 `artifacts/` 下同步放置 `model_version.json`，使启动日志能读出当前默认版本；
+- **V1 可回滚备份** `artifacts/backup_v1_20261018/` +
+  `BACKUP_MANIFEST.json`（SHA256 / 字节数 / 来源 / 时间戳 / 回滚命令，
+  **不依赖 Git**，因权重本就不入 Git）。
+
+### 12.2 切换前闸门（18 项全部通过）
+
+`arch=resnet18`、`num_classes=37`、`fc.weight (37,512)`、
+`layer4.1.conv1 (512,512,3,3)`、**候选类别顺序与正式 `class_names.json`
+逐项相同**、`load_checkpoint` 真实加载成功、前向输出 `(1,37)`、
+预处理 `build_transforms(train=False)` 输出 `(3,224,224)` 且确定性、
+`verify_class_mapping` 硬校验通过。
+
+### 12.3 启动校验与日志
+
+启动日志实证：
+
+```
+INFO:     class mapping verified against class_names.json (37 classes)
+INFO:     model ready: version=v1_1_37_optimized arch=resnet18 classes=37 device=cuda (weights: best_model.pth)
+```
+
+版本 ID 与类别数已明确打印；**只打印权重文件名，不暴露完整服务器路径**
+（`/api/health` 响应体也未加版本字段）。
+
+### 12.4 三类指标口径（不可直接互比）
+
+| 口径 | 划分 | test Acc | test Macro-F1 |
+|---|---|---|---|
+| V1 基线（阶段 2/3，单次） | 原始 `data/processed` | 0.8035 | 0.8022 |
+| A3b 多种子汇总（n=5） | `data/processed_clean` | 0.8851 ± 0.0035 | 0.8836 ± 0.0036 |
+| **V1.1 seed42（正式部署）** | `data/processed_clean` | **0.8885** | **0.8875** |
+
+seed42 已报告指标：val Acc 0.9158 / val Macro-F1 0.9151；
+test Acc 0.8885 / test Macro-F1 0.8875 / test Weighted-F1 0.8883；
+单张延迟 2.354 ms。
+**口径声明**：为该 seed42 模型在 `data/processed_clean` 清洁划分上的
+已报告结果，**并非所有运行环境下的性能保证**。
+
+### 12.5 冒烟与回归
+
+- 8 张真实图片（猫/狗 + 最弱与最强品种）：CLI 8/8、API 8/8、
+  真实浏览器识别成功（萨摩耶犬 99.9%，中文名正确），
+  **三端 Top-3 品种序列逐位一致**；唯一 MISS 是已知最弱的
+  斗牛犬混淆对，属预期；
+- 数据库 81 → 90 条（API 8 + 浏览器 1），`integrity_check: ok`，
+  历史页与统计页均反映新记录；
+- `pytest tests/` **142/142**（新增 9 个 `PredictorService` 用例）、
+  Vitest **54/54**、`npm run build` 成功。
+
+### 12.6 后续
+
+- V1 基线保留在 `artifacts/backup_v1_20261018/`，可随时按清单回滚；
+- A1（补充真实数据）与 U3–U5（V2 扩展品种）仍未执行（缺合规数据）；
+- A5 的 147 个难例仍待人工审查。

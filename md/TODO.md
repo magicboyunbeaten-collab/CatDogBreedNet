@@ -148,9 +148,22 @@
 - [x] **未替换默认模型**；`best_model.pth`/`class_names.json` mtime 仍为 2026-10-13；`data/processed` 仍 3311/369/3669；A5 难例仍待人工审查
 - [x] 回归 `pytest 133/133`；三个独立提交：`0607357`（代码准备）、`7e5a268`（缺陷修复）、阶段一/二与报告
 
-## 后续可选（未开始，需用户确认）
-- [ ] **A3b + patience=10 替换基线权重**：证据已充分（配对 5/5 全正、test Macro-F1 0.8836±0.0036、延迟不变、种子间方差最小），但按约定等用户确认；正式训练固定 `--epochs 30 --patience 10`
+## 正式模型切换 V1.1（2026-10-18，已完成）
+用户确认采用 A3b + patience=10，指定候选 `artifacts/exp_esp_p10_seed42/best_model.pth`。
+- [x] 18 项切换闸门全部通过（arch=resnet18、37 类、fc (37,512)、**类别顺序与正式 class_names.json 逐项一致**、预处理同路径、load_checkpoint 真实加载成功）
+- [x] V1 备份到 `artifacts/backup_v1_20261018/`（含 `BACKUP_MANIFEST.json`：SHA256/字节数/回滚命令，不依赖 Git），复制后复算哈希校验
+- [x] 新建版本化生产目录 `artifacts/v1_1_37_optimized/`（含 `model_version.json`），与训练实验目录 `exp_esp_*` 分离；默认路径 `artifacts/best_model.pth` 保持不变（`.bat` 与后端均依赖它）
+- [x] `PredictorService` 启动日志增强：`model ready: version=v1_1_37_optimized arch=resnet18 classes=37 device=cuda (weights: best_model.pth)`，只打印文件名不暴露完整路径；新增 `tests/test_predictor_service.py` 9 个用例
+- [x] 修正版本文件位置问题（最初只在版本目录，导致日志 `version=unknown`；已在 `artifacts/` 补放一份）
+- [x] 冒烟：8 张真实图片 CLI 8/8、API 8/8、真实浏览器识别成功（萨摩耶犬 99.9%，中文名正确），三端 Top-3 逐位一致；数据库 81→90、integrity ok；历史页与统计页正常
+- [x] 回归：`pytest 142/142`、Vitest `54/54`、`npm run build` 成功
+- [x] 产出 `reports/model_switch_v1_1_report.md`；更新 README、reports/README.md、model_improvement_plan.md（第 12 节）、md 三文件
+- [x] 三类指标口径分开：V1 基线（原始划分 0.8035/0.8022）、A3b 多种子汇总（0.8851±0.0035）、V1.1 seed42 单模型（test 0.8885/0.8875/0.8883，val 0.9158/0.9151，延迟 2.354ms），并标注"非所有运行环境下的性能保证"
+- [x] 未重训、未改原始数据、未清演示数据库、未覆盖历史评估报告；Git 忽略规则核对无权重/数据/DB/上传/缓存入库；独立提交
+
+## 后续可选（未开始）
 - [ ] 若追求更高精度，可再试 patience=15/20（LR 在 epoch 20 后已冻结，预期收益有限）
+- [ ] 回滚验证：按 `BACKUP_MANIFEST.json` 的回滚命令实际演练一次（当前未演练）
 - [ ] 组合实验：A3b + RandomErasing / + label smoothing 是否叠加
 - [ ] EfficientNet-B0 单独调参后在延迟预算内与 ResNet18 公平比较
 - [ ] Mixup 延长到 50+ 轮再评估；A2c 多 seed 确认

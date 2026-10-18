@@ -226,6 +226,34 @@ pomeranian`，API 萨摩耶犬 99.89% / 荷兰毛狮犬 / 博美犬——Top-3 �
 - 修复 3 个被本轮暴露的缺陷（控制台编码崩溃 / `--no-benchmark` 汇总崩溃 /
   汇总键名被列表覆盖），`pytest 133/133`。
 
+**正式模型切换（2026-10-18，已执行）**：
+[`model_switch_v1_1_report.md`](model_switch_v1_1_report.md)
+
+- 用户确认采用 A3b + patience=10，候选 `artifacts/exp_esp_p10_seed42/best_model.pth`
+  （依据**验证集**表现选种子），**已正式切换为默认模型**；
+- **默认路径不变**（`artifacts/best_model.pth`，`.bat` 与后端均依赖它），
+  同时建立版本化生产目录 `artifacts/v1_1_37_optimized/`（含 `model_version.json`），
+  与训练实验目录 `exp_esp_*` 分离；
+- **V1 可回滚备份** `artifacts/backup_v1_20261018/` + `BACKUP_MANIFEST.json`
+  （SHA256/字节数/回滚命令，不依赖 Git）；
+- 切换前 **18 项闸门**全部通过（arch=resnet18、37 类、`fc (37,512)`、
+  **类别顺序与正式 `class_names.json` 逐项一致**、预处理同路径、
+  `load_checkpoint` 真实加载成功）；
+- 启动日志实证：`model ready: version=v1_1_37_optimized arch=resnet18
+  classes=37 device=cuda (weights: best_model.pth)`——版本与类别数明确，
+  只打印文件名，不暴露完整服务器路径；
+- 三类指标口径分开列示：V1 基线（原始划分，0.8035/0.8022）、
+  A3b 多种子汇总（清洁划分，0.8851±0.0035）、
+  **V1.1 seed42 单模型**（清洁划分，test Acc 0.8885 / Macro-F1 0.8875 /
+  Weighted-F1 0.8883，val Acc 0.9158 / val Macro-F1 0.9151，延迟 2.354 ms），
+  并注明"是该 seed42 模型在对应清洁划分上的已报告结果，非所有运行环境下的性能保证"；
+- 冒烟：8 张真实图片 CLI 8/8、API 8/8、真实浏览器识别成功（萨摩耶犬 99.9%，
+  中文名正确），三端 Top-3 逐位一致；数据库 81→90、`integrity_check: ok`；
+- 回归：`pytest 142/142`（新增 9 个 `PredictorService` 用例）、
+  Vitest `54/54`、`npm run build` 成功；
+- 过程中修正：版本文件最初只放在版本目录，导致启动日志 `version=unknown`；
+  已在 `artifacts/` 补放一份后恢复正常。
+
 **实验结果（U2）**：[`model_experiments_report.md`](model_experiments_report.md)
 
 - 10 个实验全部真实完成，`pytest 114/114` 通过；

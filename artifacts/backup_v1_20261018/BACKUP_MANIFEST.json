@@ -1,0 +1,48 @@
+{
+  "created_at": "2026-10-18T06:31:59.541360+00:00",
+  "purpose": "正式模型切换前的 V1 可恢复备份（不依赖 Git）",
+  "backup_of": "artifacts/best_model.pth 等默认路径三件套（V1 基线，阶段 2 训练的 ResNet18）",
+  "files": [
+    {
+      "file": "best_model.pth",
+      "source": "artifacts\\best_model.pth",
+      "backup": "artifacts\\backup_v1_20261018\\best_model.pth",
+      "bytes": 44862539,
+      "sha256": "3051ab73ea96743c3aebd6df5eb82d911d0dc59b3fb2acacca552fcd118bab48",
+      "copied_sha256": "3051ab73ea96743c3aebd6df5eb82d911d0dc59b3fb2acacca552fcd118bab48",
+      "verified": true
+    },
+    {
+      "file": "last_model.pth",
+      "source": "artifacts\\last_model.pth",
+      "backup": "artifacts\\backup_v1_20261018\\last_model.pth",
+      "bytes": 44862475,
+      "sha256": "58e188a953e3b645d1306fc53750490622b1f14e483a3bb4071b939a7d64c2ae",
+      "copied_sha256": "58e188a953e3b645d1306fc53750490622b1f14e483a3bb4071b939a7d64c2ae",
+      "verified": true
+    },
+    {
+      "file": "class_names.json",
+      "source": "artifacts\\class_names.json",
+      "backup": "artifacts\\backup_v1_20261018\\class_names.json",
+      "bytes": 694,
+      "sha256": "24120035f4af1c4945ad6e6eb1d82fa1af8b1fd3a9e383ab0246c464dfce75e6",
+      "copied_sha256": "24120035f4af1c4945ad6e6eb1d82fa1af8b1fd3a9e383ab0246c464dfce75e6",
+      "verified": true
+    },
+    {
+      "file": "experiment_config.json",
+      "source": "artifacts\\experiment_config.json",
+      "backup": "artifacts\\backup_v1_20261018\\experiment_config.json",
+      "bytes": 1406,
+      "sha256": "f680c66d7feeca46e470c3b4cd10e6c8f152506567142f7f0ebc537eb40adc7a",
+      "copied_sha256": "f680c66d7feeca46e470c3b4cd10e6c8f152506567142f7f0ebc537eb40adc7a",
+      "verified": true
+    }
+  ],
+  "rollback": {
+    "description": "把默认路径恢复为 V1 基线模型",
+    "powershell": "Copy-Item 'artifacts\\backup_v1_20261018\\best_model.pth' 'artifacts\\best_model.pth' -Force; Copy-Item 'artifacts\\backup_v1_20261018\\last_model.pth' 'artifacts\\last_model.pth' -Force; Copy-Item 'artifacts\\backup_v1_20261018\\class_names.json' 'artifacts\\class_names.json' -Force; Copy-Item 'artifacts\\backup_v1_20261018\\experiment_config.json' 'artifacts\\experiment_config.json' -Force",
+    "note": "回滚后需重启后端；V1 的 class_names.json 与 V1.1 内容相同（已核验逐项一致），因此回滚主要涉及权重文件。"
+  }
+}

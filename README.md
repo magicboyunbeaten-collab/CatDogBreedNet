@@ -432,8 +432,49 @@ seed7 回退 −0.0027）；**patience=10 为 +0.0168 ± 0.0059（5/5 全正）*
 种子间标准差（0.0035）约为 A3b patience=3（0.0182）的 **1/5**。
 相对同划分的 baseline 配置（0.8055）为 **Macro-F1 +0.0781**；延迟与基线持平。
 
-**结论：建议采用 A3b + patience=10 作为下一版默认模型，但按约定未自动替换，
-等待用户确认。** 实验权重在 `artifacts/exp_esp_p10_seed*/`。
+**结论：建议采用 A3b + patience=10 作为下一版默认模型。**
+
+### 正式模型切换（2026-10-18，已执行）
+
+完整报告见 [`reports/model_switch_v1_1_report.md`](reports/model_switch_v1_1_report.md)。
+
+用户已确认采用 **A3b 分层学习率 + patience=10**，指定候选为
+`artifacts/exp_esp_p10_seed42/best_model.pth`（依据**验证集**表现选种子）。
+**已正式切换为默认模型**：
+
+- **默认加载路径不变**：`artifacts/best_model.pth`
+  （`启动系统.bat`/`启动后端.bat`/`backend/app/config.py` 均依赖它，
+  未修改任何启动脚本）
+- **版本化生产目录**：`artifacts/v1_1_37_optimized/`（含 `model_version.json`），
+  与训练实验目录 `artifacts/exp_esp_*` 明确分离
+- **V1 可回滚备份**：`artifacts/backup_v1_20261018/` + `BACKUP_MANIFEST.json`
+  （SHA256/字节数/回滚命令，不依赖 Git）
+- **启动日志**：`model ready: version=v1_1_37_optimized arch=resnet18
+  classes=37 device=cuda (weights: best_model.pth)`——版本与类别数明确，
+  只打印文件名，不暴露完整服务器路径
+
+切换前通过 **18 项闸门核验**（arch=resnet18、37 类、`fc (37,512)`、
+**类别顺序与正式 `class_names.json` 逐项一致**、预处理同路径、
+`load_checkpoint` 真实加载成功）。
+
+**三类指标口径（互不相同条件，不可直接比较）**：
+
+| 口径 | 划分 | test Acc | test Macro-F1 |
+|---|---|---|---|
+| V1 基线（阶段 2/3，单次） | 原始 `data/processed` | 0.8035 | 0.8022 |
+| A3b 多种子汇总（n=5） | `data/processed_clean` | 0.8851 ± 0.0035 | 0.8836 ± 0.0036 |
+| **V1.1 seed42（正式部署）** | `data/processed_clean` | **0.8885** | **0.8875** |
+
+seed42 单模型已报告指标：验证集 Acc **0.9158** / Macro-F1 **0.9151**；
+测试集 Acc **0.8885** / Macro-F1 **0.8875** / Weighted-F1 **0.8883**；
+单张延迟 **2.354 ms**。
+**口径声明**：这些是该 seed42 模型在 `data/processed_clean` 清洁划分上的
+已报告结果，**并非所有运行环境下的性能保证**。
+
+**冒烟与回归**：8 张真实图片（覆盖猫/狗与最弱、最强品种）CLI 8/8、
+API 8/8、真实浏览器识别成功（萨摩耶犬 99.9%，中文名正确），
+三端 Top-3 逐位一致；数据库 81→90 条、`integrity_check: ok`；
+`pytest 142/142`、Vitest `54/54`、`npm run build` 成功。
 
 ## 已知限制
 
@@ -442,14 +483,13 @@ seed7 回退 −0.0027）；**patience=10 为 +0.0168 ± 0.0059（5/5 全正）*
   详见 [`reports/thesis_materials.md`](reports/thesis_materials.md) 第 9 节；
 - 普通分类器不保证识别训练类别之外的动物、物体或无效图片；
 - Softmax 分数是模型在当前类别集合上的归一化分数，不应宣称为真实正确概率；
-- **默认模型仍为阶段 2 基线**（test Macro-F1 0.8022）。A2–A4 实验、5 种子
-  配对验证与早停 patience 对比均已完成（见
+- **默认模型已切换为 V1.1**（A3b + patience=10，版本 ID `v1_1_37_optimized`，
+  清洁划分上 test Macro-F1 0.8875，延迟与 V1 持平）。V1 基线备份在
+  `artifacts/backup_v1_20261018/` 可随时回滚；A2–A4 实验、5 种子配对验证与
+  早停 patience 对比的过程报告见
   [`reports/model_experiments_report.md`](reports/model_experiments_report.md)、
   [`reports/seed_validation_report.md`](reports/seed_validation_report.md)、
-  [`reports/earlystop_patience_report.md`](reports/earlystop_patience_report.md)），
-  最优候选为 **A3b + patience=10**（去重划分上 test Macro-F1 0.8836 ± 0.0036），
-  保存在 `artifacts/exp_esp_p10_seed*/`，
-  但**尚未替换为默认模型**（需用户确认；替换前建议先定早停策略）；
+  [`reports/earlystop_patience_report.md`](reports/earlystop_patience_report.md)；
 - 识别页品种名显示为中文（映射见 `frontend/src/utils/breedNames.js`，未映射标签
   回退显示英文原名）；历史与统计页保持数据库原始英文标签；
 - 数据集仅限研究用途，图片版权归原始网站所有。
