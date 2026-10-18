@@ -266,6 +266,34 @@ pomeranian`，API 萨摩耶犬 99.89% / 荷兰毛狮犬 / 博美犬——Top-3 �
 - **基线权重未被替换**，A3b 候选在 `artifacts/exp_A3b_layered_lr/`；
   A1（补充真实数据）与 B/U3–U5（新增类别）**未执行**（缺合规数据）。
 
+## V2 扩展数据准备（U3，2026-10-18）
+
+按 `MODEL_UPGRADE_PLAN` 的 **U3** 完成数据源审核与 V2 数据集准备，**未训练模型**。
+
+| 报告 | 内容 |
+|---|---|
+| [`v2_data_source_audit.md`](v2_data_source_audit.md) | 6 个候选源的实测可达性、许可、规模与排除理由 |
+| [`v2_class_catalog.csv`](v2_class_catalog.csv) / [`.json`](v2_class_catalog.json) | 135 类标准标签 + 中文名 + 来源 + 许可 + 样本数 + 重叠/新增标记 |
+| [`v2_class_counts.csv`](v2_class_counts.csv) | 每类在 train/val/test 的真实样本数 |
+| [`v2_exclusion_manifest.csv`](v2_exclusion_manifest.csv) | 80 条排除记录（78 张 MD5 重复 + 2 个命名歧义类） |
+| [`v2_data_quality_report.md`](v2_data_quality_report.md) | 质量检查、防泄漏检查、划分与已知限制 |
+
+关键结论：
+
+- **唯一通过审核的新增来源是 Stanford Dogs**（120 类 / 20,580 张，
+  ImageNet 衍生、源页面未声明独立许可，仅限本地非商业教育研究，不再分发）；
+- CatInBeard 返回 **401 需授权**无法审核；COCO **无品种标签**；
+  两个 HF 公开猫种集分别只有 Birman（已在 37 类内）与**野生猫科动物**；
+- **类别并集 135 类**（37 现有 + 98 新增犬种），不是规划的 132/140；
+  3 个歧义项未合并、2 个 Stanford 歧义类排除；
+- **Border Collie 确认存在**：150 张，划分后 114/15/15；
+- **防泄漏**：新增数据与 `processed_clean/test` 近重复 **0** 对；
+  V2 内部 MD5 跨 split **0**、pHash 跨 split **0**；
+- 划分：train 16,525 / val 2,062 / test 5,346 = **23,933** 张；
+- 数据目录 `data/v2_processed/`（Git 忽略），校验脚本
+  `scripts/verify_v2_dataset.py`，单元测试
+  `tests/test_v2_data_pipeline.py`（28 例）。
+
 ## 已知限制
 
 - 验证精度 0.84 为基线水平；A2–A4 实验、5 种子配对验证与早停 patience 对比

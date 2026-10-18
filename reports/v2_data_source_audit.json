@@ -1,0 +1,250 @@
+{
+  "generated_at": "2026-10-18T09:14:16.565546+00:00",
+  "sources": {
+    "stanford_dogs": {
+      "name": "Stanford Dogs Dataset",
+      "homepage": "http://vision.stanford.edu/aditya86/ImageNetDogs/",
+      "stated_categories": 120,
+      "stated_images": 20580,
+      "actual_categories": 120,
+      "actual_images": 20580,
+      "annotations": "类别标签 + 边界框",
+      "official_splits": "官方 train 12,000 张（每类 100）/ test 8,580 张",
+      "license_status": "源页面未声明独立许可证（正文无 license 段落）",
+      "upstream": "由 ImageNet 图片与标注构建",
+      "applicable_terms": "ImageNet 使用条款：仅限非商业研究与教育用途；不得再分发原始图片；引用 Khosla et al. (FGVC@CVPR 2011) 与 Deng et al. (CVPR 2009)",
+      "decision": "有条件通过（本地非商业教育研究用途）",
+      "restrictions": [
+        "仅用于本项目（本科毕业设计）的非商业研究与教育目的",
+        "原始压缩包、解包图片与处理后图片全部留在 Git 忽略目录，不提交、不作为公开附件分发",
+        "论文与文档中必须引用上述两篇论文",
+        "不得声称拥有图片版权或可自由再分发"
+      ]
+    },
+    "oxford": {
+      "name": "Oxford-IIIT Pet Dataset",
+      "homepage": "https://www.robots.ox.ac.uk/~vgg/data/pets/",
+      "stated_categories": 37,
+      "stated_images": 7349,
+      "actual_categories": 37,
+      "actual_images": 7349,
+      "license_status": "CC BY-SA 4.0（项目既有 37 类数据来源）",
+      "decision": "采用（既有基线，本阶段不重新下载）",
+      "restrictions": [
+        "沿用既有数据划分；不修改、不重新下载"
+      ]
+    },
+    "catinbeard": {
+      "name": "CatInBeard/cat-breeds-dataset (HuggingFace)",
+      "homepage": "https://huggingface.co/datasets/CatInBeard/cat-breeds-dataset",
+      "license_status": "无法核实（接口返回 401，未取得任何元数据）",
+      "decision": "排除（需授权凭据，无法审核）",
+      "restrictions": [
+        "未取得访问权限，无法核对 README/LICENSE/images_metadata.csv 与逐图许可"
+      ]
+    },
+    "coco": {
+      "name": "COCO (Common Objects in Context)",
+      "homepage": "https://cocodataset.org",
+      "license_status": "COCO 自身有使用条款；但其类别体系为 80 个通用物体类",
+      "decision": "排除（无品种细分标签，不适用于品种分类）",
+      "restrictions": [
+        "仅含 cat / dog 两个粗粒度类，无品种标签"
+      ]
+    },
+    "afifizzul": {
+      "name": "afifizzul/cat-breeds (HuggingFace)",
+      "homepage": "https://huggingface.co/datasets/afifizzul/cat-breeds",
+      "license_status": "cc0-1.0（HF 元数据声明）",
+      "decision": "排除（仅 1 类 Birman，已在现有 37 类中，无新增品种价值）",
+      "restrictions": [
+        "200 张图片，全部为 Birman"
+      ]
+    },
+    "harish03": {
+      "name": "harish03/catbreed (HuggingFace)",
+      "homepage": "https://huggingface.co/datasets/harish03/catbreed",
+      "license_status": "apache-2.0（HF 元数据声明），但加载脚本 _LICENSE 为空",
+      "decision": "排除（类别为野生猫科动物，非家猫品种；自述 demo 数据集；三个 split 复用同一迭代器，必然跨集合重复）",
+      "restrictions": [
+        "10 个类别为狮/虎/豹等野生猫科动物",
+        "自述 'Demo dataset for testing or showing image-classification capabilities'"
+      ]
+    }
+  },
+  "probes": [
+    {
+      "label": "Stanford Dogs 官方主页",
+      "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/main.html",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 8439,
+      "server_last_modified": "Wed, 18 Sep 2013 07:19:49 GMT",
+      "seconds": 1.82
+    },
+    {
+      "label": "Stanford Dogs images.tar",
+      "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/images.tar",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 793579520,
+      "server_last_modified": "Thu, 20 Oct 2011 22:38:12 GMT",
+      "seconds": 1.62
+    },
+    {
+      "label": "Stanford Dogs lists.tar",
+      "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/lists.tar",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 481280,
+      "server_last_modified": "Tue, 17 Jan 2012 22:53:00 GMT",
+      "seconds": 1.63
+    },
+    {
+      "label": "Stanford Dogs annotation.tar",
+      "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/annotation.tar",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 21852160,
+      "server_last_modified": "Mon, 24 Oct 2011 03:46:41 GMT",
+      "seconds": 1.64
+    },
+    {
+      "label": "CatInBeard 数据集页",
+      "url": "https://huggingface.co/datasets/CatInBeard/cat-breeds-dataset",
+      "method": "HEAD",
+      "ok": false,
+      "http_status": 401,
+      "reason": "Unauthorized",
+      "body_excerpt": "",
+      "seconds": 2.11
+    },
+    {
+      "label": "CatInBeard 数据集 API",
+      "url": "https://huggingface.co/api/datasets/CatInBeard/cat-breeds-dataset",
+      "method": "HEAD",
+      "ok": false,
+      "http_status": 401,
+      "reason": "Unauthorized",
+      "body_excerpt": "",
+      "seconds": 1.84
+    },
+    {
+      "label": "afifizzul/cat-breeds API",
+      "url": "https://huggingface.co/api/datasets/afifizzul/cat-breeds",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 8043,
+      "server_last_modified": null,
+      "seconds": 1.96
+    },
+    {
+      "label": "harish03/catbreed API",
+      "url": "https://huggingface.co/api/datasets/harish03/catbreed",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 816,
+      "server_last_modified": null,
+      "seconds": 1.95
+    },
+    {
+      "label": "COCO 图片站（https）",
+      "url": "https://images.cocodataset.org",
+      "method": "HEAD",
+      "ok": false,
+      "error": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'images.cocodataset.org'. (_ssl.c:1006)>",
+      "seconds": 1.9
+    },
+    {
+      "label": "COCO 图片站（http）",
+      "url": "http://images.cocodataset.org",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": null,
+      "server_last_modified": null,
+      "seconds": 1.7
+    },
+    {
+      "label": "Oxford-IIIT Pet 官网",
+      "url": "https://www.robots.ox.ac.uk/~vgg/data/pets/",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": null,
+      "server_last_modified": null,
+      "seconds": 2.98
+    }
+  ],
+  "local_state": {
+    "download_manifest": {
+      "source": {
+        "name": "Stanford Dogs Dataset",
+        "homepage": "http://vision.stanford.edu/aditya86/ImageNetDogs/",
+        "paper_primary": "Aditya Khosla, Nityananda Jayadevaprakash, Bangpeng Yao, Li Fei-Fei. Novel dataset for Fine-Grained Image Categorization. FGVC @ CVPR 2011.",
+        "paper_secondary": "J. Deng, W. Dong, R. Socher, L.-J. Li, K. Li, L. Fei-Fei. ImageNet: A Large-Scale Hierarchical Image Database. CVPR 2009.",
+        "stated_categories": 120,
+        "stated_images": 20580,
+        "note": "官方页面未发布可核对的 SHA256；本清单中的 sha256 为**本地完整性指纹**，仅用于确认文件未损坏与两次下载一致，不能独立证明文件来源真实性。可核对的官方信息是服务器 Content-Length（下方 content_length）。"
+      },
+      "downloaded_at": "2026-10-18T07:54:00.131662+00:00",
+      "files": {
+        "images.tar": {
+          "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/images.tar",
+          "http_status": 200,
+          "content_length": 793579520,
+          "server_last_modified": "Thu, 20 Oct 2011 22:38:12 GMT",
+          "status": "downloaded",
+          "bytes": 793579520,
+          "sha256": "a443fc2f9a851aa1a7b8e4fa4af94b8459fce2c9f5a2f4dd4669cf9673a4ec58",
+          "download_seconds": 3985.0,
+          "size_matches_server": true
+        },
+        "lists.tar": {
+          "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/lists.tar",
+          "http_status": 200,
+          "content_length": 481280,
+          "server_last_modified": "Tue, 17 Jan 2012 22:53:00 GMT",
+          "status": "present",
+          "bytes": 481280,
+          "sha256": "34b47cacd9a98b5d150e084f24d29391c084c55272295ec65c85651bc35f4d6c",
+          "size_matches_server": true
+        },
+        "annotation.tar": {
+          "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/annotation.tar",
+          "http_status": 200,
+          "content_length": 21852160,
+          "server_last_modified": "Mon, 24 Oct 2011 03:46:41 GMT",
+          "status": "downloaded",
+          "bytes": 21852160,
+          "sha256": "662ed36f707be6b195c2fda392d8e153e83af28cedc8e2134a649f198def30fd",
+          "download_seconds": 99.1,
+          "size_matches_server": true
+        }
+      }
+    },
+    "images": {
+      "class_dirs": 120,
+      "images": 20580,
+      "bytes": 777706781,
+      "per_class_min": 148,
+      "per_class_max": 252,
+      "per_class_mean": 171.5
+    }
+  },
+  "approved": [
+    "stanford_dogs"
+  ],
+  "excluded": [
+    "catinbeard",
+    "coco",
+    "afifizzul",
+    "harish03"
+  ]
+}

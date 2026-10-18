@@ -35,6 +35,11 @@ import torch  # noqa: E402
 import torch.nn as nn  # noqa: E402
 import numpy as np  # noqa: E402
 import torchvision  # noqa: E402
+
+# 训练脚本在无 GUI 环境运行：显式使用无头后端，避免加载 TkAgg 失败。
+import matplotlib  # noqa: E402
+
+matplotlib.use("Agg")
 from matplotlib import pyplot as plt  # noqa: E402
 from torch.optim import AdamW  # noqa: E402
 from torch.optim.lr_scheduler import StepLR  # noqa: E402

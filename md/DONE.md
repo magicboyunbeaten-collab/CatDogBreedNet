@@ -547,3 +547,79 @@ test Acc 0.8885 / test Macro-F1 0.8875 / test Weighted-F1 0.8883；
 - A5 的 147 个难例仍保留为人工审查任务，未修改任何标签
 - 产物：`reports/model_switch_v1_1_report.md`；
   `reports/model_improvement_plan.md` 第 12 节；README/reports/README.md/md 三文件
+
+## 2026-10-18（U3：V2 扩展数据源审核与准备）
+
+依据 `MODEL_UPGRADE_PLAN` 的 U3 阶段。**只做数据审核与准备，未训练模型**，
+V1.1 仍为正式默认模型。
+
+### 数据源审核（全部实测，不靠记忆）
+| 来源 | 实测结果 | 结论 |
+|---|---|---|
+| Stanford Dogs | HTTP 200；images.tar 793,579,520 B、lists.tar 481,280 B、annotation.tar 21,852,160 B，均与服务器 Content-Length 一致 | **有条件通过** |
+| CatInBeard（HF） | **HTTP 401**，`{"error":"Invalid username or password."}` | 排除（无法审核） |
+| COCO | https SSL 证书失败；http 可达，但仅 cat/dog 两类 | 排除（无品种标签） |
+| afifizzul/cat-breeds | CC0，仅 200 张 Birman | 排除（无新增品种） |
+| harish03/catbreed | Apache-2.0，类别为狮/虎/豹等**野生猫科动物**，自述 demo，三 split 复用同一迭代器 | 排除 |
+
+**许可口径**：Stanford Dogs 源页面**未声明独立许可证**，为 ImageNet 衍生；
+按 ImageNet 条款仅限非商业研究与教育用途、不得再分发、须引用
+Khosla et al. (FGVC@CVPR 2011) 与 Deng et al. (CVPR 2009)。
+图片只落 `data/external_raw/`、`data/v2_processed/`（均 Git 忽略），
+**不提交、不作为公开附件分发**，**未声称可自由再分发**。
+
+**哈希口径**：官方未发布可核对 SHA256，脚本计算的 SHA256 明确标注为
+**本地完整性指纹**；可核对的官方信息是 Content-Length（已逐文件比对一致）
+与服务器 Last-Modified（2011–2012 年）。
+
+### 类别目录（真实并集，非规划值）
+- **135 类** = 37 现有（12 猫 + 25 狗）+ **98 新增犬种**
+- 20 个 Oxford 犬种与 Stanford 确切重叠 → 按决策**只用 Oxford 数据**
+- 3 个 Oxford 犬种 Stanford 无对应：`american_bulldog`、`havanese`、`shiba_inu`
+- 2 个 Stanford 类因命名歧义**排除**：`American_Staffordshire_terrier`、`cocker_spaniel`
+- **Border Collie 已核实**：`border_collie` / `n02106166-Border_collie` / **150 张**
+  → 划分后 114/15/15；同数据集中的 `Border_terrier`(172)、`collie`(153) 为**另两个品种**
+- 人工核验别名表，**不做模糊自动合并**；未匹配名称进 `ambiguous`/`unmatched` 待人工确认
+
+### 数据质量与防泄漏
+- 新增 16,686 张：**0 坏图、0 过低分辨率**；去除 **78 张 MD5 完全重复**
+- **与 `data/processed_clean/test` 近重复 0 对**（未删改原测试图）
+- 近重复簇 16,554 个（52 个多图簇），**全局整簇原子分配**
+- 最终校验：**MD5 跨 split 0、pHash 跨 split 0**、0 空类别
+
+### 划分（seed 42）
+train **16,525** / val **2,062** / test **5,346** = **23,933** 张
+（现有 7,325 + 新增 16,608）
+
+### 阶段中修复的 3 个真实问题
+1. **跨类近重复被拆到不同 split**：原簇分配按类独立进行，
+   `English_foxhound`↔`Walker_hound`、`standard_schnauzer`↔`miniature_schnauzer`
+   等跨类近重复（pHash 距离 0）会跨集合泄漏 → 改为**全局**簇原子分配
+2. **`Scotch_terrier` 同义名误判**：原按歧义处理会让 `scottish_terrier` 与
+   `scotch_terrier` 两类指同一品种，且与既有训练图形成距离 0 近重复
+   （正是用户要求避免的"同一品种重复计为多类"）→ 核实为 Scottish Terrier
+   旧同义名后升为可确信别名
+3. **matplotlib 未固定后端**：偶发 `_tkinter.TclError: Can't find a usable
+   tk.tcl`（TkAgg 不可用）；`ml/train.py`、`ml/evaluate.py` 显式
+   `matplotlib.use("Agg")`，修复后连续 3 次全量回归稳定通过
+
+### 产物
+- 脚本：`scripts/fetch_stanford_dogs.py`（Range 断点续传 + 幂等）、
+  `scripts/audit_v2_data_sources.py`、`scripts/build_v2_class_catalog.py`、
+  `scripts/build_v2_dataset.py`、`scripts/verify_v2_dataset.py`
+- 报告：`reports/v2_data_source_audit.md`(+`.json`、`v2_data_source_probe.json`)、
+  `reports/v2_class_catalog.csv`/`.json`、`reports/v2_class_counts.csv`、
+  `reports/v2_exclusion_manifest.csv`、`reports/v2_data_quality_report.md`
+- 数据：`data/external_raw/stanford_dogs/`（1.59 GB，20,587 文件）、
+  `data/v2_processed/`（1.42 GB，23,934 文件）——均 Git 忽略
+- 测试：`tests/test_v2_data_pipeline.py` **28 例**（合成数据）；`pytest 174/174`
+- `.gitignore` 新增 `data/external_raw/`、`data/v2_processed/`
+
+### 约束遵守
+- **V1.1 与旧数据零改动**：`best_model.pth`、`class_names.json`、
+  `model_version.json`、`experiment_config.json`、`last_model.pth` 哈希全部一致；
+  `data/processed` 7349 / `data/processed_clean` 7325 / `data/raw` 25867
+  文件数与字节完全一致；DB 142 条 `integrity_check: ok`；uploads 142
+- **未训练 V2、未改默认模型路径、未清理数据库/uploads/缓存**
+- 未删除整个项目目录；构建脚本采用增量同步，可安全重复执行
+- A5 的 147 个难例仍未修改标签，保留人工审查

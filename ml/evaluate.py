@@ -48,6 +48,12 @@ if str(_REPO_ROOT) not in sys.path:
 import numpy as np  # noqa: E402
 import torch  # noqa: E402
 import torchvision  # noqa: E402
+
+# 服务端评估脚本不需要 GUI：显式使用无头后端，避免 matplotlib 试图加载
+# TkAgg 而报 `_tkinter.TclError: Can't find a usable tk.tcl`（曾导致测试偶发失败）。
+import matplotlib  # noqa: E402
+
+matplotlib.use("Agg")
 from matplotlib import pyplot as plt  # noqa: E402
 from PIL import Image  # noqa: E402
 from sklearn.metrics import (  # noqa: E402
@@ -227,6 +233,14 @@ def save_confusion_matrix(y_true, y_pred, class_names, csv_path: Path,
     return cm
 
 
+def confusion_matrix_title(normalize: bool, split: str, total: int,
+                           n: int) -> str:
+    """混淆矩阵图标题（抽成独立函数以便直接测试 split 口径）。"""
+    base = ("Confusion matrix (row-normalized)" if normalize
+            else "Confusion matrix (counts)")
+    return f"{base} - {split} split, {total} images, {n} breeds"
+
+
 def _plot_confusion_matrix(cm, class_names, png_path: Path,
                            normalize: bool, split: str = "test") -> None:
     matrix = cm.astype(float)
@@ -247,10 +261,7 @@ def _plot_confusion_matrix(cm, class_names, png_path: Path,
     ax.set_yticklabels(class_names, fontsize=max(6, 160 // n))
     ax.set_xlabel("predicted breed")
     ax.set_ylabel("true breed")
-    title = "Confusion matrix (row-normalized)" if normalize \
-        else "Confusion matrix (counts)"
-    ax.set_title(f"{title} - {split} split, {int(cm.sum())} images, "
-                 f"{n} breeds")
+    ax.set_title(confusion_matrix_title(normalize, split, int(cm.sum()), n))
 
     threshold = (matrix.max() / 2) if matrix.max() > 0 else 0.5
     for i in range(n):

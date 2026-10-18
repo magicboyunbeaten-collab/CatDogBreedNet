@@ -19,6 +19,8 @@ dist/
 data/raw/
 data/processed/
 data/processed_clean/
+data/external_raw/
+data/v2_processed/
 uploads/
 
 # Databases
@@ -35,6 +37,12 @@ artifacts/**/*.pth
 reports/*.csv
 reports/*.png
 reports/split_*.json
+
+# 例外：V2 数据准备的类别目录/计数/排除清单是审核交付物（体积极小、
+# 需可追溯、无原始数据无法重建），必须纳入版本库
+!reports/v2_class_catalog.csv
+!reports/v2_class_counts.csv
+!reports/v2_exclusion_manifest.csv
 
 # 近重复联系表图片：由 scripts/review_near_duplicates.py 生成，可随时重建；
 # 保留报告（.md/.json/.csv）与人工判定记录（visual_verification.json）

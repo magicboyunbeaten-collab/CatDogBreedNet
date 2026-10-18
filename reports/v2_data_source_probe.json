@@ -1,0 +1,113 @@
+{
+  "probed_at": "2026-10-18T09:14:16.565546+00:00",
+  "endpoints": [
+    {
+      "label": "Stanford Dogs 官方主页",
+      "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/main.html",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 8439,
+      "server_last_modified": "Wed, 18 Sep 2013 07:19:49 GMT",
+      "seconds": 1.82
+    },
+    {
+      "label": "Stanford Dogs images.tar",
+      "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/images.tar",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 793579520,
+      "server_last_modified": "Thu, 20 Oct 2011 22:38:12 GMT",
+      "seconds": 1.62
+    },
+    {
+      "label": "Stanford Dogs lists.tar",
+      "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/lists.tar",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 481280,
+      "server_last_modified": "Tue, 17 Jan 2012 22:53:00 GMT",
+      "seconds": 1.63
+    },
+    {
+      "label": "Stanford Dogs annotation.tar",
+      "url": "http://vision.stanford.edu/aditya86/ImageNetDogs/annotation.tar",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 21852160,
+      "server_last_modified": "Mon, 24 Oct 2011 03:46:41 GMT",
+      "seconds": 1.64
+    },
+    {
+      "label": "CatInBeard 数据集页",
+      "url": "https://huggingface.co/datasets/CatInBeard/cat-breeds-dataset",
+      "method": "HEAD",
+      "ok": false,
+      "http_status": 401,
+      "reason": "Unauthorized",
+      "body_excerpt": "",
+      "seconds": 2.11
+    },
+    {
+      "label": "CatInBeard 数据集 API",
+      "url": "https://huggingface.co/api/datasets/CatInBeard/cat-breeds-dataset",
+      "method": "HEAD",
+      "ok": false,
+      "http_status": 401,
+      "reason": "Unauthorized",
+      "body_excerpt": "",
+      "seconds": 1.84
+    },
+    {
+      "label": "afifizzul/cat-breeds API",
+      "url": "https://huggingface.co/api/datasets/afifizzul/cat-breeds",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 8043,
+      "server_last_modified": null,
+      "seconds": 1.96
+    },
+    {
+      "label": "harish03/catbreed API",
+      "url": "https://huggingface.co/api/datasets/harish03/catbreed",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": 816,
+      "server_last_modified": null,
+      "seconds": 1.95
+    },
+    {
+      "label": "COCO 图片站（https）",
+      "url": "https://images.cocodataset.org",
+      "method": "HEAD",
+      "ok": false,
+      "error": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'images.cocodataset.org'. (_ssl.c:1006)>",
+      "seconds": 1.9
+    },
+    {
+      "label": "COCO 图片站（http）",
+      "url": "http://images.cocodataset.org",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": null,
+      "server_last_modified": null,
+      "seconds": 1.7
+    },
+    {
+      "label": "Oxford-IIIT Pet 官网",
+      "url": "https://www.robots.ox.ac.uk/~vgg/data/pets/",
+      "method": "HEAD",
+      "ok": true,
+      "http_status": 200,
+      "content_length": null,
+      "server_last_modified": null,
+      "seconds": 2.98
+    }
+  ]
+}

@@ -25,7 +25,71 @@
 - 本轮测试在正式库新增 1 条记录（#65，用户要求的真实识别联调产生）
 
 ## 阻塞 / 等待
-- 无（V1.1 已切换为默认模型；V1 备份可回滚）
+- 无（V1.1 已切换为默认模型；V1 备份可回滚；V2 数据已就绪，训练待确认）
+
+## V2 扩展数据准备 U3（2026-10-18，已完成，未训练）
+依据 `MODEL_UPGRADE_PLAN` U3。当前正式模型仍为 V1.1（A3b + patience=10，seed42）。
+
+**数据源审核（实测）**
+- **Stanford Dogs 唯一通过**：可达，120 类 / 20,580 张（官方声明与实际解包一致），
+  ImageNet 衍生、源页面未声明独立许可 → **有条件通过**
+  （本地非商业教育研究；图片只落 Git 忽略目录；须引用两篇论文；不再分发）
+- CatInBeard（HF）：**401 Unauthorized**，需授权凭据 → 排除，无法审核
+- COCO：https 证书失败 / http 可达，但仅 cat/dog 两类无品种标签 → 排除
+- afifizzul/cat-breeds：CC0，仅 200 张 Birman（已在 37 类内）→ 排除
+- harish03/catbreed：Apache-2.0，但类别为**野生猫科动物**、自述 demo、
+  三 split 复用同一迭代器 → 排除
+- 下载校验：三文件 Content-Length 全部一致；**本地 SHA256 仅作完整性指纹**
+  （官方未发布可核对 SHA256）
+
+**类别目录（真实并集，非规划值）**
+- **135 类** = 37 现有（12 猫 + 25 狗）+ **98 新增犬种**
+- 20 个 Oxford 犬种与 Stanford 确切重叠（按决策**只用 Oxford 数据**，不合并）
+- 3 个 Oxford 犬种 Stanford 无对应：`american_bulldog`、`havanese`、`shiba_inu`
+- 2 个 Stanford 类别因命名歧义排除：`American_Staffordshire_terrier`、`cocker_spaniel`
+- **Border Collie 确认**：`border_collie`，150 张 → 114/15/15
+- 人工核验别名表（`german_shorthaired`↔`German_short-haired_pointer`、
+  `wheaten_terrier`↔`soft-coated_wheaten_terrier`、`japanese_chin`↔`Japanese_spaniel`、
+  `staffordshire_bull_terrier`↔`Staffordshire_bullterrier`、`basset_hound`↔`basset`、
+  `scottish_terrier`↔`Scotch_terrier` 等），**不做模糊自动合并**
+
+**数据质量与防泄漏**
+- 新增 16,686 张全部可解码、无过低分辨率；去除 78 张 MD5 完全重复
+- **与 `data/processed_clean/test` 近重复 0 对**（未删改任何原测试图）
+- 近重复簇 16,554 个（52 个多图簇），**全局整簇原子分配**
+- V2 划分最终校验：**MD5 跨 split 0、pHash 跨 split 0**、0 空类别
+
+**划分（seed 42）**
+| split | 图片数 |
+|---|---|
+| train | 16,525 |
+| val | 2,062 |
+| test | 5,346 |
+| 合计 | **23,933** |
+
+**产物**
+- 脚本：`fetch_stanford_dogs.py`、`audit_v2_data_sources.py`、
+  `build_v2_class_catalog.py`、`build_v2_dataset.py`、`verify_v2_dataset.py`
+- 报告：`v2_data_source_audit.md`、`v2_class_catalog.{csv,json}`、
+  `v2_class_counts.csv`、`v2_exclusion_manifest.csv`、`v2_data_quality_report.md`
+- 数据：`data/external_raw/stanford_dogs/`（1.59 GB）、
+  `data/v2_processed/`（1.42 GB），均 Git 忽略
+- 测试：`tests/test_v2_data_pipeline.py` 28 例；`pytest 174/174`
+
+**阶段性修复**
+1. **跨类近重复被拆到不同 split**：原簇分配按类独立进行，
+   `English_foxhound`↔`Walker_hound`、`standard_schnauzer`↔`miniature_schnauzer`
+   等跨类近重复对会泄漏；改为**全局**簇原子分配
+2. **`Scotch_terrier` 同义名**：原按歧义处理会让 `scottish_terrier` 与
+   `scotch_terrier` 两个类指同一品种，并与既有训练图形成距离 0 近重复；
+   核实为 Scottish Terrier 旧同义名后升为可确信别名
+3. **matplotlib 未固定后端**：偶发 `_tkinter.TclError: Can't find a usable
+   tk.tcl`；`ml/train.py`、`ml/evaluate.py` 显式 `matplotlib.use("Agg")`
+
+**V1.1 与旧数据零改动**：五个模型产物哈希一致；
+`data/processed` 7349 / `data/processed_clean` 7325 / `data/raw` 25867
+文件数与字节完全一致；DB 142 条 integrity ok；uploads 142。
+**本阶段未训练 V2、未改默认模型路径。**
 
 ## 正式模型切换 V1.1（2026-10-18，已完成）
 用户确认采用 A3b + patience=10，指定候选 `artifacts/exp_esp_p10_seed42/best_model.pth`

@@ -26,6 +26,7 @@ from ml.evaluate import (  # noqa: E402
     build_summary_markdown,
     collect_predictions,
     compute_metrics,
+    confusion_matrix_title,
     parse_args,
     save_classification_report_csv,
     save_confusion_matrix,
@@ -278,18 +279,32 @@ def test_benchmark_batch_inference_scope_follows_split():
 
 def test_save_confusion_matrix_accepts_split_without_changing_matrix(tmp_path):
     """split 只影响图标题，不得改变矩阵内容。"""
-    from ml.evaluate import _plot_confusion_matrix
-
     cm_a = save_confusion_matrix(Y_TRUE, Y_PRED, TOY_CLASSES,
                                  tmp_path / "a.csv", tmp_path / "a.png")
     cm_b = save_confusion_matrix(Y_TRUE, Y_PRED, TOY_CLASSES,
                                  tmp_path / "b.csv", tmp_path / "b.png",
                                  split="val")
     assert cm_a.tolist() == cm_b.tolist()
-    # 直接调用绘图函数，确认 split 参数可用
-    _plot_confusion_matrix(cm_b, TOY_CLASSES, tmp_path / "c.png",
-                           normalize=False, split="val")
-    assert (tmp_path / "c.png").stat().st_size > 5000
+    # 只断言文件确实产出（不依赖 PNG 字节数：字体/渲染环境差异会让
+    # 具体体积波动，曾造成偶发失败）
+    assert (tmp_path / "a.png").stat().st_size > 0
+    assert (tmp_path / "b.png").stat().st_size > 0
+
+
+@pytest.mark.parametrize("split", ["test", "val", "train"])
+def test_confusion_matrix_title_states_split(split):
+    """图标题必须如实标出 split，避免把验证集图误读成测试集图。"""
+    title = confusion_matrix_title(False, split, 42, 3)
+    assert f"{split} split" in title
+    assert "42 images" in title
+    assert "3 breeds" in title
+    assert "counts" in title
+
+
+def test_confusion_matrix_title_marks_normalized_variant():
+    title = confusion_matrix_title(True, "val", 10, 2)
+    assert "row-normalized" in title
+    assert "counts" not in title
 
 
 def test_build_summary_markdown_handles_missing_benchmark():

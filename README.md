@@ -476,10 +476,75 @@ API 8/8、真实浏览器识别成功（萨摩耶犬 99.9%，中文名正确）�
 三端 Top-3 逐位一致；数据库 81→90 条、`integrity_check: ok`；
 `pytest 142/142`、Vitest `54/54`、`npm run build` 成功。
 
+## V2 扩展数据准备（U3，2026-10-18）
+
+依据 `MODEL_UPGRADE_PLAN` 的 **U3 阶段**，本阶段**只做数据审核与准备，不训练模型**。
+
+### 数据源审核结论
+
+| 数据源 | 实测 | 结论 |
+|---|---|---|
+| **Stanford Dogs** | 可达，120 类 / 20,580 张（官方声明与实际解包一致） | **有条件通过**（本地非商业教育研究用途） |
+| Oxford-IIIT Pet | 既有 37 类数据 | 采用（历史基准，不重新下载） |
+| CatInBeard（HuggingFace） | **401 Unauthorized**，需授权凭据 | 排除（无法审核） |
+| COCO | https 证书失败 / http 可达，但**只有 cat/dog 两类** | 排除（无品种标签） |
+| afifizzul/cat-breeds | CC0，但**仅 200 张 Birman** | 排除（无新增品种） |
+| harish03/catbreed | Apache-2.0，但类别为**野生猫科动物**、自述 demo、三 split 复用同一迭代器 | 排除（类别不符 + 必然泄漏） |
+
+**许可说明（重要）**：Stanford Dogs 为 **ImageNet 衍生数据集**，官方页面
+**未声明独立许可证**。本项目仅将其用于本地非商业教育研究（本科毕业设计），
+图片只落在 Git 忽略目录（`data/external_raw/`、`data/v2_processed/`），
+**不提交、不再分发**，并须引用 Khosla et al. (FGVC@CVPR 2011) 与
+Deng et al. (CVPR 2009)。**不得声称图片可自由再分发。**
+
+### 类别并集（真实统计，非规划值）
+
+- 现有 37 类（12 猫 + 25 狗）+ Stanford 新增 **98** 个犬种
+- **V2 合计 135 类**（不是规划的 132/140，由标准名称去重后的真实并集决定）
+- Oxford 犬种中 20 个与 Stanford 确切重叠（按决策**只用 Oxford 数据**，
+  Stanford 图片仅入审计统计、不合并训练）
+- 3 个 Oxford 犬种在 Stanford 无对应（`american_bulldog`、`havanese`、`shiba_inu`）
+- 2 个 Stanford 类别因命名歧义**排除**（`American_Staffordshire_terrier`、
+  `cocker_spaniel`），避免同一品种重复计为多类
+- **Border Collie 已确认存在**：`border_collie`，150 张，划分后
+  train 114 / val 15 / test 15
+
+### 数据划分与防泄漏
+
+| split | 图片数 |
+|---|---|
+| train | 16,525 |
+| val | 2,062 |
+| test | 5,346 |
+| **合计** | **23,933** |
+
+- 现有 37 类**原样沿用** `data/processed_clean` 的划分（其 test 作历史基准）
+- 新增 98 个品种按 **80/10/10 分层 + 近重复簇整簇原子分配**（seed 42）
+- **防泄漏**：新增数据与 `data/processed_clean/test/` 近重复（pHash ≤ 5）
+  为 **0 对**；V2 划分内部 **MD5 跨 split 重复 0、pHash 跨 split 近重复 0**
+- 质量：16,686 张新增图片全部可解码、无过低分辨率；去除 78 张 MD5 完全重复
+
+产物：`reports/v2_data_source_audit.md`、`reports/v2_class_catalog.{csv,json}`、
+`reports/v2_class_counts.csv`、`reports/v2_exclusion_manifest.csv`、
+`reports/v2_data_quality_report.md`、`data/v2_processed/`（Git 忽略）。
+
+复现：
+
+```powershell
+.venv\Scripts\python.exe scripts\fetch_stanford_dogs.py
+.venv\Scripts\python.exe scripts\audit_v2_data_sources.py
+.venv\Scripts\python.exe scripts\build_v2_class_catalog.py
+.venv\Scripts\python.exe scripts\build_v2_dataset.py
+.venv\Scripts\python.exe scripts\verify_v2_dataset.py
+```
+
+> **本阶段未训练 V2 模型**，V1.1 仍是正式默认模型；V2 训练方案（U4）待确认。
+
 ## 已知限制
 
 - **模型仅支持训练时的 37 个品种**（12 猫 + 25 狗）。边境牧羊犬（Border Collie）等
-  训练类别之外的品种不在支持范围内，系统会给出一个低置信度的错误猜测——
+  训练类别之外的品种不在支持范围内，系统会给出一个低置信度的错误猜测
+  （V2 的 135 类**数据**已准备好，但**尚未训练**，见 `## V2 扩展数据准备` 一节）——
   详见 [`reports/thesis_materials.md`](reports/thesis_materials.md) 第 9 节；
 - 普通分类器不保证识别训练类别之外的动物、物体或无效图片；
 - Softmax 分数是模型在当前类别集合上的归一化分数，不应宣称为真实正确概率；

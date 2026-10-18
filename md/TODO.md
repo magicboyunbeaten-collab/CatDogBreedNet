@@ -168,5 +168,43 @@
 - [ ] EfficientNet-B0 单独调参后在延迟预算内与 ResNet18 公平比较
 - [ ] Mixup 延长到 50+ 轮再评估；A2c 多 seed 确认
 - [ ] A1 补充真实数据（需许可合规图片 + pHash 去重报告；新增数据须以 `data/processed_clean` 为泄漏检查基准）
-- [ ] U3 V2 数据审查（Stanford Dogs 等，需下载与许可审查）
-- [ ] U4 V2 训练与评估、U5 可切换版本集成、未知品种拒识
+- [ ] U4 V2 训练与评估（135 类数据已就绪，训练方案待确认）
+- [ ] U5 可切换版本集成（含前端 135 类中文名映射扩展）、未知品种拒识
+
+## V2 扩展数据准备 U3（2026-10-18，已完成，未训练）
+- [x] `scripts/fetch_stanford_dogs.py`：下载 images/lists/annotation.tar 并校验；
+      支持 Range 断点续传与幂等重入；记录服务器 Content-Length 比对一致，
+      **本地 SHA256 仅记作完整性指纹**（官方未发布可核对 SHA256）
+- [x] `scripts/audit_v2_data_sources.py`：实测 11 个端点，产出
+      `reports/v2_data_source_audit.md`；Stanford Dogs **有条件通过**
+      （ImageNet 衍生、源页面未声明独立许可、仅本地非商业教育研究、不再分发）；
+      CatInBeard **401 需授权**排除；COCO 无品种标签排除；
+      afifizzul 仅 Birman 排除；harish03 为野生猫科 demo 排除
+- [x] `scripts/build_v2_class_catalog.py`：人工核验别名表（**不做模糊自动合并**），
+      产出 `reports/v2_class_catalog.{csv,json}`；**类别并集 135 类**
+      （37 现有 + 98 新增犬种）；3 个 Oxford 犬种无 Stanford 对应；
+      2 个 Stanford 歧义类（`American_Staffordshire_terrier`、`cocker_spaniel`）排除
+- [x] **Border Collie 已核实存在**：`border_collie` / `n02106166-Border_collie` / 150 张；
+      并识别 `Border_terrier`、`collie`、`Border_collie` 为三个不同品种
+- [x] 修正阶段中发现的真实问题：`Scotch_terrier` 是 `Scottish Terrier` 旧同义名
+      （原按歧义处理会造成同品种重复计数并产生跨类近重复）；
+      簇分配改为**全局**（原按类分配会把跨类近重复拆到不同 split）
+- [x] `scripts/build_v2_dataset.py`：37 类原样沿用 `processed_clean` 划分 +
+      新增品种 80/10/10 分层与**近重复簇整簇原子分配**（seed 42）；
+      质量检查 16,686 张（0 坏图 / 0 过低分辨率）、去除 78 张 MD5 重复；
+      **与 `processed_clean/test` 近重复 0 对**（未删改原测试图）
+- [x] 产出 `data/v2_processed/`（train 16,525 / val 2,062 / test 5,346 = 23,933 张，
+      Git 忽略）+ `manifest.json` + 四份报告
+- [x] `scripts/verify_v2_dataset.py` 独立校验全通过：类别集合一致 135、
+      图片数一致、0 空类别、现有 37 类 7,325 个文件名全部保留、
+      **跨 split MD5 重复 0、pHash 近重复 0**
+- [x] `tests/test_v2_data_pipeline.py` 28 例（合成数据）；`pytest 174/174`
+- [x] 修复偶发失败的测试根因：matplotlib 未固定后端导致
+      `_tkinter.TclError: Can't find a usable tk.tcl`；
+      `ml/train.py` 与 `ml/evaluate.py` 显式 `matplotlib.use("Agg")`
+- [x] **V1.1 与旧数据零改动核验**：best_model.pth / class_names.json /
+      model_version.json / experiment_config.json / last_model.pth 哈希一致；
+      `data/processed` 7349、`data/processed_clean` 7325、`data/raw` 25867
+      文件数与字节完全一致；DB 142 条 integrity ok；uploads 142
+- [x] `.gitignore` 新增 `data/external_raw/`、`data/v2_processed/`
+- [x] **本阶段未训练 V2、未改默认模型路径**
