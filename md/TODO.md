@@ -133,8 +133,24 @@
 - [x] 三个独立提交：阶段一 `b751c11`、阶段二 `728281f`、阶段三（本文档更新）
 - [x] **未替换默认模型**（按约定等用户确认）；未据 test 调整任何参数；A5 的 147 个难例保留为人工审查任务
 
+## 早停策略（patience）配对对比（2026-10-18，已完成）
+用户要求"开展 A3b 的早停策略对比实验，比较 patience=3、5、10，再据结果提交最终模型切换建议"。
+- [x] 代码准备：`ml/evaluate.py` 增加向后兼容的 `--split {test,val,train}`（默认 test 行为不变）；新增 `scripts/run_earlystop_validation.py`（15 运行矩阵、两阶段强制分离、断点续跑、mean/std/配对差值）；`tests/test_evaluate.py` 补 9 个用例；`pytest 133/133`
+- [x] 核对 `data/processed_clean`：校验记录全 True（pHash 跨划分 0 / MD5 跨划分 0 / 跨集合簇 0）、磁盘 3288/368/3669 与记录一致、37 类映射与 `class_names.json` 逐项一致
+- [x] 阶段一：15 个运行（patience 3/5/10 × 5 种子）全部完成，统一 `max_epochs=30`，除 `--patience` 外逐项一致；只训练 + 只做 val 评估，**不读 test**
+- [x] 验证集结果（n=5）：p3 val Acc 0.8924±0.0063 / Macro-F1 0.8918±0.0059；p5 0.9054±0.0101 / 0.9047±0.0102；**p10 0.9092±0.0056 / 0.9081±0.0059**（均值最高、跨种子最稳、train/val 差距最小 0.0957）
+- [x] 配对差值（相对 p3）：p5 仅 **4/5 为正**（seed7 −0.0027）；**p10 +0.0168±0.0059、5/5 全正**
+- [x] **依据验证集选定 patience=10**（未参考任何 test 结果）；机制：A3b head lr=1e-3 使 val_acc 第 1–2 轮即冲高回落，p3 第 4 轮即停，错过 StepLR 在 epoch 5/10/15 衰减后的提升
+- [x] 阶段二：仅对 p10 的 5 个种子做一次 test 评估 —— Acc **0.8851±0.0035** / Macro-F1 **0.8836±0.0036** / Weighted-F1 0.8844±0.0035 / 延迟 2.2968ms；种子间 std 约为 A3b p3 的 1/5
+- [x] 逐类：最弱 american_pit_bull_terrier 0.5818、staffordshire_bull_terrier 0.6187、Ragdoll 0.7154；最强 japanese_chin 0.9881、keeshond 0.9867
+- [x] 产出 `reports/earlystop_patience_report.md`、`reports/earlystop_results/`、`reports/exp_esp_*/`、`artifacts/exp_esp_*/`
+- [x] 修复 3 个被本轮暴露的缺陷：运行器 `_console_print`（GBK 控制台 U+FFFD 崩溃，曾致 15 运行全中断）、`ml/evaluate.py` `--no-benchmark` 汇总 `KeyError: 'scope'`、汇总键名 `patiences` 被列表覆盖
+- [x] **未替换默认模型**；`best_model.pth`/`class_names.json` mtime 仍为 2026-10-13；`data/processed` 仍 3311/369/3669；A5 难例仍待人工审查
+- [x] 回归 `pytest 133/133`；三个独立提交：`0607357`（代码准备）、`7e5a268`（缺陷修复）、阶段一/二与报告
+
 ## 后续可选（未开始，需用户确认）
-- [ ] **A3b 替换基线权重**：证据已充分（配对 5/5 全正、幅度远超噪声、无延迟代价），但按约定等用户确认；**替换前建议先定 A3b 的早停策略**（对比 patience 3/5/10）
+- [ ] **A3b + patience=10 替换基线权重**：证据已充分（配对 5/5 全正、test Macro-F1 0.8836±0.0036、延迟不变、种子间方差最小），但按约定等用户确认；正式训练固定 `--epochs 30 --patience 10`
+- [ ] 若追求更高精度，可再试 patience=15/20（LR 在 epoch 20 后已冻结，预期收益有限）
 - [ ] 组合实验：A3b + RandomErasing / + label smoothing 是否叠加
 - [ ] EfficientNet-B0 单独调参后在延迟预算内与 ResNet18 公平比较
 - [ ] Mixup 延长到 50+ 轮再评估；A2c 多 seed 确认

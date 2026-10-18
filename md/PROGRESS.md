@@ -25,7 +25,60 @@
 - 本轮测试在正式库新增 1 条记录（#65，用户要求的真实识别联调产生）
 
 ## 阻塞 / 等待
-- 无（A3b 替换基线权重待用户确认；替换前建议先定 A3b 早停策略）
+- 无（A3b + patience=10 替换基线权重待用户确认；证据已充分）
+
+## 早停策略（patience）配对对比（2026-10-18，已完成）
+用户要求"开展 A3b 的早停策略对比实验，比较 patience=3、5、10，再据结果提交最终模型切换建议"。
+约束：不替换正式模型、用 `data/processed_clean`、三组除 patience 外逐项一致、相同 5 种子配对、
+按验证集选模、**先据验证集定 patience 再对选定配置做一次 test 评估**。
+
+**代码准备（提交 0607357）**
+- `ml/evaluate.py` 增加 `--split {test,val,train}`（默认 `test`，行为完全不变），
+  用于对已选 checkpoint 单独评估验证集、获得 val Macro-F1，全程不读 test split
+- 新增 `scripts/run_earlystop_validation.py`：15 运行矩阵 + 两阶段强制分离
+  （`--stage test` 不提供 `--patience` 直接报错，防止据 test 挑 patience）
+- `tests/test_evaluate.py` 补 9 个用例；`pytest 133/133`
+
+**阶段一：15 运行训练 + val 评估（不看 test）**
+- 统一协议：`--arch resnet18 --augment baseline --freeze-strategy none --batch-size 32
+  --lr-head 1e-3 --lr-backbone 1e-4 --step-size 5 --gamma 0.1 --epochs 30`
+- 验证集（n=5）：
+
+| patience | val Acc | val Macro-F1 | train/val 差距 | 跨种子 std | 轮数 | 训练耗时 |
+|---|---|---|---|---|---|---|
+| 3 | 0.8924±0.0063 | 0.8918±0.0059 | 0.1002±0.0140 | 0.0063 | 6.0 | 121s |
+| 5 | 0.9054±0.0101 | 0.9047±0.0102 | 0.0965±0.0081 | 0.0101 | 14.4 | 288s |
+| 10 | **0.9092±0.0056** | **0.9081±0.0059** | **0.0957±0.0048** | **0.0056** | 21.0 | 421s |
+
+- 配对差值（相对 p3）：p5 +0.0130±0.0104（**仅 4/5 为正**，seed7 −0.0027）；
+  **p10 +0.0168±0.0059、5/5 全正**
+
+**选定 patience=10**（依据验证集）：均值最高、跨种子最稳、5/5 全正、过拟合最轻。
+机制：A3b 的 head lr=1e-3 使 val_acc 第 1–2 轮即冲高回落，p3 第 4 轮即停，
+错过 StepLR 在 epoch 5/10/15 衰减后的提升（p5/p10 最佳 epoch 分别在 6–13 / 6–17）。
+
+**阶段二：仅对 p10 做一次 test 评估（n=5）**
+- Acc **0.8851±0.0035** / Macro-F1 **0.8836±0.0036** / Weighted-F1 0.8844±0.0035
+- 延迟 2.2968±0.0848 ms（与基线持平）、吞吐约 1554 img/s
+- 种子间 std 0.0035，约为 A3b p3（0.0182）的 **1/5**
+- 相对同划分 baseline 配置（0.8055）为 Macro-F1 **+0.0781**
+- 逐类最弱：american_pit_bull_terrier 0.5818、staffordshire_bull_terrier 0.6187、
+  Ragdoll 0.7154；最强 japanese_chin 0.9881、keeshond 0.9867
+
+**结论**：建议 **A3b + patience=10** 作为下一版默认模型（正式训练固定
+`--epochs 30 --patience 10`），**未自动替换，待用户确认**。
+权重在 `artifacts/exp_esp_p10_seed*/`，报告 `reports/earlystop_patience_report.md`。
+
+**修复 3 个被本轮暴露的缺陷（提交 7e5a268）**
+1. 运行器 `_run()` 打印子进程输出尾部时 `UnicodeEncodeError`（GBK 控制台遇 U+FFFD），
+   曾致 15 个运行全部中断；改为 `_console_print()` 安全转码，三个脚本统一修复
+2. `ml/evaluate.py` `build_summary_markdown()` 在 `--no-benchmark` 时 `KeyError: 'scope'`
+   （该路径历史从未执行）；改为缺失时跳过计时章节
+3. 汇总键名 `patiences` 被列表覆盖，mean/std 全部丢失；改名 `patience_values`
+
+**约束遵守**：`best_model.pth`/`class_names.json` mtime 仍为 2026-10-13；
+`data/processed` 仍 3311/369/3669；`data/processed_clean` 仍 3288/368/3669；
+未据 test 调整参数；A5 难例仍待人工审查；`pytest 133/133`
 
 ## 泄漏审查与多种子配对验证（2026-10-17，A3b 替换默认模型的前置检查）
 用户要求"在决定是否替换默认模型前，先完成数据泄漏风险检查与多随机种子对比"。

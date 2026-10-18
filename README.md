@@ -396,6 +396,45 @@ val_acc 与 test 排序一致，无据 test 选模迹象；逐类 36/37 提升�
 替换，等待用户确认**。替换前建议先确定 A3b 的早停策略（patience 3 对 A3b
 偏早，2/5 种子在第 1 轮即最佳后回落）。
 
+### 早停策略（patience）配对对比（2026-10-18）
+
+完整报告见 [`reports/earlystop_patience_report.md`](reports/earlystop_patience_report.md)。
+
+在 `data/processed_clean` 上对 A3b 配置做 patience=3/5/10 三组配对实验
+（5 个相同种子、统一 `max_epochs=30`，除 `--patience` 外所有训练条件逐项
+一致），**先用验证集选型、再对选定配置做一次 test 评估**。
+
+验证集结果（n=5）：
+
+| patience | val Accuracy | val Macro-F1 | train/val 差距 | 跨种子 std | 实际轮数 | 训练耗时 |
+|---|---|---|---|---|---|---|
+| 3（当前默认） | 0.8924 ± 0.0063 | 0.8918 ± 0.0059 | 0.1002 ± 0.0140 | 0.0063 | 6.0 | 121 s |
+| 5 | 0.9054 ± 0.0101 | 0.9047 ± 0.0102 | 0.0965 ± 0.0081 | 0.0101 | 14.4 | 288 s |
+| **10** | **0.9092 ± 0.0056** | **0.9081 ± 0.0059** | **0.0957 ± 0.0048** | **0.0056** | 21.0 | 421 s |
+
+配对差值（相对 patience=3）：patience=5 为 +0.0130 ± 0.0104（**仅 4/5 为正**，
+seed7 回退 −0.0027）；**patience=10 为 +0.0168 ± 0.0059（5/5 全正）**。
+
+**依据验证集选定 patience=10**（均值最高、跨种子最稳、5/5 全正、过拟合最轻）。
+机制：A3b 的 head lr=1e-3 使 val_acc 在第 1–2 轮即冲高回落，patience=3 因此
+在第 4 轮就停，错过了 StepLR 在 epoch 5/10/15 衰减后的提升
+（patience=5/10 的最佳 epoch 分别落在 6–13 与 6–17）。
+
+阶段二（仅对 patience=10，5 种子，test 各评估一次）：
+
+| 指标 | 值 |
+|---|---|
+| test Accuracy | **0.8851 ± 0.0035** |
+| test Macro-F1 | **0.8836 ± 0.0036** |
+| test Weighted-F1 | 0.8844 ± 0.0035 |
+| 单张延迟 | 2.2968 ± 0.0848 ms |
+
+种子间标准差（0.0035）约为 A3b patience=3（0.0182）的 **1/5**。
+相对同划分的 baseline 配置（0.8055）为 **Macro-F1 +0.0781**；延迟与基线持平。
+
+**结论：建议采用 A3b + patience=10 作为下一版默认模型，但按约定未自动替换，
+等待用户确认。** 实验权重在 `artifacts/exp_esp_p10_seed*/`。
+
 ## 已知限制
 
 - **模型仅支持训练时的 37 个品种**（12 猫 + 25 狗）。边境牧羊犬（Border Collie）等
@@ -403,12 +442,13 @@ val_acc 与 test 排序一致，无据 test 选模迹象；逐类 36/37 提升�
   详见 [`reports/thesis_materials.md`](reports/thesis_materials.md) 第 9 节；
 - 普通分类器不保证识别训练类别之外的动物、物体或无效图片；
 - Softmax 分数是模型在当前类别集合上的归一化分数，不应宣称为真实正确概率；
-- **默认模型仍为阶段 2 基线**（test Macro-F1 0.8022）。A2–A4 实验与 5 种子
-  配对验证均已完成（见
+- **默认模型仍为阶段 2 基线**（test Macro-F1 0.8022）。A2–A4 实验、5 种子
+  配对验证与早停 patience 对比均已完成（见
   [`reports/model_experiments_report.md`](reports/model_experiments_report.md)、
-  [`reports/seed_validation_report.md`](reports/seed_validation_report.md)），
-  最优候选为 A3b 分层学习率（去重划分上 Macro-F1 0.8715 ± 0.0182，
-  配对 5/5 全正），保存在 `artifacts/exp_A3b_layered_lr/`，
+  [`reports/seed_validation_report.md`](reports/seed_validation_report.md)、
+  [`reports/earlystop_patience_report.md`](reports/earlystop_patience_report.md)），
+  最优候选为 **A3b + patience=10**（去重划分上 test Macro-F1 0.8836 ± 0.0036），
+  保存在 `artifacts/exp_esp_p10_seed*/`，
   但**尚未替换为默认模型**（需用户确认；替换前建议先定早停策略）；
 - 识别页品种名显示为中文（映射见 `frontend/src/utils/breedNames.js`，未映射标签
   回退显示英文原名）；历史与统计页保持数据库原始英文标签；

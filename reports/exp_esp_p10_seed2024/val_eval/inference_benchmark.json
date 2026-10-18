@@ -1,0 +1,14 @@
+{
+  "evaluated_at": "2026-10-18T05:40:40.089485+00:00",
+  "weights_path": "E:\\CatDogBreedNet\\artifacts\\exp_esp_p10_seed2024\\best_model.pth",
+  "environment": {
+    "python": "3.11.9",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "platform": "Windows-10-10.0.22621-SP0"
+  },
+  "model_only_batch_benchmark": null,
+  "end_to_end_benchmark": null
+}

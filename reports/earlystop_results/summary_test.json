@@ -1,0 +1,121 @@
+{
+  "stage": "test",
+  "patiences": {
+    "10": {
+      "seeds": [
+        7,
+        42,
+        123,
+        2024,
+        20261017
+      ],
+      "n": 5,
+      "per_run": {
+        "7": {
+          "test_accuracy": 0.8882529299536659,
+          "test_macro_f1": 0.8867303597813582,
+          "test_weighted_f1": 0.8873730387132162,
+          "single_image_latency_ms_mean": 2.35920515625736,
+          "throughput_images_per_second": 1536.0684472193211,
+          "evaluate_seconds": 27.23
+        },
+        "42": {
+          "test_accuracy": 0.8885254837830472,
+          "test_macro_f1": 0.8874770164659999,
+          "test_weighted_f1": 0.8882979293268288,
+          "single_image_latency_ms_mean": 2.3535207812543035,
+          "throughput_images_per_second": 1567.8542836267804,
+          "evaluate_seconds": 53.67
+        },
+        "123": {
+          "test_accuracy": 0.8800763150722267,
+          "test_macro_f1": 0.8786319356719922,
+          "test_weighted_f1": 0.8795653122399921,
+          "single_image_latency_ms_mean": 2.3475646875183998,
+          "throughput_images_per_second": 1419.6630429728884,
+          "evaluate_seconds": 27.3
+        },
+        "2024": {
+          "test_accuracy": 0.8844371763423277,
+          "test_macro_f1": 0.8829539217827331,
+          "test_weighted_f1": 0.8836324845748419,
+          "single_image_latency_ms_mean": 2.1638264062303847,
+          "throughput_images_per_second": 1656.2041147342188,
+          "evaluate_seconds": 27.32
+        },
+        "20261017": {
+          "test_accuracy": 0.8841646225129463,
+          "test_macro_f1": 0.8824493719544385,
+          "test_weighted_f1": 0.8832355302157859,
+          "single_image_latency_ms_mean": 2.259874999992917,
+          "throughput_images_per_second": 1591.3375540308546,
+          "evaluate_seconds": 27.18
+        }
+      },
+      "test_accuracy": {
+        "mean": 0.8850913055328429,
+        "std": 0.003472254489875442
+      },
+      "test_macro_f1": {
+        "mean": 0.8836485211313043,
+        "std": 0.00357916410167049
+      },
+      "test_weighted_f1": {
+        "mean": 0.8844208590141329,
+        "std": 0.003512474636130998
+      },
+      "single_image_latency_ms_mean": {
+        "mean": 2.296798406250673,
+        "std": 0.08475573181985163
+      },
+      "throughput_images_per_second": {
+        "mean": 1554.2254885168127,
+        "std": 87.17714661466307
+      },
+      "evaluate_seconds": {
+        "mean": 32.540000000000006,
+        "std": 11.81216110624978
+      }
+    }
+  },
+  "paired_vs_baseline_patience": {
+    "baseline_patience": 10,
+    "metrics": {}
+  },
+  "generated_at": "2026-10-18T06:05:30.731620+00:00",
+  "data_dir": "E:\\CatDogBreedNet\\data\\processed_clean",
+  "seeds": [
+    42,
+    2024,
+    7,
+    123,
+    20261017
+  ],
+  "patience_values": [
+    10
+  ],
+  "max_epochs": 30,
+  "shared_train_args": [
+    "--arch",
+    "resnet18",
+    "--augment",
+    "baseline",
+    "--freeze-strategy",
+    "none",
+    "--batch-size",
+    "32",
+    "--lr-head",
+    "1e-3",
+    "--lr-backbone",
+    "1e-4",
+    "--step-size",
+    "5",
+    "--gamma",
+    "0.1",
+    "--epochs",
+    "30"
+  ],
+  "completed": 5,
+  "total": 5,
+  "note": "stage=train-val 的指标全部来自验证集，用于选择 patience；stage=test 只能对预先选定的 patience 运行，test 结果不参与任何策略选择。"
+}

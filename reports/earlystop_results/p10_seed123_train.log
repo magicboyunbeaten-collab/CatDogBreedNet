@@ -1,0 +1,27 @@
+[train] device=cuda arch=resnet18 classes=37 augment=baseline freeze=none mixup_alpha=0.0 label_smoothing=0.0 train=3288 val=368 test=3669
+[train] gpu=NVIDIA GeForce RTX 4060 Laptop GPU vram=8.0 GiB
+[train] freeze strategy 'none': all parameters trainable
+[epoch   1/30] train_loss=1.2759 train_acc=0.6922 val_loss=0.5203 val_acc=0.8533 lr=1.00e-03 (19.6s)
+[train] new best val_acc=0.8533 at epoch 1; saved best_model.pth
+[epoch   2/30] train_loss=0.3432 train_acc=0.9075 val_loss=0.3978 val_acc=0.8668 lr=1.00e-03 (19.3s)
+[train] new best val_acc=0.8668 at epoch 2; saved best_model.pth
+[epoch   3/30] train_loss=0.1559 train_acc=0.9681 val_loss=0.3519 val_acc=0.8913 lr=1.00e-03 (19.3s)
+[train] new best val_acc=0.8913 at epoch 3; saved best_model.pth
+[epoch   4/30] train_loss=0.0976 train_acc=0.9772 val_loss=0.3962 val_acc=0.8804 lr=1.00e-03 (19.4s)
+[epoch   5/30] train_loss=0.0642 train_acc=0.9860 val_loss=0.3502 val_acc=0.8913 lr=1.00e-04 (19.7s)
+[epoch   6/30] train_loss=0.0396 train_acc=0.9948 val_loss=0.3223 val_acc=0.9022 lr=1.00e-04 (19.9s)
+[train] new best val_acc=0.9022 at epoch 6; saved best_model.pth
+[epoch   7/30] train_loss=0.0279 train_acc=0.9973 val_loss=0.3345 val_acc=0.8913 lr=1.00e-04 (19.7s)
+[epoch   8/30] train_loss=0.0281 train_acc=0.9973 val_loss=0.3239 val_acc=0.8940 lr=1.00e-04 (19.7s)
+[epoch   9/30] train_loss=0.0228 train_acc=0.9985 val_loss=0.3258 val_acc=0.8995 lr=1.00e-04 (19.4s)
+[epoch  10/30] train_loss=0.0204 train_acc=0.9988 val_loss=0.3311 val_acc=0.8913 lr=1.00e-05 (19.5s)
+[epoch  11/30] train_loss=0.0179 train_acc=0.9988 val_loss=0.3334 val_acc=0.8859 lr=1.00e-05 (19.4s)
+[epoch  12/30] train_loss=0.0171 train_acc=0.9988 val_loss=0.3288 val_acc=0.8859 lr=1.00e-05 (19.7s)
+[epoch  13/30] train_loss=0.0185 train_acc=0.9988 val_loss=0.3360 val_acc=0.8886 lr=1.00e-05 (20.0s)
+[epoch  14/30] train_loss=0.0189 train_acc=0.9994 val_loss=0.3265 val_acc=0.8913 lr=1.00e-05 (19.9s)
+[epoch  15/30] train_loss=0.0195 train_acc=0.9991 val_loss=0.3319 val_acc=0.8886 lr=1.00e-06 (19.5s)
+[epoch  16/30] train_loss=0.0173 train_acc=0.9979 val_loss=0.3203 val_acc=0.8995 lr=1.00e-06 (19.6s)
+[train] early stopping: no val_acc improvement for 10 epochs
+[train] done in 315.2s; best_val_acc=0.9022 (epoch 6)
+[train] artifacts: E:\CatDogBreedNet\artifacts\exp_esp_p10_seed123/ (best_model.pth, last_model.pth, class_names.json, experiment_config.json)
+[train] reports: E:\CatDogBreedNet\reports\exp_esp_p10_seed123\train_log.csv, loss_curve.png, accuracy_curve.png

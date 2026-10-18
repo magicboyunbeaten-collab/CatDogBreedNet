@@ -1,0 +1,5 @@
+[evaluate] class_names.json matches the checkpoint (37 classes)
+[evaluate] device=cuda split=val images=368 classes=37
+[evaluate] done: 368 images in 1.52s; accuracy=0.8940 macro_f1=0.8930 weighted_f1=0.8930
+[evaluate] saved test_metrics.json, classification_report.csv, confusion_matrix.csv, confusion_matrix.png, confusion_matrix_normalized.png
+[evaluate] saved evaluation_summary.md

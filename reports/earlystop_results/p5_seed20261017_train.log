@@ -1,0 +1,24 @@
+[train] device=cuda arch=resnet18 classes=37 augment=baseline freeze=none mixup_alpha=0.0 label_smoothing=0.0 train=3288 val=368 test=3669
+[train] gpu=NVIDIA GeForce RTX 4060 Laptop GPU vram=8.0 GiB
+[train] freeze strategy 'none': all parameters trainable
+[epoch   1/30] train_loss=1.2582 train_acc=0.6992 val_loss=0.4668 val_acc=0.8668 lr=1.00e-03 (19.6s)
+[train] new best val_acc=0.8668 at epoch 1; saved best_model.pth
+[epoch   2/30] train_loss=0.3001 train_acc=0.9234 val_loss=0.3984 val_acc=0.8777 lr=1.00e-03 (19.3s)
+[train] new best val_acc=0.8777 at epoch 2; saved best_model.pth
+[epoch   3/30] train_loss=0.1604 train_acc=0.9632 val_loss=0.3781 val_acc=0.8777 lr=1.00e-03 (19.4s)
+[epoch   4/30] train_loss=0.0950 train_acc=0.9796 val_loss=0.4132 val_acc=0.8750 lr=1.00e-03 (19.8s)
+[epoch   5/30] train_loss=0.0598 train_acc=0.9887 val_loss=0.3825 val_acc=0.8886 lr=1.00e-04 (19.6s)
+[train] new best val_acc=0.8886 at epoch 5; saved best_model.pth
+[epoch   6/30] train_loss=0.0315 train_acc=0.9967 val_loss=0.3335 val_acc=0.8995 lr=1.00e-04 (19.5s)
+[train] new best val_acc=0.8995 at epoch 6; saved best_model.pth
+[epoch   7/30] train_loss=0.0268 train_acc=0.9967 val_loss=0.3248 val_acc=0.9076 lr=1.00e-04 (19.4s)
+[train] new best val_acc=0.9076 at epoch 7; saved best_model.pth
+[epoch   8/30] train_loss=0.0251 train_acc=0.9979 val_loss=0.3174 val_acc=0.8886 lr=1.00e-04 (19.6s)
+[epoch   9/30] train_loss=0.0228 train_acc=0.9973 val_loss=0.3254 val_acc=0.8995 lr=1.00e-04 (19.6s)
+[epoch  10/30] train_loss=0.0197 train_acc=0.9994 val_loss=0.3170 val_acc=0.8967 lr=1.00e-05 (19.7s)
+[epoch  11/30] train_loss=0.0149 train_acc=0.9997 val_loss=0.3216 val_acc=0.8967 lr=1.00e-05 (19.5s)
+[epoch  12/30] train_loss=0.0180 train_acc=0.9985 val_loss=0.3117 val_acc=0.9076 lr=1.00e-05 (19.5s)
+[train] early stopping: no val_acc improvement for 5 epochs
+[train] done in 235.8s; best_val_acc=0.9076 (epoch 7)
+[train] artifacts: E:\CatDogBreedNet\artifacts\exp_esp_p5_seed20261017/ (best_model.pth, last_model.pth, class_names.json, experiment_config.json)
+[train] reports: E:\CatDogBreedNet\reports\exp_esp_p5_seed20261017\train_log.csv, loss_curve.png, accuracy_curve.png

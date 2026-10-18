@@ -367,3 +367,93 @@
 - 未据 test 调整任何 epoch/种子/参数；未替换默认模型
 - A5 的 147 个难例**仍保留为人工审查任务**，未修改任何标签
 - `pytest tests/` **124/124** 通过（114 旧 + 10 新增）
+
+## 2026-10-18（早停策略 patience 配对对比，A3b 切换默认模型的前置检查）
+
+用户要求"开展 A3b 的早停策略对比实验，比较 patience=3、5、10，再据结果提交
+最终模型切换建议"，并明确：不替换当前正式模型、用 `data/processed_clean`、
+三组除 patience 外逐项一致、相同 5 种子配对、按验证集选模、
+**先据验证集定 patience 再对预先确定的配置做一次独立 test 评估**、
+若 patience=5/10 无明显优势或仍高度波动则如实记录并保留当前正式模型。
+
+分三个提交：`0607357`（代码准备）、`7e5a268`（缺陷修复）、
+阶段一/二与报告（见文末）。
+
+### 代码准备（0607357）
+- `ml/evaluate.py` 新增 `--split {test,val,train}`，**默认 test、默认行为完全
+  不变**：main() 按 split 取 loader，metrics 记录 split 与口径说明，benchmark
+  scope、混淆矩阵标题、evaluation_summary 标题与已知限制均随 split 变化。
+  用途：对已选 checkpoint 单独评估验证集以获得 val Macro-F1，全程不读 test
+- 新增 `scripts/run_earlystop_validation.py`：patience 3/5/10 × 5 种子共 15 运行，
+  统一 `max_epochs=30`，`--stage train-val` 只训练+只做 val 评估，
+  `--stage test` **必须显式提供 `--patience`** 才能运行（流程上杜绝据 test 挑 patience）；
+  断点续跑、单运行失败不影响其余；汇总各组 mean/std 与相对 patience=3 的
+  同种子配对差值
+- `tests/test_evaluate.py` 补 9 个用例；`pytest 133/133`
+
+### 阶段一：15 运行训练 + 验证集评估（未读取 test）
+统一协议（除 `--patience` 外逐项一致）：
+`--arch resnet18 --augment baseline --freeze-strategy none --batch-size 32
+--lr-head 1e-3 --lr-backbone 1e-4 --step-size 5 --gamma 0.1 --epochs 30
+--data-dir data/processed_clean`；种子 42/2024/7/123/20261017。
+
+| patience | val Acc | val Macro-F1 | val Weighted-F1 | train/val 差距 | 跨种子 std | 轮数 | 训练耗时 |
+|---|---|---|---|---|---|---|---|
+| 3 | 0.8924±0.0063 | 0.8918±0.0059 | 0.8918±0.0062 | 0.1002±0.0140 | 0.0063 | 6.0±2.9 | 121±56s |
+| 5 | 0.9054±0.0101 | 0.9047±0.0102 | 0.9049±0.0103 | 0.0965±0.0081 | 0.0101 | 14.4±3.0 | 288±59s |
+| 10 | **0.9092±0.0056** | **0.9081±0.0059** | 0.9083±0.0060 | **0.0957±0.0048** | **0.0056** | 21.0±5.1 | 421±104s |
+
+配对差值（相对 patience=3）：p5 val Acc +0.0130±0.0104（**仅 4/5 为正**，
+seed7 −0.0027）；**p10 val Acc +0.0168±0.0059、5/5 全正**，
+val Macro-F1 +0.0164±0.0059、5/5 全正。
+
+**依据验证集选定 patience=10**：均值最高、跨种子最稳、配对 5/5 全正、
+过拟合差距最小。机制：A3b 的 head lr=1e-3 使 val_acc 在第 1–2 轮即冲高回落，
+patience=3 因此在第 4 轮就停，错过了 StepLR 在 epoch 5/10/15 衰减后的提升
+（p5/p10 的最佳 epoch 分别落在 6–13 与 6–17）。
+
+### 阶段二：仅对预先选定的 patience=10 做一次 test 评估（n=5）
+| 指标 | 值 |
+|---|---|
+| test Top-1 Accuracy | **0.8851 ± 0.0035** |
+| test Macro-F1 | **0.8836 ± 0.0036** |
+| test Weighted-F1 | 0.8844 ± 0.0035 |
+| 单张延迟 | 2.2968 ± 0.0848 ms（与基线持平） |
+| 批吞吐 | 约 1554 images/s |
+
+种子间 std 0.0035，约为 A3b patience=3（0.0182）的 **1/5**。
+相对同划分 baseline 配置（0.8055）为 Macro-F1 **+0.0781**。
+逐类最弱：american_pit_bull_terrier 0.5818、staffordshire_bull_terrier 0.6187、
+Ragdoll 0.7154；最强：japanese_chin 0.9881、keeshond 0.9867。
+37 类中 6 类低于 0.80，瓶颈仍是两种斗牛犬与 Ragdoll（细粒度相似品种）。
+
+### 结论与建议
+**建议采用 A3b + patience=10 作为下一版默认模型**（正式训练固定
+`--epochs 30 --patience 10`），依据：验证集与测试集双向支持、配对 5/5 全正、
+延迟不变、种子间方差最小。**但按约定未自动替换，等待用户确认。**
+
+### 修复 3 个被本轮暴露的缺陷（7e5a268）
+1. 三个实验运行器的 `_run()` 打印子进程输出尾部时抛 `UnicodeEncodeError`：
+   子进程输出以 `errors="replace"` 解码会含 U+FFFD，而 Windows 控制台是 GBK。
+   **真实发生过：p3_seed42 的 val 评估已成功产出全部文件，运行器却死在打印
+   tail 上，导致 15 个运行全部中断。** 新增 `_console_print()` 按控制台编码
+   安全转码，三个脚本统一修复
+2. `ml/evaluate.py` 的 `build_summary_markdown()` 在 `--no-benchmark` 时崩溃：
+   传入空 dict 却直接取 `batch_bench['scope']`，报 `KeyError`。该路径历史
+   从未被执行（此前评估都带 benchmark），直到用 `--no-benchmark` 做验证集
+   评估才触发。改为缺失时跳过计时章节并说明；硬编码 "37 个类别" 改为
+   `metrics['num_classes']`
+3. `run_earlystop_validation.py` 的 `summary['patiences']` 被列表覆盖，
+   mean/std 全部丢失（与 `run_seed_validation.py` 曾出现的同一类错误）；
+   改名 `patience_values`
+
+### 约束遵守与回归（本轮）
+- `artifacts/best_model.pth`、`class_names.json`、`experiment_config.json`
+  **未改动**（mtime 仍为 2026-10-13）
+- `data/processed/` 仍 3311/369/3669；`data/processed_clean/` 仍 3288/368/3669，
+  其校验记录（pHash 跨划分 0 / MD5 跨划分 0 / 跨集合簇 0）与磁盘一致
+- 未据 test 调整任何参数；未替换默认模型
+- A5 的 147 个难例仍保留为人工审查任务，未修改任何标签
+- `pytest tests/` **133/133** 通过
+- 产物：`reports/earlystop_patience_report.md`、`reports/earlystop_results/`、
+  `reports/exp_esp_*/`、`artifacts/exp_esp_*/`（权重不入 Git）

@@ -492,7 +492,8 @@ def main(argv: list[str] | None = None) -> int:
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "data_dir": str(args.data_dir),
         "seeds": seeds,
-        "patiences": patiences,
+        # 注意：键名不能叫 "patiences"，那会覆盖 build_summary 产出的统计字典
+        "patience_values": patiences,
         "max_epochs": MAX_EPOCHS,
         "shared_train_args": SHARED_TRAIN_ARGS,
         "completed": sum(1 for r in records if r["status"] == "completed"),
