@@ -65,6 +65,22 @@ SHARED_TRAIN_ARGS = [
 RESULTS_DIR = REPORTS_DIR / "earlystop_results"
 
 
+def _console_print(text: str) -> None:
+    """打印可能包含控制台编码无法表示的字符的文本。
+
+    子进程输出用 ``errors="replace"`` 解码，可能含 ``\\ufffd`` 替换字符；
+    在 GBK 控制台上直接 print 会抛 UnicodeEncodeError 并使整个运行器崩溃
+    （本项目真实发生过：val 评估已成功，运行器却死在打印 tail 上）。
+    """
+    encoding = getattr(sys.stdout, "encoding", None) or "utf-8"
+    try:
+        text.encode(encoding)
+    except UnicodeEncodeError:
+        text = text.encode(encoding, errors="replace").decode(
+            encoding, errors="replace")
+    print(text, flush=True)
+
+
 def _run(command: list[str], log_path: Path) -> subprocess.CompletedProcess:
     print(f"[esp] $ {' '.join(command)}", flush=True)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -75,7 +91,7 @@ def _run(command: list[str], log_path: Path) -> subprocess.CompletedProcess:
             text=True, encoding="utf-8", errors="replace")
         log.write(process.stdout or "")
     tail = "\n".join((process.stdout or "").strip().splitlines()[-5:])
-    print(f"[esp] exit={process.returncode}\n{tail}", flush=True)
+    _console_print(f"[esp] exit={process.returncode}\n{tail}")
     return process
 
 

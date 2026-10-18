@@ -292,6 +292,24 @@ def test_save_confusion_matrix_accepts_split_without_changing_matrix(tmp_path):
     assert (tmp_path / "c.png").stat().st_size > 5000
 
 
+def test_build_summary_markdown_handles_missing_benchmark():
+    """`--no-benchmark` 会传入空 dict；此前会因取 ['scope'] 直接崩溃。
+
+    这是本项目真实暴露的潜伏缺陷：历史评估都带 benchmark，所以空 dict 路径
+    从未被执行过，直到用 `--no-benchmark` 做验证集评估时才触发。
+    """
+    metrics = toy_metrics()
+    env = {"evaluated_at": "now", "weights_path": "w.pth", "dataset": "toy",
+           "split": "val", "python": "3.11", "torch": "2", "torchvision": "0",
+           "gpu": "CPU", "platform": "win"}
+    markdown = build_summary_markdown(metrics, {}, {}, env, {})
+    assert "未做推理计时" in markdown
+    # 指标章节必须仍然完整
+    assert "Macro-F1" in markdown
+    assert f"{metrics['macro_f1']:.4f}" in markdown
+    assert "验证集" in markdown
+
+
 def test_build_summary_markdown_split_aware():
     metrics = toy_metrics()
     bench = {"scope": "model_only", "device": "cpu", "gpu": None,

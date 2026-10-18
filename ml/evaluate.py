@@ -489,42 +489,50 @@ def build_summary_markdown(metrics: dict, batch_bench: dict, e2e_bench: dict,
     else:
         lines.append("## 无预测样本的类别")
         lines.append("")
-        lines.append("无——37 个类别在测试集中都至少被预测过一次，"
-                     "`zero_division=0` 未实际生效。")
+        lines.append(f"无——{metrics['num_classes']} 个类别在该划分中都至少被"
+                     f"预测过一次，`zero_division=0` 未实际生效。")
     lines.append("")
 
-    lines.append("## 推理性能（两个计时口径，不可直接互比）")
-    lines.append("")
-    lines.append(f"### 口径 A：模型纯推理（{batch_bench['scope']}）")
-    lines.append("")
-    lines.append(f"- 设备：{batch_bench['device']}"
-                 f"{'（' + batch_bench['gpu'] + '）' if batch_bench['gpu'] else ''}")
-    lines.append(f"- batch size：{batch_bench['batch_size']}；"
-                 f"预热 {batch_bench['warmup_batches']} 个 batch；"
-                 f"计时 {batch_bench['timed_batches']} 个 batch；"
-                 f"CUDA 同步：{batch_bench['cuda_synchronized']}")
-    lines.append(f"- 平均单 batch 时间："
-                 f"{batch_bench['mean_batch_seconds'] * 1000:.2f} ms")
-    lines.append(f"- 批处理吞吐："
-                 f"{batch_bench['throughput_images_per_second']:.1f} images/s")
-    single = batch_bench["single_image_latency_ms"]
-    lines.append(f"- 单张延迟（batch=1 单独前向，{single['samples']} 次）："
-                 f"平均 {single['mean']:.2f} ms / 中位数 "
-                 f"{single['median']:.2f} ms / P95 {single['p95']:.2f} ms")
-    lines.append("")
-    lines.append(f"### 口径 B：端到端（{e2e_bench['scope']}）")
-    lines.append("")
-    lines.append(f"- 包含图片文件读取、PIL 解码、预处理与模型前向；"
-                 f"batch size：{e2e_bench['batch_size']}；"
-                 f"预热 {e2e_bench['warmup_images']} 张；"
-                 f"计时 {e2e_bench['measured_images']} 张；"
-                 f"CUDA 同步：{e2e_bench['cuda_synchronized']}")
-    e2e_single = e2e_bench["single_image_latency_ms"]
-    lines.append(f"- 单张延迟：平均 {e2e_single['mean']:.2f} ms / 中位数 "
-                 f"{e2e_single['median']:.2f} ms / P95 {e2e_single['p95']:.2f} ms")
-    lines.append(f"- 吞吐：{e2e_bench['throughput_images_per_second']:.1f} "
-                 f"images/s")
-    lines.append("")
+    if batch_bench and e2e_bench:
+        lines.append("## 推理性能（两个计时口径，不可直接互比）")
+        lines.append("")
+        lines.append(f"### 口径 A：模型纯推理（{batch_bench['scope']}）")
+        lines.append("")
+        lines.append(f"- 设备：{batch_bench['device']}"
+                     f"{'（' + batch_bench['gpu'] + '）' if batch_bench['gpu'] else ''}")
+        lines.append(f"- batch size：{batch_bench['batch_size']}；"
+                     f"预热 {batch_bench['warmup_batches']} 个 batch；"
+                     f"计时 {batch_bench['timed_batches']} 个 batch；"
+                     f"CUDA 同步：{batch_bench['cuda_synchronized']}")
+        lines.append(f"- 平均单 batch 时间："
+                     f"{batch_bench['mean_batch_seconds'] * 1000:.2f} ms")
+        lines.append(f"- 批处理吞吐："
+                     f"{batch_bench['throughput_images_per_second']:.1f} images/s")
+        single = batch_bench["single_image_latency_ms"]
+        lines.append(f"- 单张延迟（batch=1 单独前向，{single['samples']} 次）："
+                     f"平均 {single['mean']:.2f} ms / 中位数 "
+                     f"{single['median']:.2f} ms / P95 {single['p95']:.2f} ms")
+        lines.append("")
+        lines.append(f"### 口径 B：端到端（{e2e_bench['scope']}）")
+        lines.append("")
+        lines.append(f"- 包含图片文件读取、PIL 解码、预处理与模型前向；"
+                     f"batch size：{e2e_bench['batch_size']}；"
+                     f"预热 {e2e_bench['warmup_images']} 张；"
+                     f"计时 {e2e_bench['measured_images']} 张；"
+                     f"CUDA 同步：{e2e_bench['cuda_synchronized']}")
+        e2e_single = e2e_bench["single_image_latency_ms"]
+        lines.append(f"- 单张延迟：平均 {e2e_single['mean']:.2f} ms / 中位数 "
+                     f"{e2e_single['median']:.2f} ms / P95 {e2e_single['p95']:.2f} ms")
+        lines.append(f"- 吞吐：{e2e_bench['throughput_images_per_second']:.1f} "
+                     f"images/s")
+        lines.append("")
+    else:
+        # --no-benchmark：跳过计时章节（此前会因空 dict 取 ['scope'] 而崩溃）
+        lines.append("## 推理性能")
+        lines.append("")
+        lines.append("- 本次以 `--no-benchmark` 运行，未做推理计时；"
+                     "上方指标仍为真实推理结果。")
+        lines.append("")
     lines.append("## 产物文件")
     lines.append("")
     for label, path in product_paths.items():

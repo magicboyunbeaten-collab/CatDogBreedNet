@@ -86,6 +86,21 @@ EXPERIMENTS: list[dict] = [
 RESULTS_DIR = REPORTS_DIR / "exp_results"
 
 
+def _console_print(text: str) -> None:
+    """打印可能包含控制台编码无法表示的字符的文本。
+
+    子进程输出用 ``errors="replace"`` 解码，可能含 ``\\ufffd`` 替换字符；
+    在 GBK 控制台上直接 print 会抛 UnicodeEncodeError 并使运行器崩溃。
+    """
+    encoding = getattr(sys.stdout, "encoding", None) or "utf-8"
+    try:
+        text.encode(encoding)
+    except UnicodeEncodeError:
+        text = text.encode(encoding, errors="replace").decode(
+            encoding, errors="replace")
+    print(text, flush=True)
+
+
 def _run(command: list[str], log_path: Path) -> subprocess.CompletedProcess:
     """Run a subcommand, streaming output to the console and a log file."""
     print(f"[exp] $ {' '.join(command)}", flush=True)
@@ -97,7 +112,7 @@ def _run(command: list[str], log_path: Path) -> subprocess.CompletedProcess:
             text=True, encoding="utf-8", errors="replace")
         log.write(process.stdout or "")
     tail = "\n".join((process.stdout or "").strip().splitlines()[-6:])
-    print(f"[exp] exit={process.returncode}\n{tail}", flush=True)
+    _console_print(f"[exp] exit={process.returncode}\n{tail}")
     return process
 
 
