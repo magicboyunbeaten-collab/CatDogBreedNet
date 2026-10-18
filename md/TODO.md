@@ -168,8 +168,10 @@
 - [ ] EfficientNet-B0 单独调参后在延迟预算内与 ResNet18 公平比较
 - [ ] Mixup 延长到 50+ 轮再评估；A2c 多 seed 确认
 - [ ] A1 补充真实数据（需许可合规图片 + pHash 去重报告；新增数据须以 `data/processed_clean` 为泄漏检查基准）
-- [ ] U4 V2 训练与评估（135 类数据已就绪，训练方案待确认）
-- [ ] U5 可切换版本集成（含前端 135 类中文名映射扩展）、未知品种拒识
+- [ ] U4 V2 训练与评估（**136 类**数据已就绪，训练方案待确认）
+- [ ] U5 可切换版本集成（含前端 136 类中文名映射扩展）、未知品种拒识
+- [ ] 清理留档目录 `data/v2_processed_prev/`（V2.1 重建时留下的 135 类旧数据，
+      约 1.4 GB，需人工确认后删除）
 
 ## V2 扩展数据准备 U3（2026-10-18，已完成，未训练）
 - [x] `scripts/fetch_stanford_dogs.py`：下载 images/lists/annotation.tar 并校验；
@@ -181,9 +183,9 @@
       CatInBeard **401 需授权**排除；COCO 无品种标签排除；
       afifizzul 仅 Birman 排除；harish03 为野生猫科 demo 排除
 - [x] `scripts/build_v2_class_catalog.py`：人工核验别名表（**不做模糊自动合并**），
-      产出 `reports/v2_class_catalog.{csv,json}`；**类别并集 135 类**
-      （37 现有 + 98 新增犬种）；3 个 Oxford 犬种无 Stanford 对应；
-      2 个 Stanford 歧义类（`American_Staffordshire_terrier`、`cocker_spaniel`）排除
+      产出 `reports/v2_class_catalog.{csv,json}`；类别目录 **137 行候选**
+      （37 现有 + 100 Stanford 候选）→ 排除 1 项 → **最终有效 136 类**
+      （37 现有 + 99 新增犬种）；3 个 Oxford 犬种无 Stanford 对应
 - [x] **Border Collie 已核实存在**：`border_collie` / `n02106166-Border_collie` / 150 张；
       并识别 `Border_terrier`、`collie`、`Border_collie` 为三个不同品种
 - [x] 修正阶段中发现的真实问题：`Scotch_terrier` 是 `Scottish Terrier` 旧同义名
@@ -191,14 +193,14 @@
       簇分配改为**全局**（原按类分配会把跨类近重复拆到不同 split）
 - [x] `scripts/build_v2_dataset.py`：37 类原样沿用 `processed_clean` 划分 +
       新增品种 80/10/10 分层与**近重复簇整簇原子分配**（seed 42）；
-      质量检查 16,686 张（0 坏图 / 0 过低分辨率）、去除 78 张 MD5 重复；
+      质量检查 16,850 张（0 坏图 / 0 过低分辨率）、去除 78 张 MD5 重复；
       **与 `processed_clean/test` 近重复 0 对**（未删改原测试图）
-- [x] 产出 `data/v2_processed/`（train 16,525 / val 2,062 / test 5,346 = 23,933 张，
+- [x] 产出 `data/v2_processed/`（train 16,655 / val 2,079 / test 5,363 = 24,097 张，
       Git 忽略）+ `manifest.json` + 四份报告
-- [x] `scripts/verify_v2_dataset.py` 独立校验全通过：类别集合一致 135、
+- [x] `scripts/verify_v2_dataset.py` 独立校验全通过：类别集合一致 136、
       图片数一致、0 空类别、现有 37 类 7,325 个文件名全部保留、
       **跨 split MD5 重复 0、pHash 近重复 0**
-- [x] `tests/test_v2_data_pipeline.py` 28 例（合成数据）；`pytest 174/174`
+- [x] `tests/test_v2_data_pipeline.py` 34 例（合成数据）；`pytest 180/180`
 - [x] 修复偶发失败的测试根因：matplotlib 未固定后端导致
       `_tkinter.TclError: Can't find a usable tk.tcl`；
       `ml/train.py` 与 `ml/evaluate.py` 显式 `matplotlib.use("Agg")`
@@ -208,3 +210,30 @@
       文件数与字节完全一致；DB 142 条 integrity ok；uploads 142
 - [x] `.gitignore` 新增 `data/external_raw/`、`data/v2_processed/`
 - [x] **本阶段未训练 V2、未改默认模型路径**
+
+## V2.1 标签口径修正（2026-10-18，已完成，未训练）
+依据 `md/V2_AmStaff与可卡犬标签审核修正任务.md`。
+- [x] **AmStaff 由排除候选改为独立有效类别**：`american_staffordshire_terrier`
+      （中文名「美国斯塔福郡梗」），源 `n02093428-American_Staffordshire_terrier`
+      164 张 → train 130 / val 17 / test 17
+- [x] **APBT 保持独立**：`american_pit_bull_terrier` 保留原有类别与数据
+      （90/10/100），**不设 AmStaff 别名、不合并、不移动/重命名/重标其文件**；
+      抽查混入 0 张、文件名交集 0
+- [x] **`cocker_spaniel` 继续排除**：理由改为稳定表述「来源标签无法可靠区分
+      美式/英式可卡犬；不进行猜测性重标」；有效 split 中目录数 0；
+      Oxford `english_cocker_spaniel` 完整保留
+- [x] **`scottish_terrier`↔`Scotch_terrier` 维持已验证别名**，报告不再称其歧义
+- [x] `border_collie`(144) / `collie`(153) / `border_terrier`(172) 三类独立
+- [x] 类别目录 **137 行候选 → 排除 1 → 最终有效 136 类**；
+      summary 新增 `catalog_rows` / `valid_class_count` /
+      `excluded_candidate_classes` / `not_merged_oxford_breeds` 字段
+- [x] 报告生成器修正：第 1 节区分候选行数与有效类别数；第 7 节把 Oxford/Stanford
+      对应关系分为「已确切对应 20 / 不合并 2 / 无对应 15」三类
+- [x] 审计报告新增 3.6（AmStaff 与 APBT 分类口径）与 3.7（cocker_spaniel 处理）
+- [x] 重建 `data/v2_processed/`：train 16,655 / val 2,079 / test 5,363 = **24,097** 张；
+      质量检查 16,850 张（0 坏图 / 0 低分辨率）、78 张 MD5 重复；
+      与旧 test 近重复 0；跨 split MD5 0、pHash 0
+- [x] 独立校验与抽查全通过；`pytest 180/180`（34 个 V2 管线用例）
+- [x] 过程中规避了安全删除保护：旧 135 类目录整体改名为
+      `data/v2_processed_prev/` 留档（未做批量删除），再全新构建
+- [x] **未训练、未改 V1.1/备份/旧数据/DB/uploads；未执行 git commit**

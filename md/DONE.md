@@ -572,24 +572,26 @@ Khosla et al. (FGVC@CVPR 2011) 与 Deng et al. (CVPR 2009)。
 **本地完整性指纹**；可核对的官方信息是 Content-Length（已逐文件比对一致）
 与服务器 Last-Modified（2011–2012 年）。
 
-### 类别目录（真实并集，非规划值）
-- **135 类** = 37 现有（12 猫 + 25 狗）+ **98 新增犬种**
+### 类别目录（真实并集，非规划值；V2.1 修订后）
+- 类别目录 **137 行候选**（37 Oxford + 100 Stanford 候选）→ 排除 1 项
+  → **最终有效 136 类** = 37 现有（12 猫 + 25 狗）+ **99 新增犬种**
 - 20 个 Oxford 犬种与 Stanford 确切重叠 → 按决策**只用 Oxford 数据**
 - 3 个 Oxford 犬种 Stanford 无对应：`american_bulldog`、`havanese`、`shiba_inu`
-- 2 个 Stanford 类因命名歧义**排除**：`American_Staffordshire_terrier`、`cocker_spaniel`
+- 1 个 Stanford 类因来源标签不明确**排除**：`cocker_spaniel`
+  （V2.1 起 AmStaff 已改为独立有效类别）
 - **Border Collie 已核实**：`border_collie` / `n02106166-Border_collie` / **150 张**
   → 划分后 114/15/15；同数据集中的 `Border_terrier`(172)、`collie`(153) 为**另两个品种**
 - 人工核验别名表，**不做模糊自动合并**；未匹配名称进 `ambiguous`/`unmatched` 待人工确认
 
-### 数据质量与防泄漏
-- 新增 16,686 张：**0 坏图、0 过低分辨率**；去除 **78 张 MD5 完全重复**
+### 数据质量与防泄漏（V2.1 重新计算）
+- 新增 16,850 张：**0 坏图、0 过低分辨率**；去除 **78 张 MD5 完全重复**
 - **与 `data/processed_clean/test` 近重复 0 对**（未删改原测试图）
-- 近重复簇 16,554 个（52 个多图簇），**全局整簇原子分配**
+- 近重复簇 16,718 个（52 个多图簇），**全局整簇原子分配**
 - 最终校验：**MD5 跨 split 0、pHash 跨 split 0**、0 空类别
 
-### 划分（seed 42）
-train **16,525** / val **2,062** / test **5,346** = **23,933** 张
-（现有 7,325 + 新增 16,608）
+### 划分（seed 42，V2.1）
+train **16,655** / val **2,079** / test **5,363** = **24,097** 张
+（现有 7,325 + 新增 16,772）
 
 ### 阶段中修复的 3 个真实问题
 1. **跨类近重复被拆到不同 split**：原簇分配按类独立进行，
@@ -623,3 +625,70 @@ train **16,525** / val **2,062** / test **5,346** = **23,933** 张
 - **未训练 V2、未改默认模型路径、未清理数据库/uploads/缓存**
 - 未删除整个项目目录；构建脚本采用增量同步，可安全重复执行
 - A5 的 147 个难例仍未修改标签，保留人工审查
+
+## 2026-10-18（V2.1 标签口径修正：AmStaff 纳入、cocker_spaniel 继续排除）
+
+依据 `md/V2_AmStaff与可卡犬标签审核修正任务.md`。**未训练模型、未改 V1.1、
+未执行 git commit。**
+
+### 规则变更（最小改动）
+| 项目 | 变更前 | 变更后 |
+|---|---|---|
+| `American_Staffordshire_terrier` | 在 `EXCLUDED_STANFORD_CLASSES`（排除） | 移出排除表 → **独立有效类别** `american_staffordshire_terrier`（中文名「美国斯塔福郡梗」） |
+| `american_pit_bull_terrier` | 在 `AMBIGUOUS_ALIASES` 中把 AmStaff 列候选 | 移出歧义表 → 归入 `NOT_MERGED_REASONS`：「保留原有类别；AmStaff 独立纳入，不作为其别名，不合并」 |
+| `cocker_spaniel` | 排除（理由含「未标明 English/American」） | **保持排除**，理由改为「来源标签无法可靠区分美式/英式可卡犬；不进行猜测性重标」 |
+| `english_cocker_spaniel` | 在 `AMBIGUOUS_ALIASES` | 移出 → 归入 `NOT_MERGED_REASONS`：「完整保留，不与 `cocker_spaniel` 合并」 |
+| `scottish_terrier` ↔ `Scotch_terrier` | `CONFIDENT_ALIASES`（已正确） | **保留不动**，仅修正报告中仍称其「歧义未匹配」的文字 |
+| `border_collie`/`collie`/`border_terrier` | 三个独立 canonical | **保持**，并加测试固化 |
+
+`AMBIGUOUS_ALIASES` 因两项歧义均已裁定而清空（机制保留）。
+
+### 结果（136 类）
+- 类别目录 **137 行候选** → 排除 1 → **最终有效 136 类**
+  （37 现有 + 99 新增犬种）
+- **AmStaff**：164 张 → train **130** / val **17** / test **17**（三 split 均有）
+- **APBT**：`american_pit_bull_terrier` 90/10/100 原样保留；
+  与 AmStaff 混入 **0** 张、文件名交集 **0**
+- **`cocker_spaniel`**：有效 split 中目录数 **0**；
+  `english_cocker_spaniel` 完整保留（86/10/100，合计 196）
+- **border 三类独立**：`border_collie` 144（114/15/15）、
+  `collie` 153（121/16/16）、`border_terrier` 172（137/18/17）
+- 排除清单 **79 条** = 78 张 MD5 重复 + **1** 条 `excluded_ambiguous_naming`
+  （仅 `cocker_spaniel`；AmStaff 已不再出现）
+- 划分：train **16,655** / val **2,079** / test **5,363** = **24,097** 张
+- 质量（本次重建）：检查 16,850 张、0 坏图、0 低分辨率、78 张 MD5 重复、
+  内部近重复对 56、簇 16,718（多图簇 52）
+- 防泄漏：与 `processed_clean/test` 近重复 **0 对**；
+  跨 split MD5 **0**、pHash **0**；0 空类别
+- 现有 37 类 7,325 个文件名全部保留（与 `processed_clean` 逐文件一致）
+
+### 报告修正
+- `v2_data_quality_report.md` 第 1 节：明确区分「类别目录候选行数 137」与
+  「最终有效类别数 136」，并列出被排除候选及理由
+- 第 7 节：把 Oxford/Stanford 对应关系分为三类——
+  **已确切对应 20**（含 `scottish_terrier`↔`Scotch_terrier`，说明为已验证别名）、
+  **有相似类但不合并 2**（APBT、English Cocker）、
+  **确实无对应 15**（12 猫 + `american_bulldog`/`havanese`/`shiba_inu`）
+- `v2_data_source_audit.md` 新增 3.6（AmStaff 与 APBT 分类口径）与
+  3.7（`cocker_spaniel` 处理），均注明「属项目分类口径，不声称所有组织相同定义」
+
+### 过程问题与规避
+同步阶段清理旧划分残留文件（5,224 个）触发环境**安全删除保护**
+（单轮 >500 次删除被阻断），导致首次重建中断且 manifest 未更新。
+改为：把旧 135 类目录**整体改名**为 `data/v2_processed_prev/` 留档
+（单次 rename，不做批量删除），再全新构建 `data/v2_processed/`
+（`移除多余 0`），既避免批量删除又保证目录干净。
+
+### 测试
+`tests/test_v2_data_pipeline.py` **34 例**（新增 6 例：AmStaff 独立、
+APBT 不设别名、cocker_spaniel 理由稳定、not_merged 分桶、AmStaff 说明、
+歧义表清空）；`pytest` **180/180 通过**。
+
+### 约束遵守
+- **未训练任何模型**；未打开或改写 checkpoint（仅按字节计算 SHA256）
+- 五个模型产物哈希一致；`data/processed` 7349 / `data/processed_clean` 7325 /
+  `data/raw` 25867 文件数与字节完全一致；DB 142 条 integrity ok；uploads 142
+- 未删除/清空/重建数据库与 uploads；未执行任何大范围回退或清理
+- 未通过删除原测试图来解决泄漏检查（新旧 test 近重复本就为 0）
+- **未执行 git commit**（任务要求留待负责人复核）
+- 遗留：`data/v2_processed_prev/`（135 类旧版本，约 1.4 GB）待人工确认后清理

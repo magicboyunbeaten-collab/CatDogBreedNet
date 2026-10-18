@@ -1,42 +1,57 @@
 {
   "summary": {
-    "generated_at": "2026-10-18T09:19:22.107464+00:00",
+    "generated_at": "2026-10-18T10:54:22.646277+00:00",
     "oxford_classes": 37,
     "oxford_cat_classes": 12,
     "oxford_dog_classes": 25,
     "stanford_classes": 120,
     "stanford_total_images": 20580,
-    "union_classes": 137,
+    "catalog_rows": 137,
+    "catalog_rows_breakdown": {
+      "oxford": 37,
+      "stanford_candidates": 100
+    },
+    "excluded_candidate_classes": [
+      {
+        "canonical_label": "cocker_spaniel",
+        "source_original_label": "n02102318-cocker_spaniel",
+        "raw_count": 159,
+        "reason": "来源标签无法可靠区分美式/英式可卡犬（ImageNet 仅标注为 cocker_spaniel）；不进行猜测性重标，故本阶段不纳入 V2。Oxford 的 english_cocker_spaniel 类别完整保留，不与本类合并。"
+      }
+    ],
+    "excluded_candidate_count": 1,
+    "valid_class_count": 136,
+    "v2_projected_class_count": 136,
     "existing_37_classes": 37,
     "oxford_breeds_matched_to_stanford": 20,
     "overlap_classes": 20,
     "new_breed_classes": 100,
-    "new_breed_included_in_v2": 98,
+    "new_breed_included_in_v2": 99,
     "excluded_ambiguous_stanford": [
-      "American_Staffordshire_terrier",
       "cocker_spaniel"
     ],
-    "v2_projected_class_count": 135,
     "border_collie": {
       "canonical_label": "border_collie",
       "source_original_label": "n02106166-Border_collie",
       "raw_count": 150
     },
-    "ambiguous_matches": [
+    "american_staffordshire_terrier": {
+      "canonical_label": "american_staffordshire_terrier",
+      "chinese_name": "美国斯塔福郡梗",
+      "source_original_label": "n02093428-American_Staffordshire_terrier",
+      "raw_count": 164,
+      "v2_included_from": "Stanford Dogs (new stratified split)",
+      "note": "AmStaff 作为**独立新增类别**纳入 V2（canonical: american_staffordshire_terrier，中文名：美国斯塔福郡梗）。与 Oxford 的 american_pit_bull_terrier（APBT）保持独立：两者在部分登记体系与日常用语中存在边界差异，本项目按独立犬种标签分别分类，不互设别名、不合并图片，也不因外观相似而删除任何图像。"
+    },
+    "ambiguous_matches": [],
+    "not_merged_oxford_breeds": [
       {
         "canonical_label": "american_pit_bull_terrier",
-        "stanford_candidates": [
-          "American_Staffordshire_terrier",
-          "Staffordshire_bullterrier"
-        ],
-        "reason": "命名可能对应多个 Stanford 品种，需人工确认后才可合并"
+        "reason": "American Pit Bull Terrier（APBT）保留原有类别与原始数据不变；Stanford 的 American_Staffordshire_terrier（AmStaff）按**独立新增类别**纳入 V2（canonical: american_staffordshire_terrier），不作为 APBT 的别名，两类图片不合并"
       },
       {
         "canonical_label": "english_cocker_spaniel",
-        "stanford_candidates": [
-          "cocker_spaniel"
-        ],
-        "reason": "命名可能对应多个 Stanford 品种，需人工确认后才可合并"
+        "reason": "english_cocker_spaniel 类别完整保留，不改名、不删除；Stanford 的 cocker_spaniel 因来源标签无法可靠区分美式/英式可卡犬而保持排除，不与本类合并"
       }
     ],
     "unmatched_oxford_breeds": [
@@ -116,7 +131,7 @@
         "reason": "Stanford Dogs 中无 Shiba Inu synset（该数据集以西方犬种为主）"
       }
     ],
-    "note": "类别并集由标准名称去重后的真实结果决定；132/140 仅为规划参考。ambiguous 项未合并，unmatched 项未纳入 V2 匹配。"
+    "note": "`catalog_rows` 是类别目录的候选行数；`valid_class_count` 才是最终有效类别数（已剔除 `excluded_candidate_classes`）。类别并集由标准名称去重后的真实结果决定，132/140 仅为规划参考。`not_merged_oxford_breeds` 表示有相似类别但按口径不合并，与 `unmatched_oxford_breeds`（确实无对应）不同。"
   },
   "classes": [
     {
@@ -341,7 +356,7 @@
       "stanford_images": 0,
       "match_basis": "",
       "v2_included_from": "data/processed_clean",
-      "note": "命名可能对应多个 Stanford 品种（American_Staffordshire_terrier / Staffordshire_bullterrier），需人工确认后才可判定重叠；本阶段不合并"
+      "note": "American Pit Bull Terrier（APBT）保留原有类别与原始数据不变；Stanford 的 American_Staffordshire_terrier（AmStaff）按**独立新增类别**纳入 V2（canonical: american_staffordshire_terrier），不作为 APBT 的别名，两类图片不合并"
     },
     {
       "canonical_label": "basset_hound",
@@ -421,7 +436,7 @@
       "stanford_images": 0,
       "match_basis": "",
       "v2_included_from": "data/processed_clean",
-      "note": "命名可能对应多个 Stanford 品种（cocker_spaniel），需人工确认后才可判定重叠；本阶段不合并"
+      "note": "english_cocker_spaniel 类别完整保留，不改名、不删除；Stanford 的 cocker_spaniel 因来源标签无法可靠区分美式/英式可卡犬而保持排除，不与本类合并"
     },
     {
       "canonical_label": "english_setter",
@@ -1097,19 +1112,19 @@
     },
     {
       "canonical_label": "american_staffordshire_terrier",
-      "chinese_name": "American_Staffordshire_terrier",
+      "chinese_name": "美国斯塔福郡梗",
       "source_name": "Stanford Dogs",
       "source_original_label": "n02093428-American_Staffordshire_terrier",
       "raw_count": 164,
-      "available_count": 0,
+      "available_count": 164,
       "license_and_citation": "ImageNet 衍生数据集；官方页面未声明独立许可证。按 ImageNet 使用条款：仅限非商业研究与教育用途，不得再分发，须引用上述论文。 | Aditya Khosla, Nityananda Jayadevaprakash, Bangpeng Yao, Li Fei-Fei. Novel dataset for Fine-Grained Image Categorization. FGVC @ CVPR 2011. (built from ImageNet images and annotations; secondary citation: Deng et al., ImageNet, CVPR 2009)",
       "overlaps_existing_37": false,
       "is_new_breed": true,
       "stanford_match": "American_Staffordshire_terrier",
       "stanford_images": 164,
       "match_basis": "new_breed_from_stanford",
-      "v2_included_from": "excluded_ambiguous",
-      "note": "与 Oxford 的 american_pit_bull_terrier 命名可能同指或分指两个品种（AKC 将 American Staffordshire Terrier 视为独立品种），为避免把同一品种重复计为多类，本阶段不纳入 V2，留待人工确认"
+      "v2_included_from": "Stanford Dogs (new stratified split)",
+      "note": "AmStaff 作为**独立新增类别**纳入 V2（canonical: american_staffordshire_terrier，中文名：美国斯塔福郡梗）。与 Oxford 的 american_pit_bull_terrier（APBT）保持独立：两者在部分登记体系与日常用语中存在边界差异，本项目按独立犬种标签分别分类，不互设别名、不合并图片，也不因外观相似而删除任何图像。"
     },
     {
       "canonical_label": "bedlington_terrier",
@@ -1653,7 +1668,7 @@
       "stanford_images": 159,
       "match_basis": "new_breed_from_stanford",
       "v2_included_from": "excluded_ambiguous",
-      "note": "ImageNet 的 cocker_spaniel 未标明 English/American，而 Oxford 已用 english_cocker_spaniel，为避免重复计数或错误合并，本阶段不纳入 V2"
+      "note": "来源标签无法可靠区分美式/英式可卡犬（ImageNet 仅标注为 cocker_spaniel）；不进行猜测性重标，故本阶段不纳入 V2。Oxford 的 english_cocker_spaniel 类别完整保留，不与本类合并。"
     },
     {
       "canonical_label": "sussex_spaniel",

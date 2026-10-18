@@ -519,20 +519,51 @@ def write_reports(catalog: dict, expected: dict[str, Path],
     add("> 本阶段**不训练模型**。")
     add("")
 
+    summary = catalog["summary"]
     add("## 1. 数据集组成")
     add("")
-    add("| 来源 | 类别数 | 说明 |")
+    add("> **两个数字必须区分**：`catalog_rows` 是类别目录的**候选行数**，"
+        "`valid_class_count` 是剔除被排除候选后的**最终有效类别数**。"
+        "下表「最终有效类别数」取自实际 `manifest.json` 与数据目录。")
+    add("")
+    add("| 项目 | 数量 | 说明 |")
+    add("|---|---|---|")
+    add(f"| 类别目录候选行数 | **{summary['catalog_rows']}** | "
+        f"Oxford {summary['catalog_rows_breakdown']['oxford']} + "
+        f"Stanford 候选 "
+        f"{summary['catalog_rows_breakdown']['stanford_candidates']} |")
+    excluded = summary.get("excluded_candidate_classes", [])
+    add(f"| 被排除的候选类别 | **{len(excluded)}** | "
+        + ("、".join(f"`{item['canonical_label']}`" for item in excluded)
+           or "无")
+        + " |")
+    add(f"| **最终有效类别数** | **{verification['class_count']}** | "
+        f"现有 {summary['oxford_classes']} + 新增 "
+        f"{summary['new_breed_included_in_v2']}；"
+        f"由标准名称去重后的真实并集决定 |")
+    add("")
+    add("各来源明细：")
+    add("")
+    add("| 来源 | 有效类别数 | 说明 |")
     add("|---|---|---|")
     add(f"| Oxford-IIIT Pet（现有 37 类） | "
-        f"{catalog['summary']['oxford_classes']} | "
+        f"{summary['oxford_classes']} | "
         f"原样复制 `data/processed_clean` 的 train/val/test，"
         f"其 test 作为历史基准 |")
-    add(f"| Stanford Dogs（新增品种） | "
-        f"{catalog['summary']['new_breed_classes']} | "
+    add(f"| Stanford Dogs（新增有效品种） | "
+        f"{summary['new_breed_included_in_v2']} | "
         f"经质量/去重/防泄漏筛选后按 80/10/10 分层划分 |")
-    add(f"| **合计** | **{verification['class_count']}** | "
-        f"类别数由标准名称去重后的真实并集决定 |")
+    add(f"| **合计** | **{verification['class_count']}** | |")
     add("")
+    excluded = summary.get("excluded_candidate_classes", [])
+    if excluded:
+        add("被排除的候选类别及理由：")
+        add("")
+        for item in excluded:
+            add(f"- `{item['canonical_label']}`"
+                f"（`{item['source_original_label']}`，"
+                f"原始 {item['raw_count']} 张）：{item['reason']}")
+        add("")
 
     add("## 2. 各 split 规模")
     add("")
@@ -620,19 +651,45 @@ def write_reports(catalog: dict, expected: dict[str, Path],
     add("```")
     add("")
 
-    add("## 7. 已知限制")
+    add("## 7. 已知限制与口径说明")
     add("")
     add("1. **许可**：Stanford Dogs 为 ImageNet 衍生数据集，官方页面未声明独立")
-    add("   许可证，仅限本地非商业教育研究用途；不得再分发。")
+    add("   许可证，仅限本地非商业教育研究用途；**不得再分发**原始或处理后的图片。")
+    add("   论文需按审核报告要求引用 Khosla et al. (FGVC@CVPR 2011) 与 "
+        "Deng et al. (CVPR 2009)。")
     add("2. **新增品种仅犬类**：本阶段未找到可审核通过的家猫品种数据源")
     add("   （CatInBeard 需授权、COCO 无品种标签、其余两个 HF 数据集不适用），")
     add("   因此猫类别仍为现有 12 种。")
-    add("3. **3 个 Oxford 犬种未能与 Stanford 匹配**（`american_pit_bull_terrier`、")
-    add("   `english_cocker_spaniel`、`scottish_terrier` 存在命名歧义），")
-    add("   已保留 Oxford 数据、未与 Stanford 合并。")
-    add("4. **重叠品种不合并**：19 个重叠犬种只使用 `data/processed_clean` 数据，")
-    add("   Stanford 对应图片仅进入审计统计，不参与训练。")
-    add("5. 新增品种的划分是本项目自建（80/10/10），与 Stanford 官方划分不同；")
+    add("3. **Oxford 犬种与 Stanford 的对应关系分为三类**（不可混为一谈）：")
+    add(f"   - **已确切对应 {summary['oxford_breeds_matched_to_stanford']} 个**："
+        "经归一化或人工核验别名与 Stanford 一一对应，"
+        "其中包含 `scottish_terrier` ↔ `Scotch_terrier`"
+        "（Scotch 是 Scottish 的旧同义名，属**已验证别名**，"
+        "不再按命名歧义处理）。按既定决策**只使用 Oxford 数据**，"
+        "Stanford 图片仅入审计统计、不合并训练。")
+    not_merged = summary.get("not_merged_oxford_breeds", [])
+    if not_merged:
+        add(f"   - **有相似类别但按口径不合并 {len(not_merged)} 个**：")
+        for item in not_merged:
+            add(f"     - `{item['canonical_label']}`：{item['reason']}")
+    unmatched = summary.get("unmatched_oxford_breeds", [])
+    dog_unmatched = [item for item in unmatched if not item.get("is_cat")]
+    cat_unmatched = [item for item in unmatched if item.get("is_cat")]
+    add(f"   - **确实没有对应类别 {len(unmatched)} 个**："
+        f"其中猫 {len(cat_unmatched)} 个（Stanford Dogs 仅含犬种，属预期），"
+        f"犬 {len(dog_unmatched)} 个"
+        + ("（"
+           + "、".join(f"`{item['canonical_label']}`" for item in dog_unmatched)
+           + "）" if dog_unmatched else "")
+        + "。")
+    add("4. **`cocker_spaniel` 保持排除**：Stanford 的来源标签无法可靠区分")
+    add("   美式/英式可卡犬，**不做猜测性重标**；Oxford 的 "
+        "`english_cocker_spaniel` 完整保留，两者不合并。")
+    add("5. **重叠品种不合并**：" 
+        f"{summary['oxford_breeds_matched_to_stanford']} 个重叠犬种"
+        "只使用 `data/processed_clean` 数据，"
+        "Stanford 对应图片仅进入审计统计，不参与训练。")
+    add("6. 新增品种的划分是本项目自建（80/10/10），与 Stanford 官方划分不同；")
     add("   本阶段**未用测试集做任何调参**。")
     add("")
 

@@ -68,17 +68,81 @@ def test_border_collie_is_not_merged_with_similar_names():
     aliases = catalog_module.CONFIDENT_ALIASES
     assert "border_collie" not in aliases
     assert aliases.get("border_terrier") is None
-    # 归一化后三者互不相同
+    assert aliases.get("collie") is None
+    # 归一化后三者互不相同，且得到预期的三个 canonical label
     names = {catalog_module.normalize(n)
              for n in ("Border_collie", "Border_terrier", "collie")}
-    assert len(names) == 3
+    assert names == {"border_collie", "border_terrier", "collie"}
+    # 三者都应有中文名，避免后续回退成英文标签
+    for label in names:
+        assert catalog_module.CHINESE_NAMES.get(label)
 
 
 def test_excluded_stanford_classes_are_documented():
-    """歧义排除项必须带有可读理由，不能静默丢弃。"""
+    """排除项必须带有可读理由，且当前只应有 cocker_spaniel。
+
+    V2.1 起 AmStaff 已改为独立有效类别，不得再出现在排除表里。
+    """
     for name, reason in catalog_module.EXCLUDED_STANFORD_CLASSES.items():
         assert reason.strip()
-        assert name in {"American_Staffordshire_terrier", "cocker_spaniel"}
+    assert set(catalog_module.EXCLUDED_STANFORD_CLASSES) == {"cocker_spaniel"}
+    assert "American_Staffordshire_terrier" not in \
+        catalog_module.EXCLUDED_STANFORD_CLASSES
+
+
+def test_cocker_spaniel_exclusion_reason_is_stable():
+    """排除理由必须说明「无法区分美式/英式」且「不猜测性重标」。"""
+    reason = catalog_module.EXCLUDED_STANFORD_CLASSES["cocker_spaniel"]
+    assert "无法可靠区分" in reason
+    assert "不进行猜测性重标" in reason
+
+
+# ---------------------------------------------------------------------------
+# V2.1 AmStaff 口径
+# ---------------------------------------------------------------------------
+
+def test_amstaff_has_chinese_name():
+    """AmStaff 必须有唯一中文名：美国斯塔福郡梗。"""
+    assert (catalog_module.CHINESE_NAMES["american_staffordshire_terrier"]
+            == "美国斯塔福郡梗")
+
+
+def test_amstaff_is_not_an_alias_of_apbt():
+    """AmStaff 不得作为 APBT 的别名，也不得与 APBT 互相映射。"""
+    assert "american_staffordshire_terrier" not in catalog_module.CONFIDENT_ALIASES
+    assert ("American_Staffordshire_terrier"
+            not in catalog_module.CONFIDENT_ALIASES.values())
+    # APBT 不应出现在任何别名表的键或值里指向 AmStaff
+    assert catalog_module.CONFIDENT_ALIASES.get(
+        "american_pit_bull_terrier") is None
+    for targets in catalog_module.AMBIGUOUS_ALIASES.values():
+        assert "American_Staffordshire_terrier" not in targets
+
+
+def test_apbt_and_english_cocker_are_documented_as_not_merged():
+    """APBT 与 English Cocker 属于「有相似类但不合并」，须有明确说明。"""
+    not_merged = catalog_module.NOT_MERGED_REASONS
+    assert "american_pit_bull_terrier" in not_merged
+    assert "english_cocker_spaniel" in not_merged
+    assert "独立新增类别" in not_merged["american_pit_bull_terrier"]
+    assert "不合并" in not_merged["american_pit_bull_terrier"]
+    assert "不与本类合并" in not_merged["english_cocker_spaniel"]
+    # 它们不应被误归为「确实没有对应类别」
+    assert "american_pit_bull_terrier" not in catalog_module.EXPECTED_NO_MATCH
+    assert "english_cocker_spaniel" not in catalog_module.EXPECTED_NO_MATCH
+
+
+def test_amstaff_has_dedicated_note():
+    """AmStaff 的目录说明须写明独立成类、不互设别名、不因相似删图。"""
+    note = catalog_module.NEW_BREED_NOTES["American_Staffordshire_terrier"]
+    assert "独立新增类别" in note
+    assert "american_staffordshire_terrier" in note
+    assert "不互设别名" in note
+
+
+def test_ambiguous_aliases_cleared_after_v21_review():
+    """V2.1 人工审核已裁定原两项歧义，歧义表应为空（机制保留）。"""
+    assert catalog_module.AMBIGUOUS_ALIASES == {}
 
 
 def test_cat_breeds_are_not_expected_in_dog_dataset():

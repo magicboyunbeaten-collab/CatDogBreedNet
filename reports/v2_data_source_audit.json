@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-18T09:14:16.565546+00:00",
+  "generated_at": "2026-10-18T10:54:22.094819+00:00",
   "sources": {
     "stanford_dogs": {
       "name": "Stanford Dogs Dataset",
@@ -81,7 +81,7 @@
       "http_status": 200,
       "content_length": 8439,
       "server_last_modified": "Wed, 18 Sep 2013 07:19:49 GMT",
-      "seconds": 1.82
+      "seconds": 1.21
     },
     {
       "label": "Stanford Dogs images.tar",
@@ -91,7 +91,7 @@
       "http_status": 200,
       "content_length": 793579520,
       "server_last_modified": "Thu, 20 Oct 2011 22:38:12 GMT",
-      "seconds": 1.62
+      "seconds": 1.64
     },
     {
       "label": "Stanford Dogs lists.tar",
@@ -101,7 +101,7 @@
       "http_status": 200,
       "content_length": 481280,
       "server_last_modified": "Tue, 17 Jan 2012 22:53:00 GMT",
-      "seconds": 1.63
+      "seconds": 1.18
     },
     {
       "label": "Stanford Dogs annotation.tar",
@@ -111,7 +111,7 @@
       "http_status": 200,
       "content_length": 21852160,
       "server_last_modified": "Mon, 24 Oct 2011 03:46:41 GMT",
-      "seconds": 1.64
+      "seconds": 1.05
     },
     {
       "label": "CatInBeard 数据集页",
@@ -121,7 +121,7 @@
       "http_status": 401,
       "reason": "Unauthorized",
       "body_excerpt": "",
-      "seconds": 2.11
+      "seconds": 1.53
     },
     {
       "label": "CatInBeard 数据集 API",
@@ -131,7 +131,7 @@
       "http_status": 401,
       "reason": "Unauthorized",
       "body_excerpt": "",
-      "seconds": 1.84
+      "seconds": 1.36
     },
     {
       "label": "afifizzul/cat-breeds API",
@@ -141,7 +141,7 @@
       "http_status": 200,
       "content_length": 8043,
       "server_last_modified": null,
-      "seconds": 1.96
+      "seconds": 1.35
     },
     {
       "label": "harish03/catbreed API",
@@ -151,7 +151,7 @@
       "http_status": 200,
       "content_length": 816,
       "server_last_modified": null,
-      "seconds": 1.95
+      "seconds": 1.34
     },
     {
       "label": "COCO 图片站（https）",
@@ -159,7 +159,7 @@
       "method": "HEAD",
       "ok": false,
       "error": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'images.cocodataset.org'. (_ssl.c:1006)>",
-      "seconds": 1.9
+      "seconds": 1.38
     },
     {
       "label": "COCO 图片站（http）",
@@ -169,7 +169,7 @@
       "http_status": 200,
       "content_length": null,
       "server_last_modified": null,
-      "seconds": 1.7
+      "seconds": 1.22
     },
     {
       "label": "Oxford-IIIT Pet 官网",
@@ -179,7 +179,7 @@
       "http_status": 200,
       "content_length": null,
       "server_last_modified": null,
-      "seconds": 2.98
+      "seconds": 2.79
     }
   ],
   "local_state": {

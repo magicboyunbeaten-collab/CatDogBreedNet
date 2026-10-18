@@ -499,30 +499,36 @@ Deng et al. (CVPR 2009)。**不得声称图片可自由再分发。**
 
 ### 类别并集（真实统计，非规划值）
 
-- 现有 37 类（12 猫 + 25 狗）+ Stanford 新增 **98** 个犬种
-- **V2 合计 135 类**（不是规划的 132/140，由标准名称去重后的真实并集决定）
+- 现有 37 类（12 猫 + 25 狗）+ Stanford 新增 **99** 个犬种
+- **V2 合计 136 类**（不是规划的 132/140，由标准名称去重后的真实并集决定）
+- 类别目录共 **137 行候选**（37 Oxford + 100 Stanford 候选），
+  其中 **1 个被排除**（`cocker_spaniel`）→ **最终有效 136 类**
 - Oxford 犬种中 20 个与 Stanford 确切重叠（按决策**只用 Oxford 数据**，
   Stanford 图片仅入审计统计、不合并训练）
 - 3 个 Oxford 犬种在 Stanford 无对应（`american_bulldog`、`havanese`、`shiba_inu`）
-- 2 个 Stanford 类别因命名歧义**排除**（`American_Staffordshire_terrier`、
-  `cocker_spaniel`），避免同一品种重复计为多类
+- **`cocker_spaniel` 排除**：来源标签无法可靠区分美式/英式可卡犬，
+  不做猜测性重标；Oxford 的 `english_cocker_spaniel` 完整保留、不合并
+- **AmStaff 已作为独立新增类别纳入**：`american_staffordshire_terrier`
+  （美国斯塔福郡梗），164 张；与 Oxford 的 `american_pit_bull_terrier`（APBT）
+  保持独立，**不互设别名、不合并图片**
 - **Border Collie 已确认存在**：`border_collie`，150 张，划分后
-  train 114 / val 15 / test 15
+  train 114 / val 15 / test 15；与 `collie`（153）、`border_terrier`（172）
+  是三个不同类别
 
 ### 数据划分与防泄漏
 
 | split | 图片数 |
 |---|---|
-| train | 16,525 |
-| val | 2,062 |
-| test | 5,346 |
-| **合计** | **23,933** |
+| train | 16,655 |
+| val | 2,079 |
+| test | 5,363 |
+| **合计** | **24,097** |
 
 - 现有 37 类**原样沿用** `data/processed_clean` 的划分（其 test 作历史基准）
-- 新增 98 个品种按 **80/10/10 分层 + 近重复簇整簇原子分配**（seed 42）
+- 新增 99 个品种按 **80/10/10 分层 + 近重复簇整簇原子分配**（seed 42）
 - **防泄漏**：新增数据与 `data/processed_clean/test/` 近重复（pHash ≤ 5）
   为 **0 对**；V2 划分内部 **MD5 跨 split 重复 0、pHash 跨 split 近重复 0**
-- 质量：16,686 张新增图片全部可解码、无过低分辨率；去除 78 张 MD5 完全重复
+- 质量：16,850 张新增图片全部可解码、无过低分辨率；去除 78 张 MD5 完全重复
 
 产物：`reports/v2_data_source_audit.md`、`reports/v2_class_catalog.{csv,json}`、
 `reports/v2_class_counts.csv`、`reports/v2_exclusion_manifest.csv`、
@@ -544,7 +550,7 @@ Deng et al. (CVPR 2009)。**不得声称图片可自由再分发。**
 
 - **模型仅支持训练时的 37 个品种**（12 猫 + 25 狗）。边境牧羊犬（Border Collie）等
   训练类别之外的品种不在支持范围内，系统会给出一个低置信度的错误猜测
-  （V2 的 135 类**数据**已准备好，但**尚未训练**，见 `## V2 扩展数据准备` 一节）——
+  （V2 的 136 类**数据**已准备好，但**尚未训练**，见 `## V2 扩展数据准备` 一节）——
   详见 [`reports/thesis_materials.md`](reports/thesis_materials.md) 第 9 节；
 - 普通分类器不保证识别训练类别之外的动物、物体或无效图片；
 - Softmax 分数是模型在当前类别集合上的归一化分数，不应宣称为真实正确概率；

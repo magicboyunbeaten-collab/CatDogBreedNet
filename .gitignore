@@ -20,7 +20,8 @@ data/raw/
 data/processed/
 data/processed_clean/
 data/external_raw/
-data/v2_processed/
+# 同时覆盖重建时用于留档的旧目录（如 data/v2_processed_prev/）
+data/v2_processed*/
 uploads/
 
 # Databases

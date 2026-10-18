@@ -1,6 +1,6 @@
 # V2 数据源审核报告（U3）
 
-> 生成时间：2026-10-18T09:14:16.565546+00:00
+> 生成时间：2026-10-18T10:54:22.094819+00:00
 > 阶段：MODEL_UPGRADE_PLAN **U3 — V2 数据源审查与准备**
 > 本阶段**不训练模型**，不修改 V1.1 正式模型、V1 备份与既有数据目录。
 
@@ -119,21 +119,49 @@
 - 现有 37 类（12 猫 + 25 狗）继续作为标准标签参考与历史基准；
   本阶段**不重新下载、不修改** `data/processed/` 与 `data/processed_clean/`。
 
+### 3.6 AmStaff 与 APBT 的分类口径（V2.1 人工审核裁定）
+
+- **事实说明**：`American_Staffordshire_terrier`（AmStaff，美国斯塔福郡梗）
+  与 `american_pit_bull_terrier`（APBT，美国比特斗牛梗）在**部分登记体系
+  和日常用语中边界存在差异**：有的体系将两者视为不同犬种，
+  也有把二者混称的情况。**本项目不声称所有组织采用相同定义。**
+- **本项目的分类口径**：按**明确的犬种标签**分别分类——
+  Stanford 的 `n02093428-American_Staffordshire_terrier` 作为
+  **独立新增类别** `american_staffordshire_terrier` 纳入 V2；
+  Oxford 的 `american_pit_bull_terrier` 保留原有类别与原始数据。
+- **不做的处理**：不把 AmStaff 当作 APBT 的别名；不合并两类图片；
+  不因外观相似而删除任何图像；不移动、不重命名、不重新标注
+  `data/processed_clean/` 中的 APBT 文件。
+  两类仍照常接受完全重复、近重复与图像质量检查。
+
+### 3.7 cocker_spaniel 的处理（V2.1 人工审核裁定）
+
+- Stanford 的 `n02102318-cocker_spaniel` 标签本身**没有充分说明**是
+  美国可卡犬还是英国可卡犬。
+- **本项目处理**：保持为排除候选（`excluded_ambiguous_naming`），
+  理由为「来源标签无法可靠区分美式/英式可卡犬；不进行猜测性重标」，
+  不进入任何有效 split。
+- **不做的处理**：不依据图像外观把它重标为 American 或 English Cocker Spaniel。
+- Oxford 的 `english_cocker_spaniel`（英国可卡犬）类别、标签与图片完整保留，
+  不改名、不删除、不与 `cocker_spaniel` 合并。
+- 只有未来取得**具有明确来源和明确标注**的 American Cocker Spaniel 数据时，
+  才另行评估是否新增该类别；本阶段不搜索、不引入新数据源。
+
 ## 4. 实测端点明细
 
 | 端点 | 方法 | 结果 | Content-Length | 耗时 |
 |---|---|---|---|---|
-| Stanford Dogs 官方主页 | HEAD | HTTP 200 | 8,439 | 1.82s |
-| Stanford Dogs images.tar | HEAD | HTTP 200 | 793,579,520 | 1.62s |
-| Stanford Dogs lists.tar | HEAD | HTTP 200 | 481,280 | 1.63s |
-| Stanford Dogs annotation.tar | HEAD | HTTP 200 | 21,852,160 | 1.64s |
-| CatInBeard 数据集页 | HEAD | HTTP 401 Unauthorized | — | 2.11s |
-| CatInBeard 数据集 API | HEAD | HTTP 401 Unauthorized | — | 1.84s |
-| afifizzul/cat-breeds API | HEAD | HTTP 200 | 8,043 | 1.96s |
-| harish03/catbreed API | HEAD | HTTP 200 | 816 | 1.95s |
-| COCO 图片站（https） | HEAD | 失败：URLError: <urlopen error [SSL: CERTIFICA | — | 1.9s |
-| COCO 图片站（http） | HEAD | HTTP 200 | — | 1.7s |
-| Oxford-IIIT Pet 官网 | HEAD | HTTP 200 | — | 2.98s |
+| Stanford Dogs 官方主页 | HEAD | HTTP 200 | 8,439 | 1.21s |
+| Stanford Dogs images.tar | HEAD | HTTP 200 | 793,579,520 | 1.64s |
+| Stanford Dogs lists.tar | HEAD | HTTP 200 | 481,280 | 1.18s |
+| Stanford Dogs annotation.tar | HEAD | HTTP 200 | 21,852,160 | 1.05s |
+| CatInBeard 数据集页 | HEAD | HTTP 401 Unauthorized | — | 1.53s |
+| CatInBeard 数据集 API | HEAD | HTTP 401 Unauthorized | — | 1.36s |
+| afifizzul/cat-breeds API | HEAD | HTTP 200 | 8,043 | 1.35s |
+| harish03/catbreed API | HEAD | HTTP 200 | 816 | 1.34s |
+| COCO 图片站（https） | HEAD | 失败：URLError: <urlopen error [SSL: CERTIFICA | — | 1.38s |
+| COCO 图片站（http） | HEAD | HTTP 200 | — | 1.22s |
+| Oxford-IIIT Pet 官网 | HEAD | HTTP 200 | — | 2.79s |
 
 > 上表为本次运行的实际探测结果；网络环境变化可能导致可达性不同。
 

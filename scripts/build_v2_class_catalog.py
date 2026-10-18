@@ -87,31 +87,47 @@ CONFIDENT_ALIASES: dict[str, str] = {
 }
 
 #: 歧义别名：Oxford canonical -> 多个 Stanford 候选。
-#: **不自动合并**——这些品种在犬业协会体系中可能是同一品种的不同名称，
-#: 也可能是不同品种，必须人工确认后才能决定。
-AMBIGUOUS_ALIASES: dict[str, list[str]] = {
-    # 美国比特斗牛梗：AKC 的 American Staffordshire Terrier 与
-    # Staffordshire Bull Terrier 是两个独立品种，均不能断定等于 Oxford 的
-    # american_pit_bull_terrier。
-    "american_pit_bull_terrier": [
-        "American_Staffordshire_terrier",
-        "Staffordshire_bullterrier",
-    ],
-    # 英国可卡犬 vs ImageNet 的 cocker_spaniel（未标明 English/American）
-    "english_cocker_spaniel": ["cocker_spaniel"],
+#: **不自动合并**——必须人工确认后才能决定。
+#:
+#: V2.1 修订：原先涉及的两项歧义已由人工审核全部裁定，故当前为空：
+#:   * ``american_pit_bull_terrier`` → Stanford 的 AmStaff 按**独立品种**纳入
+#:     （canonical ``american_staffordshire_terrier``），不作为 APBT 的别名；
+#:   * ``english_cocker_spaniel``    → Stanford 的 ``cocker_spaniel`` 来源标签
+#:     无法可靠区分美式/英式，**保持排除**，不合并。
+#: 保留该机制以便将来出现新的歧义时使用，仍坚持"不做模糊自动合并"。
+AMBIGUOUS_ALIASES: dict[str, list[str]] = {}
+
+#: 因来源标签无法可靠细分而**不纳入 V2** 的 Stanford 类别。
+#: 这些 Stanford 图片仍留在审计目录并计入审计统计，但不进入任何有效 split。
+EXCLUDED_STANFORD_CLASSES: dict[str, str] = {
+    "cocker_spaniel": (
+        "来源标签无法可靠区分美式/英式可卡犬（ImageNet 仅标注为 "
+        "cocker_spaniel）；不进行猜测性重标，故本阶段不纳入 V2。"
+        "Oxford 的 english_cocker_spaniel 类别完整保留，不与本类合并。"),
 }
 
-#: 因命名歧义而**暂不纳入 V2** 的 Stanford 类别（避免同一品种重复计为多类）。
-#: 这些 Stanford 图片仍留在审计目录并计入审计统计，但不进入 V2 训练集。
-EXCLUDED_STANFORD_CLASSES: dict[str, str] = {
+#: Oxford 犬种在 Stanford 中存在相似类别、但按项目口径**保留独立、不合并**的原因。
+#: 与 :data:`EXPECTED_NO_MATCH`（确实没有对应类别）区分开，避免报告含混。
+NOT_MERGED_REASONS: dict[str, str] = {
+    "american_pit_bull_terrier": (
+        "American Pit Bull Terrier（APBT）保留原有类别与原始数据不变；"
+        "Stanford 的 American_Staffordshire_terrier（AmStaff）按**独立新增类别**"
+        "纳入 V2（canonical: american_staffordshire_terrier），"
+        "不作为 APBT 的别名，两类图片不合并"),
+    "english_cocker_spaniel": (
+        "english_cocker_spaniel 类别完整保留，不改名、不删除；"
+        "Stanford 的 cocker_spaniel 因来源标签无法可靠区分美式/英式可卡犬"
+        "而保持排除，不与本类合并"),
+}
+
+#: 独立纳入的新增品种的补充说明（只影响目录 note 字段，不影响匹配逻辑）。
+NEW_BREED_NOTES: dict[str, str] = {
     "American_Staffordshire_terrier": (
-        "与 Oxford 的 american_pit_bull_terrier 命名可能同指或分指两个品种"
-        "（AKC 将 American Staffordshire Terrier 视为独立品种），"
-        "为避免把同一品种重复计为多类，本阶段不纳入 V2，留待人工确认"),
-    "cocker_spaniel": (
-        "ImageNet 的 cocker_spaniel 未标明 English/American，"
-        "而 Oxford 已用 english_cocker_spaniel，"
-        "为避免重复计数或错误合并，本阶段不纳入 V2"),
+        "AmStaff 作为**独立新增类别**纳入 V2（canonical: "
+        "american_staffordshire_terrier，中文名：美国斯塔福郡梗）。"
+        "与 Oxford 的 american_pit_bull_terrier（APBT）保持独立："
+        "两者在部分登记体系与日常用语中存在边界差异，本项目按独立犬种标签"
+        "分别分类，不互设别名、不合并图片，也不因外观相似而删除任何图像。"),
 }
 
 #: Oxford 37 类中的 12 个猫品种（Stanford Dogs 仅含犬种，故无对应属预期）。
@@ -156,6 +172,9 @@ CHINESE_NAMES: dict[str, str] = {
     "affenpinscher": "猴面梗", "afghan_hound": "阿富汗猎犬",
     "airedale": "艾尔谷梗", "australian_terrier": "澳大利亚梗",
     "african_hunting_dog": "非洲野犬", "appenzeller": "阿彭策尔山犬",
+    # AmStaff：与 staffordshire_bull_terrier（斯塔福郡斗牛梗）区分，
+    # 采用「美国斯塔福郡梗」作为唯一中文名（全项目统一，不得多名称并存）
+    "american_staffordshire_terrier": "美国斯塔福郡梗",
     "basenj": "巴仙吉犬", "basset": "巴吉度猎犬",
     "bedlington_terrier": "贝灵顿梗", "bernese_mountain_dog": "伯恩山犬",
     "black_and_tan_coonhound": "黑褐猎浣熊犬", "blenheim_spaniel": "布伦海姆西班牙猎犬",
@@ -314,7 +333,7 @@ def main(argv: list[str] | None = None) -> int:
                 "reason": "命名可能对应多个 Stanford 品种，需人工确认后才可合并",
             })
         elif match_basis is None and canonical not in unmatched_names(
-                unmatched):
+                unmatched) and canonical not in NOT_MERGED_REASONS:
             if canonical in EXPECTED_NO_MATCH:
                 unmatched.append({"canonical_label": canonical,
                                   "is_cat": False,
@@ -334,6 +353,8 @@ def main(argv: list[str] | None = None) -> int:
 
         if stanford_label is not None:
             matched_stanford_labels.add(stanford_label)
+        elif canonical in NOT_MERGED_REASONS:
+            note = NOT_MERGED_REASONS[canonical]
         elif canonical in AMBIGUOUS_ALIASES:
             note = ("命名可能对应多个 Stanford 品种（"
                     + " / ".join(AMBIGUOUS_ALIASES[canonical])
@@ -389,7 +410,10 @@ def main(argv: list[str] | None = None) -> int:
             "match_basis": "new_breed_from_stanford",
             "v2_included_from": ("excluded_ambiguous" if excluded_reason
                                  else "Stanford Dogs (new stratified split)"),
-            "note": excluded_reason or "新增品种；须通过质量/去重/防泄漏检查后才进入 V2",
+            "note": (excluded_reason
+                     or NEW_BREED_NOTES.get(
+                         stanford_label,
+                         "新增品种；须通过质量/去重/防泄漏检查后才进入 V2")),
         })
 
     # ---- 3. 写出目录 ----
@@ -401,6 +425,15 @@ def main(argv: list[str] | None = None) -> int:
         writer.writerows(rows)
 
     matched_count = len(matched_stanford_labels)
+    included_new = [r for r in rows
+                    if r["is_new_breed"]
+                    and r["v2_included_from"] != "excluded_ambiguous"]
+    excluded_rows = [r for r in rows
+                     if r["v2_included_from"] == "excluded_ambiguous"]
+    not_merged = [{"canonical_label": canonical,
+                   "reason": reason}
+                  for canonical, reason in NOT_MERGED_REASONS.items()]
+
     summary = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "oxford_classes": len(oxford),
@@ -408,47 +441,75 @@ def main(argv: list[str] | None = None) -> int:
         "oxford_dog_classes": len([c for c in oxford if c not in CAT_BREEDS]),
         "stanford_classes": len(stanford),
         "stanford_total_images": sum(i["images"] for i in stanford.values()),
-        "union_classes": len(rows),
+        # ---- 关键区分：候选行数 vs 最终有效类别数 ----
+        "catalog_rows": len(rows),
+        "catalog_rows_breakdown": {
+            "oxford": len(oxford),
+            "stanford_candidates": len(rows) - len(oxford),
+        },
+        "excluded_candidate_classes": [
+            {"canonical_label": r["canonical_label"],
+             "source_original_label": r["source_original_label"],
+             "raw_count": r["raw_count"],
+             "reason": r["note"]}
+            for r in excluded_rows],
+        "excluded_candidate_count": len(excluded_rows),
+        # 最终有效类别数 = 现有 37 + 已纳入的新增品种
+        "valid_class_count": len(oxford) + len(included_new),
+        "v2_projected_class_count": len(oxford) + len(included_new),
         "existing_37_classes": sum(1 for r in rows
                                    if r["overlaps_existing_37"]),
-        # 真正能在 Stanford 中找到对应标签的 Oxford 犬种数（19）
+        # 真正能在 Stanford 中找到对应标签的 Oxford 犬种数
         "oxford_breeds_matched_to_stanford": matched_count,
-        # 歧义未合并、无对应未纳入，因此不重复计数
         "overlap_classes": matched_count,
         "new_breed_classes": sum(1 for r in rows if r["is_new_breed"]),
-        # 实际可进入 V2 的新增品种（剔除命名歧义项）
-        "new_breed_included_in_v2": sum(
-            1 for r in rows if r["is_new_breed"]
-            and r["v2_included_from"] != "excluded_ambiguous"),
+        "new_breed_included_in_v2": len(included_new),
         "excluded_ambiguous_stanford": sorted(EXCLUDED_STANFORD_CLASSES),
-        # V2 最终类别数 = 现有 37 + 可纳入的新增品种
-        "v2_projected_class_count": len(oxford) + sum(
-            1 for r in rows if r["is_new_breed"]
-            and r["v2_included_from"] != "excluded_ambiguous"),
         "border_collie": next(
             ({"canonical_label": r["canonical_label"],
               "source_original_label": r["source_original_label"],
               "raw_count": r["raw_count"]}
              for r in rows if r["canonical_label"] == "border_collie"), None),
+        "american_staffordshire_terrier": next(
+            ({"canonical_label": r["canonical_label"],
+              "chinese_name": r["chinese_name"],
+              "source_original_label": r["source_original_label"],
+              "raw_count": r["raw_count"],
+              "v2_included_from": r["v2_included_from"],
+              "note": r["note"]}
+             for r in rows
+             if r["canonical_label"] == "american_staffordshire_terrier"),
+            None),
         "ambiguous_matches": ambiguous,
+        # 有相似 Stanford 类别但按口径保留独立、不合并的 Oxford 犬种
+        "not_merged_oxford_breeds": not_merged,
+        # 确实没有任何 Stanford 对应类别的 Oxford 类别（含 12 猫）
         "unmatched_oxford_breeds": unmatched,
-        "note": ("类别并集由标准名称去重后的真实结果决定；132/140 仅为规划参考。"
-                 "ambiguous 项未合并，unmatched 项未纳入 V2 匹配。"),
+        "note": ("`catalog_rows` 是类别目录的候选行数；"
+                 "`valid_class_count` 才是最终有效类别数"
+                 "（已剔除 `excluded_candidate_classes`）。"
+                 "类别并集由标准名称去重后的真实结果决定，132/140 仅为规划参考。"
+                 "`not_merged_oxford_breeds` 表示有相似类别但按口径不合并，"
+                 "与 `unmatched_oxford_breeds`（确实无对应）不同。"),
     }
     json_path = args.out_dir / "v2_class_catalog.json"
     json_path.write_text(json.dumps({"summary": summary, "classes": rows},
                                     indent=2, ensure_ascii=False),
                          encoding="utf-8")
 
-    print(f"[catalog] Oxford 37 类 / Stanford {len(stanford)} 类 / "
-          f"并集 {len(rows)} 类")
-    print(f"[catalog] 重叠 {summary['overlap_classes']} 类，"
-          f"新增 {summary['new_breed_classes']} 类")
+    print(f"[catalog] Oxford {len(oxford)} 类 / Stanford {len(stanford)} 类")
+    print(f"[catalog] 类别目录候选行数: {summary['catalog_rows']} "
+          f"(Oxford {len(oxford)} + Stanford 候选 "
+          f"{summary['catalog_rows_breakdown']['stanford_candidates']})")
+    print(f"[catalog] 排除候选: {summary['excluded_candidate_count']} "
+          f"{[r['canonical_label'] for r in excluded_rows]}")
+    print(f"[catalog] 最终有效类别数: {summary['valid_class_count']} "
+          f"(现有 {len(oxford)} + 新增 {len(included_new)})")
+    print(f"[catalog] 与 Stanford 确切对应: {matched_count} 类；"
+          f"不合并: {[m['canonical_label'] for m in not_merged]}；"
+          f"无对应: {[u['canonical_label'] for u in unmatched]}")
+    print(f"[catalog] AmStaff: {summary['american_staffordshire_terrier']}")
     print(f"[catalog] Border Collie: {summary['border_collie']}")
-    print(f"[catalog] 歧义待人工确认 {len(ambiguous)} 项："
-          f"{[a['canonical_label'] for a in ambiguous]}")
-    print(f"[catalog] Oxford 中无 Stanford 对应 {len(unmatched)} 项："
-          f"{[u['canonical_label'] for u in unmatched]}")
     print(f"[catalog] wrote {csv_path}")
     print(f"[catalog] wrote {json_path}")
     return 0
