@@ -60,6 +60,13 @@ class CandidateGroupInfo(BaseModel):
                          "candidates")
     group_margin: float = Field(
         ..., description="raw-score gap between the group's top-1 and top-2")
+    #: 组内相对份额 ``min(p_i) / group_mass``：与 softmax 绝对尺度无关，
+    #: collie-pair 自策略 v2 起用它（而非 ``group_margin``）决定是否触发。
+    #: 四类组不使用该量，故为可选字段；默认 ``None`` 保证旧响应与旧消费者兼容。
+    group_share: float | None = Field(
+        None, description="share of the group mass held by the weaker "
+                          "candidate (min(p_i) / group_mass); populated by "
+                          "strategies that decide on relative share")
     reason: str
 
 

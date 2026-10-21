@@ -80,18 +80,34 @@ COLLIE_PAIR_GROUP_ZH: dict[str, str] = {
 }
 
 #: 双候选组阈值版本标识，沿用 ``val-<日期>-<后缀>`` 格式，但与四类组区分。
-COLLIE_PAIR_VERSION = "val-2026-10-21-collie-pair-v1"
+#:
+#: v2（U6.7）：判定量由"绝对分差"改为"组内相对份额"。
+#: v1 用的是 ``abs(p_collie - p_border_collie) <= 0.30``，该量源自 softmax 的
+#: **绝对值**，会随模型整体置信度漂移：切换到更果断的 exp06 后，31 张目标类图
+#: 的绝对分差最小也达 0.3281，策略因此永久休眠（全量 2079 张验证集触发 0 张）。
+COLLIE_PAIR_VERSION = "val-2026-10-21-collie-pair-v2"
 
 #: 组内总质量下限：两类原始概率之和至少达到该值，才认为"模型真的在这两个
-#: 品种之间做选择"。取 0.30 与四类组门槛保持一致；在 margin <= 0.30 的档位上，
-#: mass 取 0.10~0.50 的触发结果完全一致（该子集 pair_mass 均远高于阈值），
-#: 故此值并非数据表明的更优选择。
+#: 品种之间做选择"。取 0.30 与四类组门槛保持一致；该值不是本策略的判别主力
+#: （见下方 share 阈值的说明）。
 COLLIE_PAIR_MASS_THRESHOLD = 0.30
 
-#: 组内歧义上限：两类原始概率差不超过该值，才认为"难以区分"。
-#: 依据：margin <= 0.30 时验证集触发 3 张、组外误触发 0 张；放宽到 0.40 会
-#: 引入 1 张组外误触发（bernese_mountain_dog）。
-COLLIE_PAIR_MARGIN_THRESHOLD = 0.30
+#: **组内相对份额**阈值：``share = min(p_collie, p_border_collie) / pair_mass``，
+#: 即较弱一方在两类的相对占比。share >= 该值才认为"两类难以区分"。
+#:
+#: 为什么用 share 而不是绝对分差：share 与 softmax 的绝对尺度无关。同一批图片在
+#: V2.1 与 exp06 下 share 几乎不变（三张已知歧义图分别为 39.9%/39.6%/27.8% 与
+#: 29.6%/24.3%/20.6%），而绝对分差会整体漂移（0.20 vs 0.41）。
+#:
+#: 0.20 的来历（validation 2079 张，规则在看数据前已写定）：
+#:   * 覆盖：v1 曾触发的 3 张图在 exp06 下 share 为 0.2962 / 0.2430 / 0.2058，
+#:     取 >= 0.20 才能全部覆盖；取 0.25 只剩 1 张，不满足覆盖要求。
+#:   * 安全：0.20 时触发 3 张、真实标签全在组内、**组外误触发 0**；
+#:     0.10 会多纳入 3 张 share≈0.10~0.11 的图，无明显收益且更宽松。
+#:   * 间隔：目标类中次高的 share 仅 0.1119，与 0.2058 之间有约 1.84 倍间隔。
+#: 注意：该阈值由 validation 选出，因此同一 validation 的结果**不能**再被当作
+#: 独立的无偏泛化估计。
+COLLIE_PAIR_SHARE_THRESHOLD = 0.20
 
 #: 候选组标识，供前端与 API 客户端区分两套并行策略。
 GROUP_ID_FOUR_BREED = "four-breed-bully"
@@ -260,7 +276,7 @@ def build_collie_pair_group(
     predictions: list[dict],
     class_names: list[str] | None = None,
     mass_threshold: float = COLLIE_PAIR_MASS_THRESHOLD,
-    margin_threshold: float = COLLIE_PAIR_MARGIN_THRESHOLD,
+    share_threshold: float = COLLIE_PAIR_SHARE_THRESHOLD,
     probabilities: dict[str, float] | None = None,
 ) -> dict | None:
     """柯利牧羊犬 / 边境牧羊犬双候选提示；不满足条件返回 ``None``。
@@ -279,7 +295,8 @@ def build_collie_pair_group(
 
     1. 原始 Top-1 属于 :data:`COLLIE_PAIR_GROUP`；
     2. ``pair_mass = p_collie + p_border_collie >= mass_threshold``；
-    3. ``pair_margin = abs(p_collie - p_border_collie) <= margin_threshold``。
+    3. ``share = min(p_collie, p_border_collie) / pair_mass >= share_threshold``
+       —— **组内相对份额**，与 softmax 绝对尺度无关（v2 起取代 v1 的绝对分差）。
 
     Top-1 是其它品种时返回 ``None``——即使这两类彼此接近，也不暗示图片一定
     属于其中之一。
@@ -313,19 +330,24 @@ def build_collie_pair_group(
     pair_mass = sum(original.get(label, 0.0) for label in COLLIE_PAIR_GROUP)
     pair_margin = abs(original.get("collie", 0.0)
                       - original.get("border_collie", 0.0))
+    # 组内相对份额：较弱一方在两类的占比。与 softmax 绝对尺度无关，
+    # 因此不会因为模型整体更果断就永久失效（这正是 v1 绝对分差的问题）。
+    pair_share = (min(original.get("collie", 0.0),
+                      original.get("border_collie", 0.0)) / pair_mass
+                  if pair_mass > 0 else 0.0)
 
     triggered = (pair_mass >= mass_threshold
-                 and pair_margin <= margin_threshold)
+                 and pair_share >= share_threshold)
     if triggered:
         reason = (f"top-1 在候选组内、组内总概率 {pair_mass:.4f} >= "
-                  f"{mass_threshold:.2f} 且组内分差 {pair_margin:.4f} <= "
-                  f"{margin_threshold:.2f}")
+                  f"{mass_threshold:.2f} 且组内相对份额 {pair_share:.4f} >= "
+                  f"{share_threshold:.2f}")
     elif pair_mass < mass_threshold:
         reason = (f"组内总概率 {pair_mass:.4f} < {mass_threshold:.2f}，"
                   f"模型未在这两个品种之间做选择")
     else:
-        reason = (f"组内分差 {pair_margin:.4f} > {margin_threshold:.2f}，"
-                  f"模型已有明确偏好")
+        reason = (f"组内相对份额 {pair_share:.4f} < {share_threshold:.2f}，"
+                  f"模型已在这两个品种之间做出明确偏好")
 
     scores = _pair_normalised_scores(
         [original.get(label, 0.0) for label in COLLIE_PAIR_GROUP], pair_mass)
@@ -348,6 +370,8 @@ def build_collie_pair_group(
         "available_candidates": available,
         "group_mass": round(pair_mass, 6),
         "group_margin": round(pair_margin, 6),
+        #: v2 起真正决定是否触发的量；group_margin 仅作信息性字段保留。
+        "group_share": round(pair_share, 6),
         "reason": reason,
     }
 
