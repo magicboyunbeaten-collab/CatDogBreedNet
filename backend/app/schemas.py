@@ -156,6 +156,14 @@ class HealthResponse(BaseModel):
     model_weights: str | None = Field(
         None, description="file name of the weights actually loaded "
                           "(e.g. best_model.pth); None when no model")
+    #: 实际加载的**模型版本标识**（取自权重同目录的 model_version.json）。
+    #: 权重文件名在 V1.1 / V2.1 / exp06 之间是相同的（都是 best_model.pth），
+    #: 只有这个字段能直接说明"现在服务的是哪个模型"。
+    #: 可选且默认 ``None``：模型目录没有版本文件时（或模型未就绪）保持旧行为。
+    model_version: str | None = Field(
+        None, description="version_id read from model_version.json next to "
+                          "the loaded checkpoint; None when the metadata "
+                          "file is absent")
     model_error: str | None = Field(
         None, description="short reason when the model is not ready")
     version: str

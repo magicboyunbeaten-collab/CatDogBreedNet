@@ -17,6 +17,7 @@ import json
 import logging
 from pathlib import Path
 
+from ml.config import IMAGE_SIZE
 from ml.model import CLASS_NAMES_PATH, verify_class_mapping
 from ml.predictor import Predictor
 
@@ -53,12 +54,16 @@ class PredictorService:
 
     def __init__(self, weights_path: Path, device: str = "auto",
                  class_names_path: Path = CLASS_NAMES_PATH,
-                 candidate_group_enabled: bool = False) -> None:
+                 candidate_group_enabled: bool = False,
+                 image_size: int = IMAGE_SIZE) -> None:
         self.weights_path = Path(weights_path)
-        self.predictor = Predictor(weights_path=self.weights_path, device=device)
+        self.predictor = Predictor(weights_path=self.weights_path, device=device,
+                                   image_size=image_size)
         self.class_names = self.predictor.class_names
         self.num_classes = self.predictor.num_classes
         self.device = str(self.predictor.device)
+        #: 预处理分辨率：必须与权重的训练分辨率一致（exp06 为 256）。
+        self.image_size = int(image_size)
         #: 相近犬种候选组开关（默认关闭；开启也不改变模型、权重或类别定义）。
         self.candidate_group_enabled = bool(candidate_group_enabled)
         self.model_version = read_model_version(self.weights_path)
@@ -85,11 +90,12 @@ class PredictorService:
                 raise
             logger.info("class mapping verified against %s (%d classes)",
                         class_names_path.name, self.num_classes)
-        # 只打印版本 ID 与权重文件名，不暴露完整服务器路径
+        # 只打印版本 ID 与权重文件名，不暴露完整服务器路径。
+        # image_size 一并记录：换了权重却忘了改分辨率时，运维可从日志立刻看出。
         logger.info("model ready: version=%s arch=resnet18 classes=%d "
-                    "device=%s (weights: %s)",
+                    "device=%s image_size=%d (weights: %s)",
                     version_id, self.num_classes, self.device,
-                    self.weights_path.name)
+                    self.image_size, self.weights_path.name)
 
     def predict_pil(self, image, top_k: int = 3) -> dict:
         """Predict one decoded image; see ``ml.predictor.Predictor``."""

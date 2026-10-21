@@ -25,6 +25,7 @@ if str(_REPO_ROOT) not in sys.path:
 
 from PIL import Image  # noqa: E402
 
+from ml.config import IMAGE_SIZE  # noqa: E402
 from ml.dataset import build_transforms  # noqa: E402
 from ml.model import (  # noqa: E402
     BEST_WEIGHTS_PATH,
@@ -46,12 +47,22 @@ class Predictor:
     model_factory:
         Optional ``num_classes -> nn.Module`` factory, mainly for tests with
         lightweight stand-in models.
+    image_size:
+        Side length of the deterministic eval transform. **Must match the
+        resolution the checkpoint was trained at** — a 256-trained model fed
+        through the 224 pipeline loses accuracy (on the U6.6 candidate this
+        was measured as macro-F1 0.8149 → 0.8010). Defaults to the project
+        standard ``ml.config.IMAGE_SIZE`` (224) so existing callers keep their
+        previous behaviour; serving passes the configured value explicitly.
     """
 
     def __init__(self, weights_path: Path = BEST_WEIGHTS_PATH,
-                 device: str = "auto", model_factory=None) -> None:
+                 device: str = "auto", model_factory=None,
+                 image_size: int = IMAGE_SIZE) -> None:
         self.weights_path = Path(weights_path)
         self.device = resolve_device(device)
+        #: 预处理分辨率；forward 前用它构造 eval transform（见 ``predict_pil``）。
+        self.image_size = int(image_size)
         # Loaded exactly once per Predictor instance; the checkpoint carries
         # the authoritative class names and class count.
         self.model, self.class_names = load_checkpoint(
@@ -77,7 +88,10 @@ class Predictor:
             raise ValueError(
                 f"top_k must be between 1 and {self.num_classes}, got {top_k}")
         started = time.perf_counter()
-        tensor = build_transforms(train=False)(image)
+        # 分辨率必须与训练一致（exp06 训练于 256）；用实例上的 image_size 构造
+        # 确定性 eval transform，而不是走 build_transforms 的 224 默认值。
+        tensor = build_transforms(train=False,
+                                  image_size=self.image_size)(image)
         preprocess_ms = (time.perf_counter() - started) * 1000
         with self._lock:
             result = predict_from_tensor(self.model, tensor, self.class_names,

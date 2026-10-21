@@ -69,7 +69,8 @@ async def lifespan(app: FastAPI):
             app.state.predictor = PredictorService(
                 weights_path=settings.weights_path, device=settings.device,
                 class_names_path=settings.class_names_path,
-                candidate_group_enabled=settings.candidate_group_enabled)
+                candidate_group_enabled=settings.candidate_group_enabled,
+                image_size=settings.image_size)
             app.state.model_error = None
         except Exception as exc:
             # Log the full reason server-side, expose only a short reason.
@@ -126,11 +127,16 @@ def create_app(settings: Settings | None = None,
         """Service and model readiness. No paths or internals are exposed."""
         predictor = request.app.state.predictor
         weights = getattr(predictor, "weights_path", None)
+        # 权重文件名在 V1.1 / V2.1 / exp06 之间相同，单凭它无法判断版本；
+        # 版本标识取自权重同目录的 model_version.json，缺失时为 None。
+        version_payload = getattr(predictor, "model_version", None) or {}
+        model_version = version_payload.get("version_id") or None
         return HealthResponse(
             status="ok",
             model_loaded=predictor is not None,
             num_classes=(predictor.num_classes if predictor else None),
             model_weights=(Path(weights).name if weights else None),
+            model_version=model_version,
             model_error=request.app.state.model_error,
             version=request.app.state.settings.version,
             time=datetime.now(timezone.utc).isoformat(),
