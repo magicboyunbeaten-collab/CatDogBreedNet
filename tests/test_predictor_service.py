@@ -143,3 +143,121 @@ def test_matching_class_names_starts(tmp_path, fake_predictor):
     service = PredictorService(weights_path=weights, device="cpu",
                               class_names_path=mapping)
     assert service.num_classes == 3
+
+
+# ---------------------------------------------------------------------------
+# U5.5：类别**数量**错配（如 136 类权重配 37 类表）必须明确失败
+# ---------------------------------------------------------------------------
+
+def test_class_count_mismatch_names_both_sides(tmp_path, fake_predictor):
+    """数量不同时的错误必须点明两个文件与两侧计数，不能只说 "failed"。"""
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    mapping = tmp_path / "class_names.json"
+    # 假 checkpoint 是 3 类；故意只给 2 类
+    mapping.write_text(json.dumps(["beagle", "boxer"]), encoding="utf-8")
+
+    with pytest.raises(ValueError) as excinfo:
+        PredictorService(weights_path=weights, device="cpu",
+                         class_names_path=mapping)
+
+    message = str(excinfo.value)
+    assert "class count mismatch" in message
+    assert "3 classes" in message          # 权重侧
+    assert "2 classes" in message          # 类名表侧
+    assert "class_names.json" in message   # 指出是哪个文件配错
+    assert "best_model.pth" in message     # 指出是哪个权重
+
+
+def test_class_count_mismatch_does_not_silently_fall_back(tmp_path,
+                                                          fake_predictor):
+    """错配绝不能静默降级成"少几类也行"。"""
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    mapping = tmp_path / "class_names.json"
+    mapping.write_text(json.dumps(FAKE_CLASSES + ["extra_breed"]),
+                       encoding="utf-8")
+    with pytest.raises(ValueError, match="class count mismatch"):
+        PredictorService(weights_path=weights, device="cpu",
+                         class_names_path=mapping)
+
+
+# ---------------------------------------------------------------------------
+# U6.4.1：类别**数量相同**但名称或顺序不匹配 —— 必须报索引级错误
+# ---------------------------------------------------------------------------
+# 与上面的"数量错配"是两条不同分支：
+#   * 数量不同 -> "class count mismatch"（含两侧计数与两个文件名）
+#   * 数量相同 -> 原样抛出 verify_class_mapping 的
+#                 "class mapping mismatch at index N"（指名索引与两侧标签）
+# 后者绝不能被误报成数量问题，否则运维会去改类别表规模而不是修正顺序。
+
+def test_same_class_count_but_reordered_names_refuses_to_start(
+        tmp_path, fake_predictor):
+    """同数量、同一集合但**顺序反转** → 索引级错配，不得报数量错。
+
+    ``FAKE_CLASSES = ["beagle", "boxer", "chihuahua"]``，
+    这里把类别表写成 ``["chihuahua", "boxer", "beagle"]``：
+    数量仍是 3，但 index 0 与 index 2 对调。
+    """
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    mapping = tmp_path / "class_names.json"
+    mapping.write_text(json.dumps(list(reversed(FAKE_CLASSES))),
+                       encoding="utf-8")
+
+    with pytest.raises(ValueError) as excinfo:
+        PredictorService(weights_path=weights, device="cpu",
+                         class_names_path=mapping)
+
+    message = str(excinfo.value)
+    # 1) 保留 verify_class_mapping 的索引级信息（索引 + 两侧真实标签）
+    assert "class mapping mismatch at index 0" in message
+    assert "checkpoint='beagle'" in message
+    assert "dataset='chihuahua'" in message
+    # 2) 不得落入"数量不同"分支：数量相同却报数量错会误导运维
+    assert "class count mismatch" not in message
+    assert "classes" not in message
+
+
+def test_same_class_count_but_different_name_refuses_to_start(
+        tmp_path, fake_predictor):
+    """同数量、仅**某一项名称不同** → 索引级错配，定位到具体 index。
+
+    ``FAKE_CLASSES`` 的第 3 项是 ``chihuahua``，这里换成 ``pug``：
+    只有 index 2 不同，前两项一致。
+    """
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    mapping = tmp_path / "class_names.json"
+    mapping.write_text(json.dumps(["beagle", "boxer", "pug"]),
+                       encoding="utf-8")
+
+    with pytest.raises(ValueError) as excinfo:
+        PredictorService(weights_path=weights, device="cpu",
+                         class_names_path=mapping)
+
+    message = str(excinfo.value)
+    assert "class mapping mismatch at index 2" in message
+    assert "checkpoint='chihuahua'" in message
+    assert "dataset='pug'" in message
+    # 前两项一致，绝不能报 index 0 或 index 1
+    assert "at index 0" not in message
+    assert "at index 1" not in message
+    assert "class count mismatch" not in message
+
+
+def test_same_class_count_mismatch_does_not_start_service(
+        tmp_path, fake_predictor):
+    """索引级错配时服务**不得被构造成功**（无静默回退、无自动重排）。"""
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    mapping = tmp_path / "class_names.json"
+    mapping.write_text(json.dumps(list(reversed(FAKE_CLASSES))),
+                       encoding="utf-8")
+
+    service = None
+    with pytest.raises(ValueError):
+        service = PredictorService(weights_path=weights, device="cpu",
+                                   class_names_path=mapping)
+    # 异常抛出后绝不应留下一个"可用"的服务实例
+    assert service is None

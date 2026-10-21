@@ -55,6 +55,8 @@ class FakePredictor:
         self.class_names = list(class_names or FAKE_CLASSES)
         self.num_classes = len(self.class_names)
         self.fail = fail
+        #: 与真实 PredictorService 对齐：健康接口会回报实际加载的权重文件名。
+        self.weights_path = Path("fake.pth")
 
     def predict_pil(self, image, top_k: int = 3):
         if self.fail:
@@ -168,8 +170,31 @@ def test_health_model_not_ready(client_without_model):
     body = response.json()
     assert body["model_loaded"] is False
     assert body["model_error"]
+    # 模型未就绪时不应报出权重文件名
+    assert body.get("model_weights") is None
     # no absolute paths or stack traces leak into the health payload
     assert "\\" not in json.dumps(body) and "Traceback" not in json.dumps(body)
+
+
+def test_health_reports_loaded_weights_name(client_with_fake):
+    """U5.5：健康接口必须能证明"实际加载了哪个权重"，而非只凭配置宣称。"""
+    client, _, _ = client_with_fake
+    body = client.get("/api/health").json()
+    assert body["model_weights"] == "fake.pth"
+    # 只暴露文件名，不泄露服务器绝对路径
+    assert "\\" not in body["model_weights"]
+    assert "/" not in body["model_weights"]
+
+
+def test_health_response_model_weights_is_optional():
+    """旧版响应（无 model_weights 字段）必须仍能通过 schema 校验。"""
+    from backend.app.schemas import HealthResponse
+
+    legacy = HealthResponse(
+        status="ok", model_loaded=True, num_classes=37, model_error=None,
+        version="1.0.0", time="2026-10-19T00:00:00+00:00")
+    assert legacy.model_weights is None
+    assert legacy.model_dump()["num_classes"] == 37
 
 
 def test_predict_returns_503_when_model_not_ready(client_without_model):

@@ -123,7 +123,7 @@ describe('HistoryView 详情中文展示', () => {
         ...HISTORY_DETAIL.item,
         predictions: [
           { breed: 'beagle', confidence: 0.9123 },
-          { breed: 'border_collie', confidence: 0.03 }
+          { breed: 'not_a_known_breed', confidence: 0.03 }
         ]
       }
     })
@@ -138,7 +138,40 @@ describe('HistoryView 详情中文展示', () => {
 
     const text = dialogBody(wrapper).text()
     expect(text).toContain('1. 比格犬')
-    expect(text).toContain('2. border_collie') // 未映射 → 英文原名
+    // 真正不在 136 类中的标签才回退英文原名（U5.5 起 border_collie 已有中文名）
+    expect(text).toContain('2. not_a_known_breed')
+    wrapper.unmount()
+  })
+
+  it('旧 37 类与新 99 类的历史标签都能显示中文', async () => {
+    // 历史记录只存英文 canonical label；无论它来自 V1.1（37 类）还是
+    // V2.1 新增的 99 类，详情页都必须显示中文名。
+    fetchHistoryMock.mockResolvedValue(HISTORY_PAGE)
+    fetchHistoryDetailMock.mockResolvedValue({
+      item: {
+        ...HISTORY_DETAIL.item,
+        predictions: [
+          { breed: 'beagle', confidence: 0.5 },          // V1.1 旧类别
+          { breed: 'border_collie', confidence: 0.3 },   // V2.1 新增
+          { breed: 'collie', confidence: 0.2 }           // V2.1 新增
+        ]
+      }
+    })
+    const { wrapper } = mountAt('/history')
+    await flushPromises()
+    await flushPromises()
+
+    const detailButton = wrapper.findAll('button').find((b) => b.text() === '详情')
+    await detailButton.trigger('click')
+    await flushPromises()
+    await flushPromises()
+
+    const text = dialogBody(wrapper).text()
+    expect(text).toContain('比格犬')
+    expect(text).toContain('边境牧羊犬')
+    expect(text).toContain('柯利牧羊犬')
+    // 两类必须能区分开，不能显示成同一个名字
+    expect(text).not.toContain('border_collie')
     wrapper.unmount()
   })
 
