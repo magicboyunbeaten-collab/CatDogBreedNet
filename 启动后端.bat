@@ -18,17 +18,36 @@ if not exist "%ROOT%.venv\Scripts\python.exe" (
 )
 
 echo [2/3] 检查模型文件 ...
-if not exist "%ROOT%artifacts\best_model.pth" (
-    echo [错误] 未找到模型权重 "%ROOT%artifacts\best_model.pth"。
-    echo         请先按 README.md 训练模型：python -m ml.train
-    pause
-    exit /b 1
+rem ---------------------------------------------------------------------------
+rem 默认推理模型为 V2.1（136 类）：权重与类别映射必须成对来自同一目录。
+rem 若已通过环境变量 CATDOG_WEIGHTS_PATH / CATDOG_CLASS_NAMES_PATH 显式指定
+rem （例如回退到 V1.1），则尊重该设置，不再检查默认路径。
+rem ---------------------------------------------------------------------------
+set "MODEL_DIR=%ROOT%artifacts\v2_1_136classes_seed42"
+if not defined CATDOG_WEIGHTS_PATH (
+    if not exist "%MODEL_DIR%\best_model.pth" (
+        echo [错误] 未找到 V2.1 模型权重 "%MODEL_DIR%\best_model.pth"。
+        echo         默认模型为 V2.1（136 类）；请确认候选模型目录完整。
+        echo         如需回退到 V1.1（37 类），先设置这两个变量再启动：
+        echo             set CATDOG_WEIGHTS_PATH=%ROOT%artifacts\best_model.pth
+        echo             set CATDOG_CLASS_NAMES_PATH=%ROOT%artifacts\class_names.json
+        pause
+        exit /b 1
+    )
 )
-if not exist "%ROOT%artifacts\class_names.json" (
-    echo [错误] 未找到类别映射 "%ROOT%artifacts\class_names.json"。
-    pause
-    exit /b 1
+if not defined CATDOG_CLASS_NAMES_PATH (
+    if not exist "%MODEL_DIR%\class_names.json" (
+        echo [错误] 未找到 V2.1 类别映射 "%MODEL_DIR%\class_names.json"。
+        echo         权重与类别表必须配对，缺一不可。
+        echo         如需回退到 V1.1（37 类），先设置这两个变量再启动：
+        echo             set CATDOG_WEIGHTS_PATH=%ROOT%artifacts\best_model.pth
+        echo             set CATDOG_CLASS_NAMES_PATH=%ROOT%artifacts\class_names.json
+        pause
+        exit /b 1
+    )
 )
+if defined CATDOG_WEIGHTS_PATH echo [检查] 已通过环境变量指定权重: %CATDOG_WEIGHTS_PATH%
+if defined CATDOG_CLASS_NAMES_PATH echo [检查] 已通过环境变量指定类名表: %CATDOG_CLASS_NAMES_PATH%
 
 rem 训练缓存与下载缓存固定在 E 盘，避免写入 C 盘
 if not exist "%ROOT%.cache\torch" mkdir "%ROOT%.cache\torch"
