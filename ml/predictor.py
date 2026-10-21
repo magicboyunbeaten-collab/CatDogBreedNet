@@ -65,9 +65,13 @@ class Predictor:
         """Predict one already-decoded RGB image.
 
         Returns ``{"predictions": [{"breed", "confidence"}...],
-        "inference_ms": float, "preprocess_ms": float}`` where
-        ``inference_ms`` covers the model forward pass only and
-        ``preprocess_ms`` covers the deterministic eval transform.
+        "probabilities": {...}, "inference_ms": float,
+        "preprocess_ms": float}`` where ``inference_ms`` covers the model
+        forward pass only and ``preprocess_ms`` covers the deterministic eval
+        transform. ``probabilities`` is the full softmax vector over the
+        trained classes; it stays internal (the API schema never exposes it)
+        and exists so look-alike candidate groups are not blind to candidates
+        ranked below ``top_k``.
         """
         if not 1 <= top_k <= self.num_classes:
             raise ValueError(
@@ -80,6 +84,7 @@ class Predictor:
                                          top_k=top_k, device=self.device)
         return {
             "predictions": result["predictions"],
+            "probabilities": result.get("probabilities"),
             "inference_ms": result["elapsed_ms"],
             "preprocess_ms": round(preprocess_ms, 3),
         }

@@ -98,10 +98,21 @@ async def predict(
             from exc
 
     elapsed_ms = (time.perf_counter() - started) * 1000
+    # 候选组仅在显式开启时计算；关闭时字段为 None，响应与 V1.1 完全一致。
+    # 注意：候选组绝不参与数据库写入，历史记录语义不变。
+    candidate_group = None
+    if getattr(settings, "candidate_group_enabled", False):
+        try:
+            candidate_group = predictor.candidate_group(result)
+        except Exception:  # never let an optional feature break prediction
+            logger.exception("candidate group computation failed")
+            candidate_group = None
+
     return PredictResponse(
         success=True,
         record_id=record.id,
         predictions=result["predictions"],
+        candidate_group=candidate_group,
         elapsed_ms=round(elapsed_ms, 3),
         inference_ms=result["inference_ms"],
         preprocess_ms=result["preprocess_ms"],

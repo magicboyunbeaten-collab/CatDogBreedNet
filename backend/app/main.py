@@ -12,6 +12,7 @@ fabricated results.
 from __future__ import annotations
 
 import logging
+import re
 import sys
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
@@ -39,6 +40,18 @@ def _safe_model_error(exc: Exception) -> str:
     """Short, path-free reason for why the model is not ready."""
     if isinstance(exc, FileNotFoundError):
         return "model weights file is missing"
+    message = str(exc)
+    # 权重与类别表错配是**配置错误**，必须在健康状态里直接说清楚是两侧类别数
+    # 不一致（不暴露服务器绝对路径），而不是笼统的 "failed to load"。
+    if "class count mismatch" in message:
+        match = re.search(r"\((\d+) classes\),.*?\((\d+) classes\)",
+                          message, re.S)
+        if match:
+            return (
+                f"class mapping mismatch: checkpoint has {match.group(1)} "
+                f"classes but class_names.json has {match.group(2)}. "
+                f"Point CATDOG_WEIGHTS_PATH and CATDOG_CLASS_NAMES_PATH at a "
+                f"matching pair.")
     return f"model failed to load ({type(exc).__name__})"
 
 
@@ -54,7 +67,9 @@ async def lifespan(app: FastAPI):
     else:
         try:
             app.state.predictor = PredictorService(
-                weights_path=settings.weights_path, device=settings.device)
+                weights_path=settings.weights_path, device=settings.device,
+                class_names_path=settings.class_names_path,
+                candidate_group_enabled=settings.candidate_group_enabled)
             app.state.model_error = None
         except Exception as exc:
             # Log the full reason server-side, expose only a short reason.
@@ -110,10 +125,12 @@ def create_app(settings: Settings | None = None,
     async def health(request: Request) -> HealthResponse:
         """Service and model readiness. No paths or internals are exposed."""
         predictor = request.app.state.predictor
+        weights = getattr(predictor, "weights_path", None)
         return HealthResponse(
             status="ok",
             model_loaded=predictor is not None,
             num_classes=(predictor.num_classes if predictor else None),
+            model_weights=(Path(weights).name if weights else None),
             model_error=request.app.state.model_error,
             version=request.app.state.settings.version,
             time=datetime.now(timezone.utc).isoformat(),

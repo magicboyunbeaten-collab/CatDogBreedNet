@@ -52,18 +52,37 @@ class PredictorService:
     """
 
     def __init__(self, weights_path: Path, device: str = "auto",
-                 class_names_path: Path = CLASS_NAMES_PATH) -> None:
+                 class_names_path: Path = CLASS_NAMES_PATH,
+                 candidate_group_enabled: bool = False) -> None:
         self.weights_path = Path(weights_path)
         self.predictor = Predictor(weights_path=self.weights_path, device=device)
         self.class_names = self.predictor.class_names
         self.num_classes = self.predictor.num_classes
         self.device = str(self.predictor.device)
+        #: 相近犬种候选组开关（默认关闭；开启也不改变模型、权重或类别定义）。
+        self.candidate_group_enabled = bool(candidate_group_enabled)
         self.model_version = read_model_version(self.weights_path)
         version_id = (self.model_version or {}).get("version_id", "unknown")
 
         if class_names_path and Path(class_names_path).exists():
             saved = json.loads(Path(class_names_path).read_text("utf-8"))
-            verify_class_mapping(self.class_names, saved)
+            try:
+                verify_class_mapping(self.class_names, saved)
+            except ValueError as exc:
+                # 类别**数量**不同是配置层面的错配（例如 136 类权重配了 37
+                # 类表），必须点明是两个文件、两侧计数；数量相同但名称/顺序
+                # 不同则保留 verify_class_mapping 原有的索引级错误消息。
+                if len(self.class_names) != len(saved):
+                    raise ValueError(
+                        f"class count mismatch between checkpoint and class "
+                        f"names file: weights={self.weights_path} "
+                        f"({len(self.class_names)} classes), "
+                        f"class_names={class_names_path} "
+                        f"({len(saved)} classes). "
+                        f"Point CATDOG_WEIGHTS_PATH and CATDOG_CLASS_NAMES_PATH "
+                        f"at a matching pair."
+                    ) from exc
+                raise
             logger.info("class mapping verified against %s (%d classes)",
                         class_names_path.name, self.num_classes)
         # 只打印版本 ID 与权重文件名，不暴露完整服务器路径
@@ -75,3 +94,15 @@ class PredictorService:
     def predict_pil(self, image, top_k: int = 3) -> dict:
         """Predict one decoded image; see ``ml.predictor.Predictor``."""
         return self.predictor.predict_pil(image, top_k=top_k)
+
+    def candidate_group(self, result: dict) -> dict | None:
+        """Candidate-group info for a prediction result, if the feature is on.
+
+        Returns ``None`` when the feature is disabled or the trigger conditions
+        are not met, so the caller can keep the legacy response shape.
+        """
+        from .candidate_group import resolve_candidate_group
+
+        return resolve_candidate_group(
+            result, class_names=self.class_names,
+            enabled=self.candidate_group_enabled)

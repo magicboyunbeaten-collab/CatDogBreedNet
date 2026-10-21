@@ -45,7 +45,15 @@ def load_image(image_path: Path) -> Image.Image:
 
 
 def predict_from_tensor(model, image_tensor, class_names, top_k=3, device="cpu"):
-    """Run the model on a single image tensor (C,H,W); return a result dict."""
+    """Run the model on a single image tensor (C,H,W); return a result dict.
+
+    Besides the Top-K list the result also carries the **full softmax vector**
+    under ``probabilities`` (``{class_name: score}``). Top-K alone is not enough
+    for look-alike candidate groups: a candidate ranked below ``top_k`` would
+    otherwise be treated as a zero probability and shown as 0 %, which would
+    misrepresent the model output. The extra key is internal only — the API
+    response schema never exposes it.
+    """
     num_classes = len(class_names)
     if not 1 <= top_k <= num_classes:
         raise ValueError(
@@ -62,7 +70,12 @@ def predict_from_tensor(model, image_tensor, class_names, top_k=3, device="cpu")
         {"breed": class_names[idx], "confidence": round(float(score), 6)}
         for score, idx in zip(top_scores.tolist(), top_indices.tolist())
     ]
-    return {"predictions": predictions, "elapsed_ms": round(elapsed_ms, 3)}
+    probabilities = {
+        class_names[index]: round(float(score), 6)
+        for index, score in enumerate(scores.tolist())
+    }
+    return {"predictions": predictions, "probabilities": probabilities,
+            "elapsed_ms": round(elapsed_ms, 3)}
 
 
 def predict_image(
