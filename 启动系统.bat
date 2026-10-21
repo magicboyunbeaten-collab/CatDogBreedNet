@@ -14,26 +14,34 @@ echo ============================================================
 echo.
 
 rem ---------- 启动前检查 ----------
-rem 默认推理模型为 V2.1（136 类），权重与类别映射必须成对存在。
+rem 默认推理模型为 exp06（V2.2 候选，136 类，256 分辨率），权重与类别映射必须成对存在。
 rem 若已用 CATDOG_WEIGHTS_PATH / CATDOG_CLASS_NAMES_PATH 显式覆盖（回退用），
 rem 则跳过默认路径检查，尊重用户设置。
 set "MISSING="
-set "MODEL_DIR=%ROOT%artifacts\v2_1_136classes_seed42"
+set "MODEL_DIR=%ROOT%artifacts\v2_2_border_collie_exp06_resolution256_lowlr_seed42"
+rem 类别映射沿用既有那份 136 类表（与 exp06 目录内的副本字节相同）
+set "CLASS_NAMES_FILE=%ROOT%artifacts\v2_1_136classes_seed42\class_names.json"
 if not exist "%ROOT%.venv\Scripts\python.exe" set "MISSING=1"
 if not exist "%ROOT%frontend\package.json" set "MISSING=1"
 if not defined CATDOG_WEIGHTS_PATH if not exist "%MODEL_DIR%\best_model.pth" set "MISSING=1"
-if not defined CATDOG_CLASS_NAMES_PATH if not exist "%MODEL_DIR%\class_names.json" set "MISSING=1"
+if not defined CATDOG_CLASS_NAMES_PATH if not exist "%CLASS_NAMES_FILE%" set "MISSING=1"
 
 if defined MISSING (
     echo [错误] 启动前检查未通过，缺少必要文件：
     if not exist "%ROOT%.venv\Scripts\python.exe"  echo   - .venv\Scripts\python.exe（Python 虚拟环境）
     if not exist "%ROOT%frontend\package.json"     echo   - frontend\package.json（前端项目）
-    if not defined CATDOG_WEIGHTS_PATH if not exist "%MODEL_DIR%\best_model.pth" echo   - artifacts\v2_1_136classes_seed42\best_model.pth（V2.1 模型权重）
-    if not defined CATDOG_CLASS_NAMES_PATH if not exist "%MODEL_DIR%\class_names.json" echo   - artifacts\v2_1_136classes_seed42\class_names.json（V2.1 类别映射）
+    if not defined CATDOG_WEIGHTS_PATH if not exist "%MODEL_DIR%\best_model.pth" echo   - artifacts\v2_2_border_collie_exp06_resolution256_lowlr_seed42\best_model.pth（exp06 默认模型权重）
+    if not defined CATDOG_CLASS_NAMES_PATH if not exist "%CLASS_NAMES_FILE%" echo   - artifacts\v2_1_136classes_seed42\class_names.json（136 类类别映射）
     echo.
-    echo 默认模型为 V2.1（136 类）。如需回退到 V1.1（37 类），先设置：
+    echo 默认模型为 exp06（136 类，256 分辨率）。回退方式：
+    echo   V2.1（136 类，224 分辨率）：
+    echo     set CATDOG_WEIGHTS_PATH=%ROOT%artifacts\v2_1_136classes_seed42\best_model.pth
+    echo     set CATDOG_CLASS_NAMES_PATH=%ROOT%artifacts\v2_1_136classes_seed42\class_names.json
+    echo     set CATDOG_IMAGE_SIZE=224
+    echo   V1.1（37 类，224 分辨率）：
     echo     set CATDOG_WEIGHTS_PATH=%ROOT%artifacts\best_model.pth
     echo     set CATDOG_CLASS_NAMES_PATH=%ROOT%artifacts\class_names.json
+    echo     set CATDOG_IMAGE_SIZE=224
     echo.
     echo 请先按 README.md 的 "首次启动" 章节完成环境与模型准备。
     echo.
