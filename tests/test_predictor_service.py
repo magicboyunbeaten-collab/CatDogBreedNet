@@ -28,11 +28,17 @@ FAKE_CLASSES = ["beagle", "boxer", "chihuahua"]
 class _FakeInnerPredictor:
     """Stand-in for ``ml.predictor.Predictor`` (no weights, no inference)."""
 
-    def __init__(self, weights_path, device="auto", model_factory=None):
+    #: 记录最后一次构造收到的 image_size，供 U6.6 的分辨率透传用例断言。
+    last_image_size: int | None = None
+
+    def __init__(self, weights_path, device="auto", model_factory=None,
+                 image_size=None):
+        _FakeInnerPredictor.last_image_size = image_size
         self.weights_path = Path(weights_path)
         self.class_names = list(FAKE_CLASSES)
         self.num_classes = len(self.class_names)
         self.device = "cpu"
+        self.image_size = image_size
 
 
 @pytest.fixture
@@ -261,3 +267,67 @@ def test_same_class_count_mismatch_does_not_start_service(
                                    class_names_path=mapping)
     # 异常抛出后绝不应留下一个"可用"的服务实例
     assert service is None
+
+
+
+# ---------------------------------------------------------------------------
+# U6.6：推理分辨率必须与权重的训练分辨率一致（exp06 为 256）
+# ---------------------------------------------------------------------------
+
+def test_image_size_is_passed_through_to_inner_predictor(
+        tmp_path, fake_predictor):
+    """服务层必须把 image_size 原样交给内层 Predictor。
+
+    exp06 训练于 256；若服务仍按 224 预处理，macro-F1 会从 0.8149 掉到 0.8010，
+    低于 V2.1 基线，切换就失去意义。因此这条透传必须被测试锁住。
+    """
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    service = PredictorService(weights_path=weights, device="cpu",
+                               class_names_path=None, image_size=256)
+    assert service.image_size == 256
+    assert _FakeInnerPredictor.last_image_size == 256
+
+
+def test_image_size_defaults_to_project_standard_when_unspecified(
+        tmp_path, fake_predictor):
+    """不传 image_size 时保持 224（向后兼容既有调用点）。"""
+    from ml.config import IMAGE_SIZE
+
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    service = PredictorService(weights_path=weights, device="cpu",
+                               class_names_path=None)
+    assert service.image_size == IMAGE_SIZE == 224
+    assert _FakeInnerPredictor.last_image_size == 224
+
+
+def test_startup_log_states_image_size(tmp_path, fake_predictor, caplog):
+    """启动日志必须写明 image_size：换了权重却忘了改分辨率时能立刻看出。"""
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    with caplog.at_level(logging.INFO):
+        PredictorService(weights_path=weights, device="cpu",
+                         class_names_path=None, image_size=256)
+    assert "image_size=256" in caplog.text
+
+
+def test_service_exposes_version_id_for_health(tmp_path, fake_predictor):
+    """U6.6：服务要把 model_version.json 的 version_id 暴露给健康接口。"""
+    version_id = "v2_2_exp06_resolution256_lowlr_seed42"
+    _write_version(tmp_path, {"version_id": version_id, "num_classes": 136})
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    service = PredictorService(weights_path=weights, device="cpu",
+                               class_names_path=None, image_size=256)
+    assert service.model_version["version_id"] == version_id
+
+
+def test_service_model_version_is_none_without_version_file(
+        tmp_path, fake_predictor):
+    """没有版本文件时不得臆造版本（健康接口应返回 None）。"""
+    weights = tmp_path / "best_model.pth"
+    weights.write_bytes(b"")
+    service = PredictorService(weights_path=weights, device="cpu",
+                               class_names_path=None, image_size=256)
+    assert service.model_version is None

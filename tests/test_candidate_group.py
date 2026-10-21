@@ -598,19 +598,62 @@ def test_settings_candidate_group_flag_can_be_disabled():
     assert Settings(candidate_group_enabled=False).candidate_group_enabled is False
 
 
-def test_settings_default_model_is_v2_1():
-    """U5.5：默认推理模型切换为 V2.1（136 类），权重与类名表同目录。"""
-    from backend.app.config import DEFAULT_MODEL_DIR, Settings
+def test_settings_default_model_is_exp06():
+    """U6.6：默认推理模型切换为 exp06（V2.2 候选，136 类，256 分辨率）。
+
+    这里只断言**有判别力**的条件（目录名、分辨率、文件真实存在），
+    不写 ``settings.weights_path == DEFAULT_MODEL_DIR / "best_model.pth"``
+    这种自洽命题——那种断言在目录写错时依然成立。
+    """
+    from backend.app.config import (
+        DEFAULT_CLASS_NAMES_PATH,
+        DEFAULT_IMAGE_SIZE,
+        DEFAULT_MODEL_DIR,
+        Settings,
+    )
 
     settings = Settings()
+    assert DEFAULT_MODEL_DIR.name == (
+        "v2_2_border_collie_exp06_resolution256_lowlr_seed42")
     assert settings.weights_path == DEFAULT_MODEL_DIR / "best_model.pth"
-    assert settings.class_names_path == DEFAULT_MODEL_DIR / "class_names.json"
-    # 两者必须配对：默认状态下位于同一目录
-    assert settings.class_names_path.parent == settings.weights_path.parent
+    assert settings.weights_path.exists()
+    # exp06 训练于 256；分辨率必须与权重配对，否则预处理与训练不匹配
+    assert DEFAULT_IMAGE_SIZE == 256
+    assert settings.image_size == 256
+    # 类别映射继续使用既有那份 136 类表，不为新权重复制/重写
+    assert settings.class_names_path == DEFAULT_CLASS_NAMES_PATH
+    assert settings.class_names_path.name == "class_names.json"
+    assert settings.class_names_path.parent.name == "v2_1_136classes_seed42"
+    assert settings.class_names_path.exists()
+    # exp06 checkpoint 的 class_names 与该映射逐项一致（内容级核对）
+    assert (DEFAULT_MODEL_DIR / "class_names.json").read_bytes() == \
+        settings.class_names_path.read_bytes()
+
+
+def test_settings_image_size_env_override():
+    """回退到 224 训练的模型时必须能改回 224（CATDOG_IMAGE_SIZE）。"""
+    from backend.app.config import Settings
+
+    assert Settings().image_size == 256
+    monkey = {"CATDOG_IMAGE_SIZE": "224"}
+    import os
+
+    old = os.environ.get("CATDOG_IMAGE_SIZE")
+    try:
+        os.environ["CATDOG_IMAGE_SIZE"] = monkey["CATDOG_IMAGE_SIZE"]
+        assert Settings.from_env().image_size == 224
+        os.environ["CATDOG_IMAGE_SIZE"] = "not-a-number"
+        # 非法值回退默认，不得崩溃
+        assert Settings.from_env().image_size == 256
+    finally:
+        if old is None:
+            os.environ.pop("CATDOG_IMAGE_SIZE", None)
+        else:
+            os.environ["CATDOG_IMAGE_SIZE"] = old
 
 
 def test_settings_v1_1_files_still_exist_untouched():
-    """回退目标必须仍然存在（V1.1 文件不得被覆盖或删除）。"""
+    """回退目标必须仍然存在（V1.1 与 V2.1 文件不得被覆盖或删除）。"""
     from ml.config import ARTIFACTS_DIR
 
     assert (ARTIFACTS_DIR / "best_model.pth").exists()
@@ -618,6 +661,31 @@ def test_settings_v1_1_files_still_exist_untouched():
     assert (ARTIFACTS_DIR / "v2_1_136classes_seed42" / "best_model.pth").exists()
     assert (ARTIFACTS_DIR / "v2_1_136classes_seed42"
             / "class_names.json").exists()
+    # exp06 权重本身也不得被覆盖
+    assert (ARTIFACTS_DIR
+            / "v2_2_border_collie_exp06_resolution256_lowlr_seed42"
+            / "best_model.pth").exists()
+
+
+def test_v2_1_rollback_path_is_still_resolvable(monkeypatch):
+    """U6.6：切到 exp06 之后，V2.1 仍是可用的回退目标。
+
+    回退只需两个环境变量（外加把分辨率改回 224），不要求改动任何代码或文件。
+    """
+    from backend.app.config import Settings
+    from ml.config import ARTIFACTS_DIR
+
+    v21 = ARTIFACTS_DIR / "v2_1_136classes_seed42"
+    monkeypatch.setenv("CATDOG_WEIGHTS_PATH", str(v21 / "best_model.pth"))
+    monkeypatch.setenv("CATDOG_CLASS_NAMES_PATH", str(v21 / "class_names.json"))
+    monkeypatch.setenv("CATDOG_IMAGE_SIZE", "224")
+
+    rollback = Settings.from_env()
+    assert rollback.weights_path == v21 / "best_model.pth"
+    assert rollback.class_names_path == v21 / "class_names.json"
+    assert rollback.image_size == 224
+    assert rollback.weights_path.exists()
+    assert rollback.class_names_path.exists()
 
 
 def test_env_can_override_model_paths_independently(monkeypatch, tmp_path):

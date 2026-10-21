@@ -197,6 +197,44 @@ def test_health_response_model_weights_is_optional():
     assert legacy.model_dump()["num_classes"] == 37
 
 
+def test_health_reports_model_version(client_with_fake):
+    """U6.6：健康接口必须能直接说清"现在服务的是哪个模型版本"。
+
+    权重文件名在 V1.1 / V2.1 / exp06 之间都是 ``best_model.pth``，
+    单看 ``model_weights`` 无法区分版本；版本标识来自权重同目录的
+    ``model_version.json``，必须原样透出到 health。
+    """
+    client, app, _ = client_with_fake
+    app.state.predictor.model_version = {
+        "version_id": "v2_2_exp06_resolution256_lowlr_seed42"}
+    body = client.get("/api/health").json()
+    assert body["model_version"] == "v2_2_exp06_resolution256_lowlr_seed42"
+    # 版本标识不是路径，不得泄露服务器目录
+    assert "\\" not in body["model_version"]
+    assert "/" not in body["model_version"]
+    # 应用版本保持原有语义，不被模型版本覆盖
+    assert body["version"] == "1.0.0"
+
+
+def test_health_model_version_is_none_without_metadata(client_with_fake):
+    """模型目录没有 model_version.json 时返回 None，不臆造版本。"""
+    client, app, _ = client_with_fake
+    app.state.predictor.model_version = None
+    body = client.get("/api/health").json()
+    assert body["model_version"] is None
+
+
+def test_health_response_model_version_is_optional():
+    """旧版响应（无 model_version 字段）必须仍能通过 schema 校验。"""
+    from backend.app.schemas import HealthResponse
+
+    legacy = HealthResponse(
+        status="ok", model_loaded=True, num_classes=136, model_error=None,
+        version="1.0.0", time="2026-10-21T00:00:00+00:00")
+    assert legacy.model_version is None
+    assert legacy.model_dump()["num_classes"] == 136
+
+
 def test_predict_returns_503_when_model_not_ready(client_without_model):
     client, _, _ = client_without_model
     response = client.post(
