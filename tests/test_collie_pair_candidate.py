@@ -35,8 +35,8 @@ from backend.app.services.candidate_group import (  # noqa: E402
     CANDIDATE_GROUP_ZH,
     COLLIE_PAIR_GROUP,
     COLLIE_PAIR_GROUP_ZH,
-    COLLIE_PAIR_MARGIN_THRESHOLD,
     COLLIE_PAIR_MASS_THRESHOLD,
+    COLLIE_PAIR_SHARE_THRESHOLD,
     COLLIE_PAIR_VERSION,
     GROUP_ID_COLLIE_PAIR,
     GROUP_ID_FOUR_BREED,
@@ -87,12 +87,14 @@ def test_collie_pair_members_and_version_are_independent():
     assert COLLIE_PAIR_GROUP == ("collie", "border_collie")
     assert set(COLLIE_PAIR_GROUP).isdisjoint(set(CANDIDATE_GROUP))
     assert COLLIE_PAIR_VERSION != THRESHOLD_VERSION
-    assert COLLIE_PAIR_VERSION == "val-2026-10-21-collie-pair-v1"
+    # v2（U6.7）：判定量由绝对分差改为组内相对份额
+    assert COLLIE_PAIR_VERSION == "val-2026-10-21-collie-pair-v2"
     assert set(COLLIE_PAIR_GROUP_ZH) == set(COLLIE_PAIR_GROUP)
     assert COLLIE_PAIR_GROUP_ZH[COLLIE] == "柯利牧羊犬"
     assert COLLIE_PAIR_GROUP_ZH[BORDER_COLLIE] == "边境牧羊犬"
     assert COLLIE_PAIR_MASS_THRESHOLD == 0.30
-    assert COLLIE_PAIR_MARGIN_THRESHOLD == 0.30
+    #: 由 validation 网格选定：覆盖 3 张已知歧义图、组外误触发 0
+    assert COLLIE_PAIR_SHARE_THRESHOLD == 0.20
 
 
 # ---------------------------------------------------------------------------
@@ -125,18 +127,67 @@ def test_collie_pair_triggers_when_top1_border_collie():
     assert group["triggered"] is True
     assert group["top1_breed"] == BORDER_COLLIE
     assert group["group_mass"] == pytest.approx(0.5689, abs=1e-6)
+    # group_margin 仅作信息性字段保留；v2 的判据是 group_share
     assert group["group_margin"] == pytest.approx(0.2525, abs=1e-6)
+    assert group["group_share"] == pytest.approx(0.1582 / 0.5689, abs=1e-6)
+    assert group["group_share"] >= 0.20
 
 
-def test_collie_pair_not_triggered_when_margin_too_large():
-    """pair_margin 超阈值时不触发（§4.1-3）。"""
+def test_collie_pair_not_triggered_when_share_too_small():
+    """组内相对份额不足时不触发（v2 的判别条件，对应 v1 的"分差过大"）。"""
     predictions = _pair_predictions((COLLIE, 0.90), (BORDER_COLLIE, 0.02))
     group = build_collie_pair_group(
         predictions, class_names=PAIR_CLASSES,
         probabilities={COLLIE: 0.90, BORDER_COLLIE: 0.02})
     assert group is not None
     assert group["triggered"] is False
-    assert "分差" in group["reason"]
+    # share = 0.02 / 0.92 ≈ 0.0217
+    assert group["group_share"] == pytest.approx(0.02 / 0.92, abs=1e-6)
+    assert "相对份额" in group["reason"]
+
+
+def test_collie_pair_high_mass_but_low_share_does_not_trigger():
+    """组内总质量很高但份额很小 → 不触发。
+
+    这是 validation 上真实存在的形态：cardigan / papillon /
+    english_springer / shetland_sheepdog / bernese_mountain_dog 共 7 张图
+    的 Top-1 落在两类上、pair_mass 高达 0.65~0.996，但 share 最高仅 0.0841。
+    若只看 mass（≥0.30）会给这些图错误地加上"两类难以区分"的提示，
+    因此真正起拦截作用的是 share。
+    """
+    predictions = _pair_predictions((BORDER_COLLIE, 0.9961), (COLLIE, 0.0039))
+    group = build_collie_pair_group(
+        predictions, class_names=PAIR_CLASSES,
+        probabilities={BORDER_COLLIE: 0.9961, COLLIE: 0.0039})
+    assert group is not None
+    assert group["group_mass"] >= 0.30          # mass 门槛本身过得去
+    assert group["group_share"] < 0.20          # 但份额不到门槛
+    assert group["triggered"] is False
+
+
+def test_collie_pair_share_threshold_is_inclusive():
+    """share 恰好等于阈值时应当触发（边界包含）。"""
+    # p = (0.40, 0.10) -> mass 0.50, share 0.10/0.50 = 0.20
+    predictions = _pair_predictions((COLLIE, 0.40), (BORDER_COLLIE, 0.10))
+    group = build_collie_pair_group(
+        predictions, class_names=PAIR_CLASSES,
+        probabilities={COLLIE: 0.40, BORDER_COLLIE: 0.10})
+    assert group["group_share"] == pytest.approx(COLLIE_PAIR_SHARE_THRESHOLD,
+                                                 abs=1e-9)
+    assert group["triggered"] is True
+
+
+def test_collie_pair_mass_threshold_is_inclusive():
+    """mass 恰好等于阈值时，只要份额够就触发（边界包含）。"""
+    predictions = _pair_predictions((COLLIE, 0.20), (BORDER_COLLIE, 0.10))
+    group = build_collie_pair_group(
+        predictions, class_names=PAIR_CLASSES,
+        probabilities={COLLIE: 0.20, BORDER_COLLIE: 0.10})
+    assert group["group_mass"] == pytest.approx(COLLIE_PAIR_MASS_THRESHOLD,
+                                                abs=1e-9)
+    # group_share 按 6 位小数返回，容差取 1e-6
+    assert group["group_share"] == pytest.approx(0.10 / 0.30, abs=1e-6)
+    assert group["triggered"] is True
 
 
 def test_collie_pair_not_triggered_when_mass_too_low():
@@ -293,7 +344,7 @@ def test_api_response_never_exposes_full_probability_vector():
     assert set(group) == {
         "group_id", "triggered", "threshold_version", "top1_breed",
         "top1_confidence", "candidates", "available_candidates",
-        "group_mass", "group_margin", "reason",
+        "group_mass", "group_margin", "group_share", "reason",
     }
     response = PredictResponse(
         success=True,
