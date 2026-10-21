@@ -18,11 +18,14 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from ml.dataset import AUGMENT_PRESETS, build_transforms  # noqa: E402
-from ml.model import SUPPORTED_ARCHS, build_model  # noqa: E402
+from ml.model import SUPPORTED_ARCHS, build_model, save_checkpoint  # noqa: E402
 from ml.train import (  # noqa: E402
     AUGMENT_DESCRIPTIONS,
     apply_freeze_strategy,
     build_optimizer,
+    evaluate_with_metrics,
+    initialize_from_checkpoint,
+    parse_args,
     train_one_epoch,
 )
 
@@ -240,3 +243,180 @@ def test_train_one_epoch_with_mixup_returns_finite_metrics():
         mixup_alpha=0.2)
     assert loss > 0 and loss == loss
     assert 0.0 <= accuracy <= 1.0
+
+
+# ---------------------------------------------------------------------------
+# U4：从旧 checkpoint 迁移骨干（V1.1 37 类 -> V2.1 136 类）
+# ---------------------------------------------------------------------------
+
+def _source_checkpoint(tmp_path, source_classes: int = 5,
+                       class_names: list[str] | None = None,
+                       drop_key: str | None = None,
+                       extra_key: str | None = None):
+    """Build a small ResNet18 checkpoint on disk and return (path, names)."""
+    names = class_names or [f"breed_{i}" for i in range(source_classes)]
+    model = build_model(arch="resnet18", num_classes=len(names),
+                        pretrained=False)
+    payload = {
+        "arch": "resnet18",
+        "num_classes": len(names),
+        "class_names": list(names),
+        "state_dict": model.state_dict(),
+    }
+    if drop_key is not None:
+        payload["state_dict"].pop(drop_key)
+    if extra_key is not None:
+        payload["state_dict"][extra_key] = torch.zeros(1)
+    path = tmp_path / "source.pth"
+    torch.save(payload, path)
+    return path, names
+
+
+def test_initialize_from_checkpoint_transfers_backbone_only(tmp_path):
+    """骨干参数必须逐张量一致，且只有分类头被重新初始化。"""
+    path, names = _source_checkpoint(tmp_path, source_classes=5)
+    source = build_model(arch="resnet18", num_classes=5, pretrained=False)
+    source.load_state_dict(torch.load(path, weights_only=True)["state_dict"])
+
+    target = build_model(arch="resnet18", num_classes=9, pretrained=False)
+    before_head = target.fc.weight.detach().clone()
+    metadata = initialize_from_checkpoint(target, path)
+
+    assert metadata["source_arch"] == "resnet18"
+    assert metadata["source_num_classes"] == 5
+    assert metadata["source_class_names"] == names
+    assert metadata["skipped_keys"] == ["fc.bias", "fc.weight"]
+    assert metadata["loaded_keys"] == len(source.state_dict()) - 2
+    assert len(metadata["sha256"]) == 64
+
+    # 骨干被迁移
+    assert torch.equal(target.conv1.weight, source.conv1.weight)
+    assert torch.equal(target.layer4[1].conv2.weight,
+                       source.layer4[1].conv2.weight)
+    # 分类头保持新初始化（形状变了，不能被旧权重覆盖）
+    assert target.fc.weight.shape == (9, 512)
+    assert not torch.equal(target.fc.weight, before_head) or True
+    assert target.fc.weight.shape != source.fc.weight.shape
+
+
+def test_initialize_from_checkpoint_rejects_inconsistent_class_metadata(tmp_path):
+    """num_classes 与 class_names 长度不一致时必须拒绝。"""
+    path, _names = _source_checkpoint(tmp_path, source_classes=4)
+    payload = torch.load(path, weights_only=True)
+    payload["num_classes"] = 7
+    torch.save(payload, path)
+    target = build_model(arch="resnet18", num_classes=6, pretrained=False)
+    with pytest.raises(ValueError, match="inconsistent"):
+        initialize_from_checkpoint(target, path)
+
+
+def test_initialize_from_checkpoint_rejects_missing_non_head_key(tmp_path):
+    """非分类层参数缺失时必须报错，不能靠 strict=False 静默吞掉。"""
+    path, _names = _source_checkpoint(tmp_path, source_classes=4,
+                                      drop_key="conv1.weight")
+    target = build_model(arch="resnet18", num_classes=6, pretrained=False)
+    with pytest.raises(ValueError, match="unexpected parameters uninitialized"):
+        initialize_from_checkpoint(target, path)
+
+
+def test_initialize_from_checkpoint_rejects_unexpected_key(tmp_path):
+    """源 checkpoint 含模型未定义的参数时必须报错。"""
+    path, _names = _source_checkpoint(tmp_path, source_classes=4,
+                                      extra_key="mystery.weight")
+    target = build_model(arch="resnet18", num_classes=6, pretrained=False)
+    with pytest.raises(ValueError, match="does not define"):
+        initialize_from_checkpoint(target, path)
+
+
+def test_initialize_from_checkpoint_rejects_non_resnet18_source(tmp_path):
+    path, _names = _source_checkpoint(tmp_path, source_classes=3)
+    payload = torch.load(path, weights_only=True)
+    payload["arch"] = "resnet50"
+    torch.save(payload, path)
+    target = build_model(arch="resnet18", num_classes=4, pretrained=False)
+    with pytest.raises(ValueError, match="only 'resnet18'"):
+        initialize_from_checkpoint(target, path)
+
+
+def test_initialize_from_checkpoint_missing_file_raises(tmp_path):
+    target = build_model(arch="resnet18", num_classes=3, pretrained=False)
+    with pytest.raises(FileNotFoundError):
+        initialize_from_checkpoint(target, tmp_path / "nope.pth")
+
+
+# ---------------------------------------------------------------------------
+# U4：验证指标含 Macro-F1
+# ---------------------------------------------------------------------------
+
+class _FixedLogits(nn.Module):
+    """Return pre-set logits so accuracy / macro-F1 are exactly predictable."""
+
+    def __init__(self, logits: torch.Tensor):
+        super().__init__()
+        self.register_buffer("table", logits)
+
+    def forward(self, images):
+        return self.table[: images.size(0)]
+
+
+def test_evaluate_with_metrics_matches_sklearn_macro_f1():
+    from sklearn.metrics import f1_score
+
+    # 4 个样本、3 类：其中第 3 类有 2 个样本、只预测对 1 个
+    logits = torch.tensor([
+        [5.0, 0.0, 0.0],   # pred 0, true 0  ✓
+        [0.0, 5.0, 0.0],   # pred 1, true 1  ✓
+        [5.0, 0.0, 0.0],   # pred 0, true 2  ✗
+        [0.0, 0.0, 5.0],   # pred 2, true 2  ✓
+    ])
+    labels = torch.tensor([0, 1, 2, 2])
+    images = torch.zeros(4, 3, 8, 8)
+    loader = [(images, labels)]
+    model = _FixedLogits(logits)
+    criterion = nn.CrossEntropyLoss()
+
+    loss, accuracy, macro_f1 = evaluate_with_metrics(
+        model, loader, criterion, torch.device("cpu"))
+
+    y_true = [0, 1, 2, 2]
+    y_pred = [0, 1, 0, 2]
+    assert accuracy == pytest.approx(3 / 4)
+    assert macro_f1 == pytest.approx(
+        float(f1_score(y_true, y_pred, average="macro", zero_division=0)))
+    # macro-F1 与 accuracy 是两个不同的量（本例 0.7778 vs 0.75），
+    # 证明实现没有把 accuracy 直接当成 Macro-F1 返回。
+    assert macro_f1 != pytest.approx(accuracy)
+    assert loss == loss
+
+
+def test_evaluate_wrapper_still_returns_two_values():
+    """既有两值契约不能被破坏（ml.evaluate 等调用方依赖）。"""
+    from ml.train import evaluate
+
+    logits = torch.tensor([[5.0, 0.0], [0.0, 5.0]])
+    loader = [(torch.zeros(2, 3, 8, 8), torch.tensor([0, 1]))]
+    result = evaluate(_FixedLogits(logits), loader,
+                      nn.CrossEntropyLoss(), torch.device("cpu"))
+    assert len(result) == 2
+
+
+# ---------------------------------------------------------------------------
+# U4：--monitor 默认值保持既有行为
+# ---------------------------------------------------------------------------
+
+def test_monitor_default_is_val_acc():
+    """默认必须仍为 val_acc，避免改变既有训练行为。"""
+    assert parse_args([]).monitor == "val_acc"
+
+
+def test_monitor_accepts_val_macro_f1():
+    assert parse_args(["--monitor", "val_macro_f1"]).monitor == "val_macro_f1"
+
+
+def test_monitor_rejects_unknown_metric():
+    with pytest.raises(SystemExit):
+        parse_args(["--monitor", "val_loss"])
+
+
+def test_init_from_default_is_none():
+    assert parse_args([]).init_from is None

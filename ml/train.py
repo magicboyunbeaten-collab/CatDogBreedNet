@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
+import json
 import platform
 import sys
 import time
@@ -41,6 +43,7 @@ import matplotlib  # noqa: E402
 
 matplotlib.use("Agg")
 from matplotlib import pyplot as plt  # noqa: E402
+from sklearn.metrics import f1_score  # noqa: E402
 from torch.optim import AdamW  # noqa: E402
 from torch.optim.lr_scheduler import StepLR  # noqa: E402
 
@@ -52,7 +55,12 @@ from ml.config import (  # noqa: E402
     SEED,
     VAL_RATIO,
 )
-from ml.dataset import AUGMENT_PRESETS, build_dataloaders  # noqa: E402
+from ml.dataset import (  # noqa: E402
+    AUGMENT_PRESETS,
+    build_dataloaders,
+    build_transforms,
+)
+from torch.utils.data import DataLoader  # noqa: E402
 from ml.model import (  # noqa: E402
     ARCH,
     PRETRAINED_WEIGHTS,
@@ -96,6 +104,21 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--augment", default="baseline",
                         choices=list(AUGMENT_PRESETS),
                         help="training augmentation preset (A2 experiment)")
+    # --- U6-C：仅对目标两类（collie / border_collie）生效的通道 ---
+    parser.add_argument("--pair-color-jitter", default=None, metavar="B,C,S,H",
+                        help="U6 exp01: apply ColorJitter ONLY to collie and "
+                             "border_collie training samples. Format "
+                             "'brightness,contrast,saturation,hue'; omit to "
+                             "keep the baseline behaviour.")
+    parser.add_argument("--pair-sampler-weight", type=float, default=1.0,
+                        help="U6 exp02: WeightedRandomSampler weight for "
+                             "collie / border_collie samples (all other "
+                             "classes stay 1.0). 1.0 disables sampling so the "
+                             "default path is byte-for-byte the baseline.")
+    parser.add_argument("--image-size", type=int, default=IMAGE_SIZE,
+                        help="U6 exp04: input resolution for both train and "
+                             "eval transforms (default 224).")
+
     parser.add_argument("--freeze-strategy", default="none",
                         choices=["none", "layer4", "head"],
                         help="which modules stay trainable (A3 experiment): "
@@ -112,7 +135,23 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         help="label smoothing factor (0 disables, baseline)")
     parser.add_argument("--mixup-alpha", type=float, default=0.0,
                         help="Mixup Beta(alpha, alpha); 0 disables (baseline)")
+    parser.add_argument("--init-from", type=Path, default=None,
+                        help="initialize from an existing checkpoint (e.g. a "
+                             "37-class model) by loading only shape-compatible "
+                             "parameters and re-initializing the head. The "
+                             "skipped-keys set is asserted to be exactly the "
+                             "classification head, never silently ignored.")
+    parser.add_argument("--monitor", default="val_acc",
+                        choices=["val_acc", "val_macro_f1"],
+                        help="metric used for best-checkpoint selection and "
+                             "early stopping. Default 'val_acc' keeps the "
+                             "historical behaviour unchanged.")
     return parser.parse_args(argv)
+
+
+#: Head parameter names excluded when transferring a checkpoint whose
+#: ``num_classes`` differs from the current run (e.g. 37 -> 136).
+HEAD_PARAM_KEYS = ("fc.weight", "fc.bias")
 
 
 def _subset_loader(loader, limit, shuffle):
@@ -274,18 +313,45 @@ def train_one_epoch(model, loader, criterion, optimizer, device,
 
 
 @torch.no_grad()
-def evaluate(model, loader, criterion, device):
-    """Evaluate on a loader; return (avg_loss, accuracy)."""
+def evaluate_with_metrics(model, loader, criterion, device):
+    """Evaluate on a loader; return ``(avg_loss, accuracy, macro_f1)``.
+
+    Macro-F1 uses ``zero_division=0`` so a class that is never predicted does
+    not raise. It is the primary model-selection metric for multi-class runs
+    with uneven class populations (V2.1), because plain accuracy favours the
+    more populated classes.
+    """
     model.eval()
     total_loss, total_correct, total_samples = 0.0, 0, 0
+    y_true: list[int] = []
+    y_pred: list[int] = []
     for images, labels in loader:
         images, labels = images.to(device), labels.to(device)
         logits = model(images)
         loss = criterion(logits, labels)
+        predictions = logits.argmax(dim=1)
         total_loss += loss.item() * labels.size(0)
-        total_correct += (logits.argmax(dim=1) == labels).sum().item()
+        total_correct += (predictions == labels).sum().item()
         total_samples += labels.size(0)
-    return total_loss / total_samples, total_correct / total_samples
+        y_true.extend(labels.tolist())
+        y_pred.extend(predictions.tolist())
+    if not total_samples:
+        return 0.0, 0.0, 0.0
+    accuracy = total_correct / total_samples
+    macro_f1 = float(f1_score(y_true, y_pred, average="macro",
+                              zero_division=0))
+    return total_loss / total_samples, accuracy, macro_f1
+
+
+@torch.no_grad()
+def evaluate(model, loader, criterion, device):
+    """Evaluate on a loader; return (avg_loss, accuracy).
+
+    Kept as a thin wrapper so existing callers keep the two-value contract.
+    """
+    loss, accuracy, _macro_f1 = evaluate_with_metrics(
+        model, loader, criterion, device)
+    return loss, accuracy
 
 
 def save_curves(rows: list[dict], reports_dir: Path) -> None:
@@ -316,6 +382,120 @@ def save_curves(rows: list[dict], reports_dir: Path) -> None:
     plt.close(fig)
 
 
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def initialize_from_checkpoint(model, checkpoint_path,
+                               head_prefix: str = "fc.",
+                               target_class_names: list[str] | None = None) -> dict:
+    """Transfer shape-compatible weights from ``checkpoint_path`` into ``model``.
+
+    The classification head is transferred **only when**
+    ``target_class_names`` is given and is identical to the checkpoint's
+    ``class_names`` (e.g. V2.1 136 类 → V2.2 136 类 warm start). Otherwise the
+    head shape depends on a different ``num_classes`` and is re-initialized.
+    Every other parameter must load, and the result is *asserted* rather than
+    trusted:
+
+    * the missing keys must be exactly the head tensors (and nothing else);
+    * there must be no unexpected keys;
+    * the number of transferred tensors must equal
+      ``len(source_state_dict) - len(head_keys)``.
+
+    A broad unchecked ``strict=False`` is therefore impossible: any deviation
+    raises ``ValueError`` and aborts the run instead of silently producing a
+    partially initialized model.
+
+    Returns metadata suitable for ``experiment_config.json``.
+    """
+    checkpoint_path = Path(checkpoint_path)
+    if not checkpoint_path.exists():
+        raise FileNotFoundError(f"init checkpoint not found: {checkpoint_path}")
+    try:
+        payload = torch.load(checkpoint_path, map_location="cpu",
+                             weights_only=True)
+    except Exception:  # noqa: BLE001 - older payloads may need weights_only=False
+        payload = torch.load(checkpoint_path, map_location="cpu",
+                             weights_only=False)
+    if not isinstance(payload, dict) or "state_dict" not in payload:
+        raise ValueError(
+            f"init checkpoint {checkpoint_path} has no 'state_dict' entry")
+
+    source_arch = payload.get("arch")
+    if source_arch != "resnet18":
+        raise ValueError(
+            f"init checkpoint arch={source_arch!r}; only 'resnet18' is "
+            f"supported for weight transfer")
+    source_classes = payload.get("num_classes")
+    source_names = list(payload.get("class_names") or [])
+    if source_classes is None or len(source_names) != int(source_classes):
+        raise ValueError(
+            f"init checkpoint is inconsistent: num_classes={source_classes} "
+            f"but {len(source_names)} class names stored")
+
+    source_state = payload["state_dict"]
+    expected_head = {f"{head_prefix}weight", f"{head_prefix}bias"}
+    # 类别集合与顺序完全一致时才能连分类头一起继承（如 V2.1→V2.2 同为 136 类）。
+    same_classes = (target_class_names is not None
+                    and list(target_class_names) == list(source_names))
+    if same_classes:
+        head_keys: set[str] = set()
+    else:
+        head_keys = {key for key in source_state
+                     if key.startswith(head_prefix)}
+    if head_keys:
+        unexpected_head = head_keys - expected_head
+        if unexpected_head:
+            raise ValueError(
+                f"init checkpoint has unexpected head tensors: "
+                f"{sorted(unexpected_head)}")
+
+    transfer = {key: value for key, value in source_state.items()
+                if key not in head_keys}
+    if not transfer:
+        raise ValueError(
+            f"init checkpoint {checkpoint_path} contains no transferable "
+            f"backbone parameters")
+
+    result = model.load_state_dict(transfer, strict=False)
+    missing = set(result.missing_keys)
+    unexpected = set(result.unexpected_keys)
+    if unexpected:
+        raise ValueError(
+            f"init checkpoint has keys the model does not define: "
+            f"{sorted(unexpected)}")
+    permitted_missing = (set() if same_classes
+                         else expected_head & set(model.state_dict()))
+    if missing != permitted_missing:
+        raise ValueError(
+            f"init checkpoint left unexpected parameters uninitialized: "
+            f"missing={sorted(missing)}; only {sorted(permitted_missing)} "
+            f"(the classification head) may be re-initialized")
+    if len(transfer) != len(source_state) - len(head_keys):
+        raise ValueError("internal error: transferred tensor count mismatch")
+
+    return {
+        "path": str(checkpoint_path),
+        "sha256": _sha256_file(checkpoint_path),
+        "source_arch": source_arch,
+        "source_num_classes": int(source_classes),
+        "source_class_names": source_names,
+        "loaded_keys": len(transfer),
+        "head_transferred": same_classes,
+        "skipped_keys": sorted(head_keys),
+        "skipped_reason": (
+            "classification head transferred unchanged (identical class "
+            "names)" if same_classes else
+            "classification head re-initialized because the class count "
+            "changed"),
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     started = time.time()
@@ -329,8 +509,45 @@ def main(argv: list[str] | None = None) -> int:
         batch_size=args.batch_size,
         num_workers=args.num_workers,
         augment=args.augment,
+        image_size=args.image_size,
     )
     train_loader, val_loader = loaders["train"], loaders["val"]
+
+    # --- U6-C：仅对目标两类生效的颜色扰动 / 加权采样（默认全部关闭）---
+    pair_jitter_spec = None
+    if args.pair_color_jitter:
+        from ml.u6_pair_training import (PairColorJitterDataset,
+                                         parse_jitter)
+        pair_jitter_spec = ",".join(
+            f"{value:g}" for value in parse_jitter(args.pair_color_jitter))
+        jitter = parse_jitter(args.pair_color_jitter)
+        wrapped = PairColorJitterDataset(
+            loaders["train"].dataset, class_names,
+            transform=build_transforms(train=True, augment=args.augment,
+                                       image_size=args.image_size),
+            jitter=jitter)
+        print(f"[train] pair-only ColorJitter {jitter} applied to "
+              f"{wrapped.pair_sample_count} samples "
+              f"(collie + border_collie)")
+        loaders["train"] = DataLoader(
+            wrapped, batch_size=args.batch_size, shuffle=True,
+            num_workers=args.num_workers,
+            pin_memory=torch.cuda.is_available())
+        train_loader = loaders["train"]
+
+    if args.pair_sampler_weight and args.pair_sampler_weight > 1.0:
+        from ml.u6_pair_training import make_pair_weighted_sampler
+        sampler = make_pair_weighted_sampler(
+            loaders["train"].dataset, class_names,
+            pair_weight=args.pair_sampler_weight, seed=args.seed)
+        print(f"[train] pair-weighted sampler weight="
+              f"{args.pair_sampler_weight} over "
+              f"{len(loaders['train'].dataset)} samples")
+        loaders["train"] = DataLoader(
+            loaders["train"].dataset, batch_size=args.batch_size,
+            sampler=sampler, num_workers=args.num_workers,
+            pin_memory=torch.cuda.is_available())
+        train_loader = loaders["train"]
     if args.limit_train is not None:
         train_loader = _subset_loader(train_loader, args.limit_train, shuffle=True)
     if args.limit_val is not None:
@@ -353,17 +570,42 @@ def main(argv: list[str] | None = None) -> int:
         model, args.arch, args.freeze_strategy)
     print(f"[train] freeze strategy '{args.freeze_strategy}': "
           f"{freeze_description}")
+
+    init_metadata = None
+    if args.init_from is not None:
+        init_metadata = initialize_from_checkpoint(
+            model, args.init_from, target_class_names=class_names)
+        print(f"[train] initialized from {init_metadata['path']} "
+              f"(source {init_metadata['source_arch']}/"
+              f"{init_metadata['source_num_classes']} classes): "
+              f"loaded {init_metadata['loaded_keys']} tensors, "
+              f"re-initialized {init_metadata['skipped_keys']}, "
+              f"head_transferred={init_metadata['head_transferred']}",
+              flush=True)
+
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
     optimizer = build_optimizer(
         model, arch=args.arch, lr=args.lr, weight_decay=args.weight_decay,
         lr_head=args.lr_head, lr_backbone=args.lr_backbone)
     scheduler = StepLR(optimizer, step_size=args.step_size, gamma=args.gamma)
 
+    # Refuse to overwrite an existing experiment directory. The legacy default
+    # (``artifacts/``) is exempt because it always contains previous results and
+    # the historical default invocation must keep working.
+    if (args.output_dir.exists() and any(args.output_dir.iterdir())
+            and args.output_dir.resolve() != ARTIFACTS_DIR.resolve()):
+        print(f"[train] refusing to overwrite non-empty output dir "
+              f"{args.output_dir}; choose a new --output-dir",
+              file=sys.stderr)
+        return 2
+
     args.output_dir.mkdir(parents=True, exist_ok=True)
     args.reports_dir.mkdir(parents=True, exist_ok=True)
 
     rows: list[dict] = []
     best_val_acc = -1.0
+    best_val_macro_f1 = -1.0
+    best_monitor_value = -1.0
     best_epoch = -1
     epochs_without_improvement = 0
 
@@ -373,9 +615,15 @@ def main(argv: list[str] | None = None) -> int:
             train_loss, train_acc = train_one_epoch(
                 model, train_loader, criterion, optimizer, device,
                 mixup_alpha=args.mixup_alpha)
-            val_loss, val_acc = evaluate(model, val_loader, criterion, device)
+            val_loss, val_acc, val_macro_f1 = evaluate_with_metrics(
+                model, val_loader, criterion, device)
             scheduler.step()
             epoch_seconds = time.time() - epoch_started
+
+            # Primary metric drives best-checkpoint selection and early
+            # stopping; ``--monitor val_acc`` preserves the historical default.
+            monitor_value = (val_macro_f1 if args.monitor == "val_macro_f1"
+                             else val_acc)
 
             row = {
                 "epoch": epoch,
@@ -383,6 +631,7 @@ def main(argv: list[str] | None = None) -> int:
                 "train_acc": round(train_acc, 6),
                 "val_loss": round(val_loss, 6),
                 "val_acc": round(val_acc, 6),
+                "val_macro_f1": round(val_macro_f1, 6),
                 "lr": scheduler.get_last_lr()[0],
                 "epoch_seconds": round(epoch_seconds, 2),
             }
@@ -390,30 +639,38 @@ def main(argv: list[str] | None = None) -> int:
             print(f"[epoch {epoch:>3}/{args.epochs}] "
                   f"train_loss={train_loss:.4f} train_acc={train_acc:.4f} "
                   f"val_loss={val_loss:.4f} val_acc={val_acc:.4f} "
+                  f"val_macro_f1={val_macro_f1:.4f} "
                   f"lr={row['lr']:.2e} ({epoch_seconds:.1f}s)", flush=True)
 
-            # Keep the latest weights every epoch; best weights by val accuracy.
-            # ``arch`` must be passed explicitly: save_checkpoint defaults to
-            # the baseline resnet18, which would mislabel non-resnet18
-            # checkpoints and break load_checkpoint's architecture dispatch.
+            # Keep the latest weights every epoch; best weights by the monitored
+            # metric. ``arch`` must be passed explicitly: save_checkpoint
+            # defaults to the baseline resnet18, which would mislabel
+            # non-resnet18 checkpoints and break load_checkpoint's dispatch.
             save_checkpoint(model, args.output_dir / "last_model.pth",
                             class_names, arch=args.arch,
                             extra={"epoch": epoch})
-            if val_acc > best_val_acc:
+            if monitor_value > best_monitor_value:
+                best_monitor_value = monitor_value
                 best_val_acc = val_acc
+                best_val_macro_f1 = val_macro_f1
                 best_epoch = epoch
                 epochs_without_improvement = 0
                 save_checkpoint(model, args.output_dir / "best_model.pth",
                                 class_names, arch=args.arch,
-                                extra={"epoch": epoch, "val_acc": val_acc})
-                print(f"[train] new best val_acc={val_acc:.4f} at epoch {epoch}; "
+                                extra={"epoch": epoch, "val_acc": val_acc,
+                                       "val_macro_f1": val_macro_f1,
+                                       "monitor": args.monitor,
+                                       "monitor_value": monitor_value})
+                print(f"[train] new best {args.monitor}={monitor_value:.4f} "
+                      f"at epoch {epoch} (val_acc={val_acc:.4f}, "
+                      f"val_macro_f1={val_macro_f1:.4f}); "
                       f"saved best_model.pth", flush=True)
             else:
                 epochs_without_improvement += 1
 
             if args.patience and epochs_without_improvement >= args.patience:
-                print(f"[train] early stopping: no val_acc improvement for "
-                      f"{epochs_without_improvement} epochs")
+                print(f"[train] early stopping: no {args.monitor} improvement "
+                      f"for {epochs_without_improvement} epochs")
                 break
     except torch.cuda.OutOfMemoryError:
         print("[train] CUDA out of memory. Suggestions: reduce --batch-size "
@@ -443,12 +700,20 @@ def main(argv: list[str] | None = None) -> int:
         "fine_tuning": freeze_description,
         "freeze_strategy": args.freeze_strategy,
         "augment_preset": args.augment,
+        # U6-C：仅对目标两类生效的通道（默认关闭，写入配置便于复现与审计）
+        "pair_color_jitter": pair_jitter_spec,
+        "pair_sampler_weight": args.pair_sampler_weight,
+        "pair_labels": ["collie", "border_collie"],
         "num_classes": num_classes,
         "seed": args.seed,
         "epochs_requested": args.epochs,
         "epochs_completed": len(rows),
         "best_epoch": best_epoch,
         "best_val_acc": best_val_acc,
+        "best_val_macro_f1": best_val_macro_f1,
+        "monitor": args.monitor,
+        "best_monitor_value": best_monitor_value,
+        "init_from": init_metadata,
         "batch_size": args.batch_size,
         "lr": args.lr,
         "lr_head": args.lr_head,
@@ -464,11 +729,15 @@ def main(argv: list[str] | None = None) -> int:
                     if args.label_smoothing else "")),
         "mixup_alpha": args.mixup_alpha,
         "early_stopping_patience": args.patience,
-        "image_size": IMAGE_SIZE,
+        "image_size": args.image_size,
         "train_augmentation": AUGMENT_DESCRIPTIONS[args.augment],
         "eval_transform": "Resize(256) + CenterCrop(224) + Normalize(ImageNet)",
         "normalization": "ImageNet mean/std",
         "data_dir": str(args.data_dir),
+        "class_count": num_classes,
+        "class_names": list(class_names),
+        "class_order_sha256": hashlib.sha256(
+            json.dumps(list(class_names)).encode("utf-8")).hexdigest(),
         "dataset_split_policy": (
             "test = official test split; train/val = official trainval split "
             f"stratified per class, seed={SEED}, val_ratio={VAL_RATIO}"),
@@ -490,11 +759,13 @@ def main(argv: list[str] | None = None) -> int:
     }
     config_path = args.output_dir / "experiment_config.json"
     config_path.write_text(
-        __import__("json").dumps(experiment_config, indent=2, ensure_ascii=False),
+        json.dumps(experiment_config, indent=2, ensure_ascii=False),
         encoding="utf-8")
 
     print(f"[train] done in {time.time() - started:.1f}s; "
-          f"best_val_acc={best_val_acc:.4f} (epoch {best_epoch})")
+          f"monitor={args.monitor} best={best_monitor_value:.4f} "
+          f"(epoch {best_epoch}); best_val_acc={best_val_acc:.4f} "
+          f"best_val_macro_f1={best_val_macro_f1:.4f}")
     print(f"[train] artifacts: {args.output_dir}/ "
           f"(best_model.pth, last_model.pth, class_names.json, experiment_config.json)")
     print(f"[train] reports: {log_path}, loss_curve.png, accuracy_curve.png")

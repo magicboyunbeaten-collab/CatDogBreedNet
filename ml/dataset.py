@@ -81,13 +81,15 @@ def class_names_from_class_to_idx(class_to_idx: dict[str, int]) -> list[str]:
 
 
 def build_datasets(processed_dir: Path = PROCESSED_DATA_DIR,
-                   augment: str = "baseline"):
+                   augment: str = "baseline",
+                   image_size: int = IMAGE_SIZE):
     """Build train/val/test ``ImageFolder`` datasets.
 
     Raises ``FileNotFoundError`` with setup instructions when a split
     directory is missing, and ``ValueError`` when the class-to-index
     mappings differ between splits. ``augment`` only affects the training
-    transform (see :func:`build_transforms`).
+    transform (see :func:`build_transforms`). ``image_size`` defaults to the
+    project standard 224 and is overridable for the U6 resolution experiment.
     """
     processed_dir = Path(processed_dir)
     for split in SPLITS:
@@ -100,11 +102,14 @@ def build_datasets(processed_dir: Path = PROCESSED_DATA_DIR,
 
     train_ds = ImageFolder(root=str(processed_dir / "train"),
                            transform=build_transforms(train=True,
-                                                      augment=augment))
+                                                      augment=augment,
+                                                      image_size=image_size))
     val_ds = ImageFolder(root=str(processed_dir / "val"),
-                         transform=build_transforms(train=False))
+                         transform=build_transforms(train=False,
+                                                    image_size=image_size))
     test_ds = ImageFolder(root=str(processed_dir / "test"),
-                          transform=build_transforms(train=False))
+                          transform=build_transforms(train=False,
+                                                     image_size=image_size))
 
     if not (train_ds.class_to_idx == val_ds.class_to_idx == test_ds.class_to_idx):
         raise ValueError(
@@ -121,6 +126,7 @@ def build_dataloaders(
     num_workers: int = 0,
     pin_memory: bool | None = None,
     augment: str = "baseline",
+    image_size: int = IMAGE_SIZE,
 ) -> tuple[dict[str, DataLoader], list[str]]:
     """Build dataloaders for all splits plus the ordered class names.
 
@@ -128,9 +134,11 @@ def build_dataloaders(
     multiprocessing issues (CODEBUDDY.md section 3). ``pin_memory`` defaults
     to True only when CUDA is available. ``augment`` selects the training
     augmentation preset; validation/test loaders always use the deterministic
-    eval transform.
+    eval transform. ``image_size`` defaults to 224 (project standard) and is
+    only overridden by the U6 resolution experiment.
     """
-    train_ds, val_ds, test_ds = build_datasets(processed_dir, augment=augment)
+    train_ds, val_ds, test_ds = build_datasets(
+        processed_dir, augment=augment, image_size=image_size)
     if pin_memory is None:
         pin_memory = torch.cuda.is_available()
 
