@@ -1,0 +1,132 @@
+{
+  "generated_at": "2026-10-21T06:21:31.272694+00:00",
+  "mode": "read-only (only hashlib / sqlite3 SELECT / pathlib stat)",
+  "writes_to_protected_objects": 0,
+  "weights_and_metadata": {
+    "v1_1_best_model.pth": "89ef468f199c6d1550fec2638c5ea6f8ef7ad543e57f8ec82c4263c121b1a256",
+    "v2_1_best_model.pth": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+    "v2_1_metadata": {
+      "class_names.json": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad",
+      "model_version.json": "0b0e5c7f79a000f7f87387c71df213d658f59e12ebfe22f68bf19336fb1cdd08",
+      "experiment_config.json": "0253416ba4a3f011e87a6b57fb04d62a28bcb1caab2aa6cc9db5d12de4f2439a"
+    }
+  },
+  "data_directories": {
+    "data/processed": {
+      "files": 7349,
+      "bytes": 790860970
+    },
+    "data/processed_clean": {
+      "files": 7325,
+      "bytes": 787775992
+    },
+    "data/raw": {
+      "files": 25867,
+      "bytes": 1632137687
+    },
+    "data/v2_processed": {
+      "files": 24098,
+      "bytes": 1428084982
+    },
+    "data/v2_processed_prev": {
+      "files": 29158,
+      "bytes": 1622680409
+    }
+  },
+  "formal_database": {
+    "path": "data/app.db",
+    "records": 142,
+    "integrity_check": "ok"
+  },
+  "uploads": {
+    "path": "uploads/",
+    "files": 142
+  },
+  "defaults": {
+    "weights_path": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\best_model.pth",
+    "class_names_path": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\class_names.json",
+    "candidate_group_enabled": true
+  },
+  "checks": [
+    {
+      "check": "V1.1 best_model.pth sha256",
+      "passed": true,
+      "actual": "89ef468f199c6d1550fec2638c5ea6f8ef7ad543e57f8ec82c4263c121b1a256",
+      "expected": "89ef468f199c6d1550fec2638c5ea6f8ef7ad543e57f8ec82c4263c121b1a256",
+      "note": ""
+    },
+    {
+      "check": "V2.1 best_model.pth sha256",
+      "passed": true,
+      "actual": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+      "expected": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+      "note": ""
+    },
+    {
+      "check": "V2.1 class_names.json 可读取且非空",
+      "passed": true,
+      "actual": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad",
+      "expected": "64 位十六进制",
+      "note": ""
+    },
+    {
+      "check": "V2.1 model_version.json 可读取且非空",
+      "passed": true,
+      "actual": "0b0e5c7f79a000f7f87387c71df213d658f59e12ebfe22f68bf19336fb1cdd08",
+      "expected": "64 位十六进制",
+      "note": ""
+    },
+    {
+      "check": "V2.1 experiment_config.json 可读取且非空",
+      "passed": true,
+      "actual": "0253416ba4a3f011e87a6b57fb04d62a28bcb1caab2aa6cc9db5d12de4f2439a",
+      "expected": "64 位十六进制",
+      "note": ""
+    },
+    {
+      "check": "正式 data/app.db 记录数",
+      "passed": true,
+      "actual": 142,
+      "expected": 142,
+      "note": ""
+    },
+    {
+      "check": "正式 data/app.db integrity_check",
+      "passed": true,
+      "actual": "ok",
+      "expected": "ok",
+      "note": ""
+    },
+    {
+      "check": "项目 uploads/ 文件数",
+      "passed": true,
+      "actual": 142,
+      "expected": 142,
+      "note": ""
+    },
+    {
+      "check": "默认 weights_path 指向 V2.1",
+      "passed": true,
+      "actual": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\best_model.pth",
+      "expected": ".../v2_1_136classes_seed42/best_model.pth",
+      "note": ""
+    },
+    {
+      "check": "默认 class_names_path 指向 V2.1",
+      "passed": true,
+      "actual": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\class_names.json",
+      "expected": ".../v2_1_136classes_seed42/class_names.json",
+      "note": ""
+    },
+    {
+      "check": "默认 candidate_group_enabled == True",
+      "passed": true,
+      "actual": true,
+      "expected": true,
+      "note": ""
+    }
+  ],
+  "passed": 11,
+  "total": 11,
+  "all_passed": true
+}

@@ -1,0 +1,10 @@
+label,support_before,predicted_before,precision_before,recall_before,f1_before,support_after,predicted_after,precision_after,recall_after,f1_after,delta_f1
+american_pit_bull_terrier,100,20,0.7,0.14,0.233333,0,0,0.0,0.0,0.0,-0.233333
+american_staffordshire_terrier,17,55,0.218182,0.705882,0.333333,0,0,0.0,0.0,0.0,-0.333333
+pit_bull_type_merged,0,0,0.0,0.0,0.0,117,75,0.653333,0.418803,0.510417,0.510417
+staffordshire_bull_terrier,89,72,0.652778,0.52809,0.583851,89,72,0.652778,0.52809,0.583851,0.0
+american_bulldog,100,131,0.641221,0.84,0.727273,100,131,0.641221,0.84,0.727273,0.0
+bull_mastiff,16,27,0.555556,0.9375,0.697674,16,27,0.555556,0.9375,0.697674,0.0
+overall_accuracy,,,,,0.796942,,,,,0.801231,0.004289
+overall_macro_f1,,,,,0.747241,,,,,0.752359,0.005118
+overall_weighted_f1,,,,,0.798846,,,,,0.804574,0.005728

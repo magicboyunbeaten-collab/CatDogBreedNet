@@ -1,0 +1,106 @@
+path,git_status,tracked,change_summary,task_group,runtime_required,mixed_change,commit_recommendation,reason,added_lines,deleted_lines,review_depth
+backend/app/config.py, M,yes,新增 DEFAULT_MODEL_DIR（指向 v2_1_136classes_seed42）与 _env_bool()；新增独立 class_names_path 字段；weights_path 默认翻转为 V2.1；candidate_group_enabled 默认 True。实测 git show HEAD: 确认 HEAD 版本**完全没有** class_names_path 与 candidate_group_enabled 字段，故本文件为纯新增语义，无跨任务混合。,A,yes,no,建议提交,生产推理路径必需；决定默认加载哪个模型与是否附加候选组,38,3,full-diff
+backend/app/main.py, M,yes,三处改动：①_safe_model_error 识别 class count mismatch 并解析两侧类别数（U5.5）；②lifespan 透传 class_names_path 与 candidate_group_enabled（U5.5，但 candidate_group_enabled 透传同时服务 U5.2 接线）；③/health 新增 model_weights 字段（U5.5）。,A,yes,yes,整文件提交 + 说明,运行必需；混合 U5.5 与 U5.2，整文件提交需在 message 列明,18,1,full-diff
+backend/app/routes/predict.py, M,yes,新增候选组计算（try/except 兜底，失败不影响原始预测）与 candidate_group 入响应；注释明确候选组绝不参与数据库写入。,A,yes,no,建议提交,运行必需；纯 U5.2 候选组接线,11,0,full-diff
+backend/app/schemas.py, M,yes,新增 CandidateBreedItem、CandidateGroupInfo（含可选 group_id）、PredictResponse.candidate_group、HealthResponse.model_weights。候选组 schema 属 U5.2/U6.2，model_weights 属 U5.5。,A,yes,yes,整文件提交 + 说明,运行必需；响应契约，候选组与 health 字段来源不同,57,0,diff-summary
+backend/app/services/predictor.py, M,yes,①类别数错配时重抛含两侧计数与两个真实路径的错误（U5.5，且仅在数量不同时改写消息，数量相同名称不同则保留原索引级错误）；②向候选组透传完整 probabilities（U5.2/U6.2）。,A,yes,yes,整文件提交 + 说明,运行必需；错配保护与候选组概率来源分属两个任务,33,2,full-diff
+frontend/src/components/PredictionResult.vue, M,yes,候选区渲染、candidateCount 动态数量、user-choice 独立区；U6.2 新增 group_id 可见渲染、collie-pair 专属副标题、「不保证候选中一定包含正确品种」声明；U5.3 已将硬编码「三个候选」改为动态。,A,yes,yes,整文件提交 + 说明,运行必需；叠加 U5.2/U5.3/U6.2 三轮改动,242,1,diff-summary
+frontend/src/utils/breedNames.js, M,yes,BREED_NAMES_ZH 由 37 条扩到 136 条（旧 37 条原样保留），并含 CANDIDATE_GROUP / CANDIDATE_BREED_NAMES_ZH 四项候选常量。,A,yes,yes,整文件提交 + 说明,运行必需；136 类映射属 U5.5，候选四类常量属 U5.2,133,11,diff-summary
+frontend/tests/breedNames.test.js, M,yes,由写死 37 条改为 136 类完整性 + 旧 37 类兼容 + 边牧/柯利/边境梗互不混淆 + 候选四类中文名断言。,B,no,yes,整文件提交 + 说明,锁定映射行为；跨 U5.5/U5.2,90,17,diff-summary
+frontend/tests/historyView.test.js, M,yes,未映射标签回退英文的用例改用真正未知标签（因 border_collie 现已有中文名），并新增旧 37 类与新 99 类历史标签都显示中文的用例。,B,no,yes,整文件提交 + 说明,锁定历史页兼容；跨 U5.5 与既有,35,2,diff-summary
+ml/dataset.py, M,yes,build_datasets / build_dataloaders 新增 image_size 参数（默认 224，向后兼容），供 U6-C/exp04/exp06 分辨率实验使用；其余为 U4 既有 AUGMENT_PRESETS / build_transforms。,D,no,yes,整文件提交 + 说明（独立成组）,训练工具；U6-C 与 U4 混合,15,7,diff-summary
+ml/predict.py, M,yes,predict_from_tensor 返回值新增完整 softmax 向量 probabilities，docstring 明确「API response schema never exposes it」，目的是让候选组不把 Top-K 外候选当作 0 分。**修正 U6.3 分类：U6.3 将其归入 G7『无法明确归属』，实际属候选组概率透传（U5.2/U6.2）。**,A,yes,no,建议提交,运行必需；候选组得分的概率来源,15,2,full-diff
+ml/predictor.py, M,yes,Predictor.predict_pil 透传 probabilities；docstring 说明其仅内部使用、API schema 不暴露。**同样修正 U6.3 的 G7 误分类。**,A,yes,no,建议提交,运行必需；候选组概率透传链路,8,3,full-diff
+ml/train.py, M,yes,三类来源叠加：①U6-C pair-only 训练通道 --pair-color-jitter / --pair-sampler-weight 与 --image-size；②U6 warm-start 分类头继承修复（initialize_from_checkpoint 在类别名一致时连 fc.* 一起继承并记录 head_transferred）；③U4 早前训练扩展（--init-from/--monitor/--lr-head 等）。,D,no,yes,整文件提交 + 说明（独立成组，不混入生产功能提交）,训练工具，与线上推理无关；含 U4/U6-C/U6 三来源，不可按任务拆分,289,18,diff-summary
+tests/test_api.py, M,yes,新增 health model_weights 断言与旧响应兼容用例（U5.5），以及候选组响应相关断言（U5.2）。,B,no,yes,整文件提交 + 说明,锁定 A 组行为；跨 U5.5/U5.2,25,0,diff-summary
+tests/test_predictor_service.py, M,yes,新增 class_names_path 匹配/错配用例（U5.5，含两侧计数断言）与候选组安全返回用例（U5.2）。,B,no,yes,整文件提交 + 说明,锁定 A 组行为；跨 U5.5/U5.2,37,0,diff-summary
+tests/test_train_extensions.py, M,yes,覆盖 initialize_from_checkpoint 的 136→136 分类头继承、张量数量精确匹配、异常必须抛错（U6 warm-start 修复 + U6-C pair 能力），以及 U4 早前训练扩展。,D,no,yes,整文件提交 + 说明（独立成组）,训练工具回归；U6-C/U6 与 U4 混合,181,1,diff-summary
+启动后端.bat, M,yes,MODEL_DIR 改指 artifacts/v2_1_136classes_seed42；以 if not defined CATDOG_WEIGHTS_PATH / CATDOG_CLASS_NAMES_PATH **只读**语义决定是否检查默认路径（不设置任何 CATDOG_*）；缺失时给出可复制的 V1.1 回退提示；定义时回显已指定的环境变量。,C,yes,no,建议提交,日常启动入口；纯 U5.5,28,9,full-diff
+启动系统.bat, M,yes,启动前检查从 artifacts/best_model.pth 改为 V2.1 目录的两个文件，并尊重 CATDOG_* 覆盖；缺失时给出回退提示。,C,yes,no,建议提交,日常启动入口；纯 U5.5,12,2,diff-summary
+artifacts/_v2_1_smoke/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_1_136classes_seed42/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp01_pair_color_jitter_seed42/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp02_pair_sampler_seed42/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp04_resolution_seed2024/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp04_resolution_seed42/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp04_resolution_seed7/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed2024/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed7/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+artifacts/v2_2_border_collie_exp08_pair_sampler_lowlr_seed42/,??,no,未跟踪产物/文档目录,F,no,no,不提交,模型权重与实验 checkpoint；任务明确禁止把 .pth 入库,0,0,file-head
+backend/app/services/candidate_group.py,??,no,未跟踪新文件。内含**两套并行策略**：四类 bully（group_id=four-breed-bully，mass 0.30/margin 0.40，版本 val-2026-10-19-four-breed-b1）与 collie-pair（group_id=collie-pair，mass 0.30/margin 0.30，版本 val-2026-10-21-collie-pair-v1）；resolve_candidate_group 按原始 Top-1 分发；两组均要求成员齐全否则返回 None（V1.1 安全退回）。,A,yes,yes,建议提交（新文件）,运行必需；单文件内含两套策略，属 U5.2 与 U6.2 的叠加,0,0,full-diff
+frontend/tests/colliePairCandidate.test.js,??,no,未跟踪新文件。6 个用例专测 collie-pair 前端渲染：两候选中文名与数量、得分和约 100% 且不硬编码 50/50、文案无必然正确暗示、用户选择不改 Top-K、null/undefined/triggered=false 不渲染、按 group_id 区分两套策略。,B,no,no,建议提交（新文件）,U6.2 专属前端回归，无跨任务混合,0,0,full-diff
+frontend/tests/predictionResult.test.js,??,no,未跟踪新文件。13 个用例：四类候选渲染、图例候选数量动态化（U5.3 修复硬编码「三个候选」）、用户选择不改 Top-K、null/undefined/triggered=false 均不渲染。,B,no,yes,建议提交（新文件）,锁定候选区渲染；跨 U5.2/U5.3/U5.4,0,0,full-diff
+frontend/tests/predictionResultAcceptance.test.js,??,no,未跟踪新文件。依赖 reports/v2_1_four_breed_candidate_implementation/acceptance_api_responses.json（U5.3 产物）做响应回放断言。**注意：该 JSON 位于 reports/ 且未跟踪，若不入库此测试在新克隆环境下会失败。**,B,no,yes,建议提交（新文件）,锁定候选响应契约；但依赖未跟踪的报告产物，需人工决策,0,0,file-head
+md/U5.2_方案B1四类相近犬种候选组正式实现任务.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/U5.4_候选组同图一致性与前端回归测试任务.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/U5.5_V2.1正式接入与边牧准确率改进计划.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/U5_1_APBT纳入四类候选组离线评估任务.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/U6.1_低学习率纠偏与边牧专项对照实验任务.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/U6.2_柯利与边境牧羊犬双候选提示实施任务.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/U6.3_默认启动行为核验与安全固化.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/U6.4_Git安全固化_审核与提交计划.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/V2.1_136类别模型训练任务.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/V2.1_相近犬种候选提示与边牧复核整合任务.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/V2.1_误分类诊断与APBT_AmStaff数据审计任务.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+md/u6_border_collie_improvement_plan_修订版.md,??,no,未跟踪产物/文档目录,E,no,no,条件提交（需用户决定）,任务单文档；有长期追溯价值，但是否入库需人工决定,0,0,file-head
+ml/u6_pair_training.py,??,no,未跟踪新文件。PairColorJitterDataset（仅 collie/border_collie 施加 ColorJitter）、make_pair_weighted_sampler（仅两类加权）、parse_jitter、pair_sample_share。纯 U6-C 新增，无混合。,D,no,no,建议提交（新文件）,U6-C 训练工具，无线上依赖,0,0,full-diff
+reports/u5_5_v2_1_integration/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/u6_1_low_lr/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/u6_2_collie_pair_candidate/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/u6_3_default_runtime_and_freeze/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/u6_4_git_freeze_review/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/u6_border_collie/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/v2_1_apbt_four_breed_candidate_eval/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/v2_1_candidate_ui_review/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/v2_1_coat_pitbull_diagnostics/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/v2_1_diagnostics/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/v2_1_four_breed_candidate_implementation/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/v2_1_four_breed_consistency_review/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+reports/v2_1_four_breed_page_acceptance/,??,no,未跟踪产物/文档目录,F,no,no,不提交,报告/截图/CSV/隔离 runtime；项目历史从未跟踪 reports/，建议延续惯例,0,0,file-head
+scripts/accept_candidate_group_api.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/accept_collie_pair_api.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/accept_four_breed_candidate_api.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/accept_v2_1_integration.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/audit_cross_class_duplicates.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/audit_external_sources.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/audit_pitbull_labels.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/build_manual_review_queue.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/check_candidate_consistency.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/diagnose_coat_color.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/diagnose_v2_1.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/diagnostic_protection_snapshot.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/evaluate_apbt_four_group.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/evaluate_v2_1_subsets.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/export_candidate_triggers_val.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/finalize_v2_1_candidate.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/generate_breed_mapping.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/page_accept_collie_pair.mjs,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/page_accept_four_breed.mjs,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/page_accept_v2_1_integration.mjs,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/reconcile_u5_2_numbers.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/run_four_breed_backend.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/summarize_coat_review.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/summarize_coat_test.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_2_collie_pair_threshold.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_3_git_inventory.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_3_page_probe.mjs,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_3_runtime_probe.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_3_static_audit.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_3_verify_switch_off.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_4_capture_baseline.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_4_git_review.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_baseline_val.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_build_u6_1_reports.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_collect_s0.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_collect_s0_snapshot.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_compare_candidates.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_freeze_criteria.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_parse_reviews.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_run_experiment.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/u6_warm_start_audit.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/validate_candidate_group_thresholds.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+scripts/verify_apbt_candidate_limit.py,??,no,未跟踪产物/文档目录,F,no,no,暂不提交（一次性验收/诊断脚本）,验收与诊断脚本；尚未证明为长期维护工具,0,0,file-head
+tests/test_candidate_group.py,??,no,未跟踪新文件。覆盖四类 bully 组全部触发/不触发/归一化/Top-K 外候选/不改写原始预测/V1.1 安全/开关关闭，以及 U6.2 collie-pair 的 group_id、独立阈值与版本、按 Top-1 分发。,B,no,yes,建议提交（新文件）,锁定两套候选策略；单文件覆盖 U5.2 与 U6.2,0,0,full-diff
+tests/test_collie_pair_candidate.py,??,no,未跟踪新文件。15 个用例专测 collie-pair：触发/不触发边界、得分严格按完整概率归一化且不硬编码 50/50、Top-K 外候选不当 0、原始预测不被改写、V1.1 安全返回、开关关闭、API 不暴露概率向量、group_id 可选向后兼容。,B,no,no,建议提交（新文件）,U6.2 专属回归，无跨任务混合,0,0,full-diff

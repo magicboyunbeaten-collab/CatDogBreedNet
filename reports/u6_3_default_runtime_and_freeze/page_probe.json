@@ -1,0 +1,295 @@
+{
+  "generatedAt": "2026-10-21T04:56:08.019Z",
+  "baseUrl": "http://127.0.0.1:5173/predict",
+  "samples": {
+    "pairTrigger": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_549.jpg",
+    "pairNonTrigger": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\afghan_hound\\n02088094_1479.jpg",
+    "bullyTrigger": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_132.jpg"
+  },
+  "checks": [
+    {
+      "check": "1: 双候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "1: 组标识为 collie-pair",
+      "passed": true,
+      "detail": "collie-pair"
+    },
+    {
+      "check": "1: 候选行为 2",
+      "passed": true,
+      "detail": "实际 2"
+    },
+    {
+      "check": "1: 中文名为柯利牧羊犬/边境牧羊犬",
+      "passed": true,
+      "detail": "[\"柯利牧羊犬\",\"边境牧羊犬\"]"
+    },
+    {
+      "check": "1: 组内得分和约 100%",
+      "passed": true,
+      "detail": "sum=100.0000"
+    },
+    {
+      "check": "1: 副标题如实说明是这两个牧羊犬难以区分",
+      "passed": true,
+      "detail": "模型对柯利牧羊犬与边境牧羊犬难以明确区分"
+    },
+    {
+      "check": "1: 图例含\"候选组内相对得分\"",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "1: 图例含版本 val-2026-10-21-collie-pair-v1",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "1: 图例声明\"不是整体识别置信度\"",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "1: 文案声明\"不保证候选中一定包含正确品种\"",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "1: 原始 Top-K 仍为 3 行",
+      "passed": true,
+      "detail": "实际 3"
+    },
+    {
+      "check": "2: \"你选择的品种\"出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "2: 选择值等于第 2 个候选",
+      "passed": true,
+      "detail": "边境牧羊犬 vs 边境牧羊犬"
+    },
+    {
+      "check": "2: 提示\"未被替换\"",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "2: 用户选择后原始 Top-1 标签不变",
+      "passed": true,
+      "detail": "柯利牧羊犬"
+    },
+    {
+      "check": "2: 用户选择后原始 Top-1 分数文本不变",
+      "passed": true,
+      "detail": "60.32% -> 60.32%"
+    },
+    {
+      "check": "2: 用户选择后 Top-K 全部不变",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "3: 候选区完全不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "3: \"你选择的品种\"不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "3: 原始 Top-K 仍为 3 行",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "3: 原始 Top-1 为\"柯利牧羊犬\"",
+      "passed": true,
+      "detail": "柯利牧羊犬"
+    },
+    {
+      "check": "3: 未按毛色直接触发（不触发图同为黑白牧羊犬类图片）",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "4: 四类候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "4: 组标识为 four-breed-bully",
+      "passed": true,
+      "detail": "four-breed-bully"
+    },
+    {
+      "check": "4: 候选行为 4",
+      "passed": true,
+      "detail": "实际 4"
+    },
+    {
+      "check": "4: 组内得分和约 100%",
+      "passed": true,
+      "detail": "sum=99.9900"
+    },
+    {
+      "check": "4: 图例含版本 val-2026-10-19-four-breed-b1",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "4: 两类策略版本未混用",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "passed": 28,
+  "total": 28,
+  "evidence": {
+    "pairTrigger": {
+      "hasCandidateBlock": true,
+      "groupId": "collie-pair",
+      "subtitle": "模型对柯利牧羊犬与边境牧羊犬难以明确区分",
+      "candidates": [
+        {
+          "name": "柯利牧羊犬",
+          "scoreText": "60.40%",
+          "rawText": "原始分 60.32%"
+        },
+        {
+          "name": "边境牧羊犬",
+          "scoreText": "39.60%",
+          "rawText": "原始分 39.54%"
+        }
+      ],
+      "topk": [
+        {
+          "breed": "柯利牧羊犬",
+          "scoreText": "60.32%"
+        },
+        {
+          "breed": "边境牧羊犬",
+          "scoreText": "39.54%"
+        },
+        {
+          "breed": "格罗安达牧羊犬",
+          "scoreText": "0.05%"
+        }
+      ],
+      "userChoice": {
+        "value": "柯利牧羊犬",
+        "hint": "模型首选仍为 柯利牧羊犬 （原始分 60.32%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nn02106166_549.jpg\n39 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #4\nTop-1\n柯利牧羊犬\n60.3%\n60.32%\nTop-2\n边境牧羊犬\n39.5%\n39.54%\nTop-3\n格罗安达牧羊犬\n0.1%\n0.05%\n外观相近的候选品种\n模型对柯利牧羊犬与边境牧羊犬难以明确区分\ncollie-pair\n柯利牧羊犬\n60.4%\n60.40%\n原始分 60.32%\n边境牧羊犬\n39.6%\n39.60%\n原始分 39.54%\n候选组内相对得分（val-2026-10-21-collie-pair-v1）—— 仅在上述2个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 也不保证候选中一定包含正确品种；该得分不代表模型已确认犬只的登记品种。 你可以选择更符合的一张，该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n柯利牧羊犬\n模型首选仍为 柯利牧羊犬 （原始分 60.32%），未被替换。\n推理耗时\n2.7 ms\n预处理耗时\n1.7 ms\n服务端总耗时\n20.3 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "userSelection": {
+      "hasCandidateBlock": true,
+      "groupId": "collie-pair",
+      "subtitle": "模型对柯利牧羊犬与边境牧羊犬难以明确区分",
+      "candidates": [
+        {
+          "name": "柯利牧羊犬",
+          "scoreText": "60.40%",
+          "rawText": "原始分 60.32%"
+        },
+        {
+          "name": "边境牧羊犬",
+          "scoreText": "39.60%",
+          "rawText": "原始分 39.54%"
+        }
+      ],
+      "topk": [
+        {
+          "breed": "柯利牧羊犬",
+          "scoreText": "60.32%"
+        },
+        {
+          "breed": "边境牧羊犬",
+          "scoreText": "39.54%"
+        },
+        {
+          "breed": "格罗安达牧羊犬",
+          "scoreText": "0.05%"
+        }
+      ],
+      "userChoice": {
+        "value": "边境牧羊犬",
+        "hint": "模型首选仍为 柯利牧羊犬 （原始分 60.32%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nn02106166_549.jpg\n39 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #4\nTop-1\n柯利牧羊犬\n60.3%\n60.32%\nTop-2\n边境牧羊犬\n39.5%\n39.54%\nTop-3\n格罗安达牧羊犬\n0.1%\n0.05%\n外观相近的候选品种\n模型对柯利牧羊犬与边境牧羊犬难以明确区分\ncollie-pair\n柯利牧羊犬\n60.4%\n60.40%\n原始分 60.32%\n边境牧羊犬\n39.6%\n39.60%\n原始分 39.54%\n候选组内相对得分（val-2026-10-21-collie-pair-v1）—— 仅在上述2个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 也不保证候选中一定包含正确品种；该得分不代表模型已确认犬只的登记品种。 你可以选择更符合的一张，该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n边境牧羊犬\n模型首选仍为 柯利牧羊犬 （原始分 60.32%），未被替换。\n推理耗时\n2.7 ms\n预处理耗时\n1.7 ms\n服务端总耗时\n20.3 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "pairNonTrigger": {
+      "hasCandidateBlock": false,
+      "groupId": null,
+      "subtitle": null,
+      "candidates": [],
+      "topk": [
+        {
+          "breed": "柯利牧羊犬",
+          "scoreText": "63.91%"
+        },
+        {
+          "breed": "标准贵宾犬",
+          "scoreText": "11.07%"
+        },
+        {
+          "breed": "阿富汗猎犬",
+          "scoreText": "5.38%"
+        }
+      ],
+      "userChoice": null,
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nn02088094_1479.jpg\n35 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #5\nTop-1\n柯利牧羊犬\n63.9%\n63.91%\nTop-2\n标准贵宾犬\n11.1%\n11.07%\nTop-3\n阿富汗猎犬\n5.4%\n5.38%\n推理耗时\n4.7 ms\n预处理耗时\n1.7 ms\n服务端总耗时\n42.9 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "bullyTrigger": {
+      "hasCandidateBlock": true,
+      "groupId": "four-breed-bully",
+      "subtitle": "模型在这几个品种间难以明确区分",
+      "candidates": [
+        {
+          "name": "美国比特斗牛梗",
+          "scoreText": "54.46%",
+          "rawText": "原始分 46.72%"
+        },
+        {
+          "name": "美国斯塔福郡梗",
+          "scoreText": "45.53%",
+          "rawText": "原始分 39.06%"
+        },
+        {
+          "name": "斯塔福郡斗牛梗",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%"
+        },
+        {
+          "name": "美国斗牛犬",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%"
+        }
+      ],
+      "topk": [
+        {
+          "breed": "美国比特斗牛梗",
+          "scoreText": "46.72%"
+        },
+        {
+          "breed": "美国斯塔福郡梗",
+          "scoreText": "39.06%"
+        },
+        {
+          "breed": "玩具梗",
+          "scoreText": "8.12%"
+        }
+      ],
+      "userChoice": {
+        "value": "美国比特斗牛梗",
+        "hint": "模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\namerican_pit_bull_terrier_132.jpg\n16 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #6\nTop-1\n美国比特斗牛梗\n46.7%\n46.72%\nTop-2\n美国斯塔福郡梗\n39.1%\n39.06%\nTop-3\n玩具梗\n8.1%\n8.12%\n外观相近的候选品种\n模型在这几个品种间难以明确区分\nfour-breed-bully\n美国比特斗牛梗\n54.5%\n54.46%\n原始分 46.72%\n美国斯塔福郡梗\n45.5%\n45.53%\n原始分 39.06%\n斯塔福郡斗牛梗\n0%\n0.00%\n原始分 0.00%\n美国斗牛犬\n0%\n0.00%\n原始分 0.00%\n候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 也不保证候选中一定包含正确品种；该得分不代表模型已确认犬只的登记品种。 你可以选择更符合的一张，该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n美国比特斗牛梗\n模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。\n推理耗时\n2.9 ms\n预处理耗时\n1.5 ms\n服务端总耗时\n59.2 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    }
+  }
+}

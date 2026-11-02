@@ -1,0 +1,2 @@
+split,tag,weights,class_names,n_samples,n_classes,batch_size,device,elapsed_seconds,accuracy,macro_f1,weighted_f1,evaluated_at,test_split_access_count
+val,exp02,artifacts\v2_2_border_collie_exp02_pair_sampler_seed42\best_model.pth,artifacts\v2_2_border_collie_exp02_pair_sampler_seed42\class_names.json,2079,136,32,cuda,19.7,0.775373,0.781248,0.77499,2026-10-20T05:02:34.799030+00:00,0

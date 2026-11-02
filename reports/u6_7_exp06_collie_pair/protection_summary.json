@@ -1,0 +1,166 @@
+{
+  "generated_at": "2026-10-21T07:23:44.927477+00:00",
+  "mode": "read-only (hashlib / sqlite3 SELECT / pathlib stat)",
+  "writes_to_protected_objects": 0,
+  "test_split_access_count": 0,
+  "weights": {
+    "artifacts/best_model.pth": "89ef468f199c6d1550fec2638c5ea6f8ef7ad543e57f8ec82c4263c121b1a256",
+    "artifacts/v2_1_136classes_seed42/best_model.pth": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+    "artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/best_model.pth": "a7560f4e538315b089b65678c452c170cecd2bcbf23738fc6609886e96ca6c8e"
+  },
+  "class_mappings": {
+    "artifacts/v2_1_136classes_seed42/class_names.json": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad",
+    "artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/class_names.json": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad"
+  },
+  "data_directories": {
+    "data/processed": {
+      "files": 7349,
+      "bytes": 790860970
+    },
+    "data/processed_clean": {
+      "files": 7325,
+      "bytes": 787775992
+    },
+    "data/raw": {
+      "files": 25867,
+      "bytes": 1632137687
+    },
+    "data/v2_processed": {
+      "files": 24098,
+      "bytes": 1428084982
+    },
+    "data/v2_processed_prev": {
+      "files": 29158,
+      "bytes": 1622680409
+    }
+  },
+  "formal_database": {
+    "records": 142,
+    "integrity_check": "ok"
+  },
+  "uploads": {
+    "files": 142
+  },
+  "defaults": {
+    "weights_path": "E:\\CatDogBreedNet\\artifacts\\v2_2_border_collie_exp06_resolution256_lowlr_seed42\\best_model.pth",
+    "class_names_path": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\class_names.json",
+    "image_size": 256,
+    "candidate_group_enabled": true
+  },
+  "candidate_strategies": {
+    "four_breed": {
+      "version": "val-2026-10-19-four-breed-b1",
+      "mass": 0.3,
+      "margin": 0.4,
+      "changed_this_task": false
+    },
+    "collie_pair": {
+      "version": "val-2026-10-21-collie-pair-v2",
+      "mass": 0.3,
+      "share": 0.2,
+      "changed_this_task": true,
+      "change": "绝对分差 margin<=0.30 被组内相对份额 share>=0.20 取代"
+    }
+  },
+  "checks": [
+    {
+      "check": "artifacts/best_model.pth SHA256 未变",
+      "passed": true,
+      "actual": "89ef468f199c6d1550fec2638c5ea6f8ef7ad543e57f8ec82c4263c121b1a256",
+      "expected": "89ef468f199c6d1550fec2638c5ea6f8ef7ad543e57f8ec82c4263c121b1a256"
+    },
+    {
+      "check": "artifacts/v2_1_136classes_seed42/best_model.pth SHA256 未变",
+      "passed": true,
+      "actual": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+      "expected": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1"
+    },
+    {
+      "check": "artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/best_model.pth SHA256 未变",
+      "passed": true,
+      "actual": "a7560f4e538315b089b65678c452c170cecd2bcbf23738fc6609886e96ca6c8e",
+      "expected": "a7560f4e538315b089b65678c452c170cecd2bcbf23738fc6609886e96ca6c8e"
+    },
+    {
+      "check": "artifacts/v2_1_136classes_seed42/class_names.json 可读",
+      "passed": true,
+      "actual": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad",
+      "expected": "64 位"
+    },
+    {
+      "check": "artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/class_names.json 可读",
+      "passed": true,
+      "actual": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad",
+      "expected": "64 位"
+    },
+    {
+      "check": "V2.1 与 exp06 的 class_names.json 字节一致",
+      "passed": true,
+      "actual": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad",
+      "expected": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad"
+    },
+    {
+      "check": "正式 DB 记录数",
+      "passed": true,
+      "actual": 142,
+      "expected": 142
+    },
+    {
+      "check": "正式 DB integrity_check",
+      "passed": true,
+      "actual": "ok",
+      "expected": "ok"
+    },
+    {
+      "check": "项目 uploads 文件数",
+      "passed": true,
+      "actual": 142,
+      "expected": 142
+    },
+    {
+      "check": "默认模型仍为 exp06",
+      "passed": true,
+      "actual": "v2_2_border_collie_exp06_resolution256_lowlr_seed42",
+      "expected": "…exp06…"
+    },
+    {
+      "check": "默认 image_size 仍为 256",
+      "passed": true,
+      "actual": 256,
+      "expected": 256
+    },
+    {
+      "check": "默认候选总开关仍为 True",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "check": "四类组版本未变",
+      "passed": true,
+      "actual": "val-2026-10-19-four-breed-b1",
+      "expected": "val-2026-10-19-four-breed-b1"
+    },
+    {
+      "check": "四类组质量阈值未变",
+      "passed": true,
+      "actual": 0.3,
+      "expected": 0.3
+    },
+    {
+      "check": "四类组分差阈值未变",
+      "passed": true,
+      "actual": 0.4,
+      "expected": 0.4
+    },
+    {
+      "check": "两类组版本升为 v2",
+      "passed": true,
+      "actual": "val-2026-10-21-collie-pair-v2",
+      "expected": "val-2026-10-21-collie-pair-v2"
+    }
+  ],
+  "passed": 16,
+  "total": 16,
+  "all_passed": true
+}

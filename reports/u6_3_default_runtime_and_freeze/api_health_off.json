@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "model_loaded": true,
+  "num_classes": 136,
+  "model_weights": "best_model.pth",
+  "model_error": null,
+  "version": "1.0.0",
+  "time": "2026-10-21T04:49:14.543650+00:00"
+}

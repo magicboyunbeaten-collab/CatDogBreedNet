@@ -1,0 +1,338 @@
+{
+  "scenario": "on",
+  "generatedAt": "2026-10-19T13:58:01.340Z",
+  "baseUrl": "http://127.0.0.1:5173/predict",
+  "samples": {
+    "competition": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_11.jpg",
+    "apbtTop1": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_132.jpg",
+    "sbtTop1": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\staffordshire_bull_terrier\\staffordshire_bull_terrier_160.jpg",
+    "cat": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\Abyssinian\\Abyssinian_10.jpg"
+  },
+  "checks": [
+    {
+      "check": "1: 四类候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "1: 候选行为 4",
+      "passed": true,
+      "detail": "实际 4"
+    },
+    {
+      "check": "1: 四个候选中文名与候选面板一致",
+      "passed": true,
+      "detail": "[\"斯塔福郡斗牛梗\",\"美国斗牛犬\",\"美国斯塔福郡梗\",\"美国比特斗牛梗\"]"
+    },
+    {
+      "check": "1: 组内得分和 ≈ 100%",
+      "passed": true,
+      "detail": "sum=100.0100"
+    },
+    {
+      "check": "1: 标注\"候选组内相对得分\"",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "1: 原始 Top-K 仍为 3 行",
+      "passed": true,
+      "detail": "实际 3"
+    },
+    {
+      "check": "1: 原始 Top-1 为中文（非英文下划线）",
+      "passed": true,
+      "detail": "美国斯塔福郡梗"
+    },
+    {
+      "check": "2: 四类候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "2: 候选含\"美国比特斗牛梗\"",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "2: 原始 Top-1 为\"美国比特斗牛梗\"（中文）",
+      "passed": true,
+      "detail": "美国比特斗牛梗"
+    },
+    {
+      "check": "2: 原始 Top-1 分数仍为原始百分比",
+      "passed": true,
+      "detail": "46.72%"
+    },
+    {
+      "check": "3: \"你选择的品种\"出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "3: 选择值等于第 2 个候选",
+      "passed": true,
+      "detail": "美国斯塔福郡梗 vs 美国斯塔福郡梗"
+    },
+    {
+      "check": "3: 提示\"模型首选仍为 … 未被替换\"",
+      "passed": true,
+      "detail": "模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。"
+    },
+    {
+      "check": "3: 用户选择后原始 Top-K 未变",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "4: 四类候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "4: 原始 Top-1 为\"斯塔福郡斗牛梗\"",
+      "passed": true,
+      "detail": "斯塔福郡斗牛梗"
+    },
+    {
+      "check": "4: 组内得分和 ≈ 100%",
+      "passed": true,
+      "detail": "sum=100.0000"
+    },
+    {
+      "check": "5: 候选区完全不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "5: \"你选择的品种\"不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "5: 原始 Top-K 正常显示 3 行",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "5: 猫类别显示中文\"阿比西尼亚猫\"",
+      "passed": true,
+      "detail": "阿比西尼亚猫"
+    },
+    {
+      "check": "6: 所有 Top-K 主标签均无英文下划线",
+      "passed": true,
+      "detail": "[]"
+    }
+  ],
+  "passed": 23,
+  "total": 23,
+  "evidence": {
+    "competition": {
+      "hasCandidateBlock": true,
+      "legend": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。",
+      "candidates": [
+        {
+          "name": "美国斯塔福郡梗",
+          "scoreText": "53.47%",
+          "rawText": "原始分 53.36%"
+        },
+        {
+          "name": "斯塔福郡斗牛梗",
+          "scoreText": "46.30%",
+          "rawText": "原始分 46.20%"
+        },
+        {
+          "name": "美国比特斗牛梗",
+          "scoreText": "0.16%",
+          "rawText": "原始分 0.16%"
+        },
+        {
+          "name": "美国斗牛犬",
+          "scoreText": "0.08%",
+          "rawText": "原始分 0.08%"
+        }
+      ],
+      "radioCount": 4,
+      "topk": [
+        {
+          "breed": "美国斯塔福郡梗",
+          "scoreText": "53.36%"
+        },
+        {
+          "breed": "斯塔福郡斗牛梗",
+          "scoreText": "46.20%"
+        },
+        {
+          "breed": "美国比特斗牛梗",
+          "scoreText": "0.16%"
+        }
+      ],
+      "userChoice": {
+        "value": "美国斯塔福郡梗",
+        "hint": "模型首选仍为 美国斯塔福郡梗 （原始分 53.36%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\namerican_pit_bull_terrier_11.jpg\n234 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #1\nTop-1\n美国斯塔福郡梗\n53.4%\n53.36%\nTop-2\n斯塔福郡斗牛梗\n46.2%\n46.20%\nTop-3\n美国比特斗牛梗\n0.2%\n0.16%\n外观相近的候选品种\n模型在这几个品种间难以明确区分\n美国斯塔福郡梗\n53.5%\n53.47%\n原始分 53.36%\n斯塔福郡斗牛梗\n46.3%\n46.30%\n原始分 46.20%\n美国比特斗牛梗\n0.2%\n0.16%\n原始分 0.16%\n美国斗牛犬\n0.1%\n0.08%\n原始分 0.08%\n候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 该得分也不代表模型已确认犬只的登记品种。你可以选择更符合的一张， 该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n美国斯塔福郡梗\n模型首选仍为 美国斯塔福郡梗 （原始分 53.36%），未被替换。\n推理耗时\n211.2 ms\n预处理耗时\n2.2 ms\n服务端总耗时\n246.4 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "apbtTop1": {
+      "hasCandidateBlock": true,
+      "legend": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。",
+      "candidates": [
+        {
+          "name": "美国比特斗牛梗",
+          "scoreText": "54.46%",
+          "rawText": "原始分 46.72%"
+        },
+        {
+          "name": "美国斯塔福郡梗",
+          "scoreText": "45.53%",
+          "rawText": "原始分 39.06%"
+        },
+        {
+          "name": "斯塔福郡斗牛梗",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%"
+        },
+        {
+          "name": "美国斗牛犬",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%"
+        }
+      ],
+      "radioCount": 4,
+      "topk": [
+        {
+          "breed": "美国比特斗牛梗",
+          "scoreText": "46.72%"
+        },
+        {
+          "breed": "美国斯塔福郡梗",
+          "scoreText": "39.06%"
+        },
+        {
+          "breed": "玩具梗",
+          "scoreText": "8.12%"
+        }
+      ],
+      "userChoice": {
+        "value": "美国比特斗牛梗",
+        "hint": "模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\namerican_pit_bull_terrier_132.jpg\n16 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #2\nTop-1\n美国比特斗牛梗\n46.7%\n46.72%\nTop-2\n美国斯塔福郡梗\n39.1%\n39.06%\nTop-3\n玩具梗\n8.1%\n8.12%\n外观相近的候选品种\n模型在这几个品种间难以明确区分\n美国比特斗牛梗\n54.5%\n54.46%\n原始分 46.72%\n美国斯塔福郡梗\n45.5%\n45.53%\n原始分 39.06%\n斯塔福郡斗牛梗\n0%\n0.00%\n原始分 0.00%\n美国斗牛犬\n0%\n0.00%\n原始分 0.00%\n候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 该得分也不代表模型已确认犬只的登记品种。你可以选择更符合的一张， 该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n美国比特斗牛梗\n模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。\n推理耗时\n2.8 ms\n预处理耗时\n1.6 ms\n服务端总耗时\n24.5 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "userSelection": {
+      "hasCandidateBlock": true,
+      "legend": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。",
+      "candidates": [
+        {
+          "name": "美国比特斗牛梗",
+          "scoreText": "54.46%",
+          "rawText": "原始分 46.72%"
+        },
+        {
+          "name": "美国斯塔福郡梗",
+          "scoreText": "45.53%",
+          "rawText": "原始分 39.06%"
+        },
+        {
+          "name": "斯塔福郡斗牛梗",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%"
+        },
+        {
+          "name": "美国斗牛犬",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%"
+        }
+      ],
+      "radioCount": 4,
+      "topk": [
+        {
+          "breed": "美国比特斗牛梗",
+          "scoreText": "46.72%"
+        },
+        {
+          "breed": "美国斯塔福郡梗",
+          "scoreText": "39.06%"
+        },
+        {
+          "breed": "玩具梗",
+          "scoreText": "8.12%"
+        }
+      ],
+      "userChoice": {
+        "value": "美国斯塔福郡梗",
+        "hint": "模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\namerican_pit_bull_terrier_132.jpg\n16 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #2\nTop-1\n美国比特斗牛梗\n46.7%\n46.72%\nTop-2\n美国斯塔福郡梗\n39.1%\n39.06%\nTop-3\n玩具梗\n8.1%\n8.12%\n外观相近的候选品种\n模型在这几个品种间难以明确区分\n美国比特斗牛梗\n54.5%\n54.46%\n原始分 46.72%\n美国斯塔福郡梗\n45.5%\n45.53%\n原始分 39.06%\n斯塔福郡斗牛梗\n0%\n0.00%\n原始分 0.00%\n美国斗牛犬\n0%\n0.00%\n原始分 0.00%\n候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 该得分也不代表模型已确认犬只的登记品种。你可以选择更符合的一张， 该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n美国斯塔福郡梗\n模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。\n推理耗时\n2.8 ms\n预处理耗时\n1.6 ms\n服务端总耗时\n24.5 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "sbtTop1": {
+      "hasCandidateBlock": true,
+      "legend": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。",
+      "candidates": [
+        {
+          "name": "斯塔福郡斗牛梗",
+          "scoreText": "92.96%",
+          "rawText": "原始分 42.57%"
+        },
+        {
+          "name": "美国斯塔福郡梗",
+          "scoreText": "6.80%",
+          "rawText": "原始分 3.11%"
+        },
+        {
+          "name": "美国比特斗牛梗",
+          "scoreText": "0.14%",
+          "rawText": "原始分 0.06%"
+        },
+        {
+          "name": "美国斗牛犬",
+          "scoreText": "0.10%",
+          "rawText": "原始分 0.05%"
+        }
+      ],
+      "radioCount": 4,
+      "topk": [
+        {
+          "breed": "斯塔福郡斗牛梗",
+          "scoreText": "42.57%"
+        },
+        {
+          "breed": "拳师犬",
+          "scoreText": "21.58%"
+        },
+        {
+          "breed": "罗得西亚脊背犬",
+          "scoreText": "19.99%"
+        }
+      ],
+      "userChoice": {
+        "value": "斯塔福郡斗牛梗",
+        "hint": "模型首选仍为 斯塔福郡斗牛梗 （原始分 42.57%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nstaffordshire_bull_terrier_160.jpg\n133 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #3\nTop-1\n斯塔福郡斗牛梗\n42.6%\n42.57%\nTop-2\n拳师犬\n21.6%\n21.58%\nTop-3\n罗得西亚脊背犬\n20%\n19.99%\n外观相近的候选品种\n模型在这几个品种间难以明确区分\n斯塔福郡斗牛梗\n93%\n92.96%\n原始分 42.57%\n美国斯塔福郡梗\n6.8%\n6.80%\n原始分 3.11%\n美国比特斗牛梗\n0.1%\n0.14%\n原始分 0.06%\n美国斗牛犬\n0.1%\n0.10%\n原始分 0.05%\n候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 该得分也不代表模型已确认犬只的登记品种。你可以选择更符合的一张， 该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n斯塔福郡斗牛梗\n模型首选仍为 斯塔福郡斗牛梗 （原始分 42.57%），未被替换。\n推理耗时\n3.4 ms\n预处理耗时\n1.7 ms\n服务端总耗时\n59.9 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "nonCandidate": {
+      "hasCandidateBlock": false,
+      "legend": null,
+      "candidates": [],
+      "radioCount": 0,
+      "topk": [
+        {
+          "breed": "阿比西尼亚猫",
+          "scoreText": "69.11%"
+        },
+        {
+          "breed": "斯芬克斯猫",
+          "scoreText": "9.03%"
+        },
+        {
+          "breed": "迷你雪纳瑞",
+          "scoreText": "5.58%"
+        }
+      ],
+      "userChoice": null,
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nAbyssinian_10.jpg\n94 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #4\nTop-1\n阿比西尼亚猫\n69.1%\n69.11%\nTop-2\n斯芬克斯猫\n9%\n9.03%\nTop-3\n迷你雪纳瑞\n5.6%\n5.58%\n推理耗时\n5.4 ms\n预处理耗时\n1.7 ms\n服务端总耗时\n96.6 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    }
+  }
+}

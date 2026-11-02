@@ -1,0 +1,28 @@
+{
+  "head": "547c55d v2训练前\n",
+  "total": 101,
+  "tracked_modified": 18,
+  "untracked": 83,
+  "mixed_change_files": [
+    "backend/app/main.py",
+    "backend/app/services/predictor.py",
+    "frontend/src/components/PredictionResult.vue",
+    "frontend/tests/breedNames.test.js",
+    "frontend/tests/historyView.test.js",
+    "ml/dataset.py",
+    "ml/train.py",
+    "tests/test_api.py",
+    "tests/test_predictor_service.py",
+    "tests/test_train_extensions.py"
+  ],
+  "runtime_required": [
+    "backend/app/config.py",
+    "backend/app/main.py",
+    "backend/app/routes/predict.py",
+    "backend/app/schemas.py",
+    "backend/app/services/predictor.py",
+    "frontend/src/components/PredictionResult.vue",
+    "frontend/src/utils/breedNames.js",
+    "backend/app/services/candidate_group.py"
+  ]
+}

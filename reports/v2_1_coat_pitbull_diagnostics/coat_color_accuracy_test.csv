@@ -1,0 +1,15 @@
+class,split,coat,coat_zh,n,correct,accuracy,to_other_class,other_class_rate,note
+collie,test,black_white,黑白色,3,0,0.0,3,1.0,主要误判目标: border_collie
+collie,test,tricolor,三色,0,0,,0,,无样本（分母 0）
+collie,test,sable,貂色,1,1,1.0,0,0.0,主要误判目标: 无
+collie,test,merle,陨石色,1,0,0.0,1,1.0,主要误判目标: border_collie
+collie,test,red_white,红白/黄白,0,0,,0,,无样本（分母 0）
+collie,test,other,其他毛色,0,0,,0,,无样本（分母 0）
+collie,test,uncertain,待人工复核,11,7,0.6364,4,0.3636,主要误判目标: border_collie
+border_collie,test,black_white,黑白色,4,4,1.0,0,0.0,主要误判目标: 无
+border_collie,test,tricolor,三色,0,0,,0,,无样本（分母 0）
+border_collie,test,sable,貂色,0,0,,0,,无样本（分母 0）
+border_collie,test,merle,陨石色,1,0,0.0,0,0.0,主要误判目标: scottish_deerhound
+border_collie,test,red_white,红白/黄白,0,0,,0,,无样本（分母 0）
+border_collie,test,other,其他毛色,2,1,0.5,0,0.0,主要误判目标: siberian_husky
+border_collie,test,uncertain,待人工复核,8,7,0.875,0,0.0,主要误判目标: flat_coated_retriever

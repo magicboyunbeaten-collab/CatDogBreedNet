@@ -1,0 +1,75 @@
+{
+  "recorded_at": "2026-10-19T10:18:54.689612+00:00",
+  "git": {
+    "head": "547c55d v2训练前",
+    "branch": "master",
+    "status_short": "M backend/app/config.py\n M backend/app/main.py\n M backend/app/routes/predict.py\n M backend/app/schemas.py\n M backend/app/services/predictor.py\n M frontend/src/components/PredictionResult.vue\n M frontend/src/utils/breedNames.js\n M frontend/tests/breedNames.test.js\n M ml/predict.py\n M ml/predictor.py\n M ml/train.py\n M tests/test_train_extensions.py\n?? artifacts/_v2_1_smoke/\n?? artifacts/v2_1_136classes_seed42/\n?? backend/app/services/candidate_group.py\n?? frontend/tests/predictionResult.test.js\n?? frontend/tests/predictionResultAcceptance.test.js\n?? md/U5_1_APBT纳入四类候选组离线评估任务.md\n?? md/V2.1_136类别模型训练任务.md\n?? md/V2.1_相近犬种候选提示与边牧复核整合任务.md\n?? md/V2.1_误分类诊断与APBT_AmStaff数据审计任务.md\n?? reports/v2_1_apbt_four_breed_candidate_eval/\n?? reports/v2_1_candidate_ui_review/\n?? reports/v2_1_coat_pitbull_diagnostics/\n?? reports/v2_1_diagnostics/\n?? scripts/accept_candidate_group_api.py\n?? scripts/audit_cross_class_duplicates.py\n?? scripts/audit_external_sources.py\n?? scripts/audit_pitbull_labels.py\n?? scripts/build_manual_review_queue.py\n?? scripts/diagnose_coat_color.py\n?? scripts/diagnose_v2_1.py\n?? scripts/diagnostic_protection_snapshot.py\n?? scripts/evaluate_apbt_four_group.py\n?? scripts/evaluate_v2_1_subsets.py\n?? scripts/export_candidate_triggers_val.py\n?? scripts/finalize_v2_1_candidate.py\n?? scripts/summarize_coat_review.py\n?? scripts/summarize_coat_test.py\n?? scripts/validate_candidate_group_thresholds.py\n?? scripts/verify_apbt_candidate_limit.py\n?? tests/test_candidate_group.py"
+  },
+  "files": {
+    "artifacts/best_model.pth": {
+      "sha256": "89ef468f199c6d1550fec2638c5ea6f8ef7ad543e57f8ec82c4263c121b1a256",
+      "bytes": 44862539
+    },
+    "artifacts/last_model.pth": {
+      "sha256": "e01522b283baf05edb0177f38896af1e6df2f559506986d3a6480c2f0af8dc52",
+      "bytes": 44862475
+    },
+    "artifacts/class_names.json": {
+      "sha256": "24120035f4af1c4945ad6e6eb1d82fa1af8b1fd3a9e383ab0246c464dfce75e6",
+      "bytes": 694
+    },
+    "artifacts/model_version.json": {
+      "sha256": "377559192e21abfe6ea7735dae1be19a095803ad315a3265050aeb14dca97196",
+      "bytes": 1895
+    },
+    "artifacts/experiment_config.json": {
+      "sha256": "3823098c4a8fc3fe8a1e15929a00e853e581e8a332b75f6780be12a12d35fa0d",
+      "bytes": 1568
+    },
+    "artifacts/v2_1_136classes_seed42/best_model.pth": {
+      "sha256": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+      "bytes": 45068043
+    },
+    "artifacts/v2_1_136classes_seed42/last_model.pth": {
+      "sha256": "af32c2ca7e1f06078ab2493b136e3eb063aa0123af04f1c6284bfd97c742aa40",
+      "bytes": 45067915
+    },
+    "artifacts/v2_1_136classes_seed42/class_names.json": {
+      "sha256": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad",
+      "bytes": 2705
+    },
+    "artifacts/v2_1_136classes_seed42/experiment_config.json": {
+      "sha256": "0253416ba4a3f011e87a6b57fb04d62a28bcb1caab2aa6cc9db5d12de4f2439a",
+      "bytes": 6056
+    }
+  },
+  "dirs": {
+    "data/processed": {
+      "files": 7349,
+      "bytes": 790860970
+    },
+    "data/processed_clean": {
+      "files": 7325,
+      "bytes": 787775992
+    },
+    "data/raw": {
+      "files": 25867,
+      "bytes": 1632137687
+    },
+    "data/v2_processed": {
+      "files": 24098,
+      "bytes": 1428084982
+    },
+    "data/v2_processed_prev": {
+      "files": 29158,
+      "bytes": 1622680409
+    }
+  },
+  "database": {
+    "records": 142,
+    "integrity": "ok"
+  },
+  "uploads": {
+    "count": 142
+  }
+}

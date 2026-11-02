@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-10-19T03:34:50.346970+00:00",
+  "model_sha256": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+  "counts": {
+    "collie": {
+      "train": 121,
+      "val": 16,
+      "test": 16
+    },
+    "border_collie": {
+      "train": 114,
+      "val": 15,
+      "test": 15
+    }
+  },
+  "classification_coverage": {
+    "total": 297,
+    "classified": 130,
+    "uncertain": 167,
+    "uncertain_ratio": 0.5623
+  },
+  "test_accuracy": {
+    "collie": {
+      "n": 16,
+      "correct": 8
+    },
+    "border_collie": {
+      "n": 15,
+      "correct": 12
+    }
+  },
+  "collie_to_border_collie": {
+    "cases": 17,
+    "collie_total": 153,
+    "collie_black_white_total": 11,
+    "collie_black_white_correct": 6,
+    "cases_coat_distribution": {
+      "uncertain": 9,
+      "black_white": 5,
+      "tricolor": 1,
+      "merle": 2
+    }
+  },
+  "cross_check_with_legacy_test": {
+    "checked": 31,
+    "mismatches": [],
+    "legacy_present": true
+  },
+  "contact_sheets": [
+    "contact_sheet_collie_black_white.png",
+    "contact_sheet_collie_tricolor.png",
+    "contact_sheet_collie_sable.png",
+    "contact_sheet_collie_merle.png",
+    "contact_sheet_collie_red_white.png",
+    "contact_sheet_collie_other.png",
+    "contact_sheet_collie_uncertain.png",
+    "contact_sheet_border_collie_black_white.png",
+    "contact_sheet_border_collie_tricolor.png",
+    "contact_sheet_border_collie_merle.png",
+    "contact_sheet_border_collie_other.png",
+    "contact_sheet_border_collie_uncertain.png",
+    "contact_sheet_collie_to_border_8cases.png"
+  ]
+}

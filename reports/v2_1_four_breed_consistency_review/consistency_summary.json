@@ -1,0 +1,115 @@
+{
+  "generated_at": "2026-10-19T13:23:01.911177+00:00",
+  "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_132.jpg",
+  "split_used": "validation only (test split never read)",
+  "test_split_access_count": 0,
+  "repeats": 5,
+  "checks": [
+    {
+      "check": "开启态 triggered 全部相同",
+      "passed": true,
+      "detail": "[True, True, True, True, True]"
+    },
+    {
+      "check": "开启态 triggered 为 True",
+      "passed": true,
+      "detail": "True"
+    },
+    {
+      "check": "四候选成员与顺序 5 次完全一致",
+      "passed": true,
+      "detail": "american_pit_bull_terrier;american_staffordshire_terrier;staffordshire_bull_terrier;american_bulldog"
+    },
+    {
+      "check": "候选成员与四类 B1 定义一致（集合相同）",
+      "passed": true,
+      "detail": "american_pit_bull_terrier;american_staffordshire_terrier;staffordshire_bull_terrier;american_bulldog"
+    },
+    {
+      "check": "原始 Top-1 标签 5 次完全一致",
+      "passed": true,
+      "detail": "american_pit_bull_terrier"
+    },
+    {
+      "check": "原始 Top-1 分数 5 次一致（batch=1 预期逐位相同）",
+      "passed": true,
+      "detail": "max_abs_diff=0.000e+00 (min=0.4672210000, max=0.4672210000)"
+    },
+    {
+      "check": "threshold_version 恒为四类 B1",
+      "passed": true,
+      "detail": "{'val-2026-10-19-four-breed-b1'}"
+    },
+    {
+      "check": "组内得分之和每次均 ≈ 100%",
+      "passed": true,
+      "detail": "sums=[100.0, 100.0, 100.0, 100.0, 100.0]"
+    },
+    {
+      "check": "组内得分严格等于原始概率归一化（容差 1e-3）",
+      "passed": true,
+      "detail": "max_deviation=4.607e-05"
+    },
+    {
+      "check": "四候选原始 Softmax 分数 5 次完全一致",
+      "passed": true,
+      "detail": "1 种取值"
+    },
+    {
+      "check": "原始 Top-K 全数组 5 次完全一致",
+      "passed": true,
+      "detail": "1 种取值"
+    },
+    {
+      "check": "开启态返回候选组",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "关闭态不返回候选组",
+      "passed": true,
+      "detail": "candidate_group=None"
+    },
+    {
+      "check": "关闭态 triggered 字段不存在（键缺失语义）",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "开/关两态原始 Top-1 标签一致",
+      "passed": true,
+      "detail": "american_pit_bull_terrier vs american_pit_bull_terrier"
+    },
+    {
+      "check": "开/关两态原始 Top-1 分数一致",
+      "passed": true,
+      "detail": "off=0.4672210000 on=0.4672210000"
+    },
+    {
+      "check": "开/关两态原始 Top-K 全数组一致",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "passed": 17,
+  "total": 17,
+  "max_top1_abs_diff": 0.0,
+  "group_score_sum_min": 100.0,
+  "group_score_sum_max": 100.0,
+  "max_group_normalisation_deviation": 4.6074464699731935e-05,
+  "unexpected_inconsistency": [],
+  "expected_by_design": [
+    {
+      "item": "开启态返回候选组并显示四候选",
+      "observed": true
+    },
+    {
+      "item": "关闭态不返回候选组（前端不显示候选区）",
+      "observed": true
+    },
+    {
+      "item": "开关不改变原始 Top-1 与 Top-K",
+      "observed": true
+    }
+  ]
+}

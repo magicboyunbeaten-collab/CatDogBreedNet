@@ -1,0 +1,50 @@
+[train] pair-only ColorJitter (0.2, 0.2, 0.3, 0.05) applied to 235 samples (collie + border_collie)
+[train] device=cuda arch=resnet18 classes=136 augment=baseline freeze=none mixup_alpha=0.0 label_smoothing=0.0 train=16655 val=2079 test=5363
+[train] gpu=NVIDIA GeForce RTX 4060 Laptop GPU vram=8.0 GiB
+[train] freeze strategy 'none': all parameters trainable
+[train] initialized from E:\CatDogBreedNet\artifacts\v2_1_136classes_seed42\best_model.pth (source resnet18/136 classes): loaded 122 tensors, re-initialized [], head_transferred=True
+[epoch   1/30] train_loss=0.2491 train_acc=0.9188 val_loss=1.2205 val_acc=0.7066 val_macro_f1=0.7044 lr=1.00e-03 (127.2s)
+[train] new best val_macro_f1=0.7044 at epoch 1 (val_acc=0.7066, val_macro_f1=0.7044); saved best_model.pth
+[epoch   2/30] train_loss=0.2324 train_acc=0.9208 val_loss=1.1649 val_acc=0.7273 val_macro_f1=0.7318 lr=1.00e-03 (97.9s)
+[train] new best val_macro_f1=0.7318 at epoch 2 (val_acc=0.7273, val_macro_f1=0.7318); saved best_model.pth
+[epoch   3/30] train_loss=0.2097 train_acc=0.9320 val_loss=1.2064 val_acc=0.7148 val_macro_f1=0.7190 lr=1.00e-03 (97.0s)
+[epoch   4/30] train_loss=0.1893 train_acc=0.9379 val_loss=1.3039 val_acc=0.7080 val_macro_f1=0.7139 lr=1.00e-03 (97.1s)
+[epoch   5/30] train_loss=0.1632 train_acc=0.9466 val_loss=1.3684 val_acc=0.7071 val_macro_f1=0.7163 lr=1.00e-04 (97.0s)
+[epoch   6/30] train_loss=0.0739 train_acc=0.9773 val_loss=1.0201 val_acc=0.7754 val_macro_f1=0.7823 lr=1.00e-04 (98.1s)
+[train] new best val_macro_f1=0.7823 at epoch 6 (val_acc=0.7754, val_macro_f1=0.7823); saved best_model.pth
+[epoch   7/30] train_loss=0.0442 train_acc=0.9880 val_loss=0.9973 val_acc=0.7787 val_macro_f1=0.7861 lr=1.00e-04 (99.2s)
+[train] new best val_macro_f1=0.7861 at epoch 7 (val_acc=0.7787, val_macro_f1=0.7861); saved best_model.pth
+[epoch   8/30] train_loss=0.0384 train_acc=0.9902 val_loss=0.9893 val_acc=0.7763 val_macro_f1=0.7826 lr=1.00e-04 (96.8s)
+[epoch   9/30] train_loss=0.0291 train_acc=0.9933 val_loss=0.9794 val_acc=0.7802 val_macro_f1=0.7884 lr=1.00e-04 (97.7s)
+[train] new best val_macro_f1=0.7884 at epoch 9 (val_acc=0.7802, val_macro_f1=0.7884); saved best_model.pth
+[epoch  10/30] train_loss=0.0255 train_acc=0.9941 val_loss=0.9853 val_acc=0.7821 val_macro_f1=0.7897 lr=1.00e-05 (97.5s)
+[train] new best val_macro_f1=0.7897 at epoch 10 (val_acc=0.7821, val_macro_f1=0.7897); saved best_model.pth
+[epoch  11/30] train_loss=0.0216 train_acc=0.9957 val_loss=0.9826 val_acc=0.7807 val_macro_f1=0.7877 lr=1.00e-05 (98.4s)
+[epoch  12/30] train_loss=0.0216 train_acc=0.9951 val_loss=0.9907 val_acc=0.7816 val_macro_f1=0.7882 lr=1.00e-05 (97.4s)
+[epoch  13/30] train_loss=0.0199 train_acc=0.9963 val_loss=0.9744 val_acc=0.7797 val_macro_f1=0.7867 lr=1.00e-05 (97.9s)
+[epoch  14/30] train_loss=0.0202 train_acc=0.9957 val_loss=0.9803 val_acc=0.7845 val_macro_f1=0.7923 lr=1.00e-05 (97.9s)
+[train] new best val_macro_f1=0.7923 at epoch 14 (val_acc=0.7845, val_macro_f1=0.7923); saved best_model.pth
+[epoch  15/30] train_loss=0.0193 train_acc=0.9962 val_loss=0.9714 val_acc=0.7826 val_macro_f1=0.7908 lr=1.00e-06 (97.9s)
+[epoch  16/30] train_loss=0.0189 train_acc=0.9961 val_loss=0.9744 val_acc=0.7855 val_macro_f1=0.7927 lr=1.00e-06 (97.1s)
+[train] new best val_macro_f1=0.7927 at epoch 16 (val_acc=0.7855, val_macro_f1=0.7927); saved best_model.pth
+[epoch  17/30] train_loss=0.0195 train_acc=0.9963 val_loss=0.9721 val_acc=0.7855 val_macro_f1=0.7932 lr=1.00e-06 (97.5s)
+[train] new best val_macro_f1=0.7932 at epoch 17 (val_acc=0.7855, val_macro_f1=0.7932); saved best_model.pth
+[epoch  18/30] train_loss=0.0187 train_acc=0.9965 val_loss=0.9704 val_acc=0.7850 val_macro_f1=0.7920 lr=1.00e-06 (98.8s)
+[epoch  19/30] train_loss=0.0183 train_acc=0.9959 val_loss=0.9651 val_acc=0.7869 val_macro_f1=0.7936 lr=1.00e-06 (98.2s)
+[train] new best val_macro_f1=0.7936 at epoch 19 (val_acc=0.7869, val_macro_f1=0.7936); saved best_model.pth
+[epoch  20/30] train_loss=0.0181 train_acc=0.9968 val_loss=0.9645 val_acc=0.7869 val_macro_f1=0.7944 lr=1.00e-07 (101.2s)
+[train] new best val_macro_f1=0.7944 at epoch 20 (val_acc=0.7869, val_macro_f1=0.7944); saved best_model.pth
+[epoch  21/30] train_loss=0.0197 train_acc=0.9957 val_loss=0.9789 val_acc=0.7816 val_macro_f1=0.7881 lr=1.00e-07 (100.7s)
+[epoch  22/30] train_loss=0.0178 train_acc=0.9961 val_loss=0.9720 val_acc=0.7792 val_macro_f1=0.7860 lr=1.00e-07 (98.0s)
+[epoch  23/30] train_loss=0.0182 train_acc=0.9966 val_loss=0.9727 val_acc=0.7835 val_macro_f1=0.7892 lr=1.00e-07 (100.2s)
+[epoch  24/30] train_loss=0.0176 train_acc=0.9964 val_loss=0.9688 val_acc=0.7845 val_macro_f1=0.7913 lr=1.00e-07 (101.0s)
+[epoch  25/30] train_loss=0.0183 train_acc=0.9966 val_loss=0.9638 val_acc=0.7802 val_macro_f1=0.7875 lr=1.00e-08 (101.2s)
+[epoch  26/30] train_loss=0.0180 train_acc=0.9967 val_loss=0.9784 val_acc=0.7792 val_macro_f1=0.7857 lr=1.00e-08 (101.1s)
+[epoch  27/30] train_loss=0.0179 train_acc=0.9960 val_loss=0.9775 val_acc=0.7787 val_macro_f1=0.7872 lr=1.00e-08 (100.7s)
+[epoch  28/30] train_loss=0.0186 train_acc=0.9967 val_loss=0.9786 val_acc=0.7783 val_macro_f1=0.7861 lr=1.00e-08 (101.6s)
+[epoch  29/30] train_loss=0.0188 train_acc=0.9964 val_loss=0.9785 val_acc=0.7831 val_macro_f1=0.7904 lr=1.00e-08 (101.9s)
+[epoch  30/30] train_loss=0.0186 train_acc=0.9966 val_loss=0.9667 val_acc=0.7816 val_macro_f1=0.7884 lr=1.00e-09 (101.0s)
+[train] early stopping: no val_macro_f1 improvement for 10 epochs
+[train] done in 2998.0s; monitor=val_macro_f1 best=0.7944 (epoch 20); best_val_acc=0.7869 best_val_macro_f1=0.7944
+[train] artifacts: E:\CatDogBreedNet\artifacts\v2_2_border_collie_exp01_pair_color_jitter_seed42/ (best_model.pth, last_model.pth, class_names.json, experiment_config.json)
+[train] reports: E:\CatDogBreedNet\reports\u6_border_collie\exp_logs\exp01_pair_color_jitter_seed42\train_log.csv, loss_curve.png, accuracy_curve.png

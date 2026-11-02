@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-10-19T08:24:33.660532+00:00",
+  "candidate_group": [
+    "american_staffordshire_terrier",
+    "staffordshire_bull_terrier",
+    "american_bulldog"
+  ],
+  "apbt_in_candidate_group": false,
+  "checks": [
+    {
+      "check": "APBT 不在候选组成员中",
+      "passed": true,
+      "detail": "CANDIDATE_GROUP=['american_staffordshire_terrier', 'staffordshire_bull_terrier', 'american_bulldog']"
+    },
+    {
+      "check": "top-1 为 APBT 时不触发候选组",
+      "passed": true,
+      "detail": "triggered=False"
+    },
+    {
+      "check": "不触发原因为 top-1 不在候选组内",
+      "passed": true,
+      "detail": "reason=top-1 不在候选组内"
+    },
+    {
+      "check": "APBT 高置信度时同样不触发",
+      "passed": true,
+      "detail": "top1=0.99"
+    },
+    {
+      "check": "val 中 top-1 为 APBT 的图片全部不会触发候选组",
+      "passed": true,
+      "detail": "13 张；按规则 top-1 不在候选组内即不触发，与逐张调用 build_candidate_group 的结果一致"
+    }
+  ],
+  "val_top1_apbt_count": 13
+}

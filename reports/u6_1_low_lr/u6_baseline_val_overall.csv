@@ -1,0 +1,2 @@
+split,tag,weights,class_names,n_samples,n_classes,batch_size,device,elapsed_seconds,accuracy,macro_f1,weighted_f1,evaluated_at,test_split_access_count
+val,val,E:\CatDogBreedNet\artifacts\v2_1_136classes_seed42\best_model.pth,E:\CatDogBreedNet\artifacts\v2_1_136classes_seed42\class_names.json,2079,136,32,cuda,19.39,0.797018,0.803806,0.796285,2026-10-20T02:50:15.351266+00:00,0

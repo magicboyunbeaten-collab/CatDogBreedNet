@@ -1,0 +1,255 @@
+{
+  "generated_at": "2026-10-19T03:35:57.575082+00:00",
+  "model_dir": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42",
+  "prediction_rows": 909,
+  "confusion_test": [
+    {
+      "true_label": "american_pit_bull_terrier",
+      "support": 100,
+      "american_pit_bull_terrier": 14,
+      "american_staffordshire_terrier": 21,
+      "staffordshire_bull_terrier": 18,
+      "american_bulldog": 15,
+      "bull_mastiff": 0,
+      "other": 32
+    },
+    {
+      "true_label": "american_staffordshire_terrier",
+      "support": 17,
+      "american_pit_bull_terrier": 2,
+      "american_staffordshire_terrier": 12,
+      "staffordshire_bull_terrier": 0,
+      "american_bulldog": 0,
+      "bull_mastiff": 3,
+      "other": 0
+    },
+    {
+      "true_label": "staffordshire_bull_terrier",
+      "support": 89,
+      "american_pit_bull_terrier": 1,
+      "american_staffordshire_terrier": 15,
+      "staffordshire_bull_terrier": 47,
+      "american_bulldog": 16,
+      "bull_mastiff": 1,
+      "other": 9
+    },
+    {
+      "true_label": "american_bulldog",
+      "support": 100,
+      "american_pit_bull_terrier": 1,
+      "american_staffordshire_terrier": 1,
+      "staffordshire_bull_terrier": 2,
+      "american_bulldog": 84,
+      "bull_mastiff": 0,
+      "other": 12
+    },
+    {
+      "true_label": "bull_mastiff",
+      "support": 16,
+      "american_pit_bull_terrier": 0,
+      "american_staffordshire_terrier": 0,
+      "staffordshire_bull_terrier": 1,
+      "american_bulldog": 0,
+      "bull_mastiff": 15,
+      "other": 0
+    }
+  ],
+  "merged_evaluation": {
+    "before": {
+      "num_classes": 136,
+      "accuracy": 0.796942,
+      "macro_f1": 0.747241,
+      "weighted_f1": 0.798846
+    },
+    "after": {
+      "num_classes": 135,
+      "accuracy": 0.801231,
+      "macro_f1": 0.752359,
+      "weighted_f1": 0.804574
+    },
+    "note": "后验标签重映射（不重跑推理、不重训练）：把 APBT 与 AmStaff 的真实/预测标签同时映射为 pit_bull_type_merged。仅代表现有权重在合并标签定义下的得分，不代表决定修改正式标签体系。"
+  },
+  "merged_label_pairs": [
+    {
+      "label": "american_pit_bull_terrier",
+      "support_before": 100,
+      "predicted_before": 20,
+      "precision_before": 0.7,
+      "recall_before": 0.14,
+      "f1_before": 0.233333,
+      "support_after": 0,
+      "predicted_after": 0,
+      "precision_after": 0.0,
+      "recall_after": 0.0,
+      "f1_after": 0.0,
+      "delta_f1": -0.233333
+    },
+    {
+      "label": "american_staffordshire_terrier",
+      "support_before": 17,
+      "predicted_before": 55,
+      "precision_before": 0.218182,
+      "recall_before": 0.705882,
+      "f1_before": 0.333333,
+      "support_after": 0,
+      "predicted_after": 0,
+      "precision_after": 0.0,
+      "recall_after": 0.0,
+      "f1_after": 0.0,
+      "delta_f1": -0.333333
+    },
+    {
+      "label": "pit_bull_type_merged",
+      "support_before": 0,
+      "predicted_before": 0,
+      "precision_before": 0.0,
+      "recall_before": 0.0,
+      "f1_before": 0.0,
+      "support_after": 117,
+      "predicted_after": 75,
+      "precision_after": 0.653333,
+      "recall_after": 0.418803,
+      "f1_after": 0.510417,
+      "delta_f1": 0.510417
+    },
+    {
+      "label": "staffordshire_bull_terrier",
+      "support_before": 89,
+      "predicted_before": 72,
+      "precision_before": 0.652778,
+      "recall_before": 0.52809,
+      "f1_before": 0.583851,
+      "support_after": 89,
+      "predicted_after": 72,
+      "precision_after": 0.652778,
+      "recall_after": 0.52809,
+      "f1_after": 0.583851,
+      "delta_f1": 0.0
+    },
+    {
+      "label": "american_bulldog",
+      "support_before": 100,
+      "predicted_before": 131,
+      "precision_before": 0.641221,
+      "recall_before": 0.84,
+      "f1_before": 0.727273,
+      "support_after": 100,
+      "predicted_after": 131,
+      "precision_after": 0.641221,
+      "recall_after": 0.84,
+      "f1_after": 0.727273,
+      "delta_f1": 0.0
+    },
+    {
+      "label": "bull_mastiff",
+      "support_before": 16,
+      "predicted_before": 27,
+      "precision_before": 0.555556,
+      "recall_before": 0.9375,
+      "f1_before": 0.697674,
+      "support_after": 16,
+      "predicted_after": 27,
+      "precision_after": 0.555556,
+      "recall_after": 0.9375,
+      "f1_after": 0.697674,
+      "delta_f1": 0.0
+    },
+    {
+      "label": "overall_accuracy",
+      "support_before": "",
+      "predicted_before": "",
+      "precision_before": "",
+      "recall_before": "",
+      "f1_before": 0.796942,
+      "support_after": "",
+      "predicted_after": "",
+      "precision_after": "",
+      "recall_after": "",
+      "f1_after": 0.801231,
+      "delta_f1": 0.004289
+    },
+    {
+      "label": "overall_macro_f1",
+      "support_before": "",
+      "predicted_before": "",
+      "precision_before": "",
+      "recall_before": "",
+      "f1_before": 0.747241,
+      "support_after": "",
+      "predicted_after": "",
+      "precision_after": "",
+      "recall_after": "",
+      "f1_after": 0.752359,
+      "delta_f1": 0.005118
+    },
+    {
+      "label": "overall_weighted_f1",
+      "support_before": "",
+      "predicted_before": "",
+      "precision_before": "",
+      "recall_before": "",
+      "f1_before": 0.798846,
+      "support_after": "",
+      "predicted_after": "",
+      "precision_after": "",
+      "recall_after": "",
+      "f1_after": 0.804574,
+      "delta_f1": 0.005728
+    }
+  ],
+  "merged_confusion": [
+    {
+      "true_label": "pit_bull_type_merged",
+      "support": 117,
+      "pit_bull_type_merged": 49,
+      "staffordshire_bull_terrier": 18,
+      "american_bulldog": 15,
+      "bull_mastiff": 3,
+      "other": 32
+    },
+    {
+      "true_label": "staffordshire_bull_terrier",
+      "support": 89,
+      "pit_bull_type_merged": 16,
+      "staffordshire_bull_terrier": 47,
+      "american_bulldog": 16,
+      "bull_mastiff": 1,
+      "other": 9
+    },
+    {
+      "true_label": "american_bulldog",
+      "support": 100,
+      "pit_bull_type_merged": 2,
+      "staffordshire_bull_terrier": 2,
+      "american_bulldog": 84,
+      "bull_mastiff": 0,
+      "other": 12
+    },
+    {
+      "true_label": "bull_mastiff",
+      "support": 16,
+      "pit_bull_type_merged": 0,
+      "staffordshire_bull_terrier": 1,
+      "american_bulldog": 0,
+      "bull_mastiff": 15,
+      "other": 0
+    }
+  ],
+  "source_distribution": {
+    "american_pit_bull_terrier": {
+      "Oxford-IIIT Pet": 200
+    },
+    "american_staffordshire_terrier": {
+      "Stanford Dogs (ImageNet wnid n02093428)": 164
+    },
+    "staffordshire_bull_terrier": {
+      "Oxford-IIIT Pet": 189
+    },
+    "american_bulldog": {
+      "Oxford-IIIT Pet": 200
+    },
+    "bull_mastiff": {
+      "Stanford Dogs (ImageNet wnid n02108422)": 156
+    }
+  }
+}

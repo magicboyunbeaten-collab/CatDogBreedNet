@@ -1,0 +1,61 @@
+{
+  "scenario": "off",
+  "generatedAt": "2026-10-21T04:21:43.702Z",
+  "baseUrl": "http://127.0.0.1:5173/predict",
+  "samples": {
+    "triggerA": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_416.jpg",
+    "triggerB": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_549.jpg",
+    "triggerC": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_884.jpg",
+    "nonTrigger": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\afghan_hound\\n02088094_1479.jpg",
+    "beagle": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\beagle"
+  },
+  "checks": [
+    {
+      "check": "8: 候选区消失",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "8: \"你选择的品种\"不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "8: 原始 Top-K 仍为 3 行",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "8: 原始 Top-1 仍为\"边境牧羊犬\"",
+      "passed": true,
+      "detail": "边境牧羊犬"
+    }
+  ],
+  "passed": 4,
+  "total": 4,
+  "evidence": {
+    "switchOff": {
+      "hasCandidateBlock": false,
+      "groupId": null,
+      "subtitle": null,
+      "candidates": [],
+      "radioCount": 0,
+      "topk": [
+        {
+          "breed": "边境牧羊犬",
+          "scoreText": "60.04%"
+        },
+        {
+          "breed": "柯利牧羊犬",
+          "scoreText": "39.87%"
+        },
+        {
+          "breed": "蝴蝶犬",
+          "scoreText": "0.04%"
+        }
+      ],
+      "userChoice": null,
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nn02106166_416.jpg\n39 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #24\nTop-1\n边境牧羊犬\n60%\n60.04%\nTop-2\n柯利牧羊犬\n39.9%\n39.87%\nTop-3\n蝴蝶犬\n0%\n0.04%\n推理耗时\n201.3 ms\n预处理耗时\n1.9 ms\n服务端总耗时\n232.0 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    }
+  }
+}

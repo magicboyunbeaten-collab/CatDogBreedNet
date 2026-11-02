@@ -1,0 +1,68 @@
+{
+  "generated_at": "2026-10-19T08:03:41.637789+00:00",
+  "model_dir": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42",
+  "val_dir": "E:\\CatDogBreedNet\\data\\v2_processed\\val",
+  "split_used": "validation only (test split never read)",
+  "val_images": 2079,
+  "thresholds": {
+    "mass": 0.3,
+    "margin": 0.4,
+    "version": "val-2026-10-19-v1"
+  },
+  "candidate_group": [
+    "american_staffordshire_terrier",
+    "staffordshire_bull_terrier",
+    "american_bulldog"
+  ],
+  "candidate_group_zh": {
+    "american_staffordshire_terrier": "美国斯塔福郡梗",
+    "staffordshire_bull_terrier": "斯塔福郡斗牛梗",
+    "american_bulldog": "美国斗牛犬"
+  },
+  "top1_in_candidate_group": 36,
+  "top1_in_candidate_group_ratio": 0.017316,
+  "top1_american_pit_bull_terrier": 13,
+  "top1_american_pit_bull_terrier_ratio": 0.006253,
+  "triggered_count": 5,
+  "triggered_ratio_of_val": 0.002405,
+  "triggered_true_labels": {
+    "american_pit_bull_terrier": 1,
+    "american_staffordshire_terrier": 1,
+    "kelpie": 1,
+    "rhodesian_ridgeback": 1,
+    "staffordshire_bull_terrier": 1
+  },
+  "not_triggered_reasons": {
+    "top-1 不在候选组内": 2043,
+    "组内分差 0.9963 大于阈值 0.40": 1,
+    "组内分差 0.8712 大于阈值 0.40": 1,
+    "组内分差 0.9759 大于阈值 0.40": 1,
+    "组内分差 0.7730 大于阈值 0.40": 1,
+    "组内分差 0.9999 大于阈值 0.40": 1,
+    "组内分差 0.9227 大于阈值 0.40": 1,
+    "组内分差 0.9991 大于阈值 0.40": 1,
+    "组内分差 0.9947 大于阈值 0.40": 1,
+    "组内分差 0.7312 大于阈值 0.40": 1,
+    "组内分差 0.8084 大于阈值 0.40": 1,
+    "组内分差 0.9709 大于阈值 0.40": 1,
+    "组内分差 0.7025 大于阈值 0.40": 1,
+    "组内分差 0.6172 大于阈值 0.40": 2,
+    "组内分差 0.8429 大于阈值 0.40": 1,
+    "组内分差 0.8725 大于阈值 0.40": 1,
+    "组内分差 0.9866 大于阈值 0.40": 1,
+    "组内分差 0.7520 大于阈值 0.40": 1,
+    "组内分差 0.4642 大于阈值 0.40": 1,
+    "组内分差 0.5290 大于阈值 0.40": 1,
+    "组内分差 0.4743 大于阈值 0.40": 1,
+    "组内分差 0.7205 大于阈值 0.40": 1,
+    "组内分差 0.9720 大于阈值 0.40": 1,
+    "组内分差 0.4562 大于阈值 0.40": 1,
+    "组内分差 0.6304 大于阈值 0.40": 1,
+    "组内分差 0.9940 大于阈值 0.40": 1,
+    "组内分差 0.9795 大于阈值 0.40": 1,
+    "组内分差 0.9979 大于阈值 0.40": 1,
+    "组内分差 0.5412 大于阈值 0.40": 1,
+    "组内分差 0.9714 大于阈值 0.40": 1,
+    "组内分差 0.6832 大于阈值 0.40": 1
+  }
+}

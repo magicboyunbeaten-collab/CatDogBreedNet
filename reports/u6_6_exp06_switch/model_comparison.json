@@ -1,0 +1,279 @@
+{
+  "generated_at": "2026-10-21T06:36:05.559738+00:00",
+  "task": "U6.6 exp06 candidate switch",
+  "split_used": "validation only (data/v2_processed/val); test split never read",
+  "test_split_access_count": 0,
+  "metric": {
+    "name": "macro_f1 over the 136 trained classes",
+    "implementation": "sklearn-style per-class F1 then unweighted mean",
+    "source_of_baseline": "reports/u6_1_low_lr/u6_1_val_group_comparison.csv",
+    "val_total": 2079,
+    "identical_split_and_metric": true,
+    "note": "baseline 与 exp06 使用同一 validation split、同一 macro-F1 口径、同一 136 类映射；不以文件名判定 checkpoint 身份。"
+  },
+  "baseline_v2_1": {
+    "weights": "artifacts/v2_1_136classes_seed42/best_model.pth",
+    "sha256": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+    "image_size": 224,
+    "accuracy": 0.797018,
+    "macro_f1": 0.803806
+  },
+  "candidate_exp06": {
+    "weights": "artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/best_model.pth",
+    "sha256": "a7560f4e538315b089b65678c452c170cecd2bcbf23738fc6609886e96ca6c8e",
+    "bytes": 45068043,
+    "arch": "resnet18",
+    "num_classes": 136,
+    "checkpoint_epoch": 22,
+    "checkpoint_val_macro_f1": 0.8149474329438666,
+    "fc_weight_shape": [
+      136,
+      512
+    ],
+    "param_tensor_count": 122,
+    "class_names_count": 136,
+    "class_names_identical_to_v2_1_mapping": true,
+    "training_metadata": {
+      "source": "artifacts/.../experiment_config.json (真实存在，未臆造)",
+      "image_size": 256,
+      "seed": 42,
+      "epochs_requested": 30,
+      "epochs_completed": 30,
+      "best_epoch": 22,
+      "lr_head": 0.0001,
+      "lr_backbone": 5e-05,
+      "weight_decay": 0.0001,
+      "batch_size": 32,
+      "init_from_sha256": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+      "head_transferred": true,
+      "dataset_sizes": {
+        "train": 16655,
+        "val": 2079,
+        "test": 5363
+      }
+    },
+    "note": "checkpoint 顶层不含 image_size / seed 字段，这两项取自 experiment_config.json；未臆造缺失值。"
+  },
+  "preprocessing_comparability": {
+    "why_it_matters": "exp06 训练与 U6.1 评估均为 256 分辨率，而推理端 ml/predictor.py 固定使用 build_transforms(train=False) 的默认 224；不修则切换后无法兑现 256 的指标。",
+    "exp06_at_256": {
+      "accuracy": 0.8095238095238095,
+      "macro_f1": 0.8149474329438666,
+      "reproduces_u6_1_record_within_csv_rounding_1e-6": true,
+      "u6_1_recorded_macro_f1": 0.814947
+    },
+    "exp06_at_224": {
+      "accuracy": 0.7936507936507936,
+      "macro_f1": 0.8009950855637381
+    },
+    "loss_if_224_used": 0.013952,
+    "exp06_at_224_vs_baseline": -0.002811,
+    "conclusion": "若沿用当前 224 预处理，exp06 的 macro-F1 会低于 baseline，切换将得不偿失；因此 image_size 贯通是切换的前置条件，不是可选项。"
+  },
+  "decision": {
+    "rule": "同口径 macro_f1 下 exp06 > baseline 且权重兼容 → 切换",
+    "exp06_at_training_resolution": 0.8149474329438666,
+    "baseline": 0.803806,
+    "delta_macro_f1": 0.011141,
+    "delta_accuracy": 0.012506,
+    "compatible": true,
+    "switch": true,
+    "condition": "必须同时把推理预处理分辨率改为 256（见 preprocessing_comparability）"
+  },
+  "multiseed_exp06": {
+    "available": true,
+    "per_metric": {
+      "all_136_macro_f1": {
+        "n_seeds": 3,
+        "mean": 0.815196,
+        "stdev": 0.002442,
+        "min": 0.812337,
+        "max": 0.818305,
+        "per_seed": "exp06:0.814947;exp06_seed7:0.812337;exp06_seed2024:0.818305"
+      },
+      "original_37_macro_f1": {
+        "n_seeds": 3,
+        "mean": 0.906471,
+        "stdev": 0.000982,
+        "min": 0.905609,
+        "max": 0.907846,
+        "per_seed": "exp06:0.905609;exp06_seed7:0.905960;exp06_seed2024:0.907846"
+      },
+      "new_99_macro_f1": {
+        "n_seeds": 3,
+        "mean": 0.794977,
+        "stdev": 0.003197,
+        "min": 0.790653,
+        "max": 0.79828,
+        "per_seed": "exp06:0.795999;exp06_seed7:0.790653;exp06_seed2024:0.798280"
+      },
+      "all_136_accuracy": {
+        "n_seeds": 3,
+        "mean": 0.809203,
+        "stdev": 0.002758,
+        "min": 0.805676,
+        "max": 0.81241,
+        "per_seed": "exp06:0.809524;exp06_seed7:0.805676;exp06_seed2024:0.812410"
+      },
+      "original_37_accuracy": {
+        "n_seeds": 3,
+        "mean": 0.887681,
+        "stdev": 0.002562,
+        "min": 0.88587,
+        "max": 0.891304,
+        "per_seed": "exp06:0.885870;exp06_seed7:0.885870;exp06_seed2024:0.891304"
+      },
+      "new_99_accuracy": {
+        "n_seeds": 3,
+        "mean": 0.792324,
+        "stdev": 0.002916,
+        "min": 0.788428,
+        "max": 0.795441,
+        "per_seed": "exp06:0.793103;exp06_seed7:0.788428;exp06_seed2024:0.795441"
+      },
+      "all_136_weighted_f1": {
+        "n_seeds": 3,
+        "mean": 0.808307,
+        "stdev": 0.002805,
+        "min": 0.804886,
+        "max": 0.811757,
+        "per_seed": "exp06:0.808277;exp06_seed7:0.804886;exp06_seed2024:0.811757"
+      },
+      "original_37_weighted_f1": {
+        "n_seeds": 3,
+        "mean": 0.906351,
+        "stdev": 0.000965,
+        "min": 0.905436,
+        "max": 0.907685,
+        "per_seed": "exp06:0.905436;exp06_seed7:0.905931;exp06_seed2024:0.907685"
+      },
+      "new_99_weighted_f1": {
+        "n_seeds": 3,
+        "mean": 0.796876,
+        "stdev": 0.003274,
+        "min": 0.7925,
+        "max": 0.800373,
+        "per_seed": "exp06:0.797755;exp06_seed7:0.792500;exp06_seed2024:0.800373"
+      },
+      "collie_f1": {
+        "n_seeds": 3,
+        "mean": 0.645476,
+        "stdev": 0.045788,
+        "min": 0.606061,
+        "max": 0.709677,
+        "per_seed": "exp06:0.709677;exp06_seed7:0.606061;exp06_seed2024:0.620690"
+      },
+      "border_collie_f1": {
+        "n_seeds": 3,
+        "mean": 0.691005,
+        "stdev": 0.044147,
+        "min": 0.628571,
+        "max": 0.722222,
+        "per_seed": "exp06:0.722222;exp06_seed7:0.628571;exp06_seed2024:0.722222"
+      }
+    },
+    "all_three_seeds_above_baseline_macro_f1": true
+  },
+  "per_class_summary": {
+    "total_classes": 136,
+    "improved": 70,
+    "unchanged": 25,
+    "degraded": 41,
+    "degraded_over_0_10_count": 7,
+    "degraded_over_0_10": [
+      {
+        "class": "standard_schnauzer",
+        "support": 16,
+        "baseline_f1": 0.5333,
+        "exp06_f1": 0.3571,
+        "delta_f1": -0.1762
+      },
+      {
+        "class": "bluetick",
+        "support": 17,
+        "baseline_f1": 0.875,
+        "exp06_f1": 0.7333,
+        "delta_f1": -0.1417
+      },
+      {
+        "class": "miniature_pinscher",
+        "support": 10,
+        "baseline_f1": 0.6364,
+        "exp06_f1": 0.5,
+        "delta_f1": -0.1364
+      },
+      {
+        "class": "eskimo_dog",
+        "support": 15,
+        "baseline_f1": 0.3571,
+        "exp06_f1": 0.24,
+        "delta_f1": -0.1171
+      },
+      {
+        "class": "miniature_schnauzer",
+        "support": 16,
+        "baseline_f1": 0.6,
+        "exp06_f1": 0.4848,
+        "delta_f1": -0.1152
+      },
+      {
+        "class": "appenzeller",
+        "support": 15,
+        "baseline_f1": 0.6667,
+        "exp06_f1": 0.5517,
+        "delta_f1": -0.1149
+      },
+      {
+        "class": "Ragdoll",
+        "support": 10,
+        "baseline_f1": 0.9091,
+        "exp06_f1": 0.8,
+        "delta_f1": -0.1091
+      }
+    ],
+    "small_denominator_warning": "validation 中每类仅约 10–23 张，单张样本即可造成数个百分点波动；类别级 delta 只用于提示风险，不作为取舍依据。"
+  },
+  "evidence_files": [
+    "reports/u6_1_low_lr/u6_1_val_group_comparison.csv",
+    "reports/u6_1_low_lr/u6_1_multiseed_summary.csv",
+    "reports/u6_1_low_lr/u6_1_per_class_delta.csv",
+    "reports/u6_6_exp06_switch/u6_baseline_exp06_i256_groups.csv",
+    "reports/u6_6_exp06_switch/u6_baseline_exp06_i224_groups.csv"
+  ],
+  "commits": [
+    {
+      "sha": "96c5511",
+      "title": "Switch default model to exp06 with matching 256 preprocessing",
+      "files": [
+        "backend/app/config.py",
+        "backend/app/main.py",
+        "backend/app/schemas.py",
+        "backend/app/services/predictor.py",
+        "ml/predictor.py"
+      ]
+    },
+    {
+      "sha": "a03ddb3",
+      "title": "Point Windows launchers at the exp06 default model",
+      "files": [
+        "启动后端.bat",
+        "启动系统.bat"
+      ]
+    },
+    {
+      "sha": "2e83c5f",
+      "title": "Cover exp06 default model, image size and model version in tests",
+      "files": [
+        "tests/test_api.py",
+        "tests/test_candidate_group.py",
+        "tests/test_predictor_service.py"
+      ]
+    }
+  ],
+  "commit_state": {
+    "pushed_to_remote": false,
+    "origin_master_sha": "ca86b0b7bdbb1530f1c96896c3316e48a81f9868",
+    "local_head_sha": "2e83c5f6894baac7b7228295ba5f5caf931da7d3",
+    "commits_ahead": 3
+  }
+}

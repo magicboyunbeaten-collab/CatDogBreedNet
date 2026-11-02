@@ -1,0 +1,19 @@
+tag,candidate,seed,class,support,precision,recall,f1,recall_wilson_low,recall_wilson_high,top_error_destinations,f1_delta_vs_baseline,collie_to_border_collie,border_collie_to_collie,bidirectional_total,bidirectional_denominator
+val,V2.1 基线（冻结）,baseline,collie,16,0.5555555555555556,0.625,0.5882352941176471,0.3864,0.8152,border_collie:4; pembroke:1; shetland_sheepdog:1,0.0,,,,
+val,V2.1 基线（冻结）,baseline,border_collie,15,0.5714285714285714,0.8,0.6666666666666666,0.5481,0.9295,collie:2; papillon:1,0.0,,,,
+val,V2.1 基线（冻结）,baseline,BIDIRECTIONAL,31,,,,,,collie->border_collie 4/16; border_collie->collie 2/15; 合计 6/31,,4,2,6,31
+exp06,exp06 256 分辨率 + 低学习率,seed 42,collie,16,0.7333333333333333,0.6875,0.7096774193548387,0.444,0.8584,border_collie:4; pembroke:1,0.121442,,,,
+exp06,exp06 256 分辨率 + 低学习率,seed 42,border_collie,15,0.6190476190476191,0.8666666666666667,0.7222222222222222,0.6212,0.9626,bernese_mountain_dog:1; collie:1,0.055556,,,,
+exp06,exp06 256 分辨率 + 低学习率,seed 42,BIDIRECTIONAL,31,,,,,,collie->border_collie 4/16; border_collie->collie 1/15; 合计 5/31,,4,1,5,31
+exp06_seed7,exp06 256 分辨率 + 低学习率,seed 7,collie,16,0.5882352941176471,0.625,0.6060606060606061,0.3864,0.8152,border_collie:4; shetland_sheepdog:2,0.017825,,,,
+exp06_seed7,exp06 256 分辨率 + 低学习率,seed 7,border_collie,15,0.55,0.7333333333333333,0.6285714285714286,0.4805,0.891,collie:3; bernese_mountain_dog:1,-0.038095,,,,
+exp06_seed7,exp06 256 分辨率 + 低学习率,seed 7,BIDIRECTIONAL,31,,,,,,collie->border_collie 4/16; border_collie->collie 3/15; 合计 7/31,,4,3,7,31
+exp06_seed2024,exp06 256 分辨率 + 低学习率,seed 2024,collie,16,0.6923076923076923,0.5625,0.6206896551724138,0.3318,0.769,border_collie:4; shetland_sheepdog:2; pembroke:1,0.032454,,,,
+exp06_seed2024,exp06 256 分辨率 + 低学习率,seed 2024,border_collie,15,0.6190476190476191,0.8666666666666667,0.7222222222222222,0.6212,0.9626,collie:1; papillon:1,0.055556,,,,
+exp06_seed2024,exp06 256 分辨率 + 低学习率,seed 2024,BIDIRECTIONAL,31,,,,,,collie->border_collie 4/16; border_collie->collie 1/15; 合计 5/31,,4,1,5,31
+exp07,exp07 仅两类颜色扰动 + 低学习率,seed 42,collie,16,0.5625,0.5625,0.5625,0.3318,0.769,border_collie:4; shetland_sheepdog:2; bernese_mountain_dog:1,-0.025735,,,,
+exp07,exp07 仅两类颜色扰动 + 低学习率,seed 42,border_collie,15,0.5,0.7333333333333333,0.5945945945945946,0.4805,0.891,collie:2; bernese_mountain_dog:1; scottish_deerhound:1,-0.072072,,,,
+exp07,exp07 仅两类颜色扰动 + 低学习率,seed 42,BIDIRECTIONAL,31,,,,,,collie->border_collie 4/16; border_collie->collie 2/15; 合计 6/31,,4,2,6,31
+exp08,exp08 仅两类加权采样 + 低学习率,seed 42,collie,16,0.5625,0.5625,0.5625,0.3318,0.769,border_collie:4; entlebucher:1; pembroke:1; shetland_sheepdog:1,-0.025735,,,,
+exp08,exp08 仅两类加权采样 + 低学习率,seed 42,border_collie,15,0.5454545454545454,0.8,0.6486486486486487,0.5481,0.9295,collie:2; bernese_mountain_dog:1,-0.018018,,,,
+exp08,exp08 仅两类加权采样 + 低学习率,seed 42,BIDIRECTIONAL,31,,,,,,collie->border_collie 4/16; border_collie->collie 2/15; 合计 6/31,,4,2,6,31

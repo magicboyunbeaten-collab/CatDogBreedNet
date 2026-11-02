@@ -1,0 +1,6 @@
+﻿ca86b0b Extend training infrastructure for warm-start and pair experiments
+62c86bf Use V2.1 defaults in Windows launchers
+bfb9fd0 Add regression tests for prediction and candidate UX
+52165ca Integrate V2.1 136-class prediction and candidate groups
+547c55d v2训练前
+301174a U3：V2 扩展数据源审核与准备（135 类，未训练）

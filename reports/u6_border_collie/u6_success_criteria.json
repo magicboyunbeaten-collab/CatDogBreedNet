@@ -1,0 +1,40 @@
+{
+  "frozen_at": "2026-10-20T02:51:29.530764+00:00",
+  "frozen_before_any_training": true,
+  "source": "U6-A validation baseline（reports/u6_border_collie/u6_baseline_val_*.csv）",
+  "baseline_file_sha256": "e531d55fa269a21b5e740a7f962110bcfb34efcd4d4201daef66739b27f25810",
+  "val_split": "data/v2_processed/val（2,079 张）",
+  "test_split_access_count": 0,
+  "baseline": {
+    "collie_f1": 0.588235,
+    "collie_support": 16,
+    "border_collie_f1": 0.666667,
+    "border_collie_support": 15,
+    "bidirectional_error_count": 6,
+    "macro_f1_136": 0.803806,
+    "macro_f1_original_37": 0.899582,
+    "macro_f1_new_99": 0.782694,
+    "accuracy_136": 0.797018
+  },
+  "thresholds": {
+    "collie_f1_min_abs_gain": 0.1,
+    "collie_f1_min": 0.688235,
+    "border_collie_f1_max_drop": 0.02,
+    "border_collie_f1_min": 0.646667,
+    "bidirectional_error_min_reduction_ratio": 0.3,
+    "bidirectional_error_max": 4,
+    "macro_f1_136_max_drop": 0.01,
+    "macro_f1_136_min": 0.793806,
+    "macro_f1_original_37_max_drop": 0.005,
+    "macro_f1_original_37_min": 0.894582,
+    "macro_f1_new_99_max_drop": 0.01,
+    "macro_f1_new_99_min": 0.772694,
+    "multiseed_min_consistent_seeds": "2/3"
+  },
+  "pass_rule": "全部指标同时满足才判定候选合格；任一不满足即 FAIL。若样本量导致无法合理达标，**不得调低阈值**，应结论为'现有数据不足以证实改进'并保留 V2.1。",
+  "notes": [
+    "collie/border_collie 的 val support 仅 16/15，单个样本即可显著改变 Recall 与 F1；已同时报告 Wilson 95% 区间。",
+    "本阈值文件在任何训练实验产生结果之前写入；后续只读，不因结果不理想而修改。",
+    "test split 在 U6-A/U6-C/U6-D 全程未被读取；仅在 U6-E（需人工批准）才可一次性评估。"
+  ]
+}

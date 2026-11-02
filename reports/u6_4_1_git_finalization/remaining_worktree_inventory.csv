@@ -1,0 +1,459 @@
+path,type,runtime_required,file_count,total_bytes,reason_excluded,intentional
+artifacts/_v2_1_smoke/accuracy_curve.png,model_weights_and_experiments,no,1,30531,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/_v2_1_smoke/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/_v2_1_smoke/experiment_config.json,model_weights_and_experiments,no,1,6029,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/_v2_1_smoke/loss_curve.png,model_weights_and_experiments,no,1,25361,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/_v2_1_smoke/train_log.csv,model_weights_and_experiments,no,1,128,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/V2_1_训练与评估报告.md,model_weights_and_experiments,no,1,5726,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/accuracy_curve.png,model_weights_and_experiments,no,1,43303,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/classification_report.csv,model_weights_and_experiments,no,1,6274,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/confusion_matrix.csv,model_weights_and_experiments,no,1,41048,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/confusion_matrix.png,model_weights_and_experiments,no,1,963804,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/confusion_matrix_normalized.png,model_weights_and_experiments,no,1,1134377,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/evaluation_summary.md,model_weights_and_experiments,no,1,3433,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/experiment_config.json,model_weights_and_experiments,no,1,6056,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/inference_benchmark.json,model_weights_and_experiments,no,1,1669,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/loss_curve.png,model_weights_and_experiments,no,1,43236,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/metrics.json,model_weights_and_experiments,no,1,37152,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/model_version.json,model_weights_and_experiments,no,1,2219,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/test_metrics.json,model_weights_and_experiments,no,1,21713,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/train.log,model_weights_and_experiments,no,1,4383,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/train_log.csv,model_weights_and_experiments,no,1,1540,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/training_history.csv,model_weights_and_experiments,no,1,1540,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_1_136classes_seed42/v2_1_subset_metrics.csv,model_weights_and_experiments,no,1,457,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp01_pair_color_jitter_seed42/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp01_pair_color_jitter_seed42/experiment_config.json,model_weights_and_experiments,no,1,8652,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp02_pair_sampler_seed42/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp02_pair_sampler_seed42/experiment_config.json,model_weights_and_experiments,no,1,8638,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp04_resolution_seed2024/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp04_resolution_seed2024/experiment_config.json,model_weights_and_experiments,no,1,8640,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp04_resolution_seed42/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp04_resolution_seed42/experiment_config.json,model_weights_and_experiments,no,1,8638,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp04_resolution_seed7/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp04_resolution_seed7/experiment_config.json,model_weights_and_experiments,no,1,8637,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed2024/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed2024/experiment_config.json,model_weights_and_experiments,no,1,8640,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/experiment_config.json,model_weights_and_experiments,no,1,8637,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed7/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed7/experiment_config.json,model_weights_and_experiments,no,1,8637,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42/experiment_config.json,model_weights_and_experiments,no,1,8652,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp08_pair_sampler_lowlr_seed42/class_names.json,model_weights_and_experiments,no,1,2705,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+artifacts/v2_2_border_collie_exp08_pair_sampler_lowlr_seed42/experiment_config.json,model_weights_and_experiments,no,1,8638,V1.1/V2.1/V2.2 权重与训练产物；.pth 体积达数十 MB，任务明确禁止入库,yes
+md/U5.2_方案B1四类相近犬种候选组正式实现任务.md,task_sheets,no,1,11588,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/U5.4_候选组同图一致性与前端回归测试任务.md,task_sheets,no,1,5136,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/U5.5_V2.1正式接入与边牧准确率改进计划.md,task_sheets,no,1,17208,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/U5_1_APBT纳入四类候选组离线评估任务.md,task_sheets,no,1,8859,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/U6.1_低学习率纠偏与边牧专项对照实验任务.md,task_sheets,no,1,15177,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/U6.2_柯利与边境牧羊犬双候选提示实施任务.md,task_sheets,no,1,10726,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/U6.3_默认启动行为核验与安全固化.md,task_sheets,no,1,10627,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/U6.4.1_测试修复与Git正式固化执行.md,task_sheets,no,1,15063,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/U6.4_Git安全固化_审核与提交计划.md,task_sheets,no,1,9615,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/V2.1_136类别模型训练任务.md,task_sheets,no,1,14396,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/V2.1_相近犬种候选提示与边牧复核整合任务.md,task_sheets,no,1,10435,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/V2.1_误分类诊断与APBT_AmStaff数据审计任务.md,task_sheets,no,1,13247,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+md/u6_border_collie_improvement_plan_修订版.md,task_sheets,no,1,20705,任务单文档；有追溯价值，但项目未将 md/ 纳入版本控制，是否入库待人工决定,yes
+reports/u5_5_v2_1_integration/acceptance_checklist.md,acceptance_reports_and_runtime,no,1,6412,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/acceptance_v2_1_default.json,acceptance_reports_and_runtime,no,1,7118,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/acceptance_v2_1_isolated.json,acceptance_reports_and_runtime,no,1,7119,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/breed_mapping_audit.csv,acceptance_reports_and_runtime,no,1,10877,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/default_config_before.json,acceptance_reports_and_runtime,no,1,267,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/diff_summary.md,acceptance_reports_and_runtime,no,1,6118,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/git_diff_before.txt,acceptance_reports_and_runtime,no,1,47853,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/git_diff_stat_after.txt,acceptance_reports_and_runtime,no,1,1197,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/git_diff_stat_before.txt,acceptance_reports_and_runtime,no,1,806,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/git_status_after.txt,acceptance_reports_and_runtime,no,1,2483,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/git_status_before.txt,acceptance_reports_and_runtime,no,1,2222,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/integration_report.md,acceptance_reports_and_runtime,no,1,15994,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/model_path_audit.md,acceptance_reports_and_runtime,no,1,8462,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/page_acceptance_off.json,acceptance_reports_and_runtime,no,1,2558,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/page_acceptance_on.json,acceptance_reports_and_runtime,no,1,17796,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,4675,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,4414,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/real_launcher_backend_stderr.log,acceptance_reports_and_runtime,no,1,528,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/real_launcher_backend_stdout.log,acceptance_reports_and_runtime,no,1,340,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/rollback.md,acceptance_reports_and_runtime,no,1,5472,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/same_image_repeated_requests_default.csv,acceptance_reports_and_runtime,no,1,1721,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/same_image_repeated_requests_isolated.csv,acceptance_reports_and_runtime,no,1,1721,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/screenshots/01_competition_four_candidates.png,acceptance_reports_and_runtime,no,1,304384,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/screenshots/02_apbt_top1.png,acceptance_reports_and_runtime,no,1,264416,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/screenshots/03_user_selection.png,acceptance_reports_and_runtime,no,1,264981,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/screenshots/04_sbt_top1.png,acceptance_reports_and_runtime,no,1,431915,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/screenshots/05_non_candidate.png,acceptance_reports_and_runtime,no,1,213876,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/screenshots/06_switch_off.png,acceptance_reports_and_runtime,no,1,215268,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u5_5_v2_1_integration/u6_border_collie_improvement_plan.md,acceptance_reports_and_runtime,no,1,9121,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/experiment_matrix.csv,acceptance_reports_and_runtime,no,1,1438,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/git_worktree_audit.md,acceptance_reports_and_runtime,no,1,7738,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,5804,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,5430,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/s0/data_inventory.json,acceptance_reports_and_runtime,no,1,550,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/s0/git_diff.txt,acceptance_reports_and_runtime,no,1,85574,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/s0/git_diff_check.txt,acceptance_reports_and_runtime,no,1,30,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/s0/git_diff_stat.txt,acceptance_reports_and_runtime,no,1,1231,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/s0/git_head.txt,acceptance_reports_and_runtime,no,1,63,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/s0/git_status_short.txt,acceptance_reports_and_runtime,no,1,4364,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/s0/tracked_changes.txt,acceptance_reports_and_runtime,no,1,539,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/s0/untracked_files.txt,acceptance_reports_and_runtime,no,1,3586,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/s0/weight_hashes.json,acceptance_reports_and_runtime,no,1,915,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_1_criteria_check.csv,acceptance_reports_and_runtime,no,1,2043,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_1_execution_report.md,acceptance_reports_and_runtime,no,1,19085,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_1_multiseed_summary.csv,acceptance_reports_and_runtime,no,1,1728,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_1_per_class_delta.csv,acceptance_reports_and_runtime,no,1,41515,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_1_protection_after.json,acceptance_reports_and_runtime,no,1,5804,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_1_protection_before.json,acceptance_reports_and_runtime,no,1,5430,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_1_target_metrics.csv,acceptance_reports_and_runtime,no,1,3251,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_1_val_group_comparison.csv,acceptance_reports_and_runtime,no,1,2095,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_confusion.csv,acceptance_reports_and_runtime,no,1,486,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_confusion_full.csv,acceptance_reports_and_runtime,no,1,23371,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_groups.csv,acceptance_reports_and_runtime,no,1,315,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_overall.csv,acceptance_reports_and_runtime,no,1,418,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_predictions.csv,acceptance_reports_and_runtime,no,1,414117,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed2024_confusion.csv,acceptance_reports_and_runtime,no,1,486,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed2024_confusion_full.csv,acceptance_reports_and_runtime,no,1,23365,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed2024_groups.csv,acceptance_reports_and_runtime,no,1,341,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed2024_overall.csv,acceptance_reports_and_runtime,no,1,430,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed2024_predictions.csv,acceptance_reports_and_runtime,no,1,413461,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed2024_target.csv,acceptance_reports_and_runtime,no,1,512,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed7_confusion.csv,acceptance_reports_and_runtime,no,1,488,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed7_confusion_full.csv,acceptance_reports_and_runtime,no,1,23371,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed7_groups.csv,acceptance_reports_and_runtime,no,1,334,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed7_overall.csv,acceptance_reports_and_runtime,no,1,422,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed7_predictions.csv,acceptance_reports_and_runtime,no,1,413295,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_seed7_target.csv,acceptance_reports_and_runtime,no,1,489,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp06_target.csv,acceptance_reports_and_runtime,no,1,477,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp07_confusion.csv,acceptance_reports_and_runtime,no,1,484,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp07_confusion_full.csv,acceptance_reports_and_runtime,no,1,23401,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp07_groups.csv,acceptance_reports_and_runtime,no,1,303,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp07_overall.csv,acceptance_reports_and_runtime,no,1,426,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp07_predictions.csv,acceptance_reports_and_runtime,no,1,413990,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp07_target.csv,acceptance_reports_and_runtime,no,1,491,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp08_confusion.csv,acceptance_reports_and_runtime,no,1,484,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp08_confusion_full.csv,acceptance_reports_and_runtime,no,1,23391,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp08_groups.csv,acceptance_reports_and_runtime,no,1,316,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp08_overall.csv,acceptance_reports_and_runtime,no,1,416,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp08_predictions.csv,acceptance_reports_and_runtime,no,1,415864,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_exp08_target.csv,acceptance_reports_and_runtime,no,1,473,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_val_confusion.csv,acceptance_reports_and_runtime,no,1,484,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_val_confusion_full.csv,acceptance_reports_and_runtime,no,1,23380,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_val_groups.csv,acceptance_reports_and_runtime,no,1,297,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_val_overall.csv,acceptance_reports_and_runtime,no,1,380,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_val_predictions.csv,acceptance_reports_and_runtime,no,1,412887,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_baseline_val_target.csv,acceptance_reports_and_runtime,no,1,465,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_criteria_check.csv,acceptance_reports_and_runtime,no,1,2043,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_multiseed_summary.csv,acceptance_reports_and_runtime,no,1,1728,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_per_class_delta.csv,acceptance_reports_and_runtime,no,1,41515,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_target_confusion_change.csv,acceptance_reports_and_runtime,no,1,656,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/u6_val_comparison_136_classes.csv,acceptance_reports_and_runtime,no,1,1904,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/warm_start_audit.md,acceptance_reports_and_runtime,no,1,5966,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_1_low_lr/warm_start_audit_data.json,acceptance_reports_and_runtime,no,1,2765,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/acceptance_api_responses.json,acceptance_reports_and_runtime,no,1,26672,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/acceptance_report.md,acceptance_reports_and_runtime,no,1,12177,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/git_diff_check_before.txt,acceptance_reports_and_runtime,no,1,0,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/git_diff_stat_before.txt,acceptance_reports_and_runtime,no,1,1236,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/git_status_after.txt,acceptance_reports_and_runtime,no,1,3963,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/git_status_before.txt,acceptance_reports_and_runtime,no,1,3756,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/implementation_report.md,acceptance_reports_and_runtime,no,1,12347,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/page_acceptance_off.json,acceptance_reports_and_runtime,no,1,2490,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/page_acceptance_on.json,acceptance_reports_and_runtime,no,1,17713,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,6155,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,5948,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/screenshots/01_collie_pair_trigger_A.png,acceptance_reports_and_runtime,no,1,379126,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/screenshots/02_collie_pair_trigger_B.png,acceptance_reports_and_runtime,no,1,332456,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/screenshots/03_user_selection.png,acceptance_reports_and_runtime,no,1,332634,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/screenshots/04_collie_pair_trigger_C.png,acceptance_reports_and_runtime,no,1,373341,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/screenshots/05_non_trigger.png,acceptance_reports_and_runtime,no,1,222134,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/screenshots/06_non_target_breed.png,acceptance_reports_and_runtime,no,1,316917,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/screenshots/07_switch_off.png,acceptance_reports_and_runtime,no,1,337621,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/u6_2_frozen_thresholds.json,acceptance_reports_and_runtime,no,1,3143,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/u6_2_threshold_scan.json,acceptance_reports_and_runtime,no,1,605,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/validation_threshold_grid.csv,acceptance_reports_and_runtime,no,1,3910,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_2_collie_pair_candidate/validation_trigger_samples.csv,acceptance_reports_and_runtime,no,1,8847,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/acceptance_report.md,acceptance_reports_and_runtime,no,1,23160,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/api_health_default.json,acceptance_reports_and_runtime,no,1,202,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/api_health_off.json,acceptance_reports_and_runtime,no,1,202,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/default_runtime_samples.csv,acceptance_reports_and_runtime,no,1,12722,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/git_change_inventory.csv,acceptance_reports_and_runtime,no,1,18697,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/git_diff_name_only_before.txt,acceptance_reports_and_runtime,no,1,544,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/git_diff_stat_before.txt,acceptance_reports_and_runtime,no,1,1237,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/git_inventory_summary.json,acceptance_reports_and_runtime,no,1,831,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/git_status_after.txt,acceptance_reports_and_runtime,no,1,4234,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/git_status_before.txt,acceptance_reports_and_runtime,no,1,4063,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/page_probe.json,acceptance_reports_and_runtime,no,1,13819,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,6426,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,6210,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/real_launcher_stderr.log,acceptance_reports_and_runtime,no,1,528,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/real_launcher_stdout.log,acceptance_reports_and_runtime,no,1,423,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/recommended_commit_plan.md,acceptance_reports_and_runtime,no,1,9732,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/runtime_config_evidence.json,acceptance_reports_and_runtime,no,1,4919,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/runtime_launcher_default.log,acceptance_reports_and_runtime,no,1,1404,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/runtime_launcher_off.log,acceptance_reports_and_runtime,no,1,1404,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/screenshots/01_pair_trigger.png,acceptance_reports_and_runtime,no,1,331911,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/screenshots/02_user_selection.png,acceptance_reports_and_runtime,no,1,332085,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/screenshots/03_pair_non_trigger.png,acceptance_reports_and_runtime,no,1,221759,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/screenshots/04_bully_trigger.png,acceptance_reports_and_runtime,no,1,266794,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/switch_off_comparison.json,acceptance_reports_and_runtime,no,1,9992,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_3_default_runtime_and_freeze/test_results.md,acceptance_reports_and_runtime,no,1,2476,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_1_git_finalization/git_diff_name_status_before.txt,acceptance_reports_and_runtime,no,1,504,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_1_git_finalization/git_diff_stat_before.txt,acceptance_reports_and_runtime,no,1,1164,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_1_git_finalization/git_status_before.txt,acceptance_reports_and_runtime,no,1,4482,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_1_git_finalization/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,5921,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_1_git_finalization/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,6637,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_1_git_finalization/remaining_worktree_inventory.csv,acceptance_reports_and_runtime,no,1,110907,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_1_git_finalization/test_results_precommit.md,acceptance_reports_and_runtime,no,1,8311,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_git_freeze_review/acceptance_report.md,acceptance_reports_and_runtime,no,1,18847,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_git_freeze_review/commit_plan.md,acceptance_reports_and_runtime,no,1,20047,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_git_freeze_review/do_not_commit.md,acceptance_reports_and_runtime,no,1,11562,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_git_freeze_review/file_by_file_review.csv,acceptance_reports_and_runtime,no,1,25189,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_git_freeze_review/mixed_changes_analysis.md,acceptance_reports_and_runtime,no,1,15050,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_git_freeze_review/working_tree_after.txt,acceptance_reports_and_runtime,no,1,10985,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_4_git_freeze_review/working_tree_before.txt,acceptance_reports_and_runtime,no,1,10849,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/U6_边境牧羊犬改进报告.md,acceptance_reports_and_runtime,no,1,26174,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp01_pair_color_jitter_seed42/accuracy_curve.png,acceptance_reports_and_runtime,no,1,43309,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp01_pair_color_jitter_seed42/loss_curve.png,acceptance_reports_and_runtime,no,1,40062,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp01_pair_color_jitter_seed42/train_log.csv,acceptance_reports_and_runtime,no,1,2170,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp01_pair_color_jitter_seed42/train_stdout.log,acceptance_reports_and_runtime,no,1,5931,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp02_pair_sampler_seed42/accuracy_curve.png,acceptance_reports_and_runtime,no,1,41600,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp02_pair_sampler_seed42/loss_curve.png,acceptance_reports_and_runtime,no,1,38142,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp02_pair_sampler_seed42/train_log.csv,acceptance_reports_and_runtime,no,1,2015,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp02_pair_sampler_seed42/train_stdout.log,acceptance_reports_and_runtime,no,1,5191,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed2024/accuracy_curve.png,acceptance_reports_and_runtime,no,1,42656,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed2024/loss_curve.png,acceptance_reports_and_runtime,no,1,39136,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed2024/train_log.csv,acceptance_reports_and_runtime,no,1,1558,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed2024/train_stdout.log,acceptance_reports_and_runtime,no,1,4524,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed42/accuracy_curve.png,acceptance_reports_and_runtime,no,1,44387,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed42/loss_curve.png,acceptance_reports_and_runtime,no,1,39848,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed42/train_log.csv,acceptance_reports_and_runtime,no,1,2189,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed42/train_stdout.log,acceptance_reports_and_runtime,no,1,5657,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed7/accuracy_curve.png,acceptance_reports_and_runtime,no,1,42121,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed7/loss_curve.png,acceptance_reports_and_runtime,no,1,39653,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed7/train_log.csv,acceptance_reports_and_runtime,no,1,2030,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp04_resolution_seed7/train_stdout.log,acceptance_reports_and_runtime,no,1,5258,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed2024/accuracy_curve.png,acceptance_reports_and_runtime,no,1,39108,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed2024/loss_curve.png,acceptance_reports_and_runtime,no,1,38752,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed2024/train_log.csv,acceptance_reports_and_runtime,no,1,2035,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed2024/train_stdout.log,acceptance_reports_and_runtime,no,1,5156,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed42/accuracy_curve.png,acceptance_reports_and_runtime,no,1,38755,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed42/loss_curve.png,acceptance_reports_and_runtime,no,1,38566,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed42/train_log.csv,acceptance_reports_and_runtime,no,1,2261,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed42/train_stdout.log,acceptance_reports_and_runtime,no,1,5676,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed7/accuracy_curve.png,acceptance_reports_and_runtime,no,1,39454,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed7/loss_curve.png,acceptance_reports_and_runtime,no,1,38127,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed7/train_log.csv,acceptance_reports_and_runtime,no,1,2036,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp06_resolution256_lowlr_seed7/train_stdout.log,acceptance_reports_and_runtime,no,1,4714,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp07_pair_color_jitter_lowlr_seed42/accuracy_curve.png,acceptance_reports_and_runtime,no,1,37672,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp07_pair_color_jitter_lowlr_seed42/loss_curve.png,acceptance_reports_and_runtime,no,1,34119,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp07_pair_color_jitter_lowlr_seed42/train_log.csv,acceptance_reports_and_runtime,no,1,1702,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp07_pair_color_jitter_lowlr_seed42/train_stdout.log,acceptance_reports_and_runtime,no,1,4647,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp08_pair_sampler_lowlr_seed42/accuracy_curve.png,acceptance_reports_and_runtime,no,1,39529,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp08_pair_sampler_lowlr_seed42/loss_curve.png,acceptance_reports_and_runtime,no,1,36557,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp08_pair_sampler_lowlr_seed42/train_log.csv,acceptance_reports_and_runtime,no,1,1466,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/exp_logs/exp08_pair_sampler_lowlr_seed42/train_stdout.log,acceptance_reports_and_runtime,no,1,4003,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,5300,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,4788,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/s0/git_diff.txt,acceptance_reports_and_runtime,no,1,76278,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/s0/git_diff_check.txt,acceptance_reports_and_runtime,no,1,17,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/s0/git_diff_stat.txt,acceptance_reports_and_runtime,no,1,1192,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/s0/git_head.txt,acceptance_reports_and_runtime,no,1,63,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/s0/git_status_short.txt,acceptance_reports_and_runtime,no,1,3562,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/s0/tracked_changes.txt,acceptance_reports_and_runtime,no,1,524,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/s0/untracked_files.txt,acceptance_reports_and_runtime,no,1,2844,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/s0/weight_hashes.json,acceptance_reports_and_runtime,no,1,705,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/s0_u5_5_solidification.md,acceptance_reports_and_runtime,no,1,6866,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline.json,acceptance_reports_and_runtime,no,1,1185,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp01_confusion.csv,acceptance_reports_and_runtime,no,1,484,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp01_confusion_full.csv,acceptance_reports_and_runtime,no,1,23408,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp01_groups.csv,acceptance_reports_and_runtime,no,1,316,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp01_overall.csv,acceptance_reports_and_runtime,no,1,398,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp01_predictions.csv,acceptance_reports_and_runtime,no,1,414347,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp01_target.csv,acceptance_reports_and_runtime,no,1,492,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp02_confusion.csv,acceptance_reports_and_runtime,no,1,482,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp02_confusion_full.csv,acceptance_reports_and_runtime,no,1,23413,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp02_groups.csv,acceptance_reports_and_runtime,no,1,316,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp02_overall.csv,acceptance_reports_and_runtime,no,1,388,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp02_predictions.csv,acceptance_reports_and_runtime,no,1,414589,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp02_target.csv,acceptance_reports_and_runtime,no,1,476,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_confusion.csv,acceptance_reports_and_runtime,no,1,486,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_confusion_full.csv,acceptance_reports_and_runtime,no,1,23387,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_groups.csv,acceptance_reports_and_runtime,no,1,316,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_overall.csv,acceptance_reports_and_runtime,no,1,400,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_predictions.csv,acceptance_reports_and_runtime,no,1,412438,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed2024_confusion.csv,acceptance_reports_and_runtime,no,1,484,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed2024_confusion_full.csv,acceptance_reports_and_runtime,no,1,23383,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed2024_groups.csv,acceptance_reports_and_runtime,no,1,343,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed2024_overall.csv,acceptance_reports_and_runtime,no,1,413,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed2024_predictions.csv,acceptance_reports_and_runtime,no,1,412137,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed2024_target.csv,acceptance_reports_and_runtime,no,1,484,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed7_confusion.csv,acceptance_reports_and_runtime,no,1,486,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed7_confusion_full.csv,acceptance_reports_and_runtime,no,1,23378,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed7_groups.csv,acceptance_reports_and_runtime,no,1,331,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed7_overall.csv,acceptance_reports_and_runtime,no,1,404,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed7_predictions.csv,acceptance_reports_and_runtime,no,1,414641,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_seed7_target.csv,acceptance_reports_and_runtime,no,1,465,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_exp04_target.csv,acceptance_reports_and_runtime,no,1,474,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_val_confusion.csv,acceptance_reports_and_runtime,no,1,484,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_val_confusion_full.csv,acceptance_reports_and_runtime,no,1,23380,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_val_groups.csv,acceptance_reports_and_runtime,no,1,297,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_val_overall.csv,acceptance_reports_and_runtime,no,1,380,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_val_predictions.csv,acceptance_reports_and_runtime,no,1,412887,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_baseline_val_target.csv,acceptance_reports_and_runtime,no,1,465,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_coat_distribution_train_val.csv,acceptance_reports_and_runtime,no,1,6151,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_confounders_train_val.csv,acceptance_reports_and_runtime,no,1,4409,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_criteria_check.csv,acceptance_reports_and_runtime,no,1,2046,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_experiment_log.csv,acceptance_reports_and_runtime,no,1,10899,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_manual_review_parsed.csv,acceptance_reports_and_runtime,no,1,29634,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_multiseed_summary.csv,acceptance_reports_and_runtime,no,1,1674,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_per_class_delta.csv,acceptance_reports_and_runtime,no,1,41581,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_sample_counts.csv,acceptance_reports_and_runtime,no,1,7171,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_success_criteria.json,acceptance_reports_and_runtime,no,1,1848,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_target_confusion_change.csv,acceptance_reports_and_runtime,no,1,652,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_target_data_audit.md,acceptance_reports_and_runtime,no,1,3624,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/u6_border_collie/u6_val_comparison_136_classes.csv,acceptance_reports_and_runtime,no,1,1932,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/README.md,acceptance_reports_and_runtime,no,1,4931,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/apbt_related_confusions.csv,acceptance_reports_and_runtime,no,1,4527,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/evaluation_report.md,acceptance_reports_and_runtime,no,1,16632,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/evaluation_summary.json,acceptance_reports_and_runtime,no,1,4261,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/four_group_threshold_grid.csv,acceptance_reports_and_runtime,no,1,5655,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/four_group_validation_predictions.csv,acceptance_reports_and_runtime,no,1,588065,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/four_group_validation_predictions_slim.csv,acceptance_reports_and_runtime,no,1,358833,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/newly_triggered_by_apbt.csv,acceptance_reports_and_runtime,no,1,3270,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/out_of_group_trigger_examples.csv,acceptance_reports_and_runtime,no,1,1940,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,3829,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,3740,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/three_vs_four_group_summary.csv,acceptance_reports_and_runtime,no,1,1087,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_apbt_four_breed_candidate_eval/triggered_by_both_strategies.csv,acceptance_reports_and_runtime,no,1,2581,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/acceptance_api_responses.json,acceptance_reports_and_runtime,no,1,32770,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/acceptance_report.md,acceptance_reports_and_runtime,no,1,15487,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/apbt_candidate_limit.json,acceptance_reports_and_runtime,no,1,1131,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/apbt_top1_val_images.csv,acceptance_reports_and_runtime,no,1,2092,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/candidate_threshold_summary.json,acceptance_reports_and_runtime,no,1,1617,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/candidate_threshold_validation.csv,acceptance_reports_and_runtime,no,1,5812,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/coat_review_grouped.csv,acceptance_reports_and_runtime,no,1,890,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/coat_review_summary.md,acceptance_reports_and_runtime,no,1,5736,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/implementation_report.md,acceptance_reports_and_runtime,no,1,15430,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,3681,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,3459,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/val_candidate_group_stats.json,acceptance_reports_and_runtime,no,1,2685,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_candidate_ui_review/val_candidate_triggers.csv,acceptance_reports_and_runtime,no,1,2266,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/V2.1边牧毛色与APBT_AmStaff标签诊断报告.md,acceptance_reports_and_runtime,no,1,26581,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/apbt_amstaff_cross_class_duplicate_pairs.csv,acceptance_reports_and_runtime,no,1,94,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/coat_color_accuracy.csv,acceptance_reports_and_runtime,no,1,957,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/coat_color_accuracy_test.csv,acceptance_reports_and_runtime,no,1,1164,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/coat_color_distribution.csv,acceptance_reports_and_runtime,no,1,2710,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/coat_color_review_queue.csv,acceptance_reports_and_runtime,no,1,77869,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/coat_confounders.csv,acceptance_reports_and_runtime,no,1,1258,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/coat_predictions_all_splits.csv,acceptance_reports_and_runtime,no,1,133895,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/coat_summary.json,acceptance_reports_and_runtime,no,1,1639,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/collie_to_border_collie_cases.csv,acceptance_reports_and_runtime,no,1,5588,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_border_collie_black_white.png,acceptance_reports_and_runtime,no,1,892425,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_border_collie_merle.png,acceptance_reports_and_runtime,no,1,808328,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_border_collie_other.png,acceptance_reports_and_runtime,no,1,581422,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_border_collie_tricolor.png,acceptance_reports_and_runtime,no,1,129205,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_border_collie_uncertain.png,acceptance_reports_and_runtime,no,1,891378,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_collie_black_white.png,acceptance_reports_and_runtime,no,1,453759,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_collie_merle.png,acceptance_reports_and_runtime,no,1,399142,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_collie_other.png,acceptance_reports_and_runtime,no,1,396637,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_collie_red_white.png,acceptance_reports_and_runtime,no,1,354504,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_collie_sable.png,acceptance_reports_and_runtime,no,1,760625,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_collie_to_border_8cases.png,acceptance_reports_and_runtime,no,1,752118,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_collie_tricolor.png,acceptance_reports_and_runtime,no,1,403385,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/contact_sheet_collie_uncertain.png,acceptance_reports_and_runtime,no,1,989820,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/label_traceability_audit.csv,acceptance_reports_and_runtime,no,1,2815,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/merged_class_confusion.csv,acceptance_reports_and_runtime,no,1,250,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/merged_class_evaluation.csv,acceptance_reports_and_runtime,no,1,829,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/pitbull_5x5_confusion.csv,acceptance_reports_and_runtime,no,1,348,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/pitbull_predictions_all_splits.csv,acceptance_reports_and_runtime,no,1,383094,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/pitbull_summary.json,acceptance_reports_and_runtime,no,1,7044,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,2871,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_coat_pitbull_diagnostics/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,2722,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/V2.1误分类诊断报告.md,acceptance_reports_and_runtime,no,1,23671,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/all_classification_report.csv,acceptance_reports_and_runtime,no,1,5706,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/all_predictions_136.csv,acceptance_reports_and_runtime,no,1,2176246,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/apbt_amstaff_confusion_summary.csv,acceptance_reports_and_runtime,no,1,999,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/apbt_amstaff_cross_class_duplicate_pairs.csv,acceptance_reports_and_runtime,no,1,94,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/apbt_amstaff_predictions.csv,acceptance_reports_and_runtime,no,1,159868,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/border_collie_family_predictions.csv,acceptance_reports_and_runtime,no,1,17572,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/confusion_matrix_136.csv,acceptance_reports_and_runtime,no,1,41048,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/confusion_matrix_136.png,acceptance_reports_and_runtime,no,1,963804,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/confusion_matrix_136_normalized.png,acceptance_reports_and_runtime,no,1,1134377,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/contact_sheet_apbt_amstaff.png,acceptance_reports_and_runtime,no,1,2339089,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/contact_sheet_old37_as_new99.png,acceptance_reports_and_runtime,no,1,2266680,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/diagnostics_summary.json,acceptance_reports_and_runtime,no,1,16488,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/external_dataset_source_audit.csv,acceptance_reports_and_runtime,no,1,2435,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/manual_review_queue.csv,acceptance_reports_and_runtime,no,1,206280,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/old37_buckets_summary.csv,acceptance_reports_and_runtime,no,1,99,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/old37_predicted_as_new99.csv,acceptance_reports_and_runtime,no,1,129008,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/original37_v1_vs_v2.csv,acceptance_reports_and_runtime,no,1,649910,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,2722,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_diagnostics/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,2540,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_candidate_implementation/acceptance_api_responses.json,acceptance_reports_and_runtime,no,1,96821,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_candidate_implementation/acceptance_report.md,acceptance_reports_and_runtime,no,1,8532,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_candidate_implementation/git_status_before.txt,acceptance_reports_and_runtime,no,1,1760,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_candidate_implementation/implementation_report.md,acceptance_reports_and_runtime,no,1,13675,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_candidate_implementation/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,3999,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_candidate_implementation/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,3898,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_candidate_implementation/validation_samples_four_breed.csv,acceptance_reports_and_runtime,no,1,5925,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_consistency_review/consistency_report.md,acceptance_reports_and_runtime,no,1,13304,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_consistency_review/consistency_summary.json,acceptance_reports_and_runtime,no,1,3445,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_consistency_review/git_status_before.txt,acceptance_reports_and_runtime,no,1,2082,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_consistency_review/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,4317,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_consistency_review/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,4226,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_consistency_review/same_image_repeated_requests.csv,acceptance_reports_and_runtime,no,1,3901,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/git_status_before.txt,acceptance_reports_and_runtime,no,1,1852,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/page_acceptance_evidence_off.json,acceptance_reports_and_runtime,no,1,1894,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/page_acceptance_evidence_on.json,acceptance_reports_and_runtime,no,1,12558,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/page_acceptance_report.md,acceptance_reports_and_runtime,no,1,14185,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/protection_snapshot_after.json,acceptance_reports_and_runtime,no,1,4159,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/protection_snapshot_before.json,acceptance_reports_and_runtime,no,1,3999,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/reconcile_stats.json,acceptance_reports_and_runtime,no,1,2132,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/report_reconciliation.md,acceptance_reports_and_runtime,no,1,7350,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/screenshots/01_trigger_apbt.png,acceptance_reports_and_runtime,no,1,264945,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/screenshots/02_trigger_amstaff.png,acceptance_reports_and_runtime,no,1,303786,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/screenshots/03_user_selection.png,acceptance_reports_and_runtime,no,1,265535,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/screenshots/04_non_candidate.png,acceptance_reports_and_runtime,no,1,214481,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+reports/v2_1_four_breed_page_acceptance/screenshots/05_switch_off.png,acceptance_reports_and_runtime,no,1,216288,验收报告/CSV/截图/临时 SQLite 与 uploads 副本；项目历史从未跟踪 reports/，延续既有惯例（并非内容无价值）,yes
+scripts/accept_candidate_group_api.py,one_off_scripts,no,1,12615,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/accept_collie_pair_api.py,one_off_scripts,no,1,16340,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/accept_four_breed_candidate_api.py,one_off_scripts,no,1,15948,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/accept_v2_1_integration.py,one_off_scripts,no,1,16838,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/audit_cross_class_duplicates.py,one_off_scripts,no,1,10398,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/audit_external_sources.py,one_off_scripts,no,1,9485,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/audit_pitbull_labels.py,one_off_scripts,no,1,17481,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/build_manual_review_queue.py,one_off_scripts,no,1,7064,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/check_candidate_consistency.py,one_off_scripts,no,1,13787,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/diagnose_coat_color.py,one_off_scripts,no,1,31331,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/diagnose_v2_1.py,one_off_scripts,no,1,30883,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/diagnostic_protection_snapshot.py,one_off_scripts,no,1,7394,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/evaluate_apbt_four_group.py,one_off_scripts,no,1,26213,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/evaluate_v2_1_subsets.py,one_off_scripts,no,1,12728,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/export_candidate_triggers_val.py,one_off_scripts,no,1,10367,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/finalize_v2_1_candidate.py,one_off_scripts,no,1,13672,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/generate_breed_mapping.py,one_off_scripts,no,1,11654,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/page_accept_collie_pair.mjs,one_off_scripts,no,1,12345,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/page_accept_four_breed.mjs,one_off_scripts,no,1,14028,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/page_accept_v2_1_integration.mjs,one_off_scripts,no,1,11782,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/reconcile_u5_2_numbers.py,one_off_scripts,no,1,6617,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/run_four_breed_backend.py,one_off_scripts,no,1,4808,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/summarize_coat_review.py,one_off_scripts,no,1,13534,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/summarize_coat_test.py,one_off_scripts,no,1,3916,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_2_collie_pair_threshold.py,one_off_scripts,no,1,10351,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_3_git_inventory.py,one_off_scripts,no,1,11174,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_3_page_probe.mjs,one_off_scripts,no,1,10291,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_3_runtime_probe.py,one_off_scripts,no,1,12545,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_3_static_audit.py,one_off_scripts,no,1,10597,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_3_verify_switch_off.py,one_off_scripts,no,1,3924,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_4_1_remaining_inventory.py,one_off_scripts,no,1,5035,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_4_capture_baseline.py,one_off_scripts,no,1,5315,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_4_git_review.py,one_off_scripts,no,1,22820,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_baseline_val.py,one_off_scripts,no,1,19980,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_build_u6_1_reports.py,one_off_scripts,no,1,6073,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_collect_s0.py,one_off_scripts,no,1,9957,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_collect_s0_snapshot.py,one_off_scripts,no,1,10090,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_compare_candidates.py,one_off_scripts,no,1,16080,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_freeze_criteria.py,one_off_scripts,no,1,5149,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_parse_reviews.py,one_off_scripts,no,1,13587,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_run_experiment.py,one_off_scripts,no,1,9040,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/u6_warm_start_audit.py,one_off_scripts,no,1,7907,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/validate_candidate_group_thresholds.py,one_off_scripts,no,1,12402,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes
+scripts/verify_apbt_candidate_limit.py,one_off_scripts,no,1,7169,一次性验收/诊断/实验脚本，尚未证明为长期维护工具；U6.4 审核结论为继续单独审核、不批量提交（其中 4 个还含机器本地绝对路径）,yes

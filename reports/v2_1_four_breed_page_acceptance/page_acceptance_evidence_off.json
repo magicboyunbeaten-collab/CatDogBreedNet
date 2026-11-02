@@ -1,0 +1,64 @@
+{
+  "scenario": "off",
+  "generatedAt": "2026-10-19T13:01:03.140Z",
+  "baseUrl": "http://127.0.0.1:5173/predict",
+  "samples": {
+    "triggerApbt": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_132.jpg",
+    "triggerAmstaff": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_11.jpg",
+    "nonCandidate": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\Abyssinian\\Abyssinian_10.jpg"
+  },
+  "checks": [
+    {
+      "check": "同一张触发图不再展示候选区",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "无\"你选择的品种\"区块",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "原始 Top-K 仍正常显示（3 行）",
+      "passed": true,
+      "detail": "实际 3"
+    },
+    {
+      "check": "Top-1 仍为 APBT（预测本身不受开关影响）",
+      "passed": true,
+      "detail": "美国比特斗牛梗"
+    }
+  ],
+  "passed": 4,
+  "total": 4,
+  "evidence": {
+    "switchOff": {
+      "hasCandidateBlock": false,
+      "candidateTitle": null,
+      "candidateSubtitle": null,
+      "legend": null,
+      "note": null,
+      "candidates": [],
+      "radioCount": 0,
+      "topk": [
+        {
+          "rank": "Top-1",
+          "breed": "美国比特斗牛梗",
+          "scoreText": "46.72%"
+        },
+        {
+          "rank": "Top-2",
+          "breed": "美国斯塔福郡梗",
+          "scoreText": "39.06%"
+        },
+        {
+          "rank": "Top-3",
+          "breed": "toy_terrier",
+          "scoreText": "8.12%"
+        }
+      ],
+      "userChoice": null,
+      "resultNote": "confidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。"
+    }
+  }
+}

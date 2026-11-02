@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-10-20T02:50:15.383697+00:00",
+  "model_dir": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42",
+  "num_classes": 136,
+  "class_names_equal_json": true,
+  "class_order_sha256": "a0120327f260d34fd532eab21c8169d02c864c06ac7c42bcdc8fa8721c513e97",
+  "class_order_sha256_matches_config": true,
+  "files": {
+    "best_model.pth": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+    "class_names.json": "216dae77ead6fa5c36499a84ee6092f82a966eb1fae0e43ed9c2930aa07505ad",
+    "model_version.json": "0b0e5c7f79a000f7f87387c71df213d658f59e12ebfe22f68bf19336fb1cdd08",
+    "experiment_config.json": "0253416ba4a3f011e87a6b57fb04d62a28bcb1caab2aa6cc9db5d12de4f2439a"
+  },
+  "val_samples": 2079,
+  "evaluation_command": "python scripts/u6_baseline_val.py --weights E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\best_model.pth --class-names E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\class_names.json --split val --tag val",
+  "test_split_access_count": 0,
+  "note": "U6-A 基线：只用 validation。test 在前序任务中已被查看过汇总指标与错分案例，不能视为未接触的盲测集。"
+}

@@ -1,0 +1,273 @@
+# U6.4 只读 Git 基线快照（working_tree_before）
+
+- 捕获时间：2026-10-21T05:20:36.430614+00:00
+- 捕获方式：`scripts/u6_4_capture_baseline.py`，**仅只读 git 子命令**
+
+## 1. HEAD 与分支
+
+- 完整 SHA：`547c55dd96b5d2a9aca71c58458f4192e55b38f5`
+- 短 SHA：`547c55d`
+- commit：`547c55d v2训练前`
+- 分支：`master`
+
+## 2. 已暂存差异（必须为空）
+
+```
+(空 —— 索引无变化)
+```
+
+## 3. `git diff --cached --name-status`
+
+```
+(空)
+```
+
+## 4. `git status --short` 全文
+
+```
+ M backend/app/config.py
+ M backend/app/main.py
+ M backend/app/routes/predict.py
+ M backend/app/schemas.py
+ M backend/app/services/predictor.py
+ M frontend/src/components/PredictionResult.vue
+ M frontend/src/utils/breedNames.js
+ M frontend/tests/breedNames.test.js
+ M frontend/tests/historyView.test.js
+ M ml/dataset.py
+ M ml/predict.py
+ M ml/predictor.py
+ M ml/train.py
+ M tests/test_api.py
+ M tests/test_predictor_service.py
+ M tests/test_train_extensions.py
+ M 启动后端.bat
+ M 启动系统.bat
+?? artifacts/_v2_1_smoke/
+?? artifacts/v2_1_136classes_seed42/
+?? artifacts/v2_2_border_collie_exp01_pair_color_jitter_seed42/
+?? artifacts/v2_2_border_collie_exp02_pair_sampler_seed42/
+?? artifacts/v2_2_border_collie_exp04_resolution_seed2024/
+?? artifacts/v2_2_border_collie_exp04_resolution_seed42/
+?? artifacts/v2_2_border_collie_exp04_resolution_seed7/
+?? artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed2024/
+?? artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/
+?? artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed7/
+?? artifacts/v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42/
+?? artifacts/v2_2_border_collie_exp08_pair_sampler_lowlr_seed42/
+?? backend/app/services/candidate_group.py
+?? frontend/tests/colliePairCandidate.test.js
+?? frontend/tests/predictionResult.test.js
+?? frontend/tests/predictionResultAcceptance.test.js
+?? md/U5.2_方案B1四类相近犬种候选组正式实现任务.md
+?? md/U5.4_候选组同图一致性与前端回归测试任务.md
+?? md/U5.5_V2.1正式接入与边牧准确率改进计划.md
+?? md/U5_1_APBT纳入四类候选组离线评估任务.md
+?? md/U6.1_低学习率纠偏与边牧专项对照实验任务.md
+?? md/U6.2_柯利与边境牧羊犬双候选提示实施任务.md
+?? md/U6.3_默认启动行为核验与安全固化.md
+?? md/U6.4_Git安全固化_审核与提交计划.md
+?? md/V2.1_136类别模型训练任务.md
+?? md/V2.1_相近犬种候选提示与边牧复核整合任务.md
+?? md/V2.1_误分类诊断与APBT_AmStaff数据审计任务.md
+?? md/u6_border_collie_improvement_plan_修订版.md
+?? ml/u6_pair_training.py
+?? reports/u5_5_v2_1_integration/
+?? reports/u6_1_low_lr/
+?? reports/u6_2_collie_pair_candidate/
+?? reports/u6_3_default_runtime_and_freeze/
+?? reports/u6_border_collie/
+?? reports/v2_1_apbt_four_breed_candidate_eval/
+?? reports/v2_1_candidate_ui_review/
+?? reports/v2_1_coat_pitbull_diagnostics/
+?? reports/v2_1_diagnostics/
+?? reports/v2_1_four_breed_candidate_implementation/
+?? reports/v2_1_four_breed_consistency_review/
+?? reports/v2_1_four_breed_page_acceptance/
+?? scripts/accept_candidate_group_api.py
+?? scripts/accept_collie_pair_api.py
+?? scripts/accept_four_breed_candidate_api.py
+?? scripts/accept_v2_1_integration.py
+?? scripts/audit_cross_class_duplicates.py
+?? scripts/audit_external_sources.py
+?? scripts/audit_pitbull_labels.py
+?? scripts/build_manual_review_queue.py
+?? scripts/check_candidate_consistency.py
+?? scripts/diagnose_coat_color.py
+?? scripts/diagnose_v2_1.py
+?? scripts/diagnostic_protection_snapshot.py
+?? scripts/evaluate_apbt_four_group.py
+?? scripts/evaluate_v2_1_subsets.py
+?? scripts/export_candidate_triggers_val.py
+?? scripts/finalize_v2_1_candidate.py
+?? scripts/generate_breed_mapping.py
+?? scripts/page_accept_collie_pair.mjs
+?? scripts/page_accept_four_breed.mjs
+?? scripts/page_accept_v2_1_integration.mjs
+?? scripts/reconcile_u5_2_numbers.py
+?? scripts/run_four_breed_backend.py
+?? scripts/summarize_coat_review.py
+?? scripts/summarize_coat_test.py
+?? scripts/u6_2_collie_pair_threshold.py
+?? scripts/u6_3_git_inventory.py
+?? scripts/u6_3_page_probe.mjs
+?? scripts/u6_3_runtime_probe.py
+?? scripts/u6_3_static_audit.py
+?? scripts/u6_3_verify_switch_off.py
+?? scripts/u6_4_capture_baseline.py
+?? scripts/u6_baseline_val.py
+?? scripts/u6_build_u6_1_reports.py
+?? scripts/u6_collect_s0.py
+?? scripts/u6_collect_s0_snapshot.py
+?? scripts/u6_compare_candidates.py
+?? scripts/u6_freeze_criteria.py
+?? scripts/u6_parse_reviews.py
+?? scripts/u6_run_experiment.py
+?? scripts/u6_warm_start_audit.py
+?? scripts/validate_candidate_group_thresholds.py
+?? scripts/verify_apbt_candidate_limit.py
+?? tests/test_candidate_group.py
+?? tests/test_collie_pair_candidate.py
+```
+
+## 5. 统计
+
+- 已跟踪文件被修改（` M`）：**18**
+- 未跟踪项（`??`）：**85**
+- 合计：**103**
+- 未跟踪项按顶层目录：scripts=42, artifacts=12, md=12, reports=12, frontend=3, tests=2, backend=1, ml=1
+
+## 6. `git diff --stat` 全文（未暂存）
+
+```
+ backend/app/config.py                        |  41 +++-
+ backend/app/main.py                          |  19 +-
+ backend/app/routes/predict.py                |  11 +
+ backend/app/schemas.py                       |  57 +++++
+ backend/app/services/predictor.py            |  35 ++-
+ frontend/src/components/PredictionResult.vue | 243 ++++++++++++++++++++-
+ frontend/src/utils/breedNames.js             | 144 ++++++++++++-
+ frontend/tests/breedNames.test.js            | 107 ++++++++--
+ frontend/tests/historyView.test.js           |  37 +++-
+ ml/dataset.py                                |  22 +-
+ ml/predict.py                                |  17 +-
+ ml/predictor.py                              |  11 +-
+ ml/train.py                                  | 307 +++++++++++++++++++++++++--
+ tests/test_api.py                            |  25 +++
+ tests/test_predictor_service.py              |  37 ++++
+ tests/test_train_extensions.py               | 182 +++++++++++++++-
+ 启动后端.bat                                 |  37 +++-
+ 启动系统.bat                                 |  14 +-
+ 18 files changed, 1267 insertions(+), 79 deletions(-)
+```
+
+## 7. `git diff --name-status` 全文（未暂存）
+
+```
+M	backend/app/config.py
+M	backend/app/main.py
+M	backend/app/routes/predict.py
+M	backend/app/schemas.py
+M	backend/app/services/predictor.py
+M	frontend/src/components/PredictionResult.vue
+M	frontend/src/utils/breedNames.js
+M	frontend/tests/breedNames.test.js
+M	frontend/tests/historyView.test.js
+M	ml/dataset.py
+M	ml/predict.py
+M	ml/predictor.py
+M	ml/train.py
+M	tests/test_api.py
+M	tests/test_predictor_service.py
+M	tests/test_train_extensions.py
+M	启动后端.bat
+M	启动系统.bat
+```
+
+## 8. 未跟踪文件清单（去引号、可读路径）
+
+- `artifacts/_v2_1_smoke/`
+- `artifacts/v2_1_136classes_seed42/`
+- `artifacts/v2_2_border_collie_exp01_pair_color_jitter_seed42/`
+- `artifacts/v2_2_border_collie_exp02_pair_sampler_seed42/`
+- `artifacts/v2_2_border_collie_exp04_resolution_seed2024/`
+- `artifacts/v2_2_border_collie_exp04_resolution_seed42/`
+- `artifacts/v2_2_border_collie_exp04_resolution_seed7/`
+- `artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed2024/`
+- `artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/`
+- `artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed7/`
+- `artifacts/v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42/`
+- `artifacts/v2_2_border_collie_exp08_pair_sampler_lowlr_seed42/`
+- `backend/app/services/candidate_group.py`
+- `frontend/tests/colliePairCandidate.test.js`
+- `frontend/tests/predictionResult.test.js`
+- `frontend/tests/predictionResultAcceptance.test.js`
+- `md/U5.2_方案B1四类相近犬种候选组正式实现任务.md`
+- `md/U5.4_候选组同图一致性与前端回归测试任务.md`
+- `md/U5.5_V2.1正式接入与边牧准确率改进计划.md`
+- `md/U5_1_APBT纳入四类候选组离线评估任务.md`
+- `md/U6.1_低学习率纠偏与边牧专项对照实验任务.md`
+- `md/U6.2_柯利与边境牧羊犬双候选提示实施任务.md`
+- `md/U6.3_默认启动行为核验与安全固化.md`
+- `md/U6.4_Git安全固化_审核与提交计划.md`
+- `md/V2.1_136类别模型训练任务.md`
+- `md/V2.1_相近犬种候选提示与边牧复核整合任务.md`
+- `md/V2.1_误分类诊断与APBT_AmStaff数据审计任务.md`
+- `md/u6_border_collie_improvement_plan_修订版.md`
+- `ml/u6_pair_training.py`
+- `reports/u5_5_v2_1_integration/`
+- `reports/u6_1_low_lr/`
+- `reports/u6_2_collie_pair_candidate/`
+- `reports/u6_3_default_runtime_and_freeze/`
+- `reports/u6_border_collie/`
+- `reports/v2_1_apbt_four_breed_candidate_eval/`
+- `reports/v2_1_candidate_ui_review/`
+- `reports/v2_1_coat_pitbull_diagnostics/`
+- `reports/v2_1_diagnostics/`
+- `reports/v2_1_four_breed_candidate_implementation/`
+- `reports/v2_1_four_breed_consistency_review/`
+- `reports/v2_1_four_breed_page_acceptance/`
+- `scripts/accept_candidate_group_api.py`
+- `scripts/accept_collie_pair_api.py`
+- `scripts/accept_four_breed_candidate_api.py`
+- `scripts/accept_v2_1_integration.py`
+- `scripts/audit_cross_class_duplicates.py`
+- `scripts/audit_external_sources.py`
+- `scripts/audit_pitbull_labels.py`
+- `scripts/build_manual_review_queue.py`
+- `scripts/check_candidate_consistency.py`
+- `scripts/diagnose_coat_color.py`
+- `scripts/diagnose_v2_1.py`
+- `scripts/diagnostic_protection_snapshot.py`
+- `scripts/evaluate_apbt_four_group.py`
+- `scripts/evaluate_v2_1_subsets.py`
+- `scripts/export_candidate_triggers_val.py`
+- `scripts/finalize_v2_1_candidate.py`
+- `scripts/generate_breed_mapping.py`
+- `scripts/page_accept_collie_pair.mjs`
+- `scripts/page_accept_four_breed.mjs`
+- `scripts/page_accept_v2_1_integration.mjs`
+- `scripts/reconcile_u5_2_numbers.py`
+- `scripts/run_four_breed_backend.py`
+- `scripts/summarize_coat_review.py`
+- `scripts/summarize_coat_test.py`
+- `scripts/u6_2_collie_pair_threshold.py`
+- `scripts/u6_3_git_inventory.py`
+- `scripts/u6_3_page_probe.mjs`
+- `scripts/u6_3_runtime_probe.py`
+- `scripts/u6_3_static_audit.py`
+- `scripts/u6_3_verify_switch_off.py`
+- `scripts/u6_4_capture_baseline.py`
+- `scripts/u6_baseline_val.py`
+- `scripts/u6_build_u6_1_reports.py`
+- `scripts/u6_collect_s0.py`
+- `scripts/u6_collect_s0_snapshot.py`
+- `scripts/u6_compare_candidates.py`
+- `scripts/u6_freeze_criteria.py`
+- `scripts/u6_parse_reviews.py`
+- `scripts/u6_run_experiment.py`
+- `scripts/u6_warm_start_audit.py`
+- `scripts/validate_candidate_group_thresholds.py`
+- `scripts/verify_apbt_candidate_limit.py`
+- `tests/test_candidate_group.py`
+- `tests/test_collie_pair_candidate.py`

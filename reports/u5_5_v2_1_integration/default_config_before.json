@@ -1,0 +1,8 @@
+{
+  "weights_path": "E:\\CatDogBreedNet\\artifacts\\best_model.pth",
+  "candidate_group_enabled": false,
+  "device": "auto",
+  "db_path": "E:\\CatDogBreedNet\\data\\app.db",
+  "upload_dir": "E:\\CatDogBreedNet\\uploads",
+  "has_class_names_path_field": false
+}

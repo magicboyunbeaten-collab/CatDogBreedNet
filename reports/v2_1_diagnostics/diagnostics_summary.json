@@ -1,0 +1,774 @@
+{
+  "generated_at": "2026-10-18T13:24:39.249413+00:00",
+  "model_dir": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42",
+  "data_dir": "E:\\CatDogBreedNet\\data\\v2_processed",
+  "v11_weights": "E:\\CatDogBreedNet\\artifacts\\best_model.pth",
+  "v11_data_dir": "E:\\CatDogBreedNet\\data\\processed_clean",
+  "all_136": {
+    "accuracy": 0.7969420100689912,
+    "macro_f1": 0.7472406618398004,
+    "weighted_f1": 0.7988464890353433,
+    "support": 5363,
+    "num_classes": 136
+  },
+  "cross_check_with_existing_metrics": {
+    "accuracy": {
+      "existing": 0.7969420100689912,
+      "recomputed": 0.7969420100689912,
+      "consistent": true
+    },
+    "macro_f1": {
+      "existing": 0.7472406618398004,
+      "recomputed": 0.7472406618398004,
+      "consistent": true
+    },
+    "weighted_f1": {
+      "existing": 0.7988464890353433,
+      "recomputed": 0.7988464890353433,
+      "consistent": true
+    }
+  },
+  "original_37": {
+    "support": 3669,
+    "buckets": {
+      "correct": 2959,
+      "to_other_original": 348,
+      "to_new_99": 362
+    },
+    "bucket_rows": [
+      {
+        "bucket": "correct",
+        "count": 2959,
+        "ratio": 0.806487
+      },
+      {
+        "bucket": "to_other_original",
+        "count": 348,
+        "ratio": 0.094849
+      },
+      {
+        "bucket": "to_new_99",
+        "count": 362,
+        "ratio": 0.098664
+      }
+    ],
+    "per_class_buckets": {
+      "Abyssinian": {
+        "correct": 83,
+        "to_new_99": 4,
+        "to_other_original": 11
+      },
+      "Bengal": {
+        "correct": 86,
+        "to_other_original": 12,
+        "to_new_99": 2
+      },
+      "Birman": {
+        "correct": 80,
+        "to_other_original": 19,
+        "to_new_99": 1
+      },
+      "Bombay": {
+        "correct": 77,
+        "to_new_99": 5,
+        "to_other_original": 6
+      },
+      "British_Shorthair": {
+        "correct": 78,
+        "to_new_99": 1,
+        "to_other_original": 21
+      },
+      "Egyptian_Mau": {
+        "correct": 84,
+        "to_other_original": 13
+      },
+      "Maine_Coon": {
+        "correct": 75,
+        "to_other_original": 20,
+        "to_new_99": 5
+      },
+      "Persian": {
+        "correct": 85,
+        "to_other_original": 11,
+        "to_new_99": 4
+      },
+      "Ragdoll": {
+        "correct": 77,
+        "to_new_99": 3,
+        "to_other_original": 20
+      },
+      "Russian_Blue": {
+        "correct": 88,
+        "to_other_original": 11,
+        "to_new_99": 1
+      },
+      "Siamese": {
+        "correct": 77,
+        "to_other_original": 22,
+        "to_new_99": 1
+      },
+      "Sphynx": {
+        "correct": 87,
+        "to_other_original": 7,
+        "to_new_99": 6
+      },
+      "american_bulldog": {
+        "to_new_99": 5,
+        "correct": 84,
+        "to_other_original": 11
+      },
+      "american_pit_bull_terrier": {
+        "to_other_original": 43,
+        "to_new_99": 43,
+        "correct": 14
+      },
+      "basset_hound": {
+        "correct": 87,
+        "to_new_99": 5,
+        "to_other_original": 8
+      },
+      "beagle": {
+        "correct": 83,
+        "to_new_99": 11,
+        "to_other_original": 6
+      },
+      "boxer": {
+        "correct": 75,
+        "to_new_99": 9,
+        "to_other_original": 15
+      },
+      "chihuahua": {
+        "correct": 70,
+        "to_other_original": 11,
+        "to_new_99": 19
+      },
+      "english_cocker_spaniel": {
+        "correct": 75,
+        "to_other_original": 12,
+        "to_new_99": 13
+      },
+      "english_setter": {
+        "to_new_99": 8,
+        "correct": 88,
+        "to_other_original": 4
+      },
+      "german_shorthaired": {
+        "correct": 93,
+        "to_new_99": 7
+      },
+      "great_pyrenees": {
+        "correct": 88,
+        "to_new_99": 8,
+        "to_other_original": 4
+      },
+      "havanese": {
+        "correct": 70,
+        "to_new_99": 28,
+        "to_other_original": 2
+      },
+      "japanese_chin": {
+        "correct": 90,
+        "to_new_99": 9,
+        "to_other_original": 1
+      },
+      "keeshond": {
+        "to_new_99": 5,
+        "correct": 93,
+        "to_other_original": 1
+      },
+      "leonberger": {
+        "correct": 96,
+        "to_other_original": 2,
+        "to_new_99": 2
+      },
+      "miniature_pinscher": {
+        "correct": 58,
+        "to_new_99": 36,
+        "to_other_original": 6
+      },
+      "newfoundland": {
+        "correct": 88,
+        "to_other_original": 1,
+        "to_new_99": 11
+      },
+      "pomeranian": {
+        "correct": 92,
+        "to_new_99": 3,
+        "to_other_original": 5
+      },
+      "pug": {
+        "correct": 93,
+        "to_new_99": 2,
+        "to_other_original": 5
+      },
+      "saint_bernard": {
+        "correct": 93,
+        "to_new_99": 5,
+        "to_other_original": 2
+      },
+      "samoyed": {
+        "correct": 98,
+        "to_other_original": 1,
+        "to_new_99": 1
+      },
+      "scottish_terrier": {
+        "correct": 88,
+        "to_new_99": 9,
+        "to_other_original": 2
+      },
+      "shiba_inu": {
+        "to_new_99": 7,
+        "correct": 91,
+        "to_other_original": 2
+      },
+      "staffordshire_bull_terrier": {
+        "correct": 47,
+        "to_other_original": 20,
+        "to_new_99": 22
+      },
+      "wheaten_terrier": {
+        "correct": 75,
+        "to_other_original": 7,
+        "to_new_99": 18
+      },
+      "yorkshire_terrier": {
+        "to_new_99": 43,
+        "correct": 53,
+        "to_other_original": 4
+      }
+    },
+    "top_new_targets": [
+      [
+        "american_staffordshire_terrier",
+        38
+      ],
+      [
+        "silky_terrier",
+        24
+      ],
+      [
+        "doberman",
+        15
+      ],
+      [
+        "french_bulldog",
+        13
+      ],
+      [
+        "australian_terrier",
+        13
+      ],
+      [
+        "lhasa",
+        12
+      ],
+      [
+        "toy_terrier",
+        11
+      ],
+      [
+        "maltese_dog",
+        9
+      ],
+      [
+        "rhodesian_ridgeback",
+        9
+      ],
+      [
+        "bull_mastiff",
+        9
+      ],
+      [
+        "walker_hound",
+        8
+      ],
+      [
+        "vizsla",
+        7
+      ],
+      [
+        "schipperke",
+        6
+      ],
+      [
+        "pekinese",
+        6
+      ],
+      [
+        "west_highland_white_terrier",
+        6
+      ]
+    ]
+  },
+  "v1_vs_v2": {
+    "matched": 3669,
+    "v1_accuracy": 0.8885254837830472,
+    "v2_accuracy": 0.806486781139275,
+    "v1_correct_v2_wrong": 407,
+    "v1_wrong_v2_correct": 106,
+    "v2_predicted_as_new_breed": 362
+  },
+  "pitbull_family": {
+    "american_pit_bull_terrier": {
+      "support": 100,
+      "support_expected": 100,
+      "support_matches_expected": true,
+      "correct": 14,
+      "predicted_count": 20,
+      "recall": 0.14,
+      "precision": 0.7,
+      "f1": 0.233333,
+      "top1_mean": 0.675912,
+      "top1_median": 0.683609,
+      "low_confidence_count": 26,
+      "margin_lt_0_1": 7,
+      "top_targets": [
+        [
+          "american_staffordshire_terrier",
+          21
+        ],
+        [
+          "staffordshire_bull_terrier",
+          18
+        ],
+        [
+          "american_bulldog",
+          15
+        ],
+        [
+          "american_pit_bull_terrier",
+          14
+        ],
+        [
+          "rhodesian_ridgeback",
+          5
+        ],
+        [
+          "german_shorthaired",
+          4
+        ],
+        [
+          "vizsla",
+          3
+        ],
+        [
+          "boxer",
+          3
+        ],
+        [
+          "ibizan_hound",
+          3
+        ],
+        [
+          "labrador_retriever",
+          1
+        ],
+        [
+          "walker_hound",
+          1
+        ],
+        [
+          "boston_bull",
+          1
+        ],
+        [
+          "whippet",
+          1
+        ],
+        [
+          "malinois",
+          1
+        ],
+        [
+          "great_dane",
+          1
+        ],
+        [
+          "french_bulldog",
+          1
+        ],
+        [
+          "weimaraner",
+          1
+        ],
+        [
+          "chesapeake_bay_retriever",
+          1
+        ],
+        [
+          "shiba_inu",
+          1
+        ],
+        [
+          "Sphynx",
+          1
+        ],
+        [
+          "italian_greyhound",
+          1
+        ],
+        [
+          "beagle",
+          1
+        ],
+        [
+          "doberman",
+          1
+        ]
+      ]
+    },
+    "american_staffordshire_terrier": {
+      "support": 17,
+      "support_expected": 17,
+      "support_matches_expected": true,
+      "correct": 12,
+      "predicted_count": 55,
+      "recall": 0.705882,
+      "precision": 0.218182,
+      "f1": 0.333333,
+      "top1_mean": 0.775684,
+      "top1_median": 0.903269,
+      "low_confidence_count": 2,
+      "margin_lt_0_1": 1,
+      "top_targets": [
+        [
+          "american_staffordshire_terrier",
+          12
+        ],
+        [
+          "bull_mastiff",
+          3
+        ],
+        [
+          "american_pit_bull_terrier",
+          2
+        ]
+      ]
+    },
+    "staffordshire_bull_terrier": {
+      "support": 89,
+      "support_expected": 89,
+      "support_matches_expected": true,
+      "correct": 47,
+      "predicted_count": 72,
+      "recall": 0.52809,
+      "precision": 0.652778,
+      "f1": 0.583851,
+      "top1_mean": 0.764217,
+      "top1_median": 0.817227,
+      "low_confidence_count": 14,
+      "margin_lt_0_1": 6,
+      "top_targets": [
+        [
+          "staffordshire_bull_terrier",
+          47
+        ],
+        [
+          "american_bulldog",
+          16
+        ],
+        [
+          "american_staffordshire_terrier",
+          15
+        ],
+        [
+          "boxer",
+          2
+        ],
+        [
+          "american_pit_bull_terrier",
+          1
+        ],
+        [
+          "bull_mastiff",
+          1
+        ],
+        [
+          "whippet",
+          1
+        ],
+        [
+          "african_hunting_dog",
+          1
+        ],
+        [
+          "italian_greyhound",
+          1
+        ],
+        [
+          "eskimo_dog",
+          1
+        ],
+        [
+          "shiba_inu",
+          1
+        ],
+        [
+          "rhodesian_ridgeback",
+          1
+        ],
+        [
+          "weimaraner",
+          1
+        ]
+      ]
+    },
+    "american_bulldog": {
+      "support": 100,
+      "support_expected": 100,
+      "support_matches_expected": true,
+      "correct": 84,
+      "predicted_count": 131,
+      "recall": 0.84,
+      "precision": 0.641221,
+      "f1": 0.727273,
+      "top1_mean": 0.890545,
+      "top1_median": 0.976276,
+      "low_confidence_count": 5,
+      "margin_lt_0_1": 3,
+      "top_targets": [
+        [
+          "american_bulldog",
+          84
+        ],
+        [
+          "boxer",
+          4
+        ],
+        [
+          "saint_bernard",
+          2
+        ],
+        [
+          "staffordshire_bull_terrier",
+          2
+        ],
+        [
+          "french_bulldog",
+          1
+        ],
+        [
+          "Sphynx",
+          1
+        ],
+        [
+          "toy_terrier",
+          1
+        ],
+        [
+          "german_shorthaired",
+          1
+        ],
+        [
+          "american_pit_bull_terrier",
+          1
+        ],
+        [
+          "cardigan",
+          1
+        ],
+        [
+          "whippet",
+          1
+        ],
+        [
+          "american_staffordshire_terrier",
+          1
+        ]
+      ]
+    },
+    "bull_mastiff": {
+      "support": 16,
+      "support_expected": 16,
+      "support_matches_expected": true,
+      "correct": 15,
+      "predicted_count": 27,
+      "recall": 0.9375,
+      "precision": 0.555556,
+      "f1": 0.697674,
+      "top1_mean": 0.950366,
+      "top1_median": 0.991353,
+      "low_confidence_count": 0,
+      "margin_lt_0_1": 0,
+      "top_targets": [
+        [
+          "bull_mastiff",
+          15
+        ],
+        [
+          "staffordshire_bull_terrier",
+          1
+        ]
+      ]
+    }
+  },
+  "pitbull_cross_check": {
+    "american_pit_bull_terrier": {
+      "present_in_legacy": true,
+      "consistent": {
+        "precision": true,
+        "recall": true,
+        "f1": true,
+        "support": true
+      },
+      "precision_legacy": 0.7,
+      "precision_recomputed": 0.7,
+      "recall_legacy": 0.14,
+      "recall_recomputed": 0.14,
+      "f1_legacy": 0.233333,
+      "f1_recomputed": 0.233333,
+      "support_legacy": 100,
+      "support_recomputed": 100
+    },
+    "american_staffordshire_terrier": {
+      "present_in_legacy": true,
+      "consistent": {
+        "precision": true,
+        "recall": true,
+        "f1": true,
+        "support": true
+      },
+      "precision_legacy": 0.218182,
+      "precision_recomputed": 0.218182,
+      "recall_legacy": 0.705882,
+      "recall_recomputed": 0.705882,
+      "f1_legacy": 0.333333,
+      "f1_recomputed": 0.333333,
+      "support_legacy": 17,
+      "support_recomputed": 17
+    },
+    "staffordshire_bull_terrier": {
+      "present_in_legacy": true,
+      "consistent": {
+        "precision": true,
+        "recall": true,
+        "f1": true,
+        "support": true
+      },
+      "precision_legacy": 0.652778,
+      "precision_recomputed": 0.652778,
+      "recall_legacy": 0.52809,
+      "recall_recomputed": 0.52809,
+      "f1_legacy": 0.583851,
+      "f1_recomputed": 0.583851,
+      "support_legacy": 89,
+      "support_recomputed": 89
+    },
+    "american_bulldog": {
+      "present_in_legacy": true,
+      "consistent": {
+        "precision": true,
+        "recall": true,
+        "f1": true,
+        "support": true
+      },
+      "precision_legacy": 0.641221,
+      "precision_recomputed": 0.641221,
+      "recall_legacy": 0.84,
+      "recall_recomputed": 0.84,
+      "f1_legacy": 0.727273,
+      "f1_recomputed": 0.727273,
+      "support_legacy": 100,
+      "support_recomputed": 100
+    },
+    "bull_mastiff": {
+      "present_in_legacy": true,
+      "consistent": {
+        "precision": true,
+        "recall": true,
+        "f1": true,
+        "support": true
+      },
+      "precision_legacy": 0.555556,
+      "precision_recomputed": 0.555556,
+      "recall_legacy": 0.9375,
+      "recall_recomputed": 0.9375,
+      "f1_legacy": 0.697674,
+      "f1_recomputed": 0.697674,
+      "support_legacy": 16,
+      "support_recomputed": 16
+    }
+  },
+  "bidirectional_confusion": {
+    "apbt_to_amstaff": 21,
+    "apbt_to_amstaff_rate": 0.21,
+    "amstaff_to_apbt": 2,
+    "amstaff_to_apbt_rate": 0.117647
+  },
+  "border_family": {
+    "border_collie": {
+      "support": 15,
+      "correct": 12,
+      "recall": 0.8,
+      "top_targets": [
+        [
+          "border_collie",
+          12
+        ],
+        [
+          "scottish_deerhound",
+          1
+        ],
+        [
+          "flat_coated_retriever",
+          1
+        ],
+        [
+          "siberian_husky",
+          1
+        ]
+      ]
+    },
+    "collie": {
+      "support": 16,
+      "correct": 8,
+      "recall": 0.5,
+      "top_targets": [
+        [
+          "collie",
+          8
+        ],
+        [
+          "border_collie",
+          8
+        ]
+      ]
+    },
+    "border_terrier": {
+      "support": 17,
+      "correct": 14,
+      "recall": 0.823529,
+      "top_targets": [
+        [
+          "border_terrier",
+          14
+        ],
+        [
+          "cairn",
+          2
+        ],
+        [
+          "briard",
+          1
+        ]
+      ]
+    }
+  },
+  "source_distribution": {
+    "american_pit_bull_terrier": {
+      "Oxford-IIIT Pet": 100
+    },
+    "american_staffordshire_terrier": {
+      "Stanford Dogs (ImageNet wnid n02093428)": 17
+    },
+    "staffordshire_bull_terrier": {
+      "Oxford-IIIT Pet": 89
+    },
+    "american_bulldog": {
+      "Oxford-IIIT Pet": 100
+    },
+    "bull_mastiff": {
+      "Stanford Dogs (ImageNet wnid n02108422)": 16
+    }
+  }
+}

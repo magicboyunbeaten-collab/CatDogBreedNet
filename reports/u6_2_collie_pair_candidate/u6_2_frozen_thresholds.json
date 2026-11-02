@@ -1,0 +1,50 @@
+{
+  "frozen_at": "2026-10-21T00:00:00+00:00",
+  "strategy": "collie / border_collie dual-candidate hint",
+  "group_id": "collie-pair",
+  "threshold_version": "val-2026-10-21-collie-pair-v1",
+  "pair_group": ["collie", "border_collie"],
+  "pair_group_zh": {
+    "collie": "柯利牧羊犬",
+    "border_collie": "边境牧羊犬"
+  },
+  "pair_mass_threshold": 0.30,
+  "pair_margin_threshold": 0.30,
+  "trigger_rule": "Top-1 in {collie, border_collie} AND pair_mass = p_collie + p_border_collie >= 0.30 AND pair_margin = abs(p_collie - p_border_collie) <= 0.30",
+  "probability_source": "full 136-dim softmax (never derived from Top-K truncation)",
+  "grid_scanned": {
+    "mass": [0.10, 0.15, 0.20, 0.25, 0.30, 0.40, 0.50],
+    "margin": [0.02, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.40],
+    "combinations": 56
+  },
+  "selection_rule_applied": [
+    "1) in-group true-label ratio among triggered >= 0.5",
+    "2) minimise out-of-group false triggers",
+    "3) trigger rate <= 50% of the Top-1-in-pair subset",
+    "4) among zero-out-of-group combinations take the largest margin tier"
+  ],
+  "selection_note": "The plan's step 4 was worded as 'take the largest margin (strictest)', which is directionally wrong: a larger margin threshold is more permissive. Per the stated intent (conservative, hint only when genuinely hard to separate) this step was executed as: among combinations with zero out-of-group false triggers, take the largest margin tier. The correction is recorded here rather than applied silently.",
+  "evidence": {
+    "val_total": 2079,
+    "top1_in_pair_subset": 29,
+    "true_pair_total": 31,
+    "true_collie_total": 16,
+    "true_border_collie_total": 15,
+    "triggered_at_frozen_thresholds": 3,
+    "trigger_rate_overall": 0.001443,
+    "trigger_rate_within_top1_pair_subset": 0.103448,
+    "triggered_true_in_pair": 3,
+    "triggered_true_in_pair_ratio": 1.0,
+    "triggered_true_out_of_pair": 0,
+    "true_collie_triggered": 0,
+    "true_border_collie_triggered": 3
+  },
+  "key_finding": "Among the 14 images whose true label is collie and whose Top-1 falls in the pair, pair_margin is >= 0.7131 for every one (min 0.7131, max 0.9986): the model is essentially never torn between these two breeds for real collies. The hint therefore fires only when a real border_collie is close to collie.",
+  "small_denominator_warning": "val has only 16 collie and 15 border_collie images; the Top-1-in-pair subset is only 29; only 3 images trigger. Every ratio here has an extremely small denominator and must not be extrapolated, nor used to claim the hint improves classification accuracy.",
+  "mass_non_binding_note": "At margin <= 0.30, mass values from 0.10 to 0.50 give identical trigger sets (3 images), i.e. pair_mass is far above every threshold in this subset. 0.30 was chosen for consistency with the existing four-breed mass gate, not because the data favour it.",
+  "test_split_access_count": 0,
+  "source_files": [
+    "reports/u6_2_collie_pair_candidate/validation_threshold_grid.csv",
+    "reports/u6_2_collie_pair_candidate/validation_trigger_samples.csv"
+  ]
+}

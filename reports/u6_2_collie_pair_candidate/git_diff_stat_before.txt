@@ -1,0 +1,19 @@
+﻿ backend/app/config.py                              |  41 ++-
+ backend/app/main.py                                |  19 +-
+ backend/app/routes/predict.py                      |  11 +
+ backend/app/schemas.py                             |  51 ++++
+ backend/app/services/predictor.py                  |  35 ++-
+ frontend/src/components/PredictionResult.vue       | 215 ++++++++++++++-
+ frontend/src/utils/breedNames.js                   | 144 +++++++++-
+ frontend/tests/breedNames.test.js                  | 107 +++++--
+ frontend/tests/historyView.test.js                 |  37 ++-
+ ml/dataset.py                                      |  22 +-
+ ml/predict.py                                      |  17 +-
+ ml/predictor.py                                    |  11 +-
+ ml/train.py                                        | 307 +++++++++++++++++++--
+ tests/test_api.py                                  |  25 ++
+ tests/test_predictor_service.py                    |  37 +++
+ tests/test_train_extensions.py                     | 182 +++++++++++-
+ ...20\257\345\212\250\345\220\216\347\253\257.bat" |  37 ++-
+ ...20\257\345\212\250\347\263\273\347\273\237.bat" |  14 +-
+ 18 files changed, 1233 insertions(+), 79 deletions(-)

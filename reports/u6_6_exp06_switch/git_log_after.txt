@@ -1,0 +1,5 @@
+﻿2e83c5f Cover exp06 default model, image size and model version in tests
+a03ddb3 Point Windows launchers at the exp06 default model
+96c5511 Switch default model to exp06 with matching 256 preprocessing
+ca86b0b Extend training infrastructure for warm-start and pair experiments
+62c86bf Use V2.1 defaults in Windows launchers

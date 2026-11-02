@@ -1,0 +1,365 @@
+{
+  "scenario": "on",
+  "generatedAt": "2026-10-19T13:00:18.805Z",
+  "baseUrl": "http://127.0.0.1:5173/predict",
+  "samples": {
+    "triggerApbt": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_132.jpg",
+    "triggerAmstaff": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_11.jpg",
+    "nonCandidate": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\Abyssinian\\Abyssinian_10.jpg"
+  },
+  "checks": [
+    {
+      "check": "候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "候选区标题为\"外观相近的候选品种\"",
+      "passed": true,
+      "detail": "外观相近的候选品种"
+    },
+    {
+      "check": "候选行数量为 4",
+      "passed": true,
+      "detail": "实际 4"
+    },
+    {
+      "check": "单选按钮数量为 4",
+      "passed": true,
+      "detail": "实际 4"
+    },
+    {
+      "check": "四个中文名齐全且正确",
+      "passed": true,
+      "detail": "实际 [\"美国比特斗牛梗\",\"美国斯塔福郡梗\",\"斯塔福郡斗牛梗\",\"美国斗牛犬\"]"
+    },
+    {
+      "check": "组内相对得分之和 ≈ 100%",
+      "passed": true,
+      "detail": "sum=99.9900"
+    },
+    {
+      "check": "得分标注为\"候选组内相对得分\"",
+      "passed": true,
+      "detail": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。"
+    },
+    {
+      "check": "标注\"不是整体识别置信度/真实概率/准确率\"",
+      "passed": true,
+      "detail": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。"
+    },
+    {
+      "check": "图例候选数量表述与实际一致",
+      "passed": true,
+      "detail": "图例声明 4 个 / 实际 4 个"
+    },
+    {
+      "check": "图例不残留\"三个候选\"表述",
+      "passed": true,
+      "detail": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。"
+    },
+    {
+      "check": "原始 Top-K 仍为 3 行",
+      "passed": true,
+      "detail": "实际 3"
+    },
+    {
+      "check": "Top-1 为 APBT（模型首选未被替换）",
+      "passed": true,
+      "detail": "美国比特斗牛梗"
+    },
+    {
+      "check": "Top-1 分数仍显示原始百分比",
+      "passed": true,
+      "detail": "46.72%"
+    },
+    {
+      "check": "提示语含\"登记品种\"",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "提示语不暗示必有正确答案",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "默认已显示\"你选择的品种\"区块",
+      "passed": true,
+      "detail": "你选择的品种"
+    },
+    {
+      "check": "默认选择为模型首选",
+      "passed": true,
+      "detail": "model-top=true"
+    },
+    {
+      "check": "用户选择后\"你选择的品种\"仍存在",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "用户选择值变为第 2 个候选",
+      "passed": true,
+      "detail": "美国斯塔福郡梗 vs 美国斯塔福郡梗"
+    },
+    {
+      "check": "提示说明\"模型首选仍为 … 未被替换\"",
+      "passed": true,
+      "detail": "模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。"
+    },
+    {
+      "check": "用户选择后原始 Top-1 未被替换",
+      "passed": true,
+      "detail": "美国比特斗牛梗 vs 美国比特斗牛梗"
+    },
+    {
+      "check": "用户选择后原始 Top-1 分数未变",
+      "passed": true,
+      "detail": "46.72% vs 46.72%"
+    },
+    {
+      "check": "用户选择后候选区得分未变",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "候选行数量为 4",
+      "passed": true,
+      "detail": "实际 4"
+    },
+    {
+      "check": "组内相对得分之和 ≈ 100%",
+      "passed": true,
+      "detail": "sum=100.0100"
+    },
+    {
+      "check": "Top-1 为 AmStaff（与 A 不同，说明结果随图片变化）",
+      "passed": true,
+      "detail": "美国斯塔福郡梗"
+    },
+    {
+      "check": "候选区完全不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "\"你选择的品种\"区块不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "原始 Top-K 仍正常显示",
+      "passed": true,
+      "detail": "实际 3"
+    }
+  ],
+  "passed": 30,
+  "total": 30,
+  "evidence": {
+    "triggerApbt": {
+      "hasCandidateBlock": true,
+      "candidateTitle": "外观相近的候选品种",
+      "candidateSubtitle": "模型在这几个品种间难以明确区分",
+      "legend": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。",
+      "note": "以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 该得分也不代表模型已确认犬只的登记品种。你可以选择更符合的一张， 该选择仅用于本次查看，不会修改模型预测与历史记录。",
+      "candidates": [
+        {
+          "name": "美国比特斗牛梗",
+          "scoreText": "54.46%",
+          "rawText": "原始分 46.72%",
+          "isModelTop": true
+        },
+        {
+          "name": "美国斯塔福郡梗",
+          "scoreText": "45.53%",
+          "rawText": "原始分 39.06%",
+          "isModelTop": false
+        },
+        {
+          "name": "斯塔福郡斗牛梗",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%",
+          "isModelTop": false
+        },
+        {
+          "name": "美国斗牛犬",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%",
+          "isModelTop": false
+        }
+      ],
+      "radioCount": 4,
+      "topk": [
+        {
+          "rank": "Top-1",
+          "breed": "美国比特斗牛梗",
+          "scoreText": "46.72%"
+        },
+        {
+          "rank": "Top-2",
+          "breed": "美国斯塔福郡梗",
+          "scoreText": "39.06%"
+        },
+        {
+          "rank": "Top-3",
+          "breed": "toy_terrier",
+          "scoreText": "8.12%"
+        }
+      ],
+      "userChoice": {
+        "label": "你选择的品种",
+        "value": "美国比特斗牛梗",
+        "hint": "模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。"
+      },
+      "resultNote": "confidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。"
+    },
+    "userSelection": {
+      "hasCandidateBlock": true,
+      "candidateTitle": "外观相近的候选品种",
+      "candidateSubtitle": "模型在这几个品种间难以明确区分",
+      "legend": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。",
+      "note": "以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 该得分也不代表模型已确认犬只的登记品种。你可以选择更符合的一张， 该选择仅用于本次查看，不会修改模型预测与历史记录。",
+      "candidates": [
+        {
+          "name": "美国比特斗牛梗",
+          "scoreText": "54.46%",
+          "rawText": "原始分 46.72%",
+          "isModelTop": true
+        },
+        {
+          "name": "美国斯塔福郡梗",
+          "scoreText": "45.53%",
+          "rawText": "原始分 39.06%",
+          "isModelTop": false
+        },
+        {
+          "name": "斯塔福郡斗牛梗",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%",
+          "isModelTop": false
+        },
+        {
+          "name": "美国斗牛犬",
+          "scoreText": "0.00%",
+          "rawText": "原始分 0.00%",
+          "isModelTop": false
+        }
+      ],
+      "radioCount": 4,
+      "topk": [
+        {
+          "rank": "Top-1",
+          "breed": "美国比特斗牛梗",
+          "scoreText": "46.72%"
+        },
+        {
+          "rank": "Top-2",
+          "breed": "美国斯塔福郡梗",
+          "scoreText": "39.06%"
+        },
+        {
+          "rank": "Top-3",
+          "breed": "toy_terrier",
+          "scoreText": "8.12%"
+        }
+      ],
+      "userChoice": {
+        "label": "你选择的品种",
+        "value": "美国斯塔福郡梗",
+        "hint": "模型首选仍为 美国比特斗牛梗 （原始分 46.72%），未被替换。"
+      },
+      "resultNote": "confidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。"
+    },
+    "triggerAmstaff": {
+      "hasCandidateBlock": true,
+      "candidateTitle": "外观相近的候选品种",
+      "candidateSubtitle": "模型在这几个品种间难以明确区分",
+      "legend": "候选组内相对得分（val-2026-10-19-four-breed-b1）—— 仅在上述4个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。",
+      "note": "以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 该得分也不代表模型已确认犬只的登记品种。你可以选择更符合的一张， 该选择仅用于本次查看，不会修改模型预测与历史记录。",
+      "candidates": [
+        {
+          "name": "美国斯塔福郡梗",
+          "scoreText": "53.47%",
+          "rawText": "原始分 53.36%",
+          "isModelTop": true
+        },
+        {
+          "name": "斯塔福郡斗牛梗",
+          "scoreText": "46.30%",
+          "rawText": "原始分 46.20%",
+          "isModelTop": false
+        },
+        {
+          "name": "美国比特斗牛梗",
+          "scoreText": "0.16%",
+          "rawText": "原始分 0.16%",
+          "isModelTop": false
+        },
+        {
+          "name": "美国斗牛犬",
+          "scoreText": "0.08%",
+          "rawText": "原始分 0.08%",
+          "isModelTop": false
+        }
+      ],
+      "radioCount": 4,
+      "topk": [
+        {
+          "rank": "Top-1",
+          "breed": "美国斯塔福郡梗",
+          "scoreText": "53.36%"
+        },
+        {
+          "rank": "Top-2",
+          "breed": "斯塔福郡斗牛梗",
+          "scoreText": "46.20%"
+        },
+        {
+          "rank": "Top-3",
+          "breed": "美国比特斗牛梗",
+          "scoreText": "0.16%"
+        }
+      ],
+      "userChoice": {
+        "label": "你选择的品种",
+        "value": "美国斯塔福郡梗",
+        "hint": "模型首选仍为 美国斯塔福郡梗 （原始分 53.36%），未被替换。"
+      },
+      "resultNote": "confidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。"
+    },
+    "nonCandidate": {
+      "hasCandidateBlock": false,
+      "candidateTitle": null,
+      "candidateSubtitle": null,
+      "legend": null,
+      "note": null,
+      "candidates": [],
+      "radioCount": 0,
+      "topk": [
+        {
+          "rank": "Top-1",
+          "breed": "阿比西尼亚猫",
+          "scoreText": "69.11%"
+        },
+        {
+          "rank": "Top-2",
+          "breed": "斯芬克斯猫",
+          "scoreText": "9.03%"
+        },
+        {
+          "rank": "Top-3",
+          "breed": "miniature_schnauzer",
+          "scoreText": "5.58%"
+        }
+      ],
+      "userChoice": null,
+      "resultNote": "confidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。"
+    }
+  }
+}

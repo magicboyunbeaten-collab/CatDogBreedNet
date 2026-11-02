@@ -1,0 +1,32 @@
+{
+  "processed": {
+    "exists": true,
+    "files": 7349,
+    "bytes": 790860970
+  },
+  "processed_clean": {
+    "exists": true,
+    "files": 7325,
+    "bytes": 787775992
+  },
+  "raw": {
+    "exists": true,
+    "files": 25867,
+    "bytes": 1632137687
+  },
+  "v2_processed": {
+    "exists": true,
+    "files": 24098,
+    "bytes": 1428084982
+  },
+  "v2_processed_prev": {
+    "exists": true,
+    "files": 29158,
+    "bytes": 1622680409
+  },
+  "uploads": {
+    "exists": true,
+    "files": 142,
+    "bytes": 14678086
+  }
+}

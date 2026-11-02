@@ -1,0 +1,2 @@
+split,tag,weights,class_names,n_samples,n_classes,batch_size,image_size,device,elapsed_seconds,accuracy,macro_f1,weighted_f1,evaluated_at,test_split_access_count
+val,exp06_i256,artifacts\v2_2_border_collie_exp06_resolution256_lowlr_seed42\best_model.pth,artifacts\v2_2_border_collie_exp06_resolution256_lowlr_seed42\class_names.json,2079,136,32,256,cuda,23.86,0.809524,0.814947,0.808277,2026-10-21T06:35:11.595481+00:00,0

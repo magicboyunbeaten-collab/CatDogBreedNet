@@ -1,0 +1,232 @@
+{
+  "generated_at": "2026-10-19T13:53:05.472547+00:00",
+  "mode": "default",
+  "split_used": "validation only (test split never read)",
+  "test_split_access_count": 0,
+  "samples": {
+    "competition": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_11.jpg",
+    "apbt_top1": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_132.jpg",
+    "sbt_top1": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\staffordshire_bull_terrier\\staffordshire_bull_terrier_160.jpg",
+    "cat": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\Abyssinian\\Abyssinian_10.jpg"
+  },
+  "checks": [
+    {
+      "check": "health: 模型已加载",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "health: 类别数 = 136",
+      "passed": true,
+      "detail": "136"
+    },
+    {
+      "check": "health: 回报实际加载的权重文件名",
+      "passed": true,
+      "detail": "best_model.pth"
+    },
+    {
+      "check": "A 竞争样本: 候选组触发",
+      "passed": true,
+      "detail": "reason=top-1 在候选组内、组内总概率 0.9979 ≥ 0.30 且组内分差 0.0716 ≤ 0.40"
+    },
+    {
+      "check": "A 竞争样本: 四候选齐全",
+      "passed": true,
+      "detail": "american_staffordshire_terrier;staffordshire_bull_terrier;american_pit_bull_terrier;american_bulldog"
+    },
+    {
+      "check": "A 竞争样本: 候选中文名齐全",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "A 竞争样本: 组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.000000"
+    },
+    {
+      "check": "A 竞争样本: 组内得分等于原始概率归一化",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "A 竞争样本: 原始 Top-1 与 predictions[0] 一致",
+      "passed": true,
+      "detail": "american_staffordshire_terrier"
+    },
+    {
+      "check": "A 竞争样本: threshold_version 为四类 B1",
+      "passed": true,
+      "detail": "val-2026-10-19-four-breed-b1"
+    },
+    {
+      "check": "A: 候选同时含 APBT 与 AmStaff",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "A: 原始 Top-1 为 AmStaff（未因候选逻辑改变）",
+      "passed": true,
+      "detail": "american_staffordshire_terrier"
+    },
+    {
+      "check": "B APBT-Top1: 候选组触发",
+      "passed": true,
+      "detail": "reason=top-1 在候选组内、组内总概率 0.8579 ≥ 0.30 且组内分差 0.0766 ≤ 0.40"
+    },
+    {
+      "check": "B APBT-Top1: 四候选齐全",
+      "passed": true,
+      "detail": "american_pit_bull_terrier;american_staffordshire_terrier;staffordshire_bull_terrier;american_bulldog"
+    },
+    {
+      "check": "B APBT-Top1: 候选中文名齐全",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "B APBT-Top1: 组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.000000"
+    },
+    {
+      "check": "B APBT-Top1: 组内得分等于原始概率归一化",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "B APBT-Top1: 原始 Top-1 与 predictions[0] 一致",
+      "passed": true,
+      "detail": "american_pit_bull_terrier"
+    },
+    {
+      "check": "B APBT-Top1: threshold_version 为四类 B1",
+      "passed": true,
+      "detail": "val-2026-10-19-four-breed-b1"
+    },
+    {
+      "check": "B: 原始 Top-1 为 APBT",
+      "passed": true,
+      "detail": "american_pit_bull_terrier"
+    },
+    {
+      "check": "B: 候选组含 APBT",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C SBT-Top1: 候选组触发",
+      "passed": true,
+      "detail": "reason=top-1 在候选组内、组内总概率 0.4579 ≥ 0.30 且组内分差 0.3946 ≤ 0.40"
+    },
+    {
+      "check": "C SBT-Top1: 四候选齐全",
+      "passed": true,
+      "detail": "staffordshire_bull_terrier;american_staffordshire_terrier;american_pit_bull_terrier;american_bulldog"
+    },
+    {
+      "check": "C SBT-Top1: 候选中文名齐全",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C SBT-Top1: 组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.000000"
+    },
+    {
+      "check": "C SBT-Top1: 组内得分等于原始概率归一化",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C SBT-Top1: 原始 Top-1 与 predictions[0] 一致",
+      "passed": true,
+      "detail": "staffordshire_bull_terrier"
+    },
+    {
+      "check": "C SBT-Top1: threshold_version 为四类 B1",
+      "passed": true,
+      "detail": "val-2026-10-19-four-breed-b1"
+    },
+    {
+      "check": "C: 原始 Top-1 为 SBT",
+      "passed": true,
+      "detail": "staffordshire_bull_terrier"
+    },
+    {
+      "check": "D: 非候选组猫图不触发候选组",
+      "passed": true,
+      "detail": "top1=Abyssinian triggered=False reason=top-1 不在候选组内"
+    },
+    {
+      "check": "D: 猫图原始 Top-1 为 Abyssinian（猫）",
+      "passed": true,
+      "detail": "Abyssinian"
+    },
+    {
+      "check": "E: 关闭候选后不返回候选组",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "E: 关闭候选后原始 Top-1 不变",
+      "passed": true,
+      "detail": "american_pit_bull_terrier"
+    },
+    {
+      "check": "E: 关闭候选后原始 Top-K 与分数逐位不变",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F: triggered 全部相同",
+      "passed": true,
+      "detail": "[True, True, True, True, True]"
+    },
+    {
+      "check": "F: 四候选顺序全部相同",
+      "passed": true,
+      "detail": "american_pit_bull_terrier;american_staffordshire_terrier;staffordshire_bull_terrier;american_bulldog"
+    },
+    {
+      "check": "F: 原始 Top-1 标签全部相同",
+      "passed": true,
+      "detail": "american_pit_bull_terrier"
+    },
+    {
+      "check": "F: 原始 Top-1 分数最大绝对差记录",
+      "passed": true,
+      "detail": "max_abs_diff=0.000e+00"
+    },
+    {
+      "check": "F: 组内得分和每次 ≈ 100",
+      "passed": true,
+      "detail": "[100.0, 100.0, 100.0, 100.0, 100.0]"
+    },
+    {
+      "check": "AmBull-Top1 合成样本满足阈值时触发",
+      "passed": true,
+      "detail": "top-1 在候选组内、组内总概率 0.9000 ≥ 0.30 且组内分差 0.1500 ≤ 0.40"
+    },
+    {
+      "check": "AmBull-Top1 合成样本保留原始 Top-1",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "AmBull-Top1 合成样本组内得分和 = 100",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "val 中 AmBull 作 Top-1 的真实样本统计（信息项）",
+      "passed": true,
+      "detail": "9 张 Top-1=AmBull，其中触发 0 张（0 表示 val 无该 Top-1 的触发样本，非缺陷）"
+    }
+  ],
+  "passed": 43,
+  "total": 43,
+  "failed": []
+}

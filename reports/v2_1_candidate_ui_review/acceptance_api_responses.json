@@ -1,0 +1,972 @@
+{
+  "checks": [
+    {
+      "check": "american_pit_bull_terrier/american_pit_bull_terrier_11.jpg 触发",
+      "passed": true,
+      "detail": "reason=top-1 在候选组内、组内总概率 0.9963 ≥ 0.30 且组内分差 0.0716 ≤ 0.40"
+    },
+    {
+      "check": "  三项候选齐全且中文名正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.0"
+    },
+    {
+      "check": "  原始 Top-1 与清单一致",
+      "passed": true,
+      "detail": "american_staffordshire_terrier vs american_staffordshire_terrier"
+    },
+    {
+      "check": "  原始 Top-1 分数与清单一致（GPU 非确定性容差 1e-3）",
+      "passed": true,
+      "detail": "0.53357 vs 0.533677"
+    },
+    {
+      "check": "  候选组 top1_confidence 与原始 Top-1 完全一致",
+      "passed": true,
+      "detail": "0.53357 vs 0.53357"
+    },
+    {
+      "check": "  original_confidence 之和 = group_mass",
+      "passed": true,
+      "detail": "0.9963159999999999 vs 0.996316"
+    },
+    {
+      "check": "  组内得分均等于原始概率归一化",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  DB 无候选组字段",
+      "passed": true,
+      "detail": "columns=['id', 'image_path', 'predicted_breed', 'confidence', 'top_k_json', 'inference_ms', 'created_at']"
+    },
+    {
+      "check": "  DB 记录与响应一致",
+      "passed": true,
+      "detail": "db=american_staffordshire_terrier/0.53357"
+    },
+    {
+      "check": "american_staffordshire_terrier/n02093428_3269.jpg 触发",
+      "passed": true,
+      "detail": "reason=top-1 在候选组内、组内总概率 0.3791 ≥ 0.30 且组内分差 0.3775 ≤ 0.40"
+    },
+    {
+      "check": "  三项候选齐全且中文名正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.0"
+    },
+    {
+      "check": "  原始 Top-1 与清单一致",
+      "passed": true,
+      "detail": "american_staffordshire_terrier vs american_staffordshire_terrier"
+    },
+    {
+      "check": "  原始 Top-1 分数与清单一致（GPU 非确定性容差 1e-3）",
+      "passed": true,
+      "detail": "0.378279 vs 0.378572"
+    },
+    {
+      "check": "  候选组 top1_confidence 与原始 Top-1 完全一致",
+      "passed": true,
+      "detail": "0.378279 vs 0.378279"
+    },
+    {
+      "check": "  original_confidence 之和 = group_mass",
+      "passed": true,
+      "detail": "0.379069 vs 0.379069"
+    },
+    {
+      "check": "  组内得分均等于原始概率归一化",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  DB 无候选组字段",
+      "passed": true,
+      "detail": "columns=['id', 'image_path', 'predicted_breed', 'confidence', 'top_k_json', 'inference_ms', 'created_at']"
+    },
+    {
+      "check": "  DB 记录与响应一致",
+      "passed": true,
+      "detail": "db=american_staffordshire_terrier/0.378279"
+    },
+    {
+      "check": "kelpie/n02105412_133.jpg 触发",
+      "passed": true,
+      "detail": "reason=top-1 在候选组内、组内总概率 0.3922 ≥ 0.30 且组内分差 0.3891 ≤ 0.40"
+    },
+    {
+      "check": "  三项候选齐全且中文名正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=99.99999999999999"
+    },
+    {
+      "check": "  原始 Top-1 与清单一致",
+      "passed": true,
+      "detail": "american_staffordshire_terrier vs american_staffordshire_terrier"
+    },
+    {
+      "check": "  原始 Top-1 分数与清单一致（GPU 非确定性容差 1e-3）",
+      "passed": true,
+      "detail": "0.390528 vs 0.389955"
+    },
+    {
+      "check": "  候选组 top1_confidence 与原始 Top-1 完全一致",
+      "passed": true,
+      "detail": "0.390528 vs 0.390528"
+    },
+    {
+      "check": "  original_confidence 之和 = group_mass",
+      "passed": true,
+      "detail": "0.392162 vs 0.392162"
+    },
+    {
+      "check": "  组内得分均等于原始概率归一化",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  DB 无候选组字段",
+      "passed": true,
+      "detail": "columns=['id', 'image_path', 'predicted_breed', 'confidence', 'top_k_json', 'inference_ms', 'created_at']"
+    },
+    {
+      "check": "  DB 记录与响应一致",
+      "passed": true,
+      "detail": "db=american_staffordshire_terrier/0.390528"
+    },
+    {
+      "check": "rhodesian_ridgeback/n02087394_9698.jpg 触发",
+      "passed": true,
+      "detail": "reason=top-1 在候选组内、组内总概率 0.8853 ≥ 0.30 且组内分差 0.3469 ≤ 0.40"
+    },
+    {
+      "check": "  三项候选齐全且中文名正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.0"
+    },
+    {
+      "check": "  原始 Top-1 与清单一致",
+      "passed": true,
+      "detail": "american_staffordshire_terrier vs american_staffordshire_terrier"
+    },
+    {
+      "check": "  原始 Top-1 分数与清单一致（GPU 非确定性容差 1e-3）",
+      "passed": true,
+      "detail": "0.599383 vs 0.599069"
+    },
+    {
+      "check": "  候选组 top1_confidence 与原始 Top-1 完全一致",
+      "passed": true,
+      "detail": "0.599383 vs 0.599383"
+    },
+    {
+      "check": "  original_confidence 之和 = group_mass",
+      "passed": true,
+      "detail": "0.8853260000000001 vs 0.885326"
+    },
+    {
+      "check": "  组内得分均等于原始概率归一化",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  DB 无候选组字段",
+      "passed": true,
+      "detail": "columns=['id', 'image_path', 'predicted_breed', 'confidence', 'top_k_json', 'inference_ms', 'created_at']"
+    },
+    {
+      "check": "  DB 记录与响应一致",
+      "passed": true,
+      "detail": "db=american_staffordshire_terrier/0.599383"
+    },
+    {
+      "check": "staffordshire_bull_terrier/staffordshire_bull_terrier_160.jpg 触发",
+      "passed": true,
+      "detail": "reason=top-1 在候选组内、组内总概率 0.4573 ≥ 0.30 且组内分差 0.3946 ≤ 0.40"
+    },
+    {
+      "check": "  三项候选齐全且中文名正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.0"
+    },
+    {
+      "check": "  原始 Top-1 与清单一致",
+      "passed": true,
+      "detail": "staffordshire_bull_terrier vs staffordshire_bull_terrier"
+    },
+    {
+      "check": "  原始 Top-1 分数与清单一致（GPU 非确定性容差 1e-3）",
+      "passed": true,
+      "detail": "0.42569 vs 0.425612"
+    },
+    {
+      "check": "  候选组 top1_confidence 与原始 Top-1 完全一致",
+      "passed": true,
+      "detail": "0.42569 vs 0.42569"
+    },
+    {
+      "check": "  original_confidence 之和 = group_mass",
+      "passed": true,
+      "detail": "0.457297 vs 0.457297"
+    },
+    {
+      "check": "  组内得分均等于原始概率归一化",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "  DB 无候选组字段",
+      "passed": true,
+      "detail": "columns=['id', 'image_path', 'predicted_breed', 'confidence', 'top_k_json', 'inference_ms', 'created_at']"
+    },
+    {
+      "check": "  DB 记录与响应一致",
+      "passed": true,
+      "detail": "db=staffordshire_bull_terrier/0.42569"
+    },
+    {
+      "check": "Abyssinian/Abyssinian_10.jpg 未触发",
+      "passed": true,
+      "detail": "reason=top-1 不在候选组内"
+    },
+    {
+      "check": "  原始 Top-K 仍正常返回",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Abyssinian/Abyssinian_107.jpg 未触发",
+      "passed": true,
+      "detail": "reason=top-1 不在候选组内"
+    },
+    {
+      "check": "  原始 Top-K 仍正常返回",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Abyssinian/Abyssinian_112.jpg 未触发",
+      "passed": true,
+      "detail": "reason=top-1 不在候选组内"
+    },
+    {
+      "check": "  原始 Top-K 仍正常返回",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "american_pit_bull_terrier/american_pit_bull_terrier_11.jpg 关闭后无候选组",
+      "passed": true,
+      "detail": "keys=['candidate_group', 'elapsed_ms', 'inference_ms', 'note', 'num_classes', 'predictions', 'preprocess_ms', 'record_id', 'success', 'top_k']"
+    },
+    {
+      "check": "  关闭后 Top-1 与开启时一致",
+      "passed": true,
+      "detail": "american_staffordshire_terrier"
+    },
+    {
+      "check": "american_staffordshire_terrier/n02093428_3269.jpg 关闭后无候选组",
+      "passed": true,
+      "detail": "keys=['candidate_group', 'elapsed_ms', 'inference_ms', 'note', 'num_classes', 'predictions', 'preprocess_ms', 'record_id', 'success', 'top_k']"
+    },
+    {
+      "check": "  关闭后 Top-1 与开启时一致",
+      "passed": true,
+      "detail": "american_staffordshire_terrier"
+    },
+    {
+      "check": "kelpie/n02105412_133.jpg 关闭后无候选组",
+      "passed": true,
+      "detail": "keys=['candidate_group', 'elapsed_ms', 'inference_ms', 'note', 'num_classes', 'predictions', 'preprocess_ms', 'record_id', 'success', 'top_k']"
+    },
+    {
+      "check": "  关闭后 Top-1 与开启时一致",
+      "passed": true,
+      "detail": "american_staffordshire_terrier"
+    },
+    {
+      "check": "rhodesian_ridgeback/n02087394_9698.jpg 关闭后无候选组",
+      "passed": true,
+      "detail": "keys=['candidate_group', 'elapsed_ms', 'inference_ms', 'note', 'num_classes', 'predictions', 'preprocess_ms', 'record_id', 'success', 'top_k']"
+    },
+    {
+      "check": "  关闭后 Top-1 与开启时一致",
+      "passed": true,
+      "detail": "american_staffordshire_terrier"
+    },
+    {
+      "check": "staffordshire_bull_terrier/staffordshire_bull_terrier_160.jpg 关闭后无候选组",
+      "passed": true,
+      "detail": "keys=['candidate_group', 'elapsed_ms', 'inference_ms', 'note', 'num_classes', 'predictions', 'preprocess_ms', 'record_id', 'success', 'top_k']"
+    },
+    {
+      "check": "  关闭后 Top-1 与开启时一致",
+      "passed": true,
+      "detail": "staffordshire_bull_terrier"
+    }
+  ],
+  "passed": 66,
+  "total": 66,
+  "evidence": {
+    "triggered": [
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_11.jpg",
+        "response": {
+          "success": true,
+          "record_id": 1,
+          "predictions": [
+            {
+              "breed": "american_staffordshire_terrier",
+              "confidence": 0.53357
+            },
+            {
+              "breed": "staffordshire_bull_terrier",
+              "confidence": 0.461983
+            },
+            {
+              "breed": "american_pit_bull_terrier",
+              "confidence": 0.001579
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "threshold_version": "val-2026-10-19-v1",
+            "top1_breed": "american_staffordshire_terrier",
+            "top1_confidence": 0.53357,
+            "candidates": [
+              {
+                "breed": "american_staffordshire_terrier",
+                "breed_zh": "美国斯塔福郡梗",
+                "original_confidence": 0.53357,
+                "group_score": 53.5543
+              },
+              {
+                "breed": "staffordshire_bull_terrier",
+                "breed_zh": "斯塔福郡斗牛梗",
+                "original_confidence": 0.461983,
+                "group_score": 46.3691
+              },
+              {
+                "breed": "american_bulldog",
+                "breed_zh": "美国斗牛犬",
+                "original_confidence": 0.000763,
+                "group_score": 0.0766
+              }
+            ],
+            "available_candidates": [
+              "american_staffordshire_terrier",
+              "staffordshire_bull_terrier",
+              "american_bulldog"
+            ],
+            "group_mass": 0.996316,
+            "group_margin": 0.071587,
+            "reason": "top-1 在候选组内、组内总概率 0.9963 ≥ 0.30 且组内分差 0.0716 ≤ 0.40"
+          },
+          "elapsed_ms": 224.801,
+          "inference_ms": 190.453,
+          "preprocess_ms": 4.954,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_staffordshire_terrier\\n02093428_3269.jpg",
+        "response": {
+          "success": true,
+          "record_id": 2,
+          "predictions": [
+            {
+              "breed": "american_staffordshire_terrier",
+              "confidence": 0.378279
+            },
+            {
+              "breed": "walker_hound",
+              "confidence": 0.330221
+            },
+            {
+              "breed": "american_pit_bull_terrier",
+              "confidence": 0.122174
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "threshold_version": "val-2026-10-19-v1",
+            "top1_breed": "american_staffordshire_terrier",
+            "top1_confidence": 0.378279,
+            "candidates": [
+              {
+                "breed": "american_staffordshire_terrier",
+                "breed_zh": "美国斯塔福郡梗",
+                "original_confidence": 0.378279,
+                "group_score": 99.7916
+              },
+              {
+                "breed": "american_bulldog",
+                "breed_zh": "美国斗牛犬",
+                "original_confidence": 0.000772,
+                "group_score": 0.2037
+              },
+              {
+                "breed": "staffordshire_bull_terrier",
+                "breed_zh": "斯塔福郡斗牛梗",
+                "original_confidence": 1.8e-05,
+                "group_score": 0.0047
+              }
+            ],
+            "available_candidates": [
+              "american_staffordshire_terrier",
+              "staffordshire_bull_terrier",
+              "american_bulldog"
+            ],
+            "group_mass": 0.379069,
+            "group_margin": 0.377507,
+            "reason": "top-1 在候选组内、组内总概率 0.3791 ≥ 0.30 且组内分差 0.3775 ≤ 0.40"
+          },
+          "elapsed_ms": 15.425,
+          "inference_ms": 2.679,
+          "preprocess_ms": 1.441,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\kelpie\\n02105412_133.jpg",
+        "response": {
+          "success": true,
+          "record_id": 3,
+          "predictions": [
+            {
+              "breed": "american_staffordshire_terrier",
+              "confidence": 0.390528
+            },
+            {
+              "breed": "entlebucher",
+              "confidence": 0.303473
+            },
+            {
+              "breed": "appenzeller",
+              "confidence": 0.17511
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "threshold_version": "val-2026-10-19-v1",
+            "top1_breed": "american_staffordshire_terrier",
+            "top1_confidence": 0.390528,
+            "candidates": [
+              {
+                "breed": "american_staffordshire_terrier",
+                "breed_zh": "美国斯塔福郡梗",
+                "original_confidence": 0.390528,
+                "group_score": 99.5833
+              },
+              {
+                "breed": "american_bulldog",
+                "breed_zh": "美国斗牛犬",
+                "original_confidence": 0.001443,
+                "group_score": 0.368
+              },
+              {
+                "breed": "staffordshire_bull_terrier",
+                "breed_zh": "斯塔福郡斗牛梗",
+                "original_confidence": 0.000191,
+                "group_score": 0.0487
+              }
+            ],
+            "available_candidates": [
+              "american_staffordshire_terrier",
+              "staffordshire_bull_terrier",
+              "american_bulldog"
+            ],
+            "group_mass": 0.392162,
+            "group_margin": 0.389085,
+            "reason": "top-1 在候选组内、组内总概率 0.3922 ≥ 0.30 且组内分差 0.3891 ≤ 0.40"
+          },
+          "elapsed_ms": 31.442,
+          "inference_ms": 4.708,
+          "preprocess_ms": 2.166,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\rhodesian_ridgeback\\n02087394_9698.jpg",
+        "response": {
+          "success": true,
+          "record_id": 4,
+          "predictions": [
+            {
+              "breed": "american_staffordshire_terrier",
+              "confidence": 0.599383
+            },
+            {
+              "breed": "american_bulldog",
+              "confidence": 0.252499
+            },
+            {
+              "breed": "staffordshire_bull_terrier",
+              "confidence": 0.033444
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "threshold_version": "val-2026-10-19-v1",
+            "top1_breed": "american_staffordshire_terrier",
+            "top1_confidence": 0.599383,
+            "candidates": [
+              {
+                "breed": "american_staffordshire_terrier",
+                "breed_zh": "美国斯塔福郡梗",
+                "original_confidence": 0.599383,
+                "group_score": 67.7019
+              },
+              {
+                "breed": "american_bulldog",
+                "breed_zh": "美国斗牛犬",
+                "original_confidence": 0.252499,
+                "group_score": 28.5205
+              },
+              {
+                "breed": "staffordshire_bull_terrier",
+                "breed_zh": "斯塔福郡斗牛梗",
+                "original_confidence": 0.033444,
+                "group_score": 3.7776
+              }
+            ],
+            "available_candidates": [
+              "american_staffordshire_terrier",
+              "staffordshire_bull_terrier",
+              "american_bulldog"
+            ],
+            "group_mass": 0.885326,
+            "group_margin": 0.346884,
+            "reason": "top-1 在候选组内、组内总概率 0.8853 ≥ 0.30 且组内分差 0.3469 ≤ 0.40"
+          },
+          "elapsed_ms": 34.025,
+          "inference_ms": 2.965,
+          "preprocess_ms": 3.733,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\staffordshire_bull_terrier\\staffordshire_bull_terrier_160.jpg",
+        "response": {
+          "success": true,
+          "record_id": 5,
+          "predictions": [
+            {
+              "breed": "staffordshire_bull_terrier",
+              "confidence": 0.42569
+            },
+            {
+              "breed": "boxer",
+              "confidence": 0.215762
+            },
+            {
+              "breed": "rhodesian_ridgeback",
+              "confidence": 0.199899
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "threshold_version": "val-2026-10-19-v1",
+            "top1_breed": "staffordshire_bull_terrier",
+            "top1_confidence": 0.42569,
+            "candidates": [
+              {
+                "breed": "staffordshire_bull_terrier",
+                "breed_zh": "斯塔福郡斗牛梗",
+                "original_confidence": 0.42569,
+                "group_score": 93.0883
+              },
+              {
+                "breed": "american_staffordshire_terrier",
+                "breed_zh": "美国斯塔福郡梗",
+                "original_confidence": 0.031138,
+                "group_score": 6.8091
+              },
+              {
+                "breed": "american_bulldog",
+                "breed_zh": "美国斗牛犬",
+                "original_confidence": 0.000469,
+                "group_score": 0.1026
+              }
+            ],
+            "available_candidates": [
+              "american_staffordshire_terrier",
+              "staffordshire_bull_terrier",
+              "american_bulldog"
+            ],
+            "group_mass": 0.457297,
+            "group_margin": 0.394552,
+            "reason": "top-1 在候选组内、组内总概率 0.4573 ≥ 0.30 且组内分差 0.3946 ≤ 0.40"
+          },
+          "elapsed_ms": 33.646,
+          "inference_ms": 4.405,
+          "preprocess_ms": 2.075,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      }
+    ],
+    "controls": [
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\Abyssinian\\Abyssinian_10.jpg",
+        "response": {
+          "success": true,
+          "record_id": 1,
+          "predictions": [
+            {
+              "breed": "Abyssinian",
+              "confidence": 0.691075
+            },
+            {
+              "breed": "Sphynx",
+              "confidence": 0.090271
+            },
+            {
+              "breed": "miniature_schnauzer",
+              "confidence": 0.055825
+            }
+          ],
+          "candidate_group": {
+            "triggered": false,
+            "threshold_version": "val-2026-10-19-v1",
+            "top1_breed": "Abyssinian",
+            "top1_confidence": 0.691075,
+            "candidates": [
+              {
+                "breed": "american_bulldog",
+                "breed_zh": "美国斗牛犬",
+                "original_confidence": 0.000407,
+                "group_score": 96.9047
+              },
+              {
+                "breed": "staffordshire_bull_terrier",
+                "breed_zh": "斯塔福郡斗牛梗",
+                "original_confidence": 8e-06,
+                "group_score": 1.9048
+              },
+              {
+                "breed": "american_staffordshire_terrier",
+                "breed_zh": "美国斯塔福郡梗",
+                "original_confidence": 5e-06,
+                "group_score": 1.1905
+              }
+            ],
+            "available_candidates": [
+              "american_staffordshire_terrier",
+              "staffordshire_bull_terrier",
+              "american_bulldog"
+            ],
+            "group_mass": 0.00042,
+            "group_margin": 0.000399,
+            "reason": "top-1 不在候选组内"
+          },
+          "elapsed_ms": 26.729,
+          "inference_ms": 4.58,
+          "preprocess_ms": 3.504,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\Abyssinian\\Abyssinian_107.jpg",
+        "response": {
+          "success": true,
+          "record_id": 2,
+          "predictions": [
+            {
+              "breed": "Abyssinian",
+              "confidence": 0.731416
+            },
+            {
+              "breed": "British_Shorthair",
+              "confidence": 0.123294
+            },
+            {
+              "breed": "Egyptian_Mau",
+              "confidence": 0.089735
+            }
+          ],
+          "candidate_group": {
+            "triggered": false,
+            "threshold_version": "val-2026-10-19-v1",
+            "top1_breed": "Abyssinian",
+            "top1_confidence": 0.731416,
+            "candidates": [
+              {
+                "breed": "american_bulldog",
+                "breed_zh": "美国斗牛犬",
+                "original_confidence": 0.002399,
+                "group_score": 64.698
+              },
+              {
+                "breed": "staffordshire_bull_terrier",
+                "breed_zh": "斯塔福郡斗牛梗",
+                "original_confidence": 0.000674,
+                "group_score": 18.1769
+              },
+              {
+                "breed": "american_staffordshire_terrier",
+                "breed_zh": "美国斯塔福郡梗",
+                "original_confidence": 0.000635,
+                "group_score": 17.1251
+              }
+            ],
+            "available_candidates": [
+              "american_staffordshire_terrier",
+              "staffordshire_bull_terrier",
+              "american_bulldog"
+            ],
+            "group_mass": 0.003708,
+            "group_margin": 0.001725,
+            "reason": "top-1 不在候选组内"
+          },
+          "elapsed_ms": 26.519,
+          "inference_ms": 2.931,
+          "preprocess_ms": 1.936,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\Abyssinian\\Abyssinian_112.jpg",
+        "response": {
+          "success": true,
+          "record_id": 3,
+          "predictions": [
+            {
+              "breed": "Abyssinian",
+              "confidence": 0.998585
+            },
+            {
+              "breed": "Maine_Coon",
+              "confidence": 0.000632
+            },
+            {
+              "breed": "Bengal",
+              "confidence": 0.00052
+            }
+          ],
+          "candidate_group": {
+            "triggered": false,
+            "threshold_version": "val-2026-10-19-v1",
+            "top1_breed": "Abyssinian",
+            "top1_confidence": 0.998585,
+            "candidates": [
+              {
+                "breed": "american_staffordshire_terrier",
+                "breed_zh": "美国斯塔福郡梗",
+                "original_confidence": 0.0,
+                "group_score": 33.3334
+              },
+              {
+                "breed": "staffordshire_bull_terrier",
+                "breed_zh": "斯塔福郡斗牛梗",
+                "original_confidence": 0.0,
+                "group_score": 33.3333
+              },
+              {
+                "breed": "american_bulldog",
+                "breed_zh": "美国斗牛犬",
+                "original_confidence": 0.0,
+                "group_score": 33.3333
+              }
+            ],
+            "available_candidates": [
+              "american_staffordshire_terrier",
+              "staffordshire_bull_terrier",
+              "american_bulldog"
+            ],
+            "group_mass": 0.0,
+            "group_margin": 0.0,
+            "reason": "top-1 不在候选组内"
+          },
+          "elapsed_ms": 24.186,
+          "inference_ms": 2.934,
+          "preprocess_ms": 2.13,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      }
+    ],
+    "switch_off": [
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_11.jpg",
+        "response": {
+          "success": true,
+          "record_id": 1,
+          "predictions": [
+            {
+              "breed": "american_staffordshire_terrier",
+              "confidence": 0.53357
+            },
+            {
+              "breed": "staffordshire_bull_terrier",
+              "confidence": 0.461983
+            },
+            {
+              "breed": "american_pit_bull_terrier",
+              "confidence": 0.001579
+            }
+          ],
+          "candidate_group": null,
+          "elapsed_ms": 27.56,
+          "inference_ms": 7.012,
+          "preprocess_ms": 3.652,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_staffordshire_terrier\\n02093428_3269.jpg",
+        "response": {
+          "success": true,
+          "record_id": 2,
+          "predictions": [
+            {
+              "breed": "american_staffordshire_terrier",
+              "confidence": 0.378279
+            },
+            {
+              "breed": "walker_hound",
+              "confidence": 0.330221
+            },
+            {
+              "breed": "american_pit_bull_terrier",
+              "confidence": 0.122174
+            }
+          ],
+          "candidate_group": null,
+          "elapsed_ms": 29.081,
+          "inference_ms": 4.598,
+          "preprocess_ms": 2.023,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\kelpie\\n02105412_133.jpg",
+        "response": {
+          "success": true,
+          "record_id": 3,
+          "predictions": [
+            {
+              "breed": "american_staffordshire_terrier",
+              "confidence": 0.390528
+            },
+            {
+              "breed": "entlebucher",
+              "confidence": 0.303473
+            },
+            {
+              "breed": "appenzeller",
+              "confidence": 0.17511
+            }
+          ],
+          "candidate_group": null,
+          "elapsed_ms": 30.909,
+          "inference_ms": 4.593,
+          "preprocess_ms": 2.29,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\rhodesian_ridgeback\\n02087394_9698.jpg",
+        "response": {
+          "success": true,
+          "record_id": 4,
+          "predictions": [
+            {
+              "breed": "american_staffordshire_terrier",
+              "confidence": 0.599383
+            },
+            {
+              "breed": "american_bulldog",
+              "confidence": 0.252499
+            },
+            {
+              "breed": "staffordshire_bull_terrier",
+              "confidence": 0.033444
+            }
+          ],
+          "candidate_group": null,
+          "elapsed_ms": 36.002,
+          "inference_ms": 4.544,
+          "preprocess_ms": 3.846,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\staffordshire_bull_terrier\\staffordshire_bull_terrier_160.jpg",
+        "response": {
+          "success": true,
+          "record_id": 5,
+          "predictions": [
+            {
+              "breed": "staffordshire_bull_terrier",
+              "confidence": 0.42569
+            },
+            {
+              "breed": "boxer",
+              "confidence": 0.215762
+            },
+            {
+              "breed": "rhodesian_ridgeback",
+              "confidence": 0.199899
+            }
+          ],
+          "candidate_group": null,
+          "elapsed_ms": 29.794,
+          "inference_ms": 4.489,
+          "preprocess_ms": 2.082,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      }
+    ]
+  }
+}

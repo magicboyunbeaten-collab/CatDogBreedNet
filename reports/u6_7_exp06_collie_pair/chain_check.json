@@ -1,0 +1,115 @@
+{
+  "stage": "B - resolution chain check",
+  "writes_to_formal_db_or_uploads": 0,
+  "checks": [
+    {
+      "check": "config 默认 DEFAULT_IMAGE_SIZE",
+      "passed": true,
+      "detail": "DEFAULT_IMAGE_SIZE=256"
+    },
+    {
+      "check": "Settings 默认 image_size",
+      "passed": true,
+      "detail": "image_size=256"
+    },
+    {
+      "check": "默认模型目录为 exp06",
+      "passed": true,
+      "detail": "v2_2_border_collie_exp06_resolution256_lowlr_seed42"
+    },
+    {
+      "check": "默认权重存在",
+      "passed": true,
+      "detail": "best_model.pth"
+    },
+    {
+      "check": "默认类名表与 checkpoint 同源",
+      "passed": true,
+      "detail": "v2_1_136classes_seed42"
+    },
+    {
+      "check": "CATDOG_IMAGE_SIZE 覆盖生效（回退用，非默认）",
+      "passed": true,
+      "detail": "image_size=224"
+    },
+    {
+      "check": "覆盖不影响默认值",
+      "passed": true,
+      "detail": "默认仍为 256"
+    },
+    {
+      "check": "PredictorService 接受 image_size",
+      "passed": true,
+      "detail": "['self', 'weights_path', 'device', 'class_names_path', 'candidate_group_enabled', 'image_size']"
+    },
+    {
+      "check": "ml.Predictor 接受 image_size",
+      "passed": true,
+      "detail": "默认=224"
+    },
+    {
+      "check": "predict_pil 使用 self.image_size 构造 transform",
+      "passed": true,
+      "detail": "build_transforms(... image_size=self.image_size)"
+    },
+    {
+      "check": "transform 输出随分辨率变化",
+      "passed": true,
+      "detail": "256 -> (3, 256, 256), 224 -> (3, 224, 224)"
+    },
+    {
+      "check": "HealthResponse 有 model_version 字段",
+      "passed": true,
+      "detail": "['status', 'model_loaded', 'num_classes', 'model_weights', 'model_version', 'model_error', 'version', 'time']"
+    },
+    {
+      "check": "启动后端.bat 不设置任何 CATDOG_*",
+      "passed": true,
+      "detail": "无"
+    },
+    {
+      "check": "启动后端.bat 默认目录指向 exp06",
+      "passed": true,
+      "detail": "含 exp06 目录"
+    },
+    {
+      "check": "启动后端.bat 回退提示含 CATDOG_IMAGE_SIZE",
+      "passed": true,
+      "detail": "含分辨率回退提示"
+    },
+    {
+      "check": "启动系统.bat 不设置任何 CATDOG_*",
+      "passed": true,
+      "detail": "无"
+    },
+    {
+      "check": "启动系统.bat 默认目录指向 exp06",
+      "passed": true,
+      "detail": "含 exp06 目录"
+    },
+    {
+      "check": "启动系统.bat 回退提示含 CATDOG_IMAGE_SIZE",
+      "passed": true,
+      "detail": "含分辨率回退提示"
+    },
+    {
+      "check": "config 回退说明同时给出 WEIGHTS/CLASS_NAMES/IMAGE_SIZE",
+      "passed": true,
+      "detail": "三项均出现"
+    },
+    {
+      "check": "exp06 model_version.json 可识别",
+      "passed": true,
+      "detail": "v2_2_exp06_resolution256_lowlr_seed42"
+    },
+    {
+      "check": "版本清单记录 image_size",
+      "passed": true,
+      "detail": 256
+    }
+  ],
+  "passed": 21,
+  "total": 21,
+  "all_passed": true,
+  "note": "链路在 U6.6 已打通；本轮仅核查，未重复修改代码。CATDOG_IMAGE_SIZE=224 的覆盖路径已验证生效，但不作为默认值。"
+}

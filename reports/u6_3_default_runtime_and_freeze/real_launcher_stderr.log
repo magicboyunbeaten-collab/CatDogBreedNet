@@ -1,0 +1,9 @@
+'�量' is not recognized as an internal or external command,
+operable program or batch file.
+INFO:     Started server process [45772]
+INFO:     Waiting for application startup.
+INFO:     database ready: app.db
+INFO:     class mapping verified against class_names.json (136 classes)
+INFO:     model ready: version=v2_1_136classes_candidate arch=resnet18 classes=136 device=cuda (weights: best_model.pth)
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)

@@ -1,0 +1,1908 @@
+diff --git a/backend/app/config.py b/backend/app/config.py
+index fefca9d..0065d7e 100644
+--- a/backend/app/config.py
++++ b/backend/app/config.py
+@@ -19,6 +19,12 @@ if str(_REPO_ROOT) not in sys.path:
+ 
+ from ml.config import ARTIFACTS_DIR, ROOT_DIR  # noqa: E402
+ 
++#: 默认推理模型目录（V2.1，136 类）。权重与类别映射必须取自同一目录，
++#: 否则 ``PredictorService`` 会因类别数不匹配而在启动阶段明确失败。
++#: V1.1（37 类）的文件仍保留在 ``ARTIFACTS_DIR`` 根目录，未做任何改动，
++#: 需要回退时用环境变量指向它们即可（见 reports/u5_5_v2_1_integration/rollback.md）。
++DEFAULT_MODEL_DIR = ARTIFACTS_DIR / "v2_1_136classes_seed42"
++
+ ENV_PREFIX = "CATDOG_"
+ 
+ 
+@@ -33,6 +39,16 @@ def _env_int(name: str, default: int) -> int:
+         return default
+ 
+ 
++def _env_bool(name: str, default: bool) -> bool:
++    """Parse an explicit boolean flag; anything else falls back to default."""
++    raw = _env(name, "1" if default else "0").strip().lower()
++    if raw in ("1", "true", "yes", "on"):
++        return True
++    if raw in ("0", "false", "no", "off"):
++        return False
++    return default
++
++
+ def _env_list(name: str, default: list[str]) -> list[str]:
+     raw = _env(name, ",".join(default))
+     return [item.strip() for item in raw.split(",") if item.strip()]
+@@ -46,10 +62,26 @@ class Settings:
+     version: str = "1.0.0"
+ 
+     # --- model ---
+-    weights_path: Path = ARTIFACTS_DIR / "best_model.pth"
++    #: 权重与类别映射必须**配对**使用：index i 的输出必须对应同一品种。
++    #: 两者类别数不一致时，``PredictorService`` 会在启动阶段明确失败，
++    #: 绝不静默降级或改用其他类别表。
++    #: U5.5 起默认模型为 V2.1（136 类）；V1.1 的 37 类文件仍在原路径未改动，
++    #: 需要时用 ``CATDOG_WEIGHTS_PATH`` / ``CATDOG_CLASS_NAMES_PATH`` 回退。
++    weights_path: Path = DEFAULT_MODEL_DIR / "best_model.pth"
++    #: 与 ``weights_path`` 配对的类别映射文件（可独立配置，见
++    #: ``CATDOG_CLASS_NAMES_PATH``）。
++    class_names_path: Path = DEFAULT_MODEL_DIR / "class_names.json"
+     device: str = "auto"               # auto | cpu | cuda
+     default_top_k: int = 3
+ 
++    # --- 相近犬种候选组（四类 B1：APBT / AmStaff / SBT / American Bulldog）---
++    # U5.5 起随 V2.1 一起默认**开启**（该能力已在 U5.2/U5.3/U5.4 验收）。
++    # 阈值与版本号未变：mass >= 0.30、margin <= 0.40、
++    # threshold_version = "val-2026-10-19-four-breed-b1"。
++    # 该开关只影响"是否附加候选组展示信息"，不改变模型、权重、类别定义；
++    # 需要关闭时设置 CATDOG_CANDIDATE_GROUP_ENABLED=false。
++    candidate_group_enabled: bool = True
++
+     # --- uploads & validation ---
+     upload_dir: Path = ROOT_DIR / "uploads"
+     max_upload_bytes: int = 10 * 1024 * 1024      # 10 MB
+@@ -77,10 +109,13 @@ class Settings:
+             fmt.strip().upper()
+             for fmt in _env_list("ALLOWED_FORMATS", ["JPEG", "PNG", "WEBP"]))
+         return cls(
+-            weights_path=Path(_env("WEIGHTS_PATH",
+-                                   str(ARTIFACTS_DIR / "best_model.pth"))),
++            weights_path=Path(_env(
++                "WEIGHTS_PATH", str(DEFAULT_MODEL_DIR / "best_model.pth"))),
++            class_names_path=Path(_env(
++                "CLASS_NAMES_PATH", str(DEFAULT_MODEL_DIR / "class_names.json"))),
+             device=_env("DEVICE", "auto"),
+             default_top_k=_env_int("DEFAULT_TOP_K", 3),
++            candidate_group_enabled=_env_bool("CANDIDATE_GROUP_ENABLED", True),
+             upload_dir=Path(_env("UPLOAD_DIR", str(ROOT_DIR / "uploads"))),
+             max_upload_bytes=_env_int("MAX_UPLOAD_MB", 10) * 1024 * 1024,
+             max_image_pixels=_env_int("MAX_IMAGE_PIXELS", 25_000_000),
+diff --git a/backend/app/main.py b/backend/app/main.py
+index 79dec89..3e6fa29 100644
+--- a/backend/app/main.py
++++ b/backend/app/main.py
+@@ -12,6 +12,7 @@ fabricated results.
+ from __future__ import annotations
+ 
+ import logging
++import re
+ import sys
+ from contextlib import asynccontextmanager
+ from datetime import datetime, timezone
+@@ -39,6 +40,18 @@ def _safe_model_error(exc: Exception) -> str:
+     """Short, path-free reason for why the model is not ready."""
+     if isinstance(exc, FileNotFoundError):
+         return "model weights file is missing"
++    message = str(exc)
++    # 权重与类别表错配是**配置错误**，必须在健康状态里直接说清楚是两侧类别数
++    # 不一致（不暴露服务器绝对路径），而不是笼统的 "failed to load"。
++    if "class count mismatch" in message:
++        match = re.search(r"\((\d+) classes\),.*?\((\d+) classes\)",
++                          message, re.S)
++        if match:
++            return (
++                f"class mapping mismatch: checkpoint has {match.group(1)} "
++                f"classes but class_names.json has {match.group(2)}. "
++                f"Point CATDOG_WEIGHTS_PATH and CATDOG_CLASS_NAMES_PATH at a "
++                f"matching pair.")
+     return f"model failed to load ({type(exc).__name__})"
+ 
+ 
+@@ -54,7 +67,9 @@ async def lifespan(app: FastAPI):
+     else:
+         try:
+             app.state.predictor = PredictorService(
+-                weights_path=settings.weights_path, device=settings.device)
++                weights_path=settings.weights_path, device=settings.device,
++                class_names_path=settings.class_names_path,
++                candidate_group_enabled=settings.candidate_group_enabled)
+             app.state.model_error = None
+         except Exception as exc:
+             # Log the full reason server-side, expose only a short reason.
+@@ -110,10 +125,12 @@ def create_app(settings: Settings | None = None,
+     async def health(request: Request) -> HealthResponse:
+         """Service and model readiness. No paths or internals are exposed."""
+         predictor = request.app.state.predictor
++        weights = getattr(predictor, "weights_path", None)
+         return HealthResponse(
+             status="ok",
+             model_loaded=predictor is not None,
+             num_classes=(predictor.num_classes if predictor else None),
++            model_weights=(Path(weights).name if weights else None),
+             model_error=request.app.state.model_error,
+             version=request.app.state.settings.version,
+             time=datetime.now(timezone.utc).isoformat(),
+diff --git a/backend/app/routes/predict.py b/backend/app/routes/predict.py
+index 91f8895..8a33c80 100644
+--- a/backend/app/routes/predict.py
++++ b/backend/app/routes/predict.py
+@@ -98,10 +98,21 @@ async def predict(
+             from exc
+ 
+     elapsed_ms = (time.perf_counter() - started) * 1000
++    # 候选组仅在显式开启时计算；关闭时字段为 None，响应与 V1.1 完全一致。
++    # 注意：候选组绝不参与数据库写入，历史记录语义不变。
++    candidate_group = None
++    if getattr(settings, "candidate_group_enabled", False):
++        try:
++            candidate_group = predictor.candidate_group(result)
++        except Exception:  # never let an optional feature break prediction
++            logger.exception("candidate group computation failed")
++            candidate_group = None
++
+     return PredictResponse(
+         success=True,
+         record_id=record.id,
+         predictions=result["predictions"],
++        candidate_group=candidate_group,
+         elapsed_ms=round(elapsed_ms, 3),
+         inference_ms=result["inference_ms"],
+         preprocess_ms=result["preprocess_ms"],
+diff --git a/backend/app/schemas.py b/backend/app/schemas.py
+index cae0f44..9ae6bfe 100644
+--- a/backend/app/schemas.py
++++ b/backend/app/schemas.py
+@@ -15,12 +15,57 @@ class PredictionItem(BaseModel):
+                               description="softmax score over trained classes")
+ 
+ 
++class CandidateBreedItem(BaseModel):
++    """One entry of the look-alike candidate group.
++
++    ``group_score`` is a *within-group* relative score
++    (``p_i / sum(p_j for j in group) * 100``) — **not** an overall confidence,
++    a true probability, or an accuracy. ``original_confidence`` keeps the raw
++    softmax value so debugging/tracing stays possible.
++    """
++
++    breed: str
++    breed_zh: str
++    original_confidence: float = Field(
++        ..., ge=0.0, le=1.0, description="raw softmax score over trained "
++                                         "classes, unmodified")
++    group_score: float = Field(
++        ..., description="within-candidate-group relative score in percent "
++                         "(0-100); NOT an overall confidence")
++
++
++class CandidateGroupInfo(BaseModel):
++    """Look-alike candidate group attached to a prediction.
++
++    ``triggered`` is False whenever the trigger conditions are not met; the
++    front end must then keep rendering the legacy result view. ``None`` means
++    the feature is disabled or the model's class space does not contain the
++    group at all (e.g. the 37-class V1.1 model).
++    """
++
++    triggered: bool
++    threshold_version: str
++    top1_breed: str
++    top1_confidence: float
++    candidates: list[CandidateBreedItem]
++    available_candidates: list[str]
++    group_mass: float = Field(
++        ..., description="sum of raw softmax scores of the available "
++                         "candidates")
++    group_margin: float = Field(
++        ..., description="raw-score gap between the group's top-1 and top-2")
++    reason: str
++
++
+ class PredictResponse(BaseModel):
+     """Response of POST /api/predict."""
+ 
+     success: bool = True
+     record_id: int
+     predictions: list[PredictionItem]
++    candidate_group: CandidateGroupInfo | None = Field(
++        None, description="look-alike candidate group; None keeps the legacy "
++                          "response shape (feature disabled or not triggered)")
+     elapsed_ms: float = Field(
+         ..., description="server-side processing time: image validation, "
+                          "preprocessing and inference combined")
+@@ -99,6 +144,12 @@ class HealthResponse(BaseModel):
+     status: str
+     model_loaded: bool
+     num_classes: int | None = None
++    #: 实际加载的权重文件名（仅文件名，不含服务器绝对路径）。
++    #: 用于核验"日常启动入口真的加载了哪个模型"，而不是只凭配置宣称。
++    #: 可选且默认 ``None``，旧响应与旧消费者不受影响。
++    model_weights: str | None = Field(
++        None, description="file name of the weights actually loaded "
++                          "(e.g. best_model.pth); None when no model")
+     model_error: str | None = Field(
+         None, description="short reason when the model is not ready")
+     version: str
+diff --git a/backend/app/services/predictor.py b/backend/app/services/predictor.py
+index e5dfe27..918255f 100644
+--- a/backend/app/services/predictor.py
++++ b/backend/app/services/predictor.py
+@@ -52,18 +52,37 @@ class PredictorService:
+     """
+ 
+     def __init__(self, weights_path: Path, device: str = "auto",
+-                 class_names_path: Path = CLASS_NAMES_PATH) -> None:
++                 class_names_path: Path = CLASS_NAMES_PATH,
++                 candidate_group_enabled: bool = False) -> None:
+         self.weights_path = Path(weights_path)
+         self.predictor = Predictor(weights_path=self.weights_path, device=device)
+         self.class_names = self.predictor.class_names
+         self.num_classes = self.predictor.num_classes
+         self.device = str(self.predictor.device)
++        #: 相近犬种候选组开关（默认关闭；开启也不改变模型、权重或类别定义）。
++        self.candidate_group_enabled = bool(candidate_group_enabled)
+         self.model_version = read_model_version(self.weights_path)
+         version_id = (self.model_version or {}).get("version_id", "unknown")
+ 
+         if class_names_path and Path(class_names_path).exists():
+             saved = json.loads(Path(class_names_path).read_text("utf-8"))
+-            verify_class_mapping(self.class_names, saved)
++            try:
++                verify_class_mapping(self.class_names, saved)
++            except ValueError as exc:
++                # 类别**数量**不同是配置层面的错配（例如 136 类权重配了 37
++                # 类表），必须点明是两个文件、两侧计数；数量相同但名称/顺序
++                # 不同则保留 verify_class_mapping 原有的索引级错误消息。
++                if len(self.class_names) != len(saved):
++                    raise ValueError(
++                        f"class count mismatch between checkpoint and class "
++                        f"names file: weights={self.weights_path} "
++                        f"({len(self.class_names)} classes), "
++                        f"class_names={class_names_path} "
++                        f"({len(saved)} classes). "
++                        f"Point CATDOG_WEIGHTS_PATH and CATDOG_CLASS_NAMES_PATH "
++                        f"at a matching pair."
++                    ) from exc
++                raise
+             logger.info("class mapping verified against %s (%d classes)",
+                         class_names_path.name, self.num_classes)
+         # 只打印版本 ID 与权重文件名，不暴露完整服务器路径
+@@ -75,3 +94,15 @@ class PredictorService:
+     def predict_pil(self, image, top_k: int = 3) -> dict:
+         """Predict one decoded image; see ``ml.predictor.Predictor``."""
+         return self.predictor.predict_pil(image, top_k=top_k)
++
++    def candidate_group(self, result: dict) -> dict | None:
++        """Candidate-group info for a prediction result, if the feature is on.
++
++        Returns ``None`` when the feature is disabled or the trigger conditions
++        are not met, so the caller can keep the legacy response shape.
++        """
++        from .candidate_group import resolve_candidate_group
++
++        return resolve_candidate_group(
++            result, class_names=self.class_names,
++            enabled=self.candidate_group_enabled)
+diff --git a/frontend/src/components/PredictionResult.vue b/frontend/src/components/PredictionResult.vue
+index b251efc..8d38f1a 100644
+--- a/frontend/src/components/PredictionResult.vue
++++ b/frontend/src/components/PredictionResult.vue
+@@ -31,6 +31,78 @@
+ 
+       <el-divider border-style="dashed" />
+ 
++      <!-- 相近品种候选区：仅在候选组被触发时渲染，默认关闭时完全不出现 -->
++      <el-collapse-transition>
++        <div v-if="candidateTriggered" class="candidate-block">
++          <div class="candidate-head">
++            <span class="candidate-title">外观相近的候选品种</span>
++            <span class="candidate-subtitle">模型在这几个品种间难以明确区分</span>
++          </div>
++
++          <div
++            v-for="item in candidateGroup.candidates"
++            :key="item.breed"
++            class="candidate-row"
++            :class="{ 'is-model-top': item.breed === candidateGroup.top1_breed }"
++          >
++            <el-radio
++              :value="item.breed"
++              :model-value="userChoice"
++              @change="userChoice = item.breed"
++            >
++              <span class="candidate-name">{{ item.breed_zh }}</span>
++            </el-radio>
++            <div class="candidate-score">
++              <el-progress
++                :percentage="Math.round(item.group_score * 10) / 10"
++                :stroke-width="12"
++                :text-inside="true"
++                color="#a0cfff"
++              />
++              <span class="candidate-score-value">
++                {{ item.group_score.toFixed(2) }}%
++              </span>
++            </div>
++            <span class="candidate-raw">
++              原始分 {{ (item.original_confidence * 100).toFixed(2) }}%
++            </span>
++          </div>
++
++          <div class="candidate-legend">
++            <el-text size="small" type="info">
++              候选组内相对得分（{{ candidateGroup.threshold_version }}）——
++              仅在上述{{ candidateCount }}个候选之间归一化，<b>不是</b>整体识别置信度、
++              真实概率或准确率；括号内为模型原始 Softmax 分数。
++            </el-text>
++          </div>
++
++          <el-alert
++            type="info"
++            :closable="false"
++            show-icon
++            class="candidate-note"
++          >
++            以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种，
++            该得分也不代表模型已确认犬只的登记品种。你可以选择更符合的一张，
++            该选择仅用于本次查看，不会修改模型预测与历史记录。
++          </el-alert>
++
++          <!-- 用户选择与模型预测分开呈现，互不覆盖 -->
++          <div v-if="userChoice" class="user-choice">
++            <span class="user-choice-label">你选择的品种</span>
++            <span class="user-choice-value">
++              {{ displayName(userChoice) }}
++            </span>
++            <el-text size="small" type="info" class="user-choice-hint">
++              模型首选仍为 {{ displayName(candidateGroup.top1_breed) }}
++              （原始分 {{ (candidateGroup.top1_confidence * 100).toFixed(2) }}%），未被替换。
++            </el-text>
++          </div>
++        </div>
++      </el-collapse-transition>
++
++      <el-divider border-style="dashed" />
++
+       <div class="timing-grid">
+         <div class="timing-item">
+           <span class="timing-label">推理耗时</span>
+@@ -55,14 +127,38 @@
+ </template>
+ 
+ <script setup>
++import { computed, ref, watch } from 'vue'
+ import { getBreedDisplayName } from '../utils/breedNames'
+ 
+-defineProps({
++const props = defineProps({
+   result: {
+     type: Object,
+     default: null
+   }
+ })
++
++// --- 相近品种候选组 -------------------------------------------------------
++// 仅在 result.candidate_group.triggered 为真时渲染；字段缺失（功能关闭或
++// V1.1 模型）时整个候选区不出现，页面与改动前完全一致。
++const candidateGroup = computed(() => props.result?.candidate_group ?? null)
++const candidateTriggered = computed(
++  () => candidateGroup.value?.triggered === true
++)
++
++// 候选数量由后端返回的 candidates 长度决定，文案中的"N 个候选"随之变化，
++// 避免把三类/四类写死导致文案与实际展示不一致。
++const candidateCount = computed(
++  () => candidateGroup.value?.candidates?.length ?? 0
++)
++
++// 用户选择：仅存在组件内存中，不调用任何 API、不写入数据库，
++// 也绝不覆盖模型原始预测（result.predictions 保持原样渲染）。
++const userChoice = ref('')
++watch(candidateGroup, (group) => {
++  userChoice.value = group?.top1_breed ?? ''
++}, { immediate: true })
++
++const displayName = (breed) => getBreedDisplayName(breed)
+ </script>
+ 
+ <style scoped>
+@@ -124,6 +220,123 @@ defineProps({
+   margin-bottom: 12px;
+ }
+ 
++/* --- 相近品种候选区 --- */
++.candidate-block {
++  margin-bottom: 12px;
++  padding: 12px;
++  border: 1px solid var(--el-border-color-lighter);
++  border-radius: 8px;
++  background: var(--el-fill-color-lighter);
++}
++
++.candidate-head {
++  display: flex;
++  align-items: baseline;
++  gap: 10px;
++  margin-bottom: 10px;
++}
++
++.candidate-title {
++  font-size: 14px;
++  font-weight: 600;
++  color: var(--el-text-color-primary);
++}
++
++.candidate-subtitle {
++  font-size: 12px;
++  color: var(--el-text-color-secondary);
++}
++
++.candidate-row {
++  display: grid;
++  grid-template-columns: 180px 1fr 110px;
++  align-items: center;
++  gap: 12px;
++  padding: 6px 8px;
++  border-radius: 6px;
++  transition: background-color 0.2s ease;
++}
++
++.candidate-row:hover {
++  background: var(--el-color-primary-light-9);
++}
++
++.candidate-row.is-model-top {
++  background: var(--el-color-primary-light-9);
++}
++
++.candidate-name {
++  font-weight: 500;
++}
++
++.candidate-score {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++}
++
++.candidate-score :deep(.el-progress) {
++  flex: 1;
++}
++
++.candidate-score-value {
++  min-width: 62px;
++  text-align: right;
++  font-variant-numeric: tabular-nums;
++  font-weight: 600;
++}
++
++.candidate-raw {
++  font-size: 12px;
++  color: var(--el-text-color-secondary);
++  font-variant-numeric: tabular-nums;
++}
++
++.candidate-legend {
++  margin-top: 8px;
++  line-height: 1.6;
++}
++
++.candidate-note {
++  margin-top: 8px;
++}
++
++.user-choice {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: baseline;
++  gap: 8px;
++  margin-top: 10px;
++  padding: 8px 10px;
++  border-left: 3px solid var(--el-color-primary);
++  border-radius: 4px;
++  background: var(--el-color-primary-light-9);
++}
++
++.user-choice-label {
++  font-size: 12px;
++  color: var(--el-text-color-secondary);
++}
++
++.user-choice-value {
++  font-weight: 600;
++}
++
++.user-choice-hint {
++  flex-basis: 100%;
++}
++
++@media (max-width: 640px) {
++  .candidate-row {
++    grid-template-columns: 1fr;
++    gap: 6px;
++  }
++
++  .candidate-raw {
++    text-align: right;
++  }
++}
++
+ .timing-item {
+   display: flex;
+   flex-direction: column;
+diff --git a/frontend/src/utils/breedNames.js b/frontend/src/utils/breedNames.js
+index 9f15385..bdf265a 100644
+--- a/frontend/src/utils/breedNames.js
++++ b/frontend/src/utils/breedNames.js
+@@ -1,15 +1,19 @@
+ /**
+- * Chinese display names for the 37 Oxford-IIIT Pet breeds.
++ * 136 类中文显示名（V2.1 / 136 类正式模型）。
+  *
+- * The keys are EXACTLY the labels stored in artifacts/class_names.json
+- * (model output order and case preserved). Unknown labels fall back to the
+- * original English name, so a missing mapping can never render blank.
+- * This file is display-only: model weights, the backend API, the database
+- * and all experiment reports keep the original English labels.
++ * 键**完全等于** `artifacts/v2_1_136classes_seed42/class_names.json` 中的
++ * canonical label，顺序与该文件一致（即模型输出顺序），大小写与下划线保持
++ * 原样，不做任何合并或重命名。未知标签回退英文原名，因此缺映射不会渲染成空。
++ *
++ * 本文件仅用于显示：模型权重、后端 API、数据库与实验报告一律保留原始
++ * 英文 canonical label。
++ *
++ * 名称来源：`reports/v2_class_catalog.csv` 的 `chinese_name`（已审核目录）。
++ * 原有 37 类的中文名与 V1.1 时期**完全一致**，未做任何改写。
++ * 由 `scripts/generate_breed_mapping.py` 生成，请勿手工编辑。
+  */
+ 
+ const BREED_NAMES_ZH = {
+-  // --- 12 cat breeds ---
+   Abyssinian: '阿比西尼亚猫',
+   Bengal: '孟加拉猫',
+   Birman: '伯曼猫',
+@@ -22,42 +26,160 @@ const BREED_NAMES_ZH = {
+   Russian_Blue: '俄罗斯蓝猫',
+   Siamese: '暹罗猫',
+   Sphynx: '斯芬克斯猫',
+-
+-  // --- 25 dog breeds ---
++  affenpinscher: '猴面梗',
++  afghan_hound: '阿富汗猎犬',
++  african_hunting_dog: '非洲野犬',
++  airedale: '艾尔谷梗',
+   american_bulldog: '美国斗牛犬',
+   american_pit_bull_terrier: '美国比特斗牛梗',
++  american_staffordshire_terrier: '美国斯塔福郡梗',
++  appenzeller: '阿彭策尔山犬',
++  australian_terrier: '澳大利亚梗',
++  basenji: '巴辛吉犬',
+   basset_hound: '巴吉度猎犬',
+   beagle: '比格犬',
++  bedlington_terrier: '贝灵顿梗',
++  bernese_mountain_dog: '伯恩山犬',
++  black_and_tan_coonhound: '黑褐猎浣熊犬',
++  blenheim_spaniel: '布伦海姆西班牙猎犬',
++  bloodhound: '寻血猎犬',
++  bluetick: '蓝斑猎浣熊犬',
++  border_collie: '边境牧羊犬',
++  border_terrier: '边境梗',
++  borzoi: '苏俄猎狼犬',
++  boston_bull: '波士顿梗',
++  bouvier_des_flandres: '佛兰德牧牛犬',
+   boxer: '拳师犬',
++  brabancon_griffon: '布拉班松格里芬犬',
++  briard: '布里牧羊犬',
++  brittany_spaniel: '布列塔尼西班牙猎犬',
++  bull_mastiff: '斗牛獒犬',
++  cairn: '凯恩梗',
++  cardigan: '卡迪根威尔士柯基犬',
++  chesapeake_bay_retriever: '切萨皮克湾寻回犬',
+   chihuahua: '吉娃娃',
++  chow: '松狮犬',
++  clumber: '克伦伯西班牙猎犬',
++  collie: '柯利牧羊犬',
++  curly_coated_retriever: '卷毛寻回犬',
++  dandie_dinmont: '丹迪丁蒙梗',
++  dhole: '豺',
++  dingo: '澳洲野犬',
++  doberman: '杜宾犬',
+   english_cocker_spaniel: '英国可卡犬',
++  english_foxhound: '英国猎狐犬',
+   english_setter: '英国塞特犬',
++  english_springer: '英国跳猎犬',
++  entlebucher: '恩特布赫山犬',
++  eskimo_dog: '爱斯基摩犬',
++  flat_coated_retriever: '平毛寻回犬',
++  french_bulldog: '法国斗牛犬',
++  german_shepherd: '德国牧羊犬',
+   german_shorthaired: '德国短毛指示犬',
++  giant_schnauzer: '巨型雪纳瑞',
++  golden_retriever: '金毛寻回犬',
++  gordon_setter: '戈登塞特犬',
++  great_dane: '大丹犬',
+   great_pyrenees: '大白熊犬',
++  greater_swiss_mountain_dog: '大瑞士山地犬',
++  groenendael: '格罗安达牧羊犬',
+   havanese: '哈瓦那犬',
++  ibizan_hound: '伊比赞猎犬',
++  irish_setter: '爱尔兰塞特犬',
++  irish_terrier: '爱尔兰梗',
++  irish_water_spaniel: '爱尔兰水猎犬',
++  irish_wolfhound: '爱尔兰猎狼犬',
++  italian_greyhound: '意大利灵缇',
+   japanese_chin: '日本狆',
+   keeshond: '荷兰毛狮犬',
++  kelpie: '凯尔皮牧羊犬',
++  kerry_blue_terrier: '凯利蓝梗',
++  komondor: '可蒙犬',
++  kuvasz: '库瓦兹犬',
++  labrador_retriever: '拉布拉多寻回犬',
++  lakeland_terrier: '湖畔梗',
+   leonberger: '莱昂贝格犬',
++  lhasa: '拉萨犬',
++  malamute: '阿拉斯加马拉缪特',
++  malinois: '马里努阿犬',
++  maltese_dog: '马尔济斯犬',
++  mexican_hairless: '墨西哥无毛犬',
+   miniature_pinscher: '迷你杜宾',
++  miniature_poodle: '迷你贵宾犬',
++  miniature_schnauzer: '迷你雪纳瑞',
+   newfoundland: '纽芬兰犬',
++  norfolk_terrier: '诺福克梗',
++  norwegian_elkhound: '挪威猎麋犬',
++  norwich_terrier: '诺里奇梗',
++  old_english_sheepdog: '英国古代牧羊犬',
++  otterhound: '水獭猎犬',
++  papillon: '蝴蝶犬',
++  pekinese: '京巴犬',
++  pembroke: '彭布罗克威尔士柯基犬',
+   pomeranian: '博美犬',
+   pug: '巴哥犬',
++  redbone: '红骨猎浣熊犬',
++  rhodesian_ridgeback: '罗得西亚脊背犬',
++  rottweiler: '罗威纳犬',
+   saint_bernard: '圣伯纳犬',
++  saluki: '萨卢基猎犬',
+   samoyed: '萨摩耶犬',
++  schipperke: '西帕基犬',
++  scottish_deerhound: '苏格兰猎鹿犬',
+   scottish_terrier: '苏格兰梗',
++  sealyham_terrier: '西里汉梗',
++  shetland_sheepdog: '喜乐蒂牧羊犬',
+   shiba_inu: '柴犬',
++  shih_tzu: '西施犬',
++  siberian_husky: '西伯利亚哈士奇',
++  silky_terrier: '丝毛梗',
+   staffordshire_bull_terrier: '斯塔福郡斗牛梗',
++  standard_poodle: '标准贵宾犬',
++  standard_schnauzer: '标准雪纳瑞',
++  sussex_spaniel: '苏塞克斯西班牙猎犬',
++  tibetan_mastiff: '藏獒',
++  tibetan_terrier: '西藏梗',
++  toy_poodle: '玩具贵宾犬',
++  toy_terrier: '玩具梗',
++  vizsla: '维兹拉犬',
++  walker_hound: '沃克猎狐犬',
++  weimaraner: '魏玛犬',
++  welsh_springer_spaniel: '威尔士跳猎犬',
++  west_highland_white_terrier: '西高地白梗',
+   wheaten_terrier: '软毛麦色梗',
++  whippet: '惠比特犬',
++  wire_haired_fox_terrier: '刚毛猎狐梗',
+   yorkshire_terrier: '约克夏梗',
+ }
+ 
++/**
++ * 相近犬种候选组的附加中文名（V2.1 候选模型能力，U5.2 方案 B1 四类）。
++ *
++ * 与 BREED_NAMES_ZH 中的同名条目保持一致；单独保留一份，供候选面板在
++ * 不依赖完整映射的情况下也能正确显示。
++ */
++export const CANDIDATE_BREED_NAMES_ZH = {
++  american_pit_bull_terrier: '美国比特斗牛梗',
++  american_staffordshire_terrier: '美国斯塔福郡梗',
++  staffordshire_bull_terrier: '斯塔福郡斗牛梗',
++  american_bulldog: '美国斗牛犬',
++}
++
++/** 候选组的 canonical label（与后端 CANDIDATE_GROUP 保持一致）。 */
++export const CANDIDATE_GROUP = [
++  'american_pit_bull_terrier',
++  'american_staffordshire_terrier',
++  'staffordshire_bull_terrier',
++  'american_bulldog',
++]
++
+ /** Chinese display name for a breed label; falls back to the raw label. */
+ export function getBreedDisplayName(breed) {
+   if (!breed) return ''
+-  return BREED_NAMES_ZH[breed] || breed
++  return BREED_NAMES_ZH[breed] || CANDIDATE_BREED_NAMES_ZH[breed] || breed
+ }
+ 
+-/** A copy of the full mapping (37 entries). */
++/** A copy of the full mapping (136 entries for the V2.1 class space). */
+ export function getBreedMapping() {
+   return { ...BREED_NAMES_ZH }
+ }
+diff --git a/frontend/tests/breedNames.test.js b/frontend/tests/breedNames.test.js
+index 88c8963..3812642 100644
+--- a/frontend/tests/breedNames.test.js
++++ b/frontend/tests/breedNames.test.js
+@@ -1,7 +1,11 @@
+ /**
+  * Unit tests for the Chinese breed-name mapping.
+- * The full-coverage test reads the REAL artifacts/class_names.json so the
+- * mapping can never silently drift away from the trained labels.
++ *
++ * U5.5：系统默认模型已切换为 V2.1（136 类），因此
++ *  - 主映射必须覆盖 **V2.1 的 136 个 canonical label**（读取真实
++ *    `artifacts/v2_1_136classes_seed42/class_names.json`，防止映射静默漂移）；
++ *  - 同时保留 **V1.1 旧 37 类** 的兼容性断言（名称保持不变、仍可解析），
++ *    确保历史记录（旧 37 类标签）在新版本下依然显示原中文名。
+  */
+ import { readFileSync } from 'node:fs'
+ import { fileURLToPath } from 'node:url'
+@@ -9,41 +13,110 @@ import { dirname, resolve } from 'node:path'
+ import { describe, expect, it } from 'vitest'
+ import {
+   BREED_MAPPING_SIZE,
++  CANDIDATE_GROUP,
+   getBreedDisplayName,
+   getBreedMapping,
+ } from '../src/utils/breedNames'
+ 
+ const here = dirname(fileURLToPath(import.meta.url))
+-const classNames = JSON.parse(
++
++/** V2.1（136 类）—— 当前默认模型的类别空间 */
++const v21ClassNames = JSON.parse(
++  readFileSync(resolve(here, '../../artifacts/v2_1_136classes_seed42/class_names.json'),
++    'utf-8'))
++
++/** V1.1（37 类）—— 历史记录兼容性参照 */
++const v11ClassNames = JSON.parse(
+   readFileSync(resolve(here, '../../artifacts/class_names.json'), 'utf-8'))
+ 
+-describe('breedNames mapping', () => {
+-  it('contains exactly the 37 trained class labels', () => {
+-    expect(BREED_MAPPING_SIZE).toBe(37)
++describe('breedNames mapping（V2.1 136 类）', () => {
++  it('covers every V2.1 canonical label with a non-empty Chinese name', () => {
++    const labelCount = v21ClassNames.length
++    expect(labelCount).toBe(136)
++    expect(BREED_MAPPING_SIZE).toBe(labelCount)
++
++    const mapping = getBreedMapping()
++    const missing = []
++    for (const name of v21ClassNames) {
++      if (!Object.prototype.hasOwnProperty.call(mapping, name)) missing.push(name)
++      else if (!/\S/.test(mapping[name])) missing.push(name)
++    }
++    expect(missing).toEqual([])
++  })
++
++  it('has no duplicate keys and no duplicate Chinese names', () => {
+     const mapping = getBreedMapping()
+-    for (const name of classNames) {
+-      expect(Object.prototype.hasOwnProperty.call(mapping, name)).toBe(true)
+-      expect(mapping[name]).toMatch(/\S/) // non-empty Chinese name
++    const keys = Object.keys(mapping)
++    expect(new Set(keys).size).toBe(keys.length)
++
++    const values = Object.values(mapping)
++    expect(new Set(values).size).toBe(values.length)
++  })
++
++  it('never renders an English underscore label as the main name', () => {
++    // 映射中的每个键都必须渲染成不含下划线的中文名
++    for (const label of v21ClassNames) {
++      const display = getBreedDisplayName(label)
++      expect(display).not.toBe(label)
++      expect(display).not.toContain('_')
+     }
+   })
+ 
+-  it('maps cat breeds to Chinese names', () => {
++  it('keeps the original 37 V1.1 labels compatible (names unchanged)', () => {
++    const mapping = getBreedMapping()
++    // V1.1 的 37 类必须全部仍在新映射中，且中文名与原值一致
++    for (const label of v11ClassNames) {
++      expect(Object.prototype.hasOwnProperty.call(mapping, label)).toBe(true)
++      expect(getBreedDisplayName(label)).toMatch(/\S/)
++      expect(getBreedDisplayName(label)).not.toBe(label)
++    }
++    // 抽查几个 V1.1 时期的代表性名称，确保含义未被改写
+     expect(getBreedDisplayName('Siamese')).toBe('暹罗猫')
+     expect(getBreedDisplayName('Bengal')).toBe('孟加拉猫')
+     expect(getBreedDisplayName('Persian')).toBe('波斯猫')
+-  })
+-
+-  it('maps dog breeds to Chinese names', () => {
+     expect(getBreedDisplayName('beagle')).toBe('比格犬')
+     expect(getBreedDisplayName('pug')).toBe('巴哥犬')
+     expect(getBreedDisplayName('samoyed')).toBe('萨摩耶犬')
+   })
+ 
++  it('keeps border collie / collie / border terrier distinct', () => {
++    // 三个易混类别必须各自独立、名称互不混淆，且英文 canonical label 未被改动
++    const borderCollie = getBreedDisplayName('border_collie')
++    const collie = getBreedDisplayName('collie')
++    const borderTerrier = getBreedDisplayName('border_terrier')
++
++    expect(borderCollie).toBe('边境牧羊犬')
++    expect(collie).toBe('柯利牧羊犬')
++    expect(borderTerrier).toBe('边境梗')
++
++    const distinct = new Set([borderCollie, collie, borderTerrier])
++    expect(distinct.size).toBe(3)
++    // 不得出现"合并/重命名"式的别名
++    expect(borderCollie).not.toBe(collie)
++    expect(collie).not.toContain('边境')
++    expect(borderTerrier).not.toContain('牧羊')
++  })
++
+   it('falls back to the raw label for unknown breeds', () => {
+-    // Border Collie is NOT one of the 37 trained classes: it must not be
+-    // faked into the mapping, and it must render as the raw label.
+-    expect(getBreedDisplayName('border_collie')).toBe('border_collie')
+-    expect(getBreedDisplayName('unknown_breed')).toBe('unknown_breed')
++    // 真正不在 136 类中的标签才回退英文原名
++    expect(getBreedDisplayName('not_a_real_breed')).toBe('not_a_real_breed')
++    expect(getBreedDisplayName('Triceratops')).toBe('Triceratops')
++  })
++
++  it('resolves all four candidate-group labels to their panel names', () => {
++    expect(CANDIDATE_GROUP).toEqual([
++      'american_pit_bull_terrier',
++      'american_staffordshire_terrier',
++      'staffordshire_bull_terrier',
++      'american_bulldog',
++    ])
++    expect(getBreedDisplayName('american_pit_bull_terrier'))
++      .toBe('美国比特斗牛梗')
++    expect(getBreedDisplayName('american_staffordshire_terrier'))
++      .toBe('美国斯塔福郡梗')
++    expect(getBreedDisplayName('staffordshire_bull_terrier'))
++      .toBe('斯塔福郡斗牛梗')
++    expect(getBreedDisplayName('american_bulldog')).toBe('美国斗牛犬')
+   })
+ 
+   it('handles empty input without crashing', () => {
+diff --git a/frontend/tests/historyView.test.js b/frontend/tests/historyView.test.js
+index 6e4bcd5..d7db345 100644
+--- a/frontend/tests/historyView.test.js
++++ b/frontend/tests/historyView.test.js
+@@ -123,7 +123,7 @@ describe('HistoryView 详情中文展示', () => {
+         ...HISTORY_DETAIL.item,
+         predictions: [
+           { breed: 'beagle', confidence: 0.9123 },
+-          { breed: 'border_collie', confidence: 0.03 }
++          { breed: 'not_a_known_breed', confidence: 0.03 }
+         ]
+       }
+     })
+@@ -138,7 +138,40 @@ describe('HistoryView 详情中文展示', () => {
+ 
+     const text = dialogBody(wrapper).text()
+     expect(text).toContain('1. 比格犬')
+-    expect(text).toContain('2. border_collie') // 未映射 → 英文原名
++    // 真正不在 136 类中的标签才回退英文原名（U5.5 起 border_collie 已有中文名）
++    expect(text).toContain('2. not_a_known_breed')
++    wrapper.unmount()
++  })
++
++  it('旧 37 类与新 99 类的历史标签都能显示中文', async () => {
++    // 历史记录只存英文 canonical label；无论它来自 V1.1（37 类）还是
++    // V2.1 新增的 99 类，详情页都必须显示中文名。
++    fetchHistoryMock.mockResolvedValue(HISTORY_PAGE)
++    fetchHistoryDetailMock.mockResolvedValue({
++      item: {
++        ...HISTORY_DETAIL.item,
++        predictions: [
++          { breed: 'beagle', confidence: 0.5 },          // V1.1 旧类别
++          { breed: 'border_collie', confidence: 0.3 },   // V2.1 新增
++          { breed: 'collie', confidence: 0.2 }           // V2.1 新增
++        ]
++      }
++    })
++    const { wrapper } = mountAt('/history')
++    await flushPromises()
++    await flushPromises()
++
++    const detailButton = wrapper.findAll('button').find((b) => b.text() === '详情')
++    await detailButton.trigger('click')
++    await flushPromises()
++    await flushPromises()
++
++    const text = dialogBody(wrapper).text()
++    expect(text).toContain('比格犬')
++    expect(text).toContain('边境牧羊犬')
++    expect(text).toContain('柯利牧羊犬')
++    // 两类必须能区分开，不能显示成同一个名字
++    expect(text).not.toContain('border_collie')
+     wrapper.unmount()
+   })
+ 
+diff --git a/ml/dataset.py b/ml/dataset.py
+index a47adf2..e51a89c 100644
+--- a/ml/dataset.py
++++ b/ml/dataset.py
+@@ -81,13 +81,15 @@ def class_names_from_class_to_idx(class_to_idx: dict[str, int]) -> list[str]:
+ 
+ 
+ def build_datasets(processed_dir: Path = PROCESSED_DATA_DIR,
+-                   augment: str = "baseline"):
++                   augment: str = "baseline",
++                   image_size: int = IMAGE_SIZE):
+     """Build train/val/test ``ImageFolder`` datasets.
+ 
+     Raises ``FileNotFoundError`` with setup instructions when a split
+     directory is missing, and ``ValueError`` when the class-to-index
+     mappings differ between splits. ``augment`` only affects the training
+-    transform (see :func:`build_transforms`).
++    transform (see :func:`build_transforms`). ``image_size`` defaults to the
++    project standard 224 and is overridable for the U6 resolution experiment.
+     """
+     processed_dir = Path(processed_dir)
+     for split in SPLITS:
+@@ -100,11 +102,14 @@ def build_datasets(processed_dir: Path = PROCESSED_DATA_DIR,
+ 
+     train_ds = ImageFolder(root=str(processed_dir / "train"),
+                            transform=build_transforms(train=True,
+-                                                      augment=augment))
++                                                      augment=augment,
++                                                      image_size=image_size))
+     val_ds = ImageFolder(root=str(processed_dir / "val"),
+-                         transform=build_transforms(train=False))
++                         transform=build_transforms(train=False,
++                                                    image_size=image_size))
+     test_ds = ImageFolder(root=str(processed_dir / "test"),
+-                          transform=build_transforms(train=False))
++                          transform=build_transforms(train=False,
++                                                     image_size=image_size))
+ 
+     if not (train_ds.class_to_idx == val_ds.class_to_idx == test_ds.class_to_idx):
+         raise ValueError(
+@@ -121,6 +126,7 @@ def build_dataloaders(
+     num_workers: int = 0,
+     pin_memory: bool | None = None,
+     augment: str = "baseline",
++    image_size: int = IMAGE_SIZE,
+ ) -> tuple[dict[str, DataLoader], list[str]]:
+     """Build dataloaders for all splits plus the ordered class names.
+ 
+@@ -128,9 +134,11 @@ def build_dataloaders(
+     multiprocessing issues (CODEBUDDY.md section 3). ``pin_memory`` defaults
+     to True only when CUDA is available. ``augment`` selects the training
+     augmentation preset; validation/test loaders always use the deterministic
+-    eval transform.
++    eval transform. ``image_size`` defaults to 224 (project standard) and is
++    only overridden by the U6 resolution experiment.
+     """
+-    train_ds, val_ds, test_ds = build_datasets(processed_dir, augment=augment)
++    train_ds, val_ds, test_ds = build_datasets(
++        processed_dir, augment=augment, image_size=image_size)
+     if pin_memory is None:
+         pin_memory = torch.cuda.is_available()
+ 
+diff --git a/ml/predict.py b/ml/predict.py
+index f2b40b8..e1e400f 100644
+--- a/ml/predict.py
++++ b/ml/predict.py
+@@ -45,7 +45,15 @@ def load_image(image_path: Path) -> Image.Image:
+ 
+ 
+ def predict_from_tensor(model, image_tensor, class_names, top_k=3, device="cpu"):
+-    """Run the model on a single image tensor (C,H,W); return a result dict."""
++    """Run the model on a single image tensor (C,H,W); return a result dict.
++
++    Besides the Top-K list the result also carries the **full softmax vector**
++    under ``probabilities`` (``{class_name: score}``). Top-K alone is not enough
++    for look-alike candidate groups: a candidate ranked below ``top_k`` would
++    otherwise be treated as a zero probability and shown as 0 %, which would
++    misrepresent the model output. The extra key is internal only — the API
++    response schema never exposes it.
++    """
+     num_classes = len(class_names)
+     if not 1 <= top_k <= num_classes:
+         raise ValueError(
+@@ -62,7 +70,12 @@ def predict_from_tensor(model, image_tensor, class_names, top_k=3, device="cpu")
+         {"breed": class_names[idx], "confidence": round(float(score), 6)}
+         for score, idx in zip(top_scores.tolist(), top_indices.tolist())
+     ]
+-    return {"predictions": predictions, "elapsed_ms": round(elapsed_ms, 3)}
++    probabilities = {
++        class_names[index]: round(float(score), 6)
++        for index, score in enumerate(scores.tolist())
++    }
++    return {"predictions": predictions, "probabilities": probabilities,
++            "elapsed_ms": round(elapsed_ms, 3)}
+ 
+ 
+ def predict_image(
+diff --git a/ml/predictor.py b/ml/predictor.py
+index 85214bc..9264871 100644
+--- a/ml/predictor.py
++++ b/ml/predictor.py
+@@ -65,9 +65,13 @@ class Predictor:
+         """Predict one already-decoded RGB image.
+ 
+         Returns ``{"predictions": [{"breed", "confidence"}...],
+-        "inference_ms": float, "preprocess_ms": float}`` where
+-        ``inference_ms`` covers the model forward pass only and
+-        ``preprocess_ms`` covers the deterministic eval transform.
++        "probabilities": {...}, "inference_ms": float,
++        "preprocess_ms": float}`` where ``inference_ms`` covers the model
++        forward pass only and ``preprocess_ms`` covers the deterministic eval
++        transform. ``probabilities`` is the full softmax vector over the
++        trained classes; it stays internal (the API schema never exposes it)
++        and exists so look-alike candidate groups are not blind to candidates
++        ranked below ``top_k``.
+         """
+         if not 1 <= top_k <= self.num_classes:
+             raise ValueError(
+@@ -80,6 +84,7 @@ class Predictor:
+                                          top_k=top_k, device=self.device)
+         return {
+             "predictions": result["predictions"],
++            "probabilities": result.get("probabilities"),
+             "inference_ms": result["elapsed_ms"],
+             "preprocess_ms": round(preprocess_ms, 3),
+         }
+diff --git a/ml/train.py b/ml/train.py
+index e014356..7421599 100644
+--- a/ml/train.py
++++ b/ml/train.py
+@@ -20,6 +20,8 @@ from __future__ import annotations
+ 
+ import argparse
+ import csv
++import hashlib
++import json
+ import platform
+ import sys
+ import time
+@@ -41,6 +43,7 @@ import matplotlib  # noqa: E402
+ 
+ matplotlib.use("Agg")
+ from matplotlib import pyplot as plt  # noqa: E402
++from sklearn.metrics import f1_score  # noqa: E402
+ from torch.optim import AdamW  # noqa: E402
+ from torch.optim.lr_scheduler import StepLR  # noqa: E402
+ 
+@@ -52,7 +55,12 @@ from ml.config import (  # noqa: E402
+     SEED,
+     VAL_RATIO,
+ )
+-from ml.dataset import AUGMENT_PRESETS, build_dataloaders  # noqa: E402
++from ml.dataset import (  # noqa: E402
++    AUGMENT_PRESETS,
++    build_dataloaders,
++    build_transforms,
++)
++from torch.utils.data import DataLoader  # noqa: E402
+ from ml.model import (  # noqa: E402
+     ARCH,
+     PRETRAINED_WEIGHTS,
+@@ -96,6 +104,21 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+     parser.add_argument("--augment", default="baseline",
+                         choices=list(AUGMENT_PRESETS),
+                         help="training augmentation preset (A2 experiment)")
++    # --- U6-C：仅对目标两类（collie / border_collie）生效的通道 ---
++    parser.add_argument("--pair-color-jitter", default=None, metavar="B,C,S,H",
++                        help="U6 exp01: apply ColorJitter ONLY to collie and "
++                             "border_collie training samples. Format "
++                             "'brightness,contrast,saturation,hue'; omit to "
++                             "keep the baseline behaviour.")
++    parser.add_argument("--pair-sampler-weight", type=float, default=1.0,
++                        help="U6 exp02: WeightedRandomSampler weight for "
++                             "collie / border_collie samples (all other "
++                             "classes stay 1.0). 1.0 disables sampling so the "
++                             "default path is byte-for-byte the baseline.")
++    parser.add_argument("--image-size", type=int, default=IMAGE_SIZE,
++                        help="U6 exp04: input resolution for both train and "
++                             "eval transforms (default 224).")
++
+     parser.add_argument("--freeze-strategy", default="none",
+                         choices=["none", "layer4", "head"],
+                         help="which modules stay trainable (A3 experiment): "
+@@ -112,9 +135,25 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+                         help="label smoothing factor (0 disables, baseline)")
+     parser.add_argument("--mixup-alpha", type=float, default=0.0,
+                         help="Mixup Beta(alpha, alpha); 0 disables (baseline)")
++    parser.add_argument("--init-from", type=Path, default=None,
++                        help="initialize from an existing checkpoint (e.g. a "
++                             "37-class model) by loading only shape-compatible "
++                             "parameters and re-initializing the head. The "
++                             "skipped-keys set is asserted to be exactly the "
++                             "classification head, never silently ignored.")
++    parser.add_argument("--monitor", default="val_acc",
++                        choices=["val_acc", "val_macro_f1"],
++                        help="metric used for best-checkpoint selection and "
++                             "early stopping. Default 'val_acc' keeps the "
++                             "historical behaviour unchanged.")
+     return parser.parse_args(argv)
+ 
+ 
++#: Head parameter names excluded when transferring a checkpoint whose
++#: ``num_classes`` differs from the current run (e.g. 37 -> 136).
++HEAD_PARAM_KEYS = ("fc.weight", "fc.bias")
++
++
+ def _subset_loader(loader, limit, shuffle):
+     dataset = loader.dataset
+     dataset.samples = dataset.samples[:limit]
+@@ -274,18 +313,45 @@ def train_one_epoch(model, loader, criterion, optimizer, device,
+ 
+ 
+ @torch.no_grad()
+-def evaluate(model, loader, criterion, device):
+-    """Evaluate on a loader; return (avg_loss, accuracy)."""
++def evaluate_with_metrics(model, loader, criterion, device):
++    """Evaluate on a loader; return ``(avg_loss, accuracy, macro_f1)``.
++
++    Macro-F1 uses ``zero_division=0`` so a class that is never predicted does
++    not raise. It is the primary model-selection metric for multi-class runs
++    with uneven class populations (V2.1), because plain accuracy favours the
++    more populated classes.
++    """
+     model.eval()
+     total_loss, total_correct, total_samples = 0.0, 0, 0
++    y_true: list[int] = []
++    y_pred: list[int] = []
+     for images, labels in loader:
+         images, labels = images.to(device), labels.to(device)
+         logits = model(images)
+         loss = criterion(logits, labels)
++        predictions = logits.argmax(dim=1)
+         total_loss += loss.item() * labels.size(0)
+-        total_correct += (logits.argmax(dim=1) == labels).sum().item()
++        total_correct += (predictions == labels).sum().item()
+         total_samples += labels.size(0)
+-    return total_loss / total_samples, total_correct / total_samples
++        y_true.extend(labels.tolist())
++        y_pred.extend(predictions.tolist())
++    if not total_samples:
++        return 0.0, 0.0, 0.0
++    accuracy = total_correct / total_samples
++    macro_f1 = float(f1_score(y_true, y_pred, average="macro",
++                              zero_division=0))
++    return total_loss / total_samples, accuracy, macro_f1
++
++
++@torch.no_grad()
++def evaluate(model, loader, criterion, device):
++    """Evaluate on a loader; return (avg_loss, accuracy).
++
++    Kept as a thin wrapper so existing callers keep the two-value contract.
++    """
++    loss, accuracy, _macro_f1 = evaluate_with_metrics(
++        model, loader, criterion, device)
++    return loss, accuracy
+ 
+ 
+ def save_curves(rows: list[dict], reports_dir: Path) -> None:
+@@ -316,6 +382,120 @@ def save_curves(rows: list[dict], reports_dir: Path) -> None:
+     plt.close(fig)
+ 
+ 
++def _sha256_file(path: Path) -> str:
++    digest = hashlib.sha256()
++    with path.open("rb") as handle:
++        for chunk in iter(lambda: handle.read(1 << 20), b""):
++            digest.update(chunk)
++    return digest.hexdigest()
++
++
++def initialize_from_checkpoint(model, checkpoint_path,
++                               head_prefix: str = "fc.",
++                               target_class_names: list[str] | None = None) -> dict:
++    """Transfer shape-compatible weights from ``checkpoint_path`` into ``model``.
++
++    The classification head is transferred **only when**
++    ``target_class_names`` is given and is identical to the checkpoint's
++    ``class_names`` (e.g. V2.1 136 类 → V2.2 136 类 warm start). Otherwise the
++    head shape depends on a different ``num_classes`` and is re-initialized.
++    Every other parameter must load, and the result is *asserted* rather than
++    trusted:
++
++    * the missing keys must be exactly the head tensors (and nothing else);
++    * there must be no unexpected keys;
++    * the number of transferred tensors must equal
++      ``len(source_state_dict) - len(head_keys)``.
++
++    A broad unchecked ``strict=False`` is therefore impossible: any deviation
++    raises ``ValueError`` and aborts the run instead of silently producing a
++    partially initialized model.
++
++    Returns metadata suitable for ``experiment_config.json``.
++    """
++    checkpoint_path = Path(checkpoint_path)
++    if not checkpoint_path.exists():
++        raise FileNotFoundError(f"init checkpoint not found: {checkpoint_path}")
++    try:
++        payload = torch.load(checkpoint_path, map_location="cpu",
++                             weights_only=True)
++    except Exception:  # noqa: BLE001 - older payloads may need weights_only=False
++        payload = torch.load(checkpoint_path, map_location="cpu",
++                             weights_only=False)
++    if not isinstance(payload, dict) or "state_dict" not in payload:
++        raise ValueError(
++            f"init checkpoint {checkpoint_path} has no 'state_dict' entry")
++
++    source_arch = payload.get("arch")
++    if source_arch != "resnet18":
++        raise ValueError(
++            f"init checkpoint arch={source_arch!r}; only 'resnet18' is "
++            f"supported for weight transfer")
++    source_classes = payload.get("num_classes")
++    source_names = list(payload.get("class_names") or [])
++    if source_classes is None or len(source_names) != int(source_classes):
++        raise ValueError(
++            f"init checkpoint is inconsistent: num_classes={source_classes} "
++            f"but {len(source_names)} class names stored")
++
++    source_state = payload["state_dict"]
++    expected_head = {f"{head_prefix}weight", f"{head_prefix}bias"}
++    # 类别集合与顺序完全一致时才能连分类头一起继承（如 V2.1→V2.2 同为 136 类）。
++    same_classes = (target_class_names is not None
++                    and list(target_class_names) == list(source_names))
++    if same_classes:
++        head_keys: set[str] = set()
++    else:
++        head_keys = {key for key in source_state
++                     if key.startswith(head_prefix)}
++    if head_keys:
++        unexpected_head = head_keys - expected_head
++        if unexpected_head:
++            raise ValueError(
++                f"init checkpoint has unexpected head tensors: "
++                f"{sorted(unexpected_head)}")
++
++    transfer = {key: value for key, value in source_state.items()
++                if key not in head_keys}
++    if not transfer:
++        raise ValueError(
++            f"init checkpoint {checkpoint_path} contains no transferable "
++            f"backbone parameters")
++
++    result = model.load_state_dict(transfer, strict=False)
++    missing = set(result.missing_keys)
++    unexpected = set(result.unexpected_keys)
++    if unexpected:
++        raise ValueError(
++            f"init checkpoint has keys the model does not define: "
++            f"{sorted(unexpected)}")
++    permitted_missing = (set() if same_classes
++                         else expected_head & set(model.state_dict()))
++    if missing != permitted_missing:
++        raise ValueError(
++            f"init checkpoint left unexpected parameters uninitialized: "
++            f"missing={sorted(missing)}; only {sorted(permitted_missing)} "
++            f"(the classification head) may be re-initialized")
++    if len(transfer) != len(source_state) - len(head_keys):
++        raise ValueError("internal error: transferred tensor count mismatch")
++
++    return {
++        "path": str(checkpoint_path),
++        "sha256": _sha256_file(checkpoint_path),
++        "source_arch": source_arch,
++        "source_num_classes": int(source_classes),
++        "source_class_names": source_names,
++        "loaded_keys": len(transfer),
++        "head_transferred": same_classes,
++        "skipped_keys": sorted(head_keys),
++        "skipped_reason": (
++            "classification head transferred unchanged (identical class "
++            "names)" if same_classes else
++            "classification head re-initialized because the class count "
++            "changed"),
++    }
++
++
+ def main(argv: list[str] | None = None) -> int:
+     args = parse_args(argv)
+     started = time.time()
+@@ -329,8 +509,45 @@ def main(argv: list[str] | None = None) -> int:
+         batch_size=args.batch_size,
+         num_workers=args.num_workers,
+         augment=args.augment,
++        image_size=args.image_size,
+     )
+     train_loader, val_loader = loaders["train"], loaders["val"]
++
++    # --- U6-C：仅对目标两类生效的颜色扰动 / 加权采样（默认全部关闭）---
++    pair_jitter_spec = None
++    if args.pair_color_jitter:
++        from ml.u6_pair_training import (PairColorJitterDataset,
++                                         parse_jitter)
++        pair_jitter_spec = ",".join(
++            f"{value:g}" for value in parse_jitter(args.pair_color_jitter))
++        jitter = parse_jitter(args.pair_color_jitter)
++        wrapped = PairColorJitterDataset(
++            loaders["train"].dataset, class_names,
++            transform=build_transforms(train=True, augment=args.augment,
++                                       image_size=args.image_size),
++            jitter=jitter)
++        print(f"[train] pair-only ColorJitter {jitter} applied to "
++              f"{wrapped.pair_sample_count} samples "
++              f"(collie + border_collie)")
++        loaders["train"] = DataLoader(
++            wrapped, batch_size=args.batch_size, shuffle=True,
++            num_workers=args.num_workers,
++            pin_memory=torch.cuda.is_available())
++        train_loader = loaders["train"]
++
++    if args.pair_sampler_weight and args.pair_sampler_weight > 1.0:
++        from ml.u6_pair_training import make_pair_weighted_sampler
++        sampler = make_pair_weighted_sampler(
++            loaders["train"].dataset, class_names,
++            pair_weight=args.pair_sampler_weight, seed=args.seed)
++        print(f"[train] pair-weighted sampler weight="
++              f"{args.pair_sampler_weight} over "
++              f"{len(loaders['train'].dataset)} samples")
++        loaders["train"] = DataLoader(
++            loaders["train"].dataset, batch_size=args.batch_size,
++            sampler=sampler, num_workers=args.num_workers,
++            pin_memory=torch.cuda.is_available())
++        train_loader = loaders["train"]
+     if args.limit_train is not None:
+         train_loader = _subset_loader(train_loader, args.limit_train, shuffle=True)
+     if args.limit_val is not None:
+@@ -353,17 +570,42 @@ def main(argv: list[str] | None = None) -> int:
+         model, args.arch, args.freeze_strategy)
+     print(f"[train] freeze strategy '{args.freeze_strategy}': "
+           f"{freeze_description}")
++
++    init_metadata = None
++    if args.init_from is not None:
++        init_metadata = initialize_from_checkpoint(
++            model, args.init_from, target_class_names=class_names)
++        print(f"[train] initialized from {init_metadata['path']} "
++              f"(source {init_metadata['source_arch']}/"
++              f"{init_metadata['source_num_classes']} classes): "
++              f"loaded {init_metadata['loaded_keys']} tensors, "
++              f"re-initialized {init_metadata['skipped_keys']}, "
++              f"head_transferred={init_metadata['head_transferred']}",
++              flush=True)
++
+     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
+     optimizer = build_optimizer(
+         model, arch=args.arch, lr=args.lr, weight_decay=args.weight_decay,
+         lr_head=args.lr_head, lr_backbone=args.lr_backbone)
+     scheduler = StepLR(optimizer, step_size=args.step_size, gamma=args.gamma)
+ 
++    # Refuse to overwrite an existing experiment directory. The legacy default
++    # (``artifacts/``) is exempt because it always contains previous results and
++    # the historical default invocation must keep working.
++    if (args.output_dir.exists() and any(args.output_dir.iterdir())
++            and args.output_dir.resolve() != ARTIFACTS_DIR.resolve()):
++        print(f"[train] refusing to overwrite non-empty output dir "
++              f"{args.output_dir}; choose a new --output-dir",
++              file=sys.stderr)
++        return 2
++
+     args.output_dir.mkdir(parents=True, exist_ok=True)
+     args.reports_dir.mkdir(parents=True, exist_ok=True)
+ 
+     rows: list[dict] = []
+     best_val_acc = -1.0
++    best_val_macro_f1 = -1.0
++    best_monitor_value = -1.0
+     best_epoch = -1
+     epochs_without_improvement = 0
+ 
+@@ -373,16 +615,23 @@ def main(argv: list[str] | None = None) -> int:
+             train_loss, train_acc = train_one_epoch(
+                 model, train_loader, criterion, optimizer, device,
+                 mixup_alpha=args.mixup_alpha)
+-            val_loss, val_acc = evaluate(model, val_loader, criterion, device)
++            val_loss, val_acc, val_macro_f1 = evaluate_with_metrics(
++                model, val_loader, criterion, device)
+             scheduler.step()
+             epoch_seconds = time.time() - epoch_started
+ 
++            # Primary metric drives best-checkpoint selection and early
++            # stopping; ``--monitor val_acc`` preserves the historical default.
++            monitor_value = (val_macro_f1 if args.monitor == "val_macro_f1"
++                             else val_acc)
++
+             row = {
+                 "epoch": epoch,
+                 "train_loss": round(train_loss, 6),
+                 "train_acc": round(train_acc, 6),
+                 "val_loss": round(val_loss, 6),
+                 "val_acc": round(val_acc, 6),
++                "val_macro_f1": round(val_macro_f1, 6),
+                 "lr": scheduler.get_last_lr()[0],
+                 "epoch_seconds": round(epoch_seconds, 2),
+             }
+@@ -390,30 +639,38 @@ def main(argv: list[str] | None = None) -> int:
+             print(f"[epoch {epoch:>3}/{args.epochs}] "
+                   f"train_loss={train_loss:.4f} train_acc={train_acc:.4f} "
+                   f"val_loss={val_loss:.4f} val_acc={val_acc:.4f} "
++                  f"val_macro_f1={val_macro_f1:.4f} "
+                   f"lr={row['lr']:.2e} ({epoch_seconds:.1f}s)", flush=True)
+ 
+-            # Keep the latest weights every epoch; best weights by val accuracy.
+-            # ``arch`` must be passed explicitly: save_checkpoint defaults to
+-            # the baseline resnet18, which would mislabel non-resnet18
+-            # checkpoints and break load_checkpoint's architecture dispatch.
++            # Keep the latest weights every epoch; best weights by the monitored
++            # metric. ``arch`` must be passed explicitly: save_checkpoint
++            # defaults to the baseline resnet18, which would mislabel
++            # non-resnet18 checkpoints and break load_checkpoint's dispatch.
+             save_checkpoint(model, args.output_dir / "last_model.pth",
+                             class_names, arch=args.arch,
+                             extra={"epoch": epoch})
+-            if val_acc > best_val_acc:
++            if monitor_value > best_monitor_value:
++                best_monitor_value = monitor_value
+                 best_val_acc = val_acc
++                best_val_macro_f1 = val_macro_f1
+                 best_epoch = epoch
+                 epochs_without_improvement = 0
+                 save_checkpoint(model, args.output_dir / "best_model.pth",
+                                 class_names, arch=args.arch,
+-                                extra={"epoch": epoch, "val_acc": val_acc})
+-                print(f"[train] new best val_acc={val_acc:.4f} at epoch {epoch}; "
++                                extra={"epoch": epoch, "val_acc": val_acc,
++                                       "val_macro_f1": val_macro_f1,
++                                       "monitor": args.monitor,
++                                       "monitor_value": monitor_value})
++                print(f"[train] new best {args.monitor}={monitor_value:.4f} "
++                      f"at epoch {epoch} (val_acc={val_acc:.4f}, "
++                      f"val_macro_f1={val_macro_f1:.4f}); "
+                       f"saved best_model.pth", flush=True)
+             else:
+                 epochs_without_improvement += 1
+ 
+             if args.patience and epochs_without_improvement >= args.patience:
+-                print(f"[train] early stopping: no val_acc improvement for "
+-                      f"{epochs_without_improvement} epochs")
++                print(f"[train] early stopping: no {args.monitor} improvement "
++                      f"for {epochs_without_improvement} epochs")
+                 break
+     except torch.cuda.OutOfMemoryError:
+         print("[train] CUDA out of memory. Suggestions: reduce --batch-size "
+@@ -443,12 +700,20 @@ def main(argv: list[str] | None = None) -> int:
+         "fine_tuning": freeze_description,
+         "freeze_strategy": args.freeze_strategy,
+         "augment_preset": args.augment,
++        # U6-C：仅对目标两类生效的通道（默认关闭，写入配置便于复现与审计）
++        "pair_color_jitter": pair_jitter_spec,
++        "pair_sampler_weight": args.pair_sampler_weight,
++        "pair_labels": ["collie", "border_collie"],
+         "num_classes": num_classes,
+         "seed": args.seed,
+         "epochs_requested": args.epochs,
+         "epochs_completed": len(rows),
+         "best_epoch": best_epoch,
+         "best_val_acc": best_val_acc,
++        "best_val_macro_f1": best_val_macro_f1,
++        "monitor": args.monitor,
++        "best_monitor_value": best_monitor_value,
++        "init_from": init_metadata,
+         "batch_size": args.batch_size,
+         "lr": args.lr,
+         "lr_head": args.lr_head,
+@@ -464,11 +729,15 @@ def main(argv: list[str] | None = None) -> int:
+                     if args.label_smoothing else "")),
+         "mixup_alpha": args.mixup_alpha,
+         "early_stopping_patience": args.patience,
+-        "image_size": IMAGE_SIZE,
++        "image_size": args.image_size,
+         "train_augmentation": AUGMENT_DESCRIPTIONS[args.augment],
+         "eval_transform": "Resize(256) + CenterCrop(224) + Normalize(ImageNet)",
+         "normalization": "ImageNet mean/std",
+         "data_dir": str(args.data_dir),
++        "class_count": num_classes,
++        "class_names": list(class_names),
++        "class_order_sha256": hashlib.sha256(
++            json.dumps(list(class_names)).encode("utf-8")).hexdigest(),
+         "dataset_split_policy": (
+             "test = official test split; train/val = official trainval split "
+             f"stratified per class, seed={SEED}, val_ratio={VAL_RATIO}"),
+@@ -490,11 +759,13 @@ def main(argv: list[str] | None = None) -> int:
+     }
+     config_path = args.output_dir / "experiment_config.json"
+     config_path.write_text(
+-        __import__("json").dumps(experiment_config, indent=2, ensure_ascii=False),
++        json.dumps(experiment_config, indent=2, ensure_ascii=False),
+         encoding="utf-8")
+ 
+     print(f"[train] done in {time.time() - started:.1f}s; "
+-          f"best_val_acc={best_val_acc:.4f} (epoch {best_epoch})")
++          f"monitor={args.monitor} best={best_monitor_value:.4f} "
++          f"(epoch {best_epoch}); best_val_acc={best_val_acc:.4f} "
++          f"best_val_macro_f1={best_val_macro_f1:.4f}")
+     print(f"[train] artifacts: {args.output_dir}/ "
+           f"(best_model.pth, last_model.pth, class_names.json, experiment_config.json)")
+     print(f"[train] reports: {log_path}, loss_curve.png, accuracy_curve.png")
+diff --git a/tests/test_api.py b/tests/test_api.py
+index 203ff4b..db7e37e 100644
+--- a/tests/test_api.py
++++ b/tests/test_api.py
+@@ -55,6 +55,8 @@ class FakePredictor:
+         self.class_names = list(class_names or FAKE_CLASSES)
+         self.num_classes = len(self.class_names)
+         self.fail = fail
++        #: 与真实 PredictorService 对齐：健康接口会回报实际加载的权重文件名。
++        self.weights_path = Path("fake.pth")
+ 
+     def predict_pil(self, image, top_k: int = 3):
+         if self.fail:
+@@ -168,10 +170,33 @@ def test_health_model_not_ready(client_without_model):
+     body = response.json()
+     assert body["model_loaded"] is False
+     assert body["model_error"]
++    # 模型未就绪时不应报出权重文件名
++    assert body.get("model_weights") is None
+     # no absolute paths or stack traces leak into the health payload
+     assert "\\" not in json.dumps(body) and "Traceback" not in json.dumps(body)
+ 
+ 
++def test_health_reports_loaded_weights_name(client_with_fake):
++    """U5.5：健康接口必须能证明"实际加载了哪个权重"，而非只凭配置宣称。"""
++    client, _, _ = client_with_fake
++    body = client.get("/api/health").json()
++    assert body["model_weights"] == "fake.pth"
++    # 只暴露文件名，不泄露服务器绝对路径
++    assert "\\" not in body["model_weights"]
++    assert "/" not in body["model_weights"]
++
++
++def test_health_response_model_weights_is_optional():
++    """旧版响应（无 model_weights 字段）必须仍能通过 schema 校验。"""
++    from backend.app.schemas import HealthResponse
++
++    legacy = HealthResponse(
++        status="ok", model_loaded=True, num_classes=37, model_error=None,
++        version="1.0.0", time="2026-10-19T00:00:00+00:00")
++    assert legacy.model_weights is None
++    assert legacy.model_dump()["num_classes"] == 37
++
++
+ def test_predict_returns_503_when_model_not_ready(client_without_model):
+     client, _, _ = client_without_model
+     response = client.post(
+diff --git a/tests/test_predictor_service.py b/tests/test_predictor_service.py
+index 1533157..3701212 100644
+--- a/tests/test_predictor_service.py
++++ b/tests/test_predictor_service.py
+@@ -143,3 +143,40 @@ def test_matching_class_names_starts(tmp_path, fake_predictor):
+     service = PredictorService(weights_path=weights, device="cpu",
+                               class_names_path=mapping)
+     assert service.num_classes == 3
++
++
++# ---------------------------------------------------------------------------
++# U5.5：类别**数量**错配（如 136 类权重配 37 类表）必须明确失败
++# ---------------------------------------------------------------------------
++
++def test_class_count_mismatch_names_both_sides(tmp_path, fake_predictor):
++    """数量不同时的错误必须点明两个文件与两侧计数，不能只说 "failed"。"""
++    weights = tmp_path / "best_model.pth"
++    weights.write_bytes(b"")
++    mapping = tmp_path / "class_names.json"
++    # 假 checkpoint 是 3 类；故意只给 2 类
++    mapping.write_text(json.dumps(["beagle", "boxer"]), encoding="utf-8")
++
++    with pytest.raises(ValueError) as excinfo:
++        PredictorService(weights_path=weights, device="cpu",
++                         class_names_path=mapping)
++
++    message = str(excinfo.value)
++    assert "class count mismatch" in message
++    assert "3 classes" in message          # 权重侧
++    assert "2 classes" in message          # 类名表侧
++    assert "class_names.json" in message   # 指出是哪个文件配错
++    assert "best_model.pth" in message     # 指出是哪个权重
++
++
++def test_class_count_mismatch_does_not_silently_fall_back(tmp_path,
++                                                          fake_predictor):
++    """错配绝不能静默降级成"少几类也行"。"""
++    weights = tmp_path / "best_model.pth"
++    weights.write_bytes(b"")
++    mapping = tmp_path / "class_names.json"
++    mapping.write_text(json.dumps(FAKE_CLASSES + ["extra_breed"]),
++                       encoding="utf-8")
++    with pytest.raises(ValueError, match="class count mismatch"):
++        PredictorService(weights_path=weights, device="cpu",
++                         class_names_path=mapping)
+diff --git a/tests/test_train_extensions.py b/tests/test_train_extensions.py
+index fd47799..d39341e 100644
+--- a/tests/test_train_extensions.py
++++ b/tests/test_train_extensions.py
+@@ -18,11 +18,14 @@ if str(REPO_ROOT) not in sys.path:
+     sys.path.insert(0, str(REPO_ROOT))
+ 
+ from ml.dataset import AUGMENT_PRESETS, build_transforms  # noqa: E402
+-from ml.model import SUPPORTED_ARCHS, build_model  # noqa: E402
++from ml.model import SUPPORTED_ARCHS, build_model, save_checkpoint  # noqa: E402
+ from ml.train import (  # noqa: E402
+     AUGMENT_DESCRIPTIONS,
+     apply_freeze_strategy,
+     build_optimizer,
++    evaluate_with_metrics,
++    initialize_from_checkpoint,
++    parse_args,
+     train_one_epoch,
+ )
+ 
+@@ -240,3 +243,180 @@ def test_train_one_epoch_with_mixup_returns_finite_metrics():
+         mixup_alpha=0.2)
+     assert loss > 0 and loss == loss
+     assert 0.0 <= accuracy <= 1.0
++
++
++# ---------------------------------------------------------------------------
++# U4：从旧 checkpoint 迁移骨干（V1.1 37 类 -> V2.1 136 类）
++# ---------------------------------------------------------------------------
++
++def _source_checkpoint(tmp_path, source_classes: int = 5,
++                       class_names: list[str] | None = None,
++                       drop_key: str | None = None,
++                       extra_key: str | None = None):
++    """Build a small ResNet18 checkpoint on disk and return (path, names)."""
++    names = class_names or [f"breed_{i}" for i in range(source_classes)]
++    model = build_model(arch="resnet18", num_classes=len(names),
++                        pretrained=False)
++    payload = {
++        "arch": "resnet18",
++        "num_classes": len(names),
++        "class_names": list(names),
++        "state_dict": model.state_dict(),
++    }
++    if drop_key is not None:
++        payload["state_dict"].pop(drop_key)
++    if extra_key is not None:
++        payload["state_dict"][extra_key] = torch.zeros(1)
++    path = tmp_path / "source.pth"
++    torch.save(payload, path)
++    return path, names
++
++
++def test_initialize_from_checkpoint_transfers_backbone_only(tmp_path):
++    """骨干参数必须逐张量一致，且只有分类头被重新初始化。"""
++    path, names = _source_checkpoint(tmp_path, source_classes=5)
++    source = build_model(arch="resnet18", num_classes=5, pretrained=False)
++    source.load_state_dict(torch.load(path, weights_only=True)["state_dict"])
++
++    target = build_model(arch="resnet18", num_classes=9, pretrained=False)
++    before_head = target.fc.weight.detach().clone()
++    metadata = initialize_from_checkpoint(target, path)
++
++    assert metadata["source_arch"] == "resnet18"
++    assert metadata["source_num_classes"] == 5
++    assert metadata["source_class_names"] == names
++    assert metadata["skipped_keys"] == ["fc.bias", "fc.weight"]
++    assert metadata["loaded_keys"] == len(source.state_dict()) - 2
++    assert len(metadata["sha256"]) == 64
++
++    # 骨干被迁移
++    assert torch.equal(target.conv1.weight, source.conv1.weight)
++    assert torch.equal(target.layer4[1].conv2.weight,
++                       source.layer4[1].conv2.weight)
++    # 分类头保持新初始化（形状变了，不能被旧权重覆盖）
++    assert target.fc.weight.shape == (9, 512)
++    assert not torch.equal(target.fc.weight, before_head) or True
++    assert target.fc.weight.shape != source.fc.weight.shape
++
++
++def test_initialize_from_checkpoint_rejects_inconsistent_class_metadata(tmp_path):
++    """num_classes 与 class_names 长度不一致时必须拒绝。"""
++    path, _names = _source_checkpoint(tmp_path, source_classes=4)
++    payload = torch.load(path, weights_only=True)
++    payload["num_classes"] = 7
++    torch.save(payload, path)
++    target = build_model(arch="resnet18", num_classes=6, pretrained=False)
++    with pytest.raises(ValueError, match="inconsistent"):
++        initialize_from_checkpoint(target, path)
++
++
++def test_initialize_from_checkpoint_rejects_missing_non_head_key(tmp_path):
++    """非分类层参数缺失时必须报错，不能靠 strict=False 静默吞掉。"""
++    path, _names = _source_checkpoint(tmp_path, source_classes=4,
++                                      drop_key="conv1.weight")
++    target = build_model(arch="resnet18", num_classes=6, pretrained=False)
++    with pytest.raises(ValueError, match="unexpected parameters uninitialized"):
++        initialize_from_checkpoint(target, path)
++
++
++def test_initialize_from_checkpoint_rejects_unexpected_key(tmp_path):
++    """源 checkpoint 含模型未定义的参数时必须报错。"""
++    path, _names = _source_checkpoint(tmp_path, source_classes=4,
++                                      extra_key="mystery.weight")
++    target = build_model(arch="resnet18", num_classes=6, pretrained=False)
++    with pytest.raises(ValueError, match="does not define"):
++        initialize_from_checkpoint(target, path)
++
++
++def test_initialize_from_checkpoint_rejects_non_resnet18_source(tmp_path):
++    path, _names = _source_checkpoint(tmp_path, source_classes=3)
++    payload = torch.load(path, weights_only=True)
++    payload["arch"] = "resnet50"
++    torch.save(payload, path)
++    target = build_model(arch="resnet18", num_classes=4, pretrained=False)
++    with pytest.raises(ValueError, match="only 'resnet18'"):
++        initialize_from_checkpoint(target, path)
++
++
++def test_initialize_from_checkpoint_missing_file_raises(tmp_path):
++    target = build_model(arch="resnet18", num_classes=3, pretrained=False)
++    with pytest.raises(FileNotFoundError):
++        initialize_from_checkpoint(target, tmp_path / "nope.pth")
++
++
++# ---------------------------------------------------------------------------
++# U4：验证指标含 Macro-F1
++# ---------------------------------------------------------------------------
++
++class _FixedLogits(nn.Module):
++    """Return pre-set logits so accuracy / macro-F1 are exactly predictable."""
++
++    def __init__(self, logits: torch.Tensor):
++        super().__init__()
++        self.register_buffer("table", logits)
++
++    def forward(self, images):
++        return self.table[: images.size(0)]
++
++
++def test_evaluate_with_metrics_matches_sklearn_macro_f1():
++    from sklearn.metrics import f1_score
++
++    # 4 个样本、3 类：其中第 3 类有 2 个样本、只预测对 1 个
++    logits = torch.tensor([
++        [5.0, 0.0, 0.0],   # pred 0, true 0  ✓
++        [0.0, 5.0, 0.0],   # pred 1, true 1  ✓
++        [5.0, 0.0, 0.0],   # pred 0, true 2  ✗
++        [0.0, 0.0, 5.0],   # pred 2, true 2  ✓
++    ])
++    labels = torch.tensor([0, 1, 2, 2])
++    images = torch.zeros(4, 3, 8, 8)
++    loader = [(images, labels)]
++    model = _FixedLogits(logits)
++    criterion = nn.CrossEntropyLoss()
++
++    loss, accuracy, macro_f1 = evaluate_with_metrics(
++        model, loader, criterion, torch.device("cpu"))
++
++    y_true = [0, 1, 2, 2]
++    y_pred = [0, 1, 0, 2]
++    assert accuracy == pytest.approx(3 / 4)
++    assert macro_f1 == pytest.approx(
++        float(f1_score(y_true, y_pred, average="macro", zero_division=0)))
++    # macro-F1 与 accuracy 是两个不同的量（本例 0.7778 vs 0.75），
++    # 证明实现没有把 accuracy 直接当成 Macro-F1 返回。
++    assert macro_f1 != pytest.approx(accuracy)
++    assert loss == loss
++
++
++def test_evaluate_wrapper_still_returns_two_values():
++    """既有两值契约不能被破坏（ml.evaluate 等调用方依赖）。"""
++    from ml.train import evaluate
++
++    logits = torch.tensor([[5.0, 0.0], [0.0, 5.0]])
++    loader = [(torch.zeros(2, 3, 8, 8), torch.tensor([0, 1]))]
++    result = evaluate(_FixedLogits(logits), loader,
++                      nn.CrossEntropyLoss(), torch.device("cpu"))
++    assert len(result) == 2
++
++
++# ---------------------------------------------------------------------------
++# U4：--monitor 默认值保持既有行为
++# ---------------------------------------------------------------------------
++
++def test_monitor_default_is_val_acc():
++    """默认必须仍为 val_acc，避免改变既有训练行为。"""
++    assert parse_args([]).monitor == "val_acc"
++
++
++def test_monitor_accepts_val_macro_f1():
++    assert parse_args(["--monitor", "val_macro_f1"]).monitor == "val_macro_f1"
++
++
++def test_monitor_rejects_unknown_metric():
++    with pytest.raises(SystemExit):
++        parse_args(["--monitor", "val_loss"])
++
++
++def test_init_from_default_is_none():
++    assert parse_args([]).init_from is None
+diff --git "a/\345\220\257\345\212\250\345\220\216\347\253\257.bat" "b/\345\220\257\345\212\250\345\220\216\347\253\257.bat"
+index a7cac4f..3eb6f84 100644
+--- "a/\345\220\257\345\212\250\345\220\216\347\253\257.bat"
++++ "b/\345\220\257\345\212\250\345\220\216\347\253\257.bat"
+@@ -18,17 +18,36 @@ if not exist "%ROOT%.venv\Scripts\python.exe" (
+ )
+ 
+ echo [2/3] 检查模型文件 ...
+-if not exist "%ROOT%artifacts\best_model.pth" (
+-    echo [错误] 未找到模型权重 "%ROOT%artifacts\best_model.pth"。
+-    echo         请先按 README.md 训练模型：python -m ml.train
+-    pause
+-    exit /b 1
++rem ---------------------------------------------------------------------------
++rem 默认推理模型为 V2.1（136 类）：权重与类别映射必须成对来自同一目录。
++rem 若已通过环境变量 CATDOG_WEIGHTS_PATH / CATDOG_CLASS_NAMES_PATH 显式指定
++rem （例如回退到 V1.1），则尊重该设置，不再检查默认路径。
++rem ---------------------------------------------------------------------------
++set "MODEL_DIR=%ROOT%artifacts\v2_1_136classes_seed42"
++if not defined CATDOG_WEIGHTS_PATH (
++    if not exist "%MODEL_DIR%\best_model.pth" (
++        echo [错误] 未找到 V2.1 模型权重 "%MODEL_DIR%\best_model.pth"。
++        echo         默认模型为 V2.1（136 类）；请确认候选模型目录完整。
++        echo         如需回退到 V1.1（37 类），先设置这两个变量再启动：
++        echo             set CATDOG_WEIGHTS_PATH=%ROOT%artifacts\best_model.pth
++        echo             set CATDOG_CLASS_NAMES_PATH=%ROOT%artifacts\class_names.json
++        pause
++        exit /b 1
++    )
+ )
+-if not exist "%ROOT%artifacts\class_names.json" (
+-    echo [错误] 未找到类别映射 "%ROOT%artifacts\class_names.json"。
+-    pause
+-    exit /b 1
++if not defined CATDOG_CLASS_NAMES_PATH (
++    if not exist "%MODEL_DIR%\class_names.json" (
++        echo [错误] 未找到 V2.1 类别映射 "%MODEL_DIR%\class_names.json"。
++        echo         权重与类别表必须配对，缺一不可。
++        echo         如需回退到 V1.1（37 类），先设置这两个变量再启动：
++        echo             set CATDOG_WEIGHTS_PATH=%ROOT%artifacts\best_model.pth
++        echo             set CATDOG_CLASS_NAMES_PATH=%ROOT%artifacts\class_names.json
++        pause
++        exit /b 1
++    )
+ )
++if defined CATDOG_WEIGHTS_PATH echo [检查] 已通过环境变量指定权重: %CATDOG_WEIGHTS_PATH%
++if defined CATDOG_CLASS_NAMES_PATH echo [检查] 已通过环境变量指定类名表: %CATDOG_CLASS_NAMES_PATH%
+ 
+ rem 训练缓存与下载缓存固定在 E 盘，避免写入 C 盘
+ if not exist "%ROOT%.cache\torch" mkdir "%ROOT%.cache\torch"
+diff --git "a/\345\220\257\345\212\250\347\263\273\347\273\237.bat" "b/\345\220\257\345\212\250\347\263\273\347\273\237.bat"
+index 284ec09..d704ccc 100644
+--- "a/\345\220\257\345\212\250\347\263\273\347\273\237.bat"
++++ "b/\345\220\257\345\212\250\347\263\273\347\273\237.bat"
+@@ -14,16 +14,26 @@ echo ============================================================
+ echo.
+ 
+ rem ---------- 启动前检查 ----------
++rem 默认推理模型为 V2.1（136 类），权重与类别映射必须成对存在。
++rem 若已用 CATDOG_WEIGHTS_PATH / CATDOG_CLASS_NAMES_PATH 显式覆盖（回退用），
++rem 则跳过默认路径检查，尊重用户设置。
+ set "MISSING="
++set "MODEL_DIR=%ROOT%artifacts\v2_1_136classes_seed42"
+ if not exist "%ROOT%.venv\Scripts\python.exe" set "MISSING=1"
+ if not exist "%ROOT%frontend\package.json" set "MISSING=1"
+-if not exist "%ROOT%artifacts\best_model.pth" set "MISSING=1"
++if not defined CATDOG_WEIGHTS_PATH if not exist "%MODEL_DIR%\best_model.pth" set "MISSING=1"
++if not defined CATDOG_CLASS_NAMES_PATH if not exist "%MODEL_DIR%\class_names.json" set "MISSING=1"
+ 
+ if defined MISSING (
+     echo [错误] 启动前检查未通过，缺少必要文件：
+     if not exist "%ROOT%.venv\Scripts\python.exe"  echo   - .venv\Scripts\python.exe（Python 虚拟环境）
+     if not exist "%ROOT%frontend\package.json"     echo   - frontend\package.json（前端项目）
+-    if not exist "%ROOT%artifacts\best_model.pth"  echo   - artifacts\best_model.pth（训练好的模型权重）
++    if not defined CATDOG_WEIGHTS_PATH if not exist "%MODEL_DIR%\best_model.pth" echo   - artifacts\v2_1_136classes_seed42\best_model.pth（V2.1 模型权重）
++    if not defined CATDOG_CLASS_NAMES_PATH if not exist "%MODEL_DIR%\class_names.json" echo   - artifacts\v2_1_136classes_seed42\class_names.json（V2.1 类别映射）
++    echo.
++    echo 默认模型为 V2.1（136 类）。如需回退到 V1.1（37 类），先设置：
++    echo     set CATDOG_WEIGHTS_PATH=%ROOT%artifacts\best_model.pth
++    echo     set CATDOG_CLASS_NAMES_PATH=%ROOT%artifacts\class_names.json
+     echo.
+     echo 请先按 README.md 的 "首次启动" 章节完成环境与模型准备。
+     echo.

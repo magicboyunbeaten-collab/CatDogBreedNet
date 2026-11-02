@@ -1,0 +1,222 @@
+{
+  "generated_at": "2026-10-21T06:20:58.752641+00:00",
+  "isolated_runtime": "reports/u6_5_remote_sync_wrapup/runtime",
+  "env_overrides_applied": {
+    "CATDOG_DB_PATH": "reports/u6_5_remote_sync_wrapup/runtime/app.db",
+    "CATDOG_UPLOAD_DIR": "reports/u6_5_remote_sync_wrapup/runtime/uploads",
+    "CATDOG_WEIGHTS_PATH": null,
+    "CATDOG_CLASS_NAMES_PATH": null,
+    "CATDOG_CANDIDATE_GROUP_ENABLED": null
+  },
+  "note": "未设置任何 CATDOG_WEIGHTS_PATH / CLASS_NAMES_PATH / CANDIDATE_GROUP_ENABLED，因此运行的是 config.py 默认配置；仅存储位置被重定向到隔离 runtime。",
+  "health": {
+    "status": "ok",
+    "model_loaded": true,
+    "num_classes": 136,
+    "model_weights": "best_model.pth",
+    "model_error": null,
+    "version": "1.0.0",
+    "time": "2026-10-21T06:20:58.752641+00:00"
+  },
+  "startup_log_identity_lines": [
+    "INFO:     database ready: app.db",
+    "INFO:     class mapping verified against class_names.json (136 classes)",
+    "INFO:     model ready: version=v2_1_136classes_candidate arch=resnet18 classes=136 device=cuda (weights: best_model.pth)"
+  ],
+  "samples": [
+    {
+      "role": "collie-pair-trigger",
+      "image": "data/v2_processed/val/border_collie/n02106166_416.jpg",
+      "expected": {
+        "group_id": "collie-pair",
+        "triggered": true
+      },
+      "http_status": 200,
+      "original_predictions": [
+        {
+          "breed": "border_collie",
+          "confidence": 0.600428
+        },
+        {
+          "breed": "collie",
+          "confidence": 0.398749
+        },
+        {
+          "breed": "papillon",
+          "confidence": 0.000379
+        }
+      ],
+      "candidate_group_id": "collie-pair",
+      "triggered": true,
+      "trigger_reason": "top-1 在候选组内、组内总概率 0.9992 >= 0.30 且组内分差 0.2017 <= 0.30",
+      "threshold_version": "val-2026-10-21-collie-pair-v1",
+      "group_mass": 0.999177,
+      "group_margin": 0.201679,
+      "candidates": [
+        {
+          "breed": "border_collie",
+          "breed_zh": "边境牧羊犬",
+          "original_confidence": 0.600428,
+          "group_score": 60.0923
+        },
+        {
+          "breed": "collie",
+          "breed_zh": "柯利牧羊犬",
+          "original_confidence": 0.398749,
+          "group_score": 39.9077
+        }
+      ],
+      "group_score_sum": 100.0,
+      "checks": {
+        "http_200": true,
+        "top1_breed_preserved": true,
+        "top1_confidence_preserved": true,
+        "topk_len_3": true,
+        "no_probabilities_field": true,
+        "triggered_as_expected": true,
+        "group_id_as_expected": true,
+        "group_score_sum_100": true,
+        "scores_equal_full_probability_normalisation": true
+      },
+      "passed": true
+    },
+    {
+      "role": "four-breed-trigger",
+      "image": "data/v2_processed/val/american_pit_bull_terrier/american_pit_bull_terrier_132.jpg",
+      "expected": {
+        "group_id": "four-breed-bully",
+        "triggered": true
+      },
+      "http_status": 200,
+      "original_predictions": [
+        {
+          "breed": "american_pit_bull_terrier",
+          "confidence": 0.467221
+        },
+        {
+          "breed": "american_staffordshire_terrier",
+          "confidence": 0.390605
+        },
+        {
+          "breed": "toy_terrier",
+          "confidence": 0.081247
+        }
+      ],
+      "candidate_group_id": "four-breed-bully",
+      "triggered": true,
+      "trigger_reason": "top-1 在候选组内、组内总概率 0.8579 ≥ 0.30 且组内分差 0.0766 ≤ 0.40",
+      "threshold_version": "val-2026-10-19-four-breed-b1",
+      "group_mass": 0.857883,
+      "group_margin": 0.076616,
+      "candidates": [
+        {
+          "breed": "american_pit_bull_terrier",
+          "breed_zh": "美国比特斗牛梗",
+          "original_confidence": 0.467221,
+          "group_score": 54.4621
+        },
+        {
+          "breed": "american_staffordshire_terrier",
+          "breed_zh": "美国斯塔福郡梗",
+          "original_confidence": 0.390605,
+          "group_score": 45.5313
+        },
+        {
+          "breed": "staffordshire_bull_terrier",
+          "breed_zh": "斯塔福郡斗牛梗",
+          "original_confidence": 3.9e-05,
+          "group_score": 0.0045
+        },
+        {
+          "breed": "american_bulldog",
+          "breed_zh": "美国斗牛犬",
+          "original_confidence": 1.8e-05,
+          "group_score": 0.0021
+        }
+      ],
+      "group_score_sum": 100.0,
+      "checks": {
+        "http_200": true,
+        "top1_breed_preserved": true,
+        "top1_confidence_preserved": true,
+        "topk_len_3": true,
+        "no_probabilities_field": true,
+        "triggered_as_expected": true,
+        "group_id_as_expected": true,
+        "group_score_sum_100": true,
+        "scores_equal_full_probability_normalisation": true
+      },
+      "passed": true
+    },
+    {
+      "role": "non-target-control",
+      "image": "data/v2_processed/val/beagle/beagle_101.jpg",
+      "expected": {
+        "group_id": "four-breed-bully",
+        "triggered": false
+      },
+      "http_status": 200,
+      "original_predictions": [
+        {
+          "breed": "beagle",
+          "confidence": 0.986948
+        },
+        {
+          "breed": "english_foxhound",
+          "confidence": 0.010482
+        },
+        {
+          "breed": "toy_terrier",
+          "confidence": 0.000796
+        }
+      ],
+      "candidate_group_id": "four-breed-bully",
+      "triggered": false,
+      "trigger_reason": "top-1 不在候选组内",
+      "threshold_version": "val-2026-10-19-four-breed-b1",
+      "group_mass": 0.000495,
+      "group_margin": 0.000493,
+      "candidates": [
+        {
+          "breed": "american_bulldog",
+          "breed_zh": "美国斗牛犬",
+          "original_confidence": 0.000494,
+          "group_score": 99.798
+        },
+        {
+          "breed": "staffordshire_bull_terrier",
+          "breed_zh": "斯塔福郡斗牛梗",
+          "original_confidence": 1e-06,
+          "group_score": 0.202
+        },
+        {
+          "breed": "american_pit_bull_terrier",
+          "breed_zh": "美国比特斗牛梗",
+          "original_confidence": 0.0,
+          "group_score": 0.0
+        },
+        {
+          "breed": "american_staffordshire_terrier",
+          "breed_zh": "美国斯塔福郡梗",
+          "original_confidence": 0.0,
+          "group_score": 0.0
+        }
+      ],
+      "group_score_sum": null,
+      "checks": {
+        "http_200": true,
+        "top1_breed_preserved": true,
+        "top1_confidence_preserved": true,
+        "topk_len_3": true,
+        "no_probabilities_field": true,
+        "triggered_as_expected": true,
+        "group_id_as_expected": true,
+        "not_misrouted_to_other_strategy": true,
+        "group_score_sum_100": null,
+        "scores_equal_full_probability_normalisation": null
+      },
+      "passed": true
+    }
+  ],
+  "all_passed": true
+}

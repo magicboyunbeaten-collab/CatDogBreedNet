@@ -1,0 +1,4 @@
+class,support,true_positive,precision,recall,f1,recall_wilson_low,recall_wilson_high,top_error_destinations,tag,split
+collie,16,11,0.7333333333333333,0.6875,0.7096774193548387,0.444,0.8584,border_collie:4; pembroke:1,exp06,val
+border_collie,15,13,0.6190476190476191,0.8666666666666667,0.7222222222222222,0.6212,0.9626,bernese_mountain_dog:1; collie:1,exp06,val
+BIDIRECTIONAL,31,26,nan,nan,nan,,,collie->border_collie 4/16; border_collie->collie 1/15; 合计 5/31,exp06,val

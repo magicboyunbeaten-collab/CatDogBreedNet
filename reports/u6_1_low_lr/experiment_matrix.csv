@@ -1,0 +1,6 @@
+exp_id,seed,unique_variable,input_resolution,lr_head,lr_backbone,weight_decay,monitor,epochs,patience,batch_size,init_from,head_transferred,output_dir,status
+exp06_resolution256_lowlr,42,输入分辨率 224 → 256（低学习率协议）,256,1e-4,5e-5,1e-4,val_macro_f1,30,10,32,artifacts/v2_1_136classes_seed42/best_model.pth,yes,artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42,ok
+exp07_pair_color_jitter_lowlr,42,仅 collie / border_collie 施加温和 ColorJitter（低学习率）,224,1e-4,5e-5,1e-4,val_macro_f1,30,10,32,artifacts/v2_1_136classes_seed42/best_model.pth,yes,artifacts/v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42,ok
+exp08_pair_sampler_lowlr,42,仅 collie / border_collie 加权采样 weight=3.0（低学习率）,224,1e-4,5e-5,1e-4,val_macro_f1,30,10,32,artifacts/v2_1_136classes_seed42/best_model.pth,yes,artifacts/v2_2_border_collie_exp08_pair_sampler_lowlr_seed42,ok
+exp06_resolution256_lowlr,7,输入分辨率 224 → 256（低学习率协议，多 seed 复核）,256,1e-4,5e-5,1e-4,val_macro_f1,30,10,32,artifacts/v2_1_136classes_seed42/best_model.pth,yes,artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed7,ok
+exp06_resolution256_lowlr,2024,输入分辨率 224 → 256（低学习率协议，多 seed 复核）,256,1e-4,5e-5,1e-4,val_macro_f1,30,10,32,artifacts/v2_1_136classes_seed42/best_model.pth,yes,artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed2024,ok

@@ -1,0 +1,86 @@
+{
+  "v21_best_model_sha256": "423e218a29230f8248e071e7fb47b88afb2c1f2b67fb860224f6f319041821e1",
+  "v21_class_order_sha256": "a0120327f260d34fd532eab21c8169d02c864c06ac7c42bcdc8fa8721c513e97",
+  "v21_num_classes": 136,
+  "source_checks": {
+    "same_classes 分支存在": true,
+    "same_classes 时 head_keys 为空": true,
+    "transfer 按 head_keys 过滤（含 fc.*）": true,
+    "target_class_names 透传": true,
+    "head_transferred 记入 config": true
+  },
+  "lr_semantics_check": true,
+  "experiments": [
+    {
+      "experiment": "v2_2_border_collie_exp01_pair_color_jitter_seed42",
+      "seed": 42,
+      "image_size": 224,
+      "pair_color_jitter": "0.2,0.2,0.3,0.05",
+      "pair_sampler_weight": 1.0,
+      "init_sha256_matches_v21": true,
+      "head_transferred": true,
+      "loaded_keys": 122,
+      "skipped_keys": "(无)",
+      "class_order_sha256_matches": true,
+      "class_names_match_v21": true,
+      "verdict": "PASS"
+    },
+    {
+      "experiment": "v2_2_border_collie_exp02_pair_sampler_seed42",
+      "seed": 42,
+      "image_size": 224,
+      "pair_color_jitter": null,
+      "pair_sampler_weight": 3.0,
+      "init_sha256_matches_v21": true,
+      "head_transferred": true,
+      "loaded_keys": 122,
+      "skipped_keys": "(无)",
+      "class_order_sha256_matches": true,
+      "class_names_match_v21": true,
+      "verdict": "PASS"
+    },
+    {
+      "experiment": "v2_2_border_collie_exp04_resolution_seed2024",
+      "seed": 2024,
+      "image_size": 256,
+      "pair_color_jitter": null,
+      "pair_sampler_weight": 1.0,
+      "init_sha256_matches_v21": true,
+      "head_transferred": true,
+      "loaded_keys": 122,
+      "skipped_keys": "(无)",
+      "class_order_sha256_matches": true,
+      "class_names_match_v21": true,
+      "verdict": "PASS"
+    },
+    {
+      "experiment": "v2_2_border_collie_exp04_resolution_seed42",
+      "seed": 42,
+      "image_size": 256,
+      "pair_color_jitter": null,
+      "pair_sampler_weight": 1.0,
+      "init_sha256_matches_v21": true,
+      "head_transferred": true,
+      "loaded_keys": 122,
+      "skipped_keys": "(无)",
+      "class_order_sha256_matches": true,
+      "class_names_match_v21": true,
+      "verdict": "PASS"
+    },
+    {
+      "experiment": "v2_2_border_collie_exp04_resolution_seed7",
+      "seed": 7,
+      "image_size": 256,
+      "pair_color_jitter": null,
+      "pair_sampler_weight": 1.0,
+      "init_sha256_matches_v21": true,
+      "head_transferred": true,
+      "loaded_keys": 122,
+      "skipped_keys": "(无)",
+      "class_order_sha256_matches": true,
+      "class_names_match_v21": true,
+      "verdict": "PASS"
+    }
+  ],
+  "all_experiments_pass": true
+}

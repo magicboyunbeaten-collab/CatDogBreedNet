@@ -1,0 +1,163 @@
+{
+  "generated_at": "2026-10-19T10:12:36.657941+00:00",
+  "model_dir": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42",
+  "val_dir": "E:\\CatDogBreedNet\\data\\v2_processed\\val",
+  "split_used": "validation only (test split never read)",
+  "test_split_access_count": 0,
+  "val_images": 2079,
+  "three_group": {
+    "candidate_group": [
+      "american_staffordshire_terrier",
+      "staffordshire_bull_terrier",
+      "american_bulldog"
+    ],
+    "mass_threshold": 0.3,
+    "margin_threshold": 0.4,
+    "val_images": 2079,
+    "trigger_rate": {
+      "numerator": 5,
+      "denominator": 2079,
+      "percent": 0.2405
+    },
+    "group_true_label_coverage": {
+      "numerator": 2,
+      "denominator": 5,
+      "percent": 40.0
+    },
+    "member_true_sample_recall": {
+      "numerator": 2,
+      "denominator": 37,
+      "percent": 5.4054
+    },
+    "top1_hit_rate_in_triggered": {
+      "numerator": 2,
+      "denominator": 5,
+      "percent": 40.0
+    },
+    "out_of_group_trigger_rate": {
+      "numerator": 3,
+      "denominator": 5,
+      "percent": 60.0
+    },
+    "member_true_samples": 37,
+    "apbt_true_samples": 10,
+    "apbt_true_trigger_rate": {
+      "numerator": 1,
+      "denominator": 10,
+      "percent": 10.0
+    },
+    "apbt_top1_samples": 13,
+    "apbt_top1_trigger_rate": {
+      "numerator": 0,
+      "denominator": 13,
+      "percent": 0.0
+    }
+  },
+  "four_group_b1": {
+    "candidate_group": [
+      "american_pit_bull_terrier",
+      "american_staffordshire_terrier",
+      "staffordshire_bull_terrier",
+      "american_bulldog"
+    ],
+    "mass_threshold": 0.3,
+    "margin_threshold": 0.4,
+    "val_images": 2079,
+    "trigger_rate": {
+      "numerator": 12,
+      "denominator": 2079,
+      "percent": 0.5772
+    },
+    "group_true_label_coverage": {
+      "numerator": 8,
+      "denominator": 12,
+      "percent": 66.6667
+    },
+    "member_true_sample_recall": {
+      "numerator": 8,
+      "denominator": 47,
+      "percent": 17.0213
+    },
+    "top1_hit_rate_in_triggered": {
+      "numerator": 5,
+      "denominator": 12,
+      "percent": 41.6667
+    },
+    "out_of_group_trigger_rate": {
+      "numerator": 4,
+      "denominator": 12,
+      "percent": 33.3333
+    },
+    "member_true_samples": 47,
+    "apbt_true_samples": 10,
+    "apbt_true_trigger_rate": {
+      "numerator": 2,
+      "denominator": 10,
+      "percent": 20.0
+    },
+    "apbt_top1_samples": 13,
+    "apbt_top1_trigger_rate": {
+      "numerator": 4,
+      "denominator": 13,
+      "percent": 30.7692
+    }
+  },
+  "four_group_b2_recommended": {
+    "mass_threshold": 0.4,
+    "margin_threshold": 0.6,
+    "triggered_count": 16,
+    "trigger_rate_percent": 0.7696,
+    "group_true_label_coverage": "12/16 (75.00%)",
+    "member_true_sample_recall": "12/47 (25.53%)",
+    "top1_hit_rate_in_triggered": "8/16 (50.00%)",
+    "out_of_group_trigger_count": 4,
+    "out_of_group_trigger_rate": "4/16 (25.00%)",
+    "apbt_true_triggered": "3/10",
+    "apbt_top1_triggered": "5/13"
+  },
+  "baseline_check_vs_u5_report": {
+    "val_images": {
+      "now": 2079,
+      "report": 2079,
+      "match": true
+    },
+    "top1_in_three_group": {
+      "now": 36,
+      "report": 36,
+      "match": true
+    },
+    "triggered_three": {
+      "now": 5,
+      "report": 5,
+      "match": true
+    },
+    "triggered_true_in_group": {
+      "now": 2,
+      "report": 3,
+      "match": false
+    }
+  },
+  "counts": {
+    "top1_in_three_group": 36,
+    "top1_in_four_group": 49,
+    "top1_is_apbt": 13,
+    "triggered_three": 5,
+    "triggered_three_true_in_group": 2,
+    "triggered_three_out_of_group": 3,
+    "triggered_four_b1": 12,
+    "newly_triggered_by_apbt": 7,
+    "triggered_by_both": 5,
+    "out_of_group_triggered": 4,
+    "apbt_true_to_three_group": 1,
+    "amstaff_true_to_apbt_sbt_ambull": 4,
+    "sbt_ambull_true_to_four_group": 1,
+    "apbt_top1_competitive": 4,
+    "member_true_samples": 47,
+    "member_true_breakdown": {
+      "american_bulldog": 10,
+      "american_pit_bull_terrier": 10,
+      "american_staffordshire_terrier": 17,
+      "staffordshire_bull_terrier": 10
+    }
+  }
+}

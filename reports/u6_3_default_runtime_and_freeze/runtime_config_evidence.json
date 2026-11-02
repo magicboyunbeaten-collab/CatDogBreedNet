@@ -1,0 +1,120 @@
+{
+  "generated_at": "2026-10-21T04:45:20.877251+00:00",
+  "scope": "static audit only (read-only); no file modified",
+  "config_defaults": {
+    "source": "backend/app/config.py — Settings() class defaults (no environment variables involved)",
+    "default_model_dir": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42",
+    "weights_path": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\best_model.pth",
+    "class_names_path": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\class_names.json",
+    "candidate_group_enabled": true,
+    "device": "auto"
+  },
+  "launcher_script_settings": {
+    "source": "direct read of the three .bat launchers (regex over set / CATDOG_* tokens)",
+    "scripts": [
+      {
+        "file": "启动后端.bat",
+        "lines": 68,
+        "sets_catdog_vars": [],
+        "reads_catdog_vars": [
+          "CATDOG_CLASS_NAMES_PATH",
+          "CATDOG_DEVICE",
+          "CATDOG_WEIGHTS_PATH"
+        ],
+        "model_dir": "%ROOT%artifacts\\v2_1_136classes_seed42",
+        "launches_uvicorn": true,
+        "uvicorn_target": "backend.app.main:app",
+        "has_model_path_logic": true
+      },
+      {
+        "file": "启动系统.bat",
+        "lines": 81,
+        "sets_catdog_vars": [],
+        "reads_catdog_vars": [
+          "CATDOG_CLASS_NAMES_PATH",
+          "CATDOG_WEIGHTS_PATH"
+        ],
+        "model_dir": "%ROOT%artifacts\\v2_1_136classes_seed42",
+        "launches_uvicorn": false,
+        "uvicorn_target": null,
+        "has_model_path_logic": true
+      },
+      {
+        "file": "启动前端.bat",
+        "lines": 64,
+        "sets_catdog_vars": [],
+        "reads_catdog_vars": [],
+        "model_dir": null,
+        "launches_uvicorn": false,
+        "uvicorn_target": null,
+        "has_model_path_logic": false
+      }
+    ],
+    "summary": "启动脚本不设置任何 CATDOG_* 环境变量；它们只在 `if not defined CATDOG_*` 中读取，用于决定是否检查 V2.1 默认路径。因此日常启动时进程有效值等于 config.py 默认值。"
+  },
+  "process_effective_values": {
+    "source": "Settings.from_env() evaluated in this process (inherits the ambient environment)",
+    "weights_path": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\best_model.pth",
+    "class_names_path": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\class_names.json",
+    "candidate_group_enabled": true,
+    "device": "auto",
+    "db_path": "E:\\CatDogBreedNet\\data\\app.db",
+    "upload_dir": "E:\\CatDogBreedNet\\uploads",
+    "matches_config_defaults": true
+  },
+  "env_override_rules": {
+    "source": "backend/app/config.py — _env / _env_bool",
+    "variables": {
+      "CATDOG_WEIGHTS_PATH": "覆盖 weights_path",
+      "CATDOG_CLASS_NAMES_PATH": "覆盖 class_names_path",
+      "CATDOG_CANDIDATE_GROUP_ENABLED": "覆盖候选总开关",
+      "CATDOG_DEVICE": "覆盖 device",
+      "CATDOG_UPLOAD_DIR": "覆盖 upload_dir",
+      "CATDOG_DB_PATH": "覆盖 db_path"
+    },
+    "bool_parsing": "1/true/yes/on -> True；0/false/no/off -> False；其它值回退到默认值（当前默认 True）"
+  },
+  "main_py_plumbing": {
+    "source": "backend/app/main.py",
+    "passes_class_names_path": true,
+    "passes_candidate_flag": true,
+    "passes_weights_path": true,
+    "health_reports_model_weights": true
+  },
+  "candidate_dispatch": {
+    "source": "backend/app/services/candidate_group.py",
+    "master_switch_semantics": "enabled=False -> resolve_candidate_group returns None for BOTH strategies",
+    "dispatch_rule": "按原始 Top-1 分发：top1 in COLLIE_PAIR_GROUP -> build_collie_pair_group；否则 -> build_candidate_group（四类）",
+    "four_breed_bully": {
+      "group_id": "four-breed-bully",
+      "members": [
+        "american_pit_bull_terrier",
+        "american_staffordshire_terrier",
+        "staffordshire_bull_terrier",
+        "american_bulldog"
+      ],
+      "mass_threshold": 0.3,
+      "margin_threshold": 0.4,
+      "threshold_version": "val-2026-10-19-four-breed-b1"
+    },
+    "collie_pair": {
+      "group_id": "collie-pair",
+      "members": [
+        "collie",
+        "border_collie"
+      ],
+      "mass_threshold": 0.3,
+      "margin_threshold": 0.3,
+      "threshold_version": "val-2026-10-21-collie-pair-v1"
+    },
+    "groups_are_disjoint": true
+  },
+  "v1_1_fallback_behaviour": {
+    "source": "function-level check against artifacts/class_names.json (37 classes); no weights loaded",
+    "v11_class_count": 37,
+    "collie_pair_returns_none": true,
+    "four_breed_returns_none": true,
+    "raises": false,
+    "reason": "两套策略都要求候选成员全部存在于类别空间中；V1.1 的 37 类既不含 AmStaff，也不含 collie / border_collie，因此安全返回 None，不抛异常、不干扰原始预测。"
+  }
+}

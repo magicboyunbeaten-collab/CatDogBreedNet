@@ -1,0 +1,7 @@
+tag,collie_to_border_collie,border_collie_to_collie,bidirectional_total,collie_total,border_collie_total,collie_recall,border_collie_recall,collie_recall_wilson,border_collie_recall_wilson,sample_count_consistent
+BASELINE,4,2,6,16,15,0.625,0.8,"[0.386, 0.815]","[0.548, 0.930]",2079
+exp01,4,3,7,16,15,0.5625,0.7333,"[0.332, 0.769]","[0.480, 0.891]",2079
+exp02,4,2,6,16,15,0.5625,0.8,"[0.332, 0.769]","[0.548, 0.930]",2079
+exp04,4,2,6,16,15,0.625,0.8667,"[0.386, 0.815]","[0.621, 0.963]",2079
+exp04_seed7,4,4,8,16,15,0.625,0.7333,"[0.386, 0.815]","[0.480, 0.891]",2079
+exp04_seed2024,4,2,6,16,15,0.5625,0.8,"[0.332, 0.769]","[0.548, 0.930]",2079

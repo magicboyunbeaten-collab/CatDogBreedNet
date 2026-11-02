@@ -1,0 +1,850 @@
+{
+  "generated_at": "2026-10-21T04:14:31.825539+00:00",
+  "split_used": "validation only (test split never read)",
+  "test_split_access_count": 0,
+  "triggered_samples": 3,
+  "untriggered_controls": 3,
+  "repeats": 5,
+  "checks": [
+    {
+      "check": "health: 模型已加载",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "health: 类别数 = 136",
+      "passed": true,
+      "detail": "136"
+    },
+    {
+      "check": "health: 默认模型仍为 V2.1",
+      "passed": true,
+      "detail": "best_model.pth"
+    },
+    {
+      "check": "A 四类代表: 触发",
+      "passed": true,
+      "detail": "top-1 在候选组内、组内总概率 0.8579 ≥ 0.30 且组内分差 0.0766 ≤ 0.40"
+    },
+    {
+      "check": "A 四类代表: 组标识 four-breed-bully",
+      "passed": true,
+      "detail": "four-breed-bully"
+    },
+    {
+      "check": "A 四类代表: 四项候选",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "A 四类代表: 版本未变",
+      "passed": true,
+      "detail": "val-2026-10-19-four-breed-b1"
+    },
+    {
+      "check": "A 四类代表: 中文名正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "A 四类代表: 组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.000000"
+    },
+    {
+      "check": "A 四类代表: 原始 Top-1 一致",
+      "passed": true,
+      "detail": "american_pit_bull_terrier"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_416.jpg: 触发",
+      "passed": true,
+      "detail": "top-1 在候选组内、组内总概率 0.9992 >= 0.30 且组内分差 0.2017 <= 0.30"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_416.jpg: 组标识 collie-pair",
+      "passed": true,
+      "detail": "collie-pair"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_416.jpg: 两项候选",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_416.jpg: 中文名正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_416.jpg: 组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.000000"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_416.jpg: 得分严格等于原始概率归一化",
+      "passed": true,
+      "detail": "mass=0.999177"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_416.jpg: 原始 Top-1 不被替换",
+      "passed": true,
+      "detail": "border_collie"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_549.jpg: 触发",
+      "passed": true,
+      "detail": "top-1 在候选组内、组内总概率 0.9987 >= 0.30 且组内分差 0.2078 <= 0.30"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_549.jpg: 组标识 collie-pair",
+      "passed": true,
+      "detail": "collie-pair"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_549.jpg: 两项候选",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_549.jpg: 中文名正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_549.jpg: 组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.000000"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_549.jpg: 得分严格等于原始概率归一化",
+      "passed": true,
+      "detail": "mass=0.998652"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_549.jpg: 原始 Top-1 不被替换",
+      "passed": true,
+      "detail": "collie"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_884.jpg: 触发",
+      "passed": true,
+      "detail": "top-1 在候选组内、组内总概率 0.5689 >= 0.30 且组内分差 0.2525 <= 0.30"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_884.jpg: 组标识 collie-pair",
+      "passed": true,
+      "detail": "collie-pair"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_884.jpg: 两项候选",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_884.jpg: 中文名正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_884.jpg: 组内得分和 ≈ 100",
+      "passed": true,
+      "detail": "sum=100.000000"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_884.jpg: 得分严格等于原始概率归一化",
+      "passed": true,
+      "detail": "mass=0.568896"
+    },
+    {
+      "check": "B 触发 border_collie/n02106166_884.jpg: 原始 Top-1 不被替换",
+      "passed": true,
+      "detail": "border_collie"
+    },
+    {
+      "check": "C 不触发 afghan_hound/n02088094_1479.jpg",
+      "passed": true,
+      "detail": "组内分差 0.6299 > 0.30，模型已有明确偏好"
+    },
+    {
+      "check": "C 不触发 afghan_hound/n02088094_1479.jpg: 组标识仍为 collie-pair",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C 不触发 bernese_mountain_dog/n02107683_3406.jpg",
+      "passed": true,
+      "detail": "组内分差 0.3960 > 0.30，模型已有明确偏好"
+    },
+    {
+      "check": "C 不触发 bernese_mountain_dog/n02107683_3406.jpg: 组标识仍为 collie-pair",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C 不触发 border_collie/n02106166_1663.jpg",
+      "passed": true,
+      "detail": "组内分差 0.9908 > 0.30，模型已有明确偏好"
+    },
+    {
+      "check": "C 不触发 border_collie/n02106166_1663.jpg: 组标识仍为 collie-pair",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D 非目标犬种: 不触发候选",
+      "passed": true,
+      "detail": "top1=beagle group_id=four-breed-bully reason=top-1 不在候选组内"
+    },
+    {
+      "check": "D 非目标犬种: 未误入双候选策略",
+      "passed": true,
+      "detail": "four-breed-bully"
+    },
+    {
+      "check": "D 非目标犬种: 原始 Top-K 正常",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "E 第 1 次: 触发且组标识一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "E 第 1 次: 候选顺序一致",
+      "passed": true,
+      "detail": "border_collie;collie"
+    },
+    {
+      "check": "E 第 2 次: 触发且组标识一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "E 第 2 次: 候选顺序一致",
+      "passed": true,
+      "detail": "border_collie;collie"
+    },
+    {
+      "check": "E 第 3 次: 触发且组标识一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "E 第 3 次: 候选顺序一致",
+      "passed": true,
+      "detail": "border_collie;collie"
+    },
+    {
+      "check": "E 第 4 次: 触发且组标识一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "E 第 4 次: 候选顺序一致",
+      "passed": true,
+      "detail": "border_collie;collie"
+    },
+    {
+      "check": "E 第 5 次: 触发且组标识一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "E 第 5 次: 候选顺序一致",
+      "passed": true,
+      "detail": "border_collie;collie"
+    },
+    {
+      "check": "E: Top-1 标签 5 次相同",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "E: Top-1 分数最大绝对差",
+      "passed": true,
+      "detail": "max_abs_diff=0.000e+00"
+    },
+    {
+      "check": "G: DB 无候选组字段",
+      "passed": true,
+      "detail": "columns=['id', 'image_path', 'predicted_breed', 'confidence', 'top_k_json', 'inference_ms', 'created_at']"
+    },
+    {
+      "check": "G: DB 记录数 = 上传次数",
+      "passed": true,
+      "detail": "records=13"
+    },
+    {
+      "check": "H: API 不暴露完整概率向量",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F 关闭: 无候选组",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F 关闭: 原始 Top-1 与开启时一致",
+      "passed": true,
+      "detail": "border_collie"
+    },
+    {
+      "check": "F 关闭: 原始 Top-K 与分数逐位不变",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "passed": 58,
+  "total": 58,
+  "failed": [],
+  "evidence": {
+    "triggered": [
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_416.jpg",
+        "response": {
+          "success": true,
+          "record_id": 2,
+          "predictions": [
+            {
+              "breed": "border_collie",
+              "confidence": 0.600428
+            },
+            {
+              "breed": "collie",
+              "confidence": 0.398749
+            },
+            {
+              "breed": "papillon",
+              "confidence": 0.000379
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "group_id": "collie-pair",
+            "threshold_version": "val-2026-10-21-collie-pair-v1",
+            "top1_breed": "border_collie",
+            "top1_confidence": 0.600428,
+            "candidates": [
+              {
+                "breed": "border_collie",
+                "breed_zh": "边境牧羊犬",
+                "original_confidence": 0.600428,
+                "group_score": 60.0923
+              },
+              {
+                "breed": "collie",
+                "breed_zh": "柯利牧羊犬",
+                "original_confidence": 0.398749,
+                "group_score": 39.9077
+              }
+            ],
+            "available_candidates": [
+              "collie",
+              "border_collie"
+            ],
+            "group_mass": 0.999177,
+            "group_margin": 0.201679,
+            "reason": "top-1 在候选组内、组内总概率 0.9992 >= 0.30 且组内分差 0.2017 <= 0.30"
+          },
+          "elapsed_ms": 17.287,
+          "inference_ms": 2.855,
+          "preprocess_ms": 1.915,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_549.jpg",
+        "response": {
+          "success": true,
+          "record_id": 3,
+          "predictions": [
+            {
+              "breed": "collie",
+              "confidence": 0.603224
+            },
+            {
+              "breed": "border_collie",
+              "confidence": 0.395428
+            },
+            {
+              "breed": "groenendael",
+              "confidence": 0.000549
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "group_id": "collie-pair",
+            "threshold_version": "val-2026-10-21-collie-pair-v1",
+            "top1_breed": "collie",
+            "top1_confidence": 0.603224,
+            "candidates": [
+              {
+                "breed": "collie",
+                "breed_zh": "柯利牧羊犬",
+                "original_confidence": 0.603224,
+                "group_score": 60.4038
+              },
+              {
+                "breed": "border_collie",
+                "breed_zh": "边境牧羊犬",
+                "original_confidence": 0.395428,
+                "group_score": 39.5962
+              }
+            ],
+            "available_candidates": [
+              "collie",
+              "border_collie"
+            ],
+            "group_mass": 0.998652,
+            "group_margin": 0.207796,
+            "reason": "top-1 在候选组内、组内总概率 0.9987 >= 0.30 且组内分差 0.2078 <= 0.30"
+          },
+          "elapsed_ms": 17.946,
+          "inference_ms": 2.91,
+          "preprocess_ms": 2.012,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_884.jpg",
+        "response": {
+          "success": true,
+          "record_id": 4,
+          "predictions": [
+            {
+              "breed": "border_collie",
+              "confidence": 0.410685
+            },
+            {
+              "breed": "collie",
+              "confidence": 0.158211
+            },
+            {
+              "breed": "papillon",
+              "confidence": 0.146664
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "group_id": "collie-pair",
+            "threshold_version": "val-2026-10-21-collie-pair-v1",
+            "top1_breed": "border_collie",
+            "top1_confidence": 0.410685,
+            "candidates": [
+              {
+                "breed": "border_collie",
+                "breed_zh": "边境牧羊犬",
+                "original_confidence": 0.410685,
+                "group_score": 72.1898
+              },
+              {
+                "breed": "collie",
+                "breed_zh": "柯利牧羊犬",
+                "original_confidence": 0.158211,
+                "group_score": 27.8102
+              }
+            ],
+            "available_candidates": [
+              "collie",
+              "border_collie"
+            ],
+            "group_mass": 0.568896,
+            "group_margin": 0.252474,
+            "reason": "top-1 在候选组内、组内总概率 0.5689 >= 0.30 且组内分差 0.2525 <= 0.30"
+          },
+          "elapsed_ms": 22.463,
+          "inference_ms": 4.76,
+          "preprocess_ms": 2.871,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      }
+    ],
+    "controls": [
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_132.jpg",
+        "response": {
+          "success": true,
+          "record_id": 1,
+          "predictions": [
+            {
+              "breed": "american_pit_bull_terrier",
+              "confidence": 0.467221
+            },
+            {
+              "breed": "american_staffordshire_terrier",
+              "confidence": 0.390605
+            },
+            {
+              "breed": "toy_terrier",
+              "confidence": 0.081247
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "group_id": "four-breed-bully",
+            "threshold_version": "val-2026-10-19-four-breed-b1",
+            "top1_breed": "american_pit_bull_terrier",
+            "top1_confidence": 0.467221,
+            "candidates": [
+              {
+                "breed": "american_pit_bull_terrier",
+                "breed_zh": "美国比特斗牛梗",
+                "original_confidence": 0.467221,
+                "group_score": 54.4621
+              },
+              {
+                "breed": "american_staffordshire_terrier",
+                "breed_zh": "美国斯塔福郡梗",
+                "original_confidence": 0.390605,
+                "group_score": 45.5313
+              },
+              {
+                "breed": "staffordshire_bull_terrier",
+                "breed_zh": "斯塔福郡斗牛梗",
+                "original_confidence": 3.9e-05,
+                "group_score": 0.0045
+              },
+              {
+                "breed": "american_bulldog",
+                "breed_zh": "美国斗牛犬",
+                "original_confidence": 1.8e-05,
+                "group_score": 0.0021
+              }
+            ],
+            "available_candidates": [
+              "american_pit_bull_terrier",
+              "american_staffordshire_terrier",
+              "staffordshire_bull_terrier",
+              "american_bulldog"
+            ],
+            "group_mass": 0.857883,
+            "group_margin": 0.076616,
+            "reason": "top-1 在候选组内、组内总概率 0.8579 ≥ 0.30 且组内分差 0.0766 ≤ 0.40"
+          },
+          "elapsed_ms": 248.131,
+          "inference_ms": 218.603,
+          "preprocess_ms": 4.834,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      }
+    ],
+    "switch_off": [
+      {
+        "image": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_416.jpg",
+        "response": {
+          "success": true,
+          "record_id": 1,
+          "predictions": [
+            {
+              "breed": "border_collie",
+              "confidence": 0.600428
+            },
+            {
+              "breed": "collie",
+              "confidence": 0.398749
+            },
+            {
+              "breed": "papillon",
+              "confidence": 0.000379
+            }
+          ],
+          "candidate_group": null,
+          "elapsed_ms": 19.901,
+          "inference_ms": 4.496,
+          "preprocess_ms": 3.598,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      }
+    ],
+    "repeats": [
+      {
+        "request_index": 1,
+        "response": {
+          "success": true,
+          "record_id": 9,
+          "predictions": [
+            {
+              "breed": "border_collie",
+              "confidence": 0.600428
+            },
+            {
+              "breed": "collie",
+              "confidence": 0.398749
+            },
+            {
+              "breed": "papillon",
+              "confidence": 0.000379
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "group_id": "collie-pair",
+            "threshold_version": "val-2026-10-21-collie-pair-v1",
+            "top1_breed": "border_collie",
+            "top1_confidence": 0.600428,
+            "candidates": [
+              {
+                "breed": "border_collie",
+                "breed_zh": "边境牧羊犬",
+                "original_confidence": 0.600428,
+                "group_score": 60.0923
+              },
+              {
+                "breed": "collie",
+                "breed_zh": "柯利牧羊犬",
+                "original_confidence": 0.398749,
+                "group_score": 39.9077
+              }
+            ],
+            "available_candidates": [
+              "collie",
+              "border_collie"
+            ],
+            "group_mass": 0.999177,
+            "group_margin": 0.201679,
+            "reason": "top-1 在候选组内、组内总概率 0.9992 >= 0.30 且组内分差 0.2017 <= 0.30"
+          },
+          "elapsed_ms": 31.252,
+          "inference_ms": 2.037,
+          "preprocess_ms": 1.324,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "request_index": 2,
+        "response": {
+          "success": true,
+          "record_id": 10,
+          "predictions": [
+            {
+              "breed": "border_collie",
+              "confidence": 0.600428
+            },
+            {
+              "breed": "collie",
+              "confidence": 0.398749
+            },
+            {
+              "breed": "papillon",
+              "confidence": 0.000379
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "group_id": "collie-pair",
+            "threshold_version": "val-2026-10-21-collie-pair-v1",
+            "top1_breed": "border_collie",
+            "top1_confidence": 0.600428,
+            "candidates": [
+              {
+                "breed": "border_collie",
+                "breed_zh": "边境牧羊犬",
+                "original_confidence": 0.600428,
+                "group_score": 60.0923
+              },
+              {
+                "breed": "collie",
+                "breed_zh": "柯利牧羊犬",
+                "original_confidence": 0.398749,
+                "group_score": 39.9077
+              }
+            ],
+            "available_candidates": [
+              "collie",
+              "border_collie"
+            ],
+            "group_mass": 0.999177,
+            "group_margin": 0.201679,
+            "reason": "top-1 在候选组内、组内总概率 0.9992 >= 0.30 且组内分差 0.2017 <= 0.30"
+          },
+          "elapsed_ms": 25.734,
+          "inference_ms": 3.805,
+          "preprocess_ms": 1.24,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "request_index": 3,
+        "response": {
+          "success": true,
+          "record_id": 11,
+          "predictions": [
+            {
+              "breed": "border_collie",
+              "confidence": 0.600428
+            },
+            {
+              "breed": "collie",
+              "confidence": 0.398749
+            },
+            {
+              "breed": "papillon",
+              "confidence": 0.000379
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "group_id": "collie-pair",
+            "threshold_version": "val-2026-10-21-collie-pair-v1",
+            "top1_breed": "border_collie",
+            "top1_confidence": 0.600428,
+            "candidates": [
+              {
+                "breed": "border_collie",
+                "breed_zh": "边境牧羊犬",
+                "original_confidence": 0.600428,
+                "group_score": 60.0923
+              },
+              {
+                "breed": "collie",
+                "breed_zh": "柯利牧羊犬",
+                "original_confidence": 0.398749,
+                "group_score": 39.9077
+              }
+            ],
+            "available_candidates": [
+              "collie",
+              "border_collie"
+            ],
+            "group_mass": 0.999177,
+            "group_margin": 0.201679,
+            "reason": "top-1 在候选组内、组内总概率 0.9992 >= 0.30 且组内分差 0.2017 <= 0.30"
+          },
+          "elapsed_ms": 29.822,
+          "inference_ms": 3.044,
+          "preprocess_ms": 1.93,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "request_index": 4,
+        "response": {
+          "success": true,
+          "record_id": 12,
+          "predictions": [
+            {
+              "breed": "border_collie",
+              "confidence": 0.600428
+            },
+            {
+              "breed": "collie",
+              "confidence": 0.398749
+            },
+            {
+              "breed": "papillon",
+              "confidence": 0.000379
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "group_id": "collie-pair",
+            "threshold_version": "val-2026-10-21-collie-pair-v1",
+            "top1_breed": "border_collie",
+            "top1_confidence": 0.600428,
+            "candidates": [
+              {
+                "breed": "border_collie",
+                "breed_zh": "边境牧羊犬",
+                "original_confidence": 0.600428,
+                "group_score": 60.0923
+              },
+              {
+                "breed": "collie",
+                "breed_zh": "柯利牧羊犬",
+                "original_confidence": 0.398749,
+                "group_score": 39.9077
+              }
+            ],
+            "available_candidates": [
+              "collie",
+              "border_collie"
+            ],
+            "group_mass": 0.999177,
+            "group_margin": 0.201679,
+            "reason": "top-1 在候选组内、组内总概率 0.9992 >= 0.30 且组内分差 0.2017 <= 0.30"
+          },
+          "elapsed_ms": 33.297,
+          "inference_ms": 4.808,
+          "preprocess_ms": 1.981,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      },
+      {
+        "request_index": 5,
+        "response": {
+          "success": true,
+          "record_id": 13,
+          "predictions": [
+            {
+              "breed": "border_collie",
+              "confidence": 0.600428
+            },
+            {
+              "breed": "collie",
+              "confidence": 0.398749
+            },
+            {
+              "breed": "papillon",
+              "confidence": 0.000379
+            }
+          ],
+          "candidate_group": {
+            "triggered": true,
+            "group_id": "collie-pair",
+            "threshold_version": "val-2026-10-21-collie-pair-v1",
+            "top1_breed": "border_collie",
+            "top1_confidence": 0.600428,
+            "candidates": [
+              {
+                "breed": "border_collie",
+                "breed_zh": "边境牧羊犬",
+                "original_confidence": 0.600428,
+                "group_score": 60.0923
+              },
+              {
+                "breed": "collie",
+                "breed_zh": "柯利牧羊犬",
+                "original_confidence": 0.398749,
+                "group_score": 39.9077
+              }
+            ],
+            "available_candidates": [
+              "collie",
+              "border_collie"
+            ],
+            "group_mass": 0.999177,
+            "group_margin": 0.201679,
+            "reason": "top-1 在候选组内、组内总概率 0.9992 >= 0.30 且组内分差 0.2017 <= 0.30"
+          },
+          "elapsed_ms": 31.085,
+          "inference_ms": 4.573,
+          "preprocess_ms": 1.922,
+          "top_k": 3,
+          "num_classes": 136,
+          "note": "confidence is a softmax score over the trained class set, not a true probability"
+        }
+      }
+    ]
+  }
+}

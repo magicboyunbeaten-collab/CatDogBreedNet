@@ -1,0 +1,274 @@
+{
+  "generated_at": "2026-10-21T06:42:49.519514+00:00",
+  "isolated_runtime": "reports/u6_6_exp06_switch/runtime",
+  "env_overrides_applied": {
+    "CATDOG_DB_PATH": "reports/u6_6_exp06_switch/runtime/app.db",
+    "CATDOG_UPLOAD_DIR": "reports/u6_6_exp06_switch/runtime/uploads",
+    "CATDOG_WEIGHTS_PATH": null,
+    "CATDOG_CLASS_NAMES_PATH": null,
+    "CATDOG_IMAGE_SIZE": null,
+    "CATDOG_CANDIDATE_GROUP_ENABLED": null
+  },
+  "note": "只重定向了数据库与上传目录；权重路径、类别映射、推理分辨率、候选开关全部走 config.py 默认值，因此这就是默认启动行为。",
+  "health": {
+    "status": "ok",
+    "model_loaded": true,
+    "num_classes": 136,
+    "model_weights": "best_model.pth",
+    "model_version": "v2_2_exp06_resolution256_lowlr_seed42",
+    "model_error": null,
+    "version": "1.0.0",
+    "time": "2026-10-21T06:42:49.502872+00:00"
+  },
+  "startup_log_identity_lines": [
+    "INFO:     database ready: app.db",
+    "INFO:     class mapping verified against class_names.json (136 classes)",
+    "INFO:     model ready: version=v2_2_exp06_resolution256_lowlr_seed42 arch=resnet18 classes=136 device=cuda image_size=256 (weights: best_model.pth)"
+  ],
+  "samples": [
+    {
+      "role": "collie-pair-known-trigger",
+      "image": "data/v2_processed/val/border_collie/n02106166_416.jpg",
+      "known_trigger_under_v2_1": "collie-pair",
+      "http_status": 200,
+      "original_predictions": [
+        {
+          "breed": "border_collie",
+          "confidence": 0.701424
+        },
+        {
+          "breed": "collie",
+          "confidence": 0.293788
+        },
+        {
+          "breed": "cardigan",
+          "confidence": 0.004476
+        }
+      ],
+      "triggered": false,
+      "candidate_group_id": "collie-pair",
+      "actual_triggered_group": null,
+      "matches_v2_1_behaviour": false,
+      "trigger_reason": "组内分差 0.4076 > 0.30，模型已有明确偏好",
+      "threshold_version": "val-2026-10-21-collie-pair-v1",
+      "group_mass": 0.995212,
+      "group_margin": 0.407636,
+      "candidates": [
+        {
+          "breed": "border_collie",
+          "breed_zh": "边境牧羊犬",
+          "original_confidence": 0.701424,
+          "group_score": 70.4799
+        },
+        {
+          "breed": "collie",
+          "breed_zh": "柯利牧羊犬",
+          "original_confidence": 0.293788,
+          "group_score": 29.5201
+        }
+      ],
+      "group_score_sum": null,
+      "invariants": {
+        "http_200": true,
+        "topk_len_3": true,
+        "no_probabilities_field": true,
+        "top1_breed_preserved": true,
+        "top1_confidence_preserved": true,
+        "group_score_sum_100": null,
+        "scores_equal_normalisation": null
+      },
+      "invariants_passed": true,
+      "num_classes": 136
+    },
+    {
+      "role": "four-breed-known-trigger",
+      "image": "data/v2_processed/val/american_pit_bull_terrier/american_pit_bull_terrier_132.jpg",
+      "known_trigger_under_v2_1": "four-breed-bully",
+      "http_status": 200,
+      "original_predictions": [
+        {
+          "breed": "american_staffordshire_terrier",
+          "confidence": 0.576812
+        },
+        {
+          "breed": "american_pit_bull_terrier",
+          "confidence": 0.421705
+        },
+        {
+          "breed": "walker_hound",
+          "confidence": 0.000495
+        }
+      ],
+      "triggered": true,
+      "candidate_group_id": "four-breed-bully",
+      "actual_triggered_group": "four-breed-bully",
+      "matches_v2_1_behaviour": true,
+      "trigger_reason": "top-1 在候选组内、组内总概率 0.9985 ≥ 0.30 且组内分差 0.1551 ≤ 0.40",
+      "threshold_version": "val-2026-10-19-four-breed-b1",
+      "group_mass": 0.998523,
+      "group_margin": 0.155107,
+      "candidates": [
+        {
+          "breed": "american_staffordshire_terrier",
+          "breed_zh": "美国斯塔福郡梗",
+          "original_confidence": 0.576812,
+          "group_score": 57.7665
+        },
+        {
+          "breed": "american_pit_bull_terrier",
+          "breed_zh": "美国比特斗牛梗",
+          "original_confidence": 0.421705,
+          "group_score": 42.2329
+        },
+        {
+          "breed": "staffordshire_bull_terrier",
+          "breed_zh": "斯塔福郡斗牛梗",
+          "original_confidence": 5e-06,
+          "group_score": 0.0005
+        },
+        {
+          "breed": "american_bulldog",
+          "breed_zh": "美国斗牛犬",
+          "original_confidence": 1e-06,
+          "group_score": 0.0001
+        }
+      ],
+      "group_score_sum": 100.0,
+      "invariants": {
+        "http_200": true,
+        "topk_len_3": true,
+        "no_probabilities_field": true,
+        "top1_breed_preserved": true,
+        "top1_confidence_preserved": true,
+        "group_score_sum_100": true,
+        "scores_equal_normalisation": true
+      },
+      "invariants_passed": true,
+      "num_classes": 136
+    },
+    {
+      "role": "non-target-control",
+      "image": "data/v2_processed/val/beagle/beagle_101.jpg",
+      "known_trigger_under_v2_1": null,
+      "http_status": 200,
+      "original_predictions": [
+        {
+          "breed": "beagle",
+          "confidence": 0.998849
+        },
+        {
+          "breed": "english_foxhound",
+          "confidence": 0.000415
+        },
+        {
+          "breed": "basset_hound",
+          "confidence": 0.000257
+        }
+      ],
+      "triggered": false,
+      "candidate_group_id": "four-breed-bully",
+      "actual_triggered_group": null,
+      "matches_v2_1_behaviour": true,
+      "trigger_reason": "top-1 不在候选组内",
+      "threshold_version": "val-2026-10-19-four-breed-b1",
+      "group_mass": 0.000153,
+      "group_margin": 0.000149,
+      "candidates": [
+        {
+          "breed": "american_bulldog",
+          "breed_zh": "美国斗牛犬",
+          "original_confidence": 0.000151,
+          "group_score": 98.6928
+        },
+        {
+          "breed": "staffordshire_bull_terrier",
+          "breed_zh": "斯塔福郡斗牛梗",
+          "original_confidence": 2e-06,
+          "group_score": 1.3072
+        },
+        {
+          "breed": "american_pit_bull_terrier",
+          "breed_zh": "美国比特斗牛梗",
+          "original_confidence": 0.0,
+          "group_score": 0.0
+        },
+        {
+          "breed": "american_staffordshire_terrier",
+          "breed_zh": "美国斯塔福郡梗",
+          "original_confidence": 0.0,
+          "group_score": 0.0
+        }
+      ],
+      "group_score_sum": null,
+      "invariants": {
+        "http_200": true,
+        "topk_len_3": true,
+        "no_probabilities_field": true,
+        "top1_breed_preserved": true,
+        "top1_confidence_preserved": true,
+        "group_score_sum_100": null,
+        "scores_equal_normalisation": null
+      },
+      "invariants_passed": true,
+      "num_classes": 136
+    }
+  ],
+  "all_invariants_passed": true,
+  "all_match_v2_1_trigger_behaviour": false,
+  "collie_pair_availability_under_exp06": {
+    "finding": "在 exp06 默认配置下，collie-pair 双候选提示在 validation 上不再触发。",
+    "evidence": {
+      "pair_class_images_scanned": 31,
+      "pair_class_triggered": 0,
+      "min_pair_margin_observed": 0.330302,
+      "min_pair_margin_image": "border_collie/n02106166_884.jpg",
+      "threshold": 0.3,
+      "full_val_scanned": 2079,
+      "full_val_collie_pair_triggered": 0,
+      "full_val_four_breed_triggered": 7,
+      "four_breed_triggered_under_v2_1": 10
+    },
+    "explanation": "exp06 在这两类上明显更果断：V2.1 下触发过的三张图 mass/margin 分别为 (0.9992,0.2017)、(0.9987,0.2078)、(0.5689,0.2525)；exp06 下同一批图的 margin 变为 0.4076、0.5794、0.3303，均超过 0.30 阈值。",
+    "not_a_threshold_change": "未放宽任何阈值来凑出触发；阈值与版本号均未改动。",
+    "consequence": "在 exp06 作为默认模型时，collie-pair 候选区实际上处于休眠状态，两套候选里只有 four-breed-bully 会在真实样本上出现。"
+  },
+  "rollback_path_verification": {
+    "purpose": "同时验证 (a) 切回 V2.1 的回退机制可用，(b) collie-pair 策略本身未被破坏。",
+    "config_used": {
+      "CATDOG_WEIGHTS_PATH": "artifacts/v2_1_136classes_seed42/best_model.pth",
+      "CATDOG_CLASS_NAMES_PATH": "artifacts/v2_1_136classes_seed42/class_names.json",
+      "CATDOG_IMAGE_SIZE": "224",
+      "isolated_storage": "reports/u6_6_exp06_switch/runtime_v21"
+    },
+    "health": {
+      "model_version": "v2_1_136classes_candidate",
+      "num_classes": 136,
+      "model_loaded": true,
+      "model_error": null
+    },
+    "startup_log_line": "model ready: version=v2_1_136classes_candidate arch=resnet18 classes=136 device=cuda image_size=224 (weights: best_model.pth)",
+    "collie_pair_sample": {
+      "image": "data/v2_processed/val/border_collie/n02106166_416.jpg",
+      "top1": "border_collie",
+      "top1_confidence": 0.600428,
+      "triggered": true,
+      "group_id": "collie-pair",
+      "group_mass": 0.999177,
+      "group_margin": 0.201679,
+      "candidates": [
+        {
+          "breed_zh": "边境牧羊犬",
+          "group_score": 60.0923
+        },
+        {
+          "breed_zh": "柯利牧羊犬",
+          "group_score": 39.9077
+        }
+      ],
+      "group_score_sum": 100.0,
+      "matches_u6_3_record": true
+    },
+    "conclusion": "回退只需三个环境变量，无需改代码；collie-pair 在 V2.1 下的行为与 U6.3 记录逐位一致，说明 exp06 下的不触发来自模型更果断，而非策略被改坏。"
+  },
+  "port_released_after_shutdown": true
+}

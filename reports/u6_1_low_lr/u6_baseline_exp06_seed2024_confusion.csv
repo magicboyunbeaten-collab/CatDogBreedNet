@@ -1,0 +1,10 @@
+true_label,collie,border_collie,shetland_sheepdog,kelpie,groenendael,cardigan,pembroke,old_english_sheepdog,border_terrier,row_total,correct
+collie,9,4,2,0,0,0,1,0,0,16,9
+border_collie,1,13,0,0,0,0,0,0,0,15,13
+shetland_sheepdog,3,0,13,0,0,0,0,0,0,16,13
+kelpie,0,0,0,11,0,0,1,0,0,16,11
+groenendael,0,0,0,0,12,0,0,0,0,15,12
+cardigan,0,1,0,0,0,11,3,0,0,16,11
+pembroke,0,0,0,0,0,1,17,0,0,18,17
+old_english_sheepdog,0,0,0,0,0,0,0,16,0,17,16
+border_terrier,0,0,0,0,0,0,0,0,18,18,18

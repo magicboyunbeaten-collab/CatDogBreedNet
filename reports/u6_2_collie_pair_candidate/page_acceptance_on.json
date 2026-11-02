@@ -1,0 +1,352 @@
+{
+  "scenario": "on",
+  "generatedAt": "2026-10-21T04:20:55.496Z",
+  "baseUrl": "http://127.0.0.1:5173/predict",
+  "samples": {
+    "triggerA": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_416.jpg",
+    "triggerB": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_549.jpg",
+    "triggerC": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\border_collie\\n02106166_884.jpg",
+    "nonTrigger": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\afghan_hound\\n02088094_1479.jpg",
+    "beagle": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\beagle"
+  },
+  "checks": [
+    {
+      "check": "1: 双候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "1: 组标识为 collie-pair",
+      "passed": true,
+      "detail": "collie-pair"
+    },
+    {
+      "check": "1: 候选行为 2",
+      "passed": true,
+      "detail": "实际 2"
+    },
+    {
+      "check": "1: 两个候选中文名正确",
+      "passed": true,
+      "detail": "[\"柯利牧羊犬\",\"边境牧羊犬\"]"
+    },
+    {
+      "check": "1: 副标题如实说明是这两个牧羊犬难以区分",
+      "passed": true,
+      "detail": "模型对柯利牧羊犬与边境牧羊犬难以明确区分"
+    },
+    {
+      "check": "1: 组内得分和约 100%",
+      "passed": true,
+      "detail": "sum=100.0000"
+    },
+    {
+      "check": "1: 原始 Top-K 仍为 3 行",
+      "passed": true,
+      "detail": "实际 3"
+    },
+    {
+      "check": "1: 原始 Top-1 为中文犬种名",
+      "passed": true,
+      "detail": "边境牧羊犬"
+    },
+    {
+      "check": "1: 图例标注\"候选组内相对得分\"且含 collie-pair 版本",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "2: 双候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "2: 候选行为 2",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "2: 组内得分和约 100%",
+      "passed": true,
+      "detail": "sum=100.0000"
+    },
+    {
+      "check": "2: 原始 Top-1 为\"柯利牧羊犬\"",
+      "passed": true,
+      "detail": "柯利牧羊犬"
+    },
+    {
+      "check": "3: \"你选择的品种\"出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "3: 选择值等于第 2 个候选",
+      "passed": true,
+      "detail": "边境牧羊犬 vs 边境牧羊犬"
+    },
+    {
+      "check": "3: 提示模型首选未被替换",
+      "passed": true,
+      "detail": "模型首选仍为 柯利牧羊犬 （原始分 60.32%），未被替换。"
+    },
+    {
+      "check": "3: 用户选择后原始 Top-K 未变",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "4: 双候选区出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "4: 候选行为 2",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "4: 组内得分和约 100%",
+      "passed": true,
+      "detail": "sum=100.0000"
+    },
+    {
+      "check": "5: 候选区完全不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "5: \"你选择的品种\"不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "5: 原始 Top-K 正常显示 3 行",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "5: 原始 Top-1 为\"柯利牧羊犬\"",
+      "passed": true,
+      "detail": "柯利牧羊犬"
+    },
+    {
+      "check": "6: 非目标犬种候选区不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "6: 非目标犬种 Top-1 为\"比格犬\"",
+      "passed": true,
+      "detail": "比格犬"
+    },
+    {
+      "check": "7: 声明\"不保证候选中一定包含正确品种\"",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "7: 不含\"其中必有一个/必然/一定是\"",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "passed": 28,
+  "total": 28,
+  "evidence": {
+    "triggerA": {
+      "hasCandidateBlock": true,
+      "groupId": "collie-pair",
+      "subtitle": "模型对柯利牧羊犬与边境牧羊犬难以明确区分",
+      "candidates": [
+        {
+          "name": "边境牧羊犬",
+          "scoreText": "60.09%",
+          "rawText": "原始分 60.04%"
+        },
+        {
+          "name": "柯利牧羊犬",
+          "scoreText": "39.91%",
+          "rawText": "原始分 39.87%"
+        }
+      ],
+      "radioCount": 2,
+      "topk": [
+        {
+          "breed": "边境牧羊犬",
+          "scoreText": "60.04%"
+        },
+        {
+          "breed": "柯利牧羊犬",
+          "scoreText": "39.87%"
+        },
+        {
+          "breed": "蝴蝶犬",
+          "scoreText": "0.04%"
+        }
+      ],
+      "userChoice": {
+        "value": "边境牧羊犬",
+        "hint": "模型首选仍为 边境牧羊犬 （原始分 60.04%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nn02106166_416.jpg\n39 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #17\nTop-1\n边境牧羊犬\n60%\n60.04%\nTop-2\n柯利牧羊犬\n39.9%\n39.87%\nTop-3\n蝴蝶犬\n0%\n0.04%\n外观相近的候选品种\n模型对柯利牧羊犬与边境牧羊犬难以明确区分\ncollie-pair\n边境牧羊犬\n60.1%\n60.09%\n原始分 60.04%\n柯利牧羊犬\n39.9%\n39.91%\n原始分 39.87%\n候选组内相对得分（val-2026-10-21-collie-pair-v1）—— 仅在上述2个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 也不保证候选中一定包含正确品种；该得分不代表模型已确认犬只的登记品种。 你可以选择更符合的一张，该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n边境牧羊犬\n模型首选仍为 边境牧羊犬 （原始分 60.04%），未被替换。\n推理耗时\n3.2 ms\n预处理耗时\n1.6 ms\n服务端总耗时\n21.2 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "triggerB": {
+      "hasCandidateBlock": true,
+      "groupId": "collie-pair",
+      "subtitle": "模型对柯利牧羊犬与边境牧羊犬难以明确区分",
+      "candidates": [
+        {
+          "name": "柯利牧羊犬",
+          "scoreText": "60.40%",
+          "rawText": "原始分 60.32%"
+        },
+        {
+          "name": "边境牧羊犬",
+          "scoreText": "39.60%",
+          "rawText": "原始分 39.54%"
+        }
+      ],
+      "radioCount": 2,
+      "topk": [
+        {
+          "breed": "柯利牧羊犬",
+          "scoreText": "60.32%"
+        },
+        {
+          "breed": "边境牧羊犬",
+          "scoreText": "39.54%"
+        },
+        {
+          "breed": "格罗安达牧羊犬",
+          "scoreText": "0.05%"
+        }
+      ],
+      "userChoice": {
+        "value": "柯利牧羊犬",
+        "hint": "模型首选仍为 柯利牧羊犬 （原始分 60.32%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nn02106166_549.jpg\n39 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #19\nTop-1\n柯利牧羊犬\n60.3%\n60.32%\nTop-2\n边境牧羊犬\n39.5%\n39.54%\nTop-3\n格罗安达牧羊犬\n0.1%\n0.05%\n外观相近的候选品种\n模型对柯利牧羊犬与边境牧羊犬难以明确区分\ncollie-pair\n柯利牧羊犬\n60.4%\n60.40%\n原始分 60.32%\n边境牧羊犬\n39.6%\n39.60%\n原始分 39.54%\n候选组内相对得分（val-2026-10-21-collie-pair-v1）—— 仅在上述2个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 也不保证候选中一定包含正确品种；该得分不代表模型已确认犬只的登记品种。 你可以选择更符合的一张，该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n柯利牧羊犬\n模型首选仍为 柯利牧羊犬 （原始分 60.32%），未被替换。\n推理耗时\n3.8 ms\n预处理耗时\n1.7 ms\n服务端总耗时\n24.5 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "userSelection": {
+      "hasCandidateBlock": true,
+      "groupId": "collie-pair",
+      "subtitle": "模型对柯利牧羊犬与边境牧羊犬难以明确区分",
+      "candidates": [
+        {
+          "name": "柯利牧羊犬",
+          "scoreText": "60.40%",
+          "rawText": "原始分 60.32%"
+        },
+        {
+          "name": "边境牧羊犬",
+          "scoreText": "39.60%",
+          "rawText": "原始分 39.54%"
+        }
+      ],
+      "radioCount": 2,
+      "topk": [
+        {
+          "breed": "柯利牧羊犬",
+          "scoreText": "60.32%"
+        },
+        {
+          "breed": "边境牧羊犬",
+          "scoreText": "39.54%"
+        },
+        {
+          "breed": "格罗安达牧羊犬",
+          "scoreText": "0.05%"
+        }
+      ],
+      "userChoice": {
+        "value": "边境牧羊犬",
+        "hint": "模型首选仍为 柯利牧羊犬 （原始分 60.32%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nn02106166_549.jpg\n39 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #19\nTop-1\n柯利牧羊犬\n60.3%\n60.32%\nTop-2\n边境牧羊犬\n39.5%\n39.54%\nTop-3\n格罗安达牧羊犬\n0.1%\n0.05%\n外观相近的候选品种\n模型对柯利牧羊犬与边境牧羊犬难以明确区分\ncollie-pair\n柯利牧羊犬\n60.4%\n60.40%\n原始分 60.32%\n边境牧羊犬\n39.6%\n39.60%\n原始分 39.54%\n候选组内相对得分（val-2026-10-21-collie-pair-v1）—— 仅在上述2个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 也不保证候选中一定包含正确品种；该得分不代表模型已确认犬只的登记品种。 你可以选择更符合的一张，该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n边境牧羊犬\n模型首选仍为 柯利牧羊犬 （原始分 60.32%），未被替换。\n推理耗时\n3.8 ms\n预处理耗时\n1.7 ms\n服务端总耗时\n24.5 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "triggerC": {
+      "hasCandidateBlock": true,
+      "groupId": "collie-pair",
+      "subtitle": "模型对柯利牧羊犬与边境牧羊犬难以明确区分",
+      "candidates": [
+        {
+          "name": "边境牧羊犬",
+          "scoreText": "72.19%",
+          "rawText": "原始分 41.07%"
+        },
+        {
+          "name": "柯利牧羊犬",
+          "scoreText": "27.81%",
+          "rawText": "原始分 15.82%"
+        }
+      ],
+      "radioCount": 2,
+      "topk": [
+        {
+          "breed": "边境牧羊犬",
+          "scoreText": "41.07%"
+        },
+        {
+          "breed": "柯利牧羊犬",
+          "scoreText": "15.82%"
+        },
+        {
+          "breed": "蝴蝶犬",
+          "scoreText": "14.67%"
+        }
+      ],
+      "userChoice": {
+        "value": "边境牧羊犬",
+        "hint": "模型首选仍为 边境牧羊犬 （原始分 41.07%），未被替换。"
+      },
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nn02106166_884.jpg\n79 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #21\nTop-1\n边境牧羊犬\n41.1%\n41.07%\nTop-2\n柯利牧羊犬\n15.8%\n15.82%\nTop-3\n蝴蝶犬\n14.7%\n14.67%\n外观相近的候选品种\n模型对柯利牧羊犬与边境牧羊犬难以明确区分\ncollie-pair\n边境牧羊犬\n72.2%\n72.19%\n原始分 41.07%\n柯利牧羊犬\n27.8%\n27.81%\n原始分 15.82%\n候选组内相对得分（val-2026-10-21-collie-pair-v1）—— 仅在上述2个候选之间归一化，不是整体识别置信度、 真实概率或准确率；括号内为模型原始 Softmax 分数。\n\n以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种， 也不保证候选中一定包含正确品种；该得分不代表模型已确认犬只的登记品种。 你可以选择更符合的一张，该选择仅用于本次查看，不会修改模型预测与历史记录。\n\n你选择的品种\n边境牧羊犬\n模型首选仍为 边境牧羊犬 （原始分 41.07%），未被替换。\n推理耗时\n4.7 ms\n预处理耗时\n1.8 ms\n服务端总耗时\n53.5 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "nonTrigger": {
+      "hasCandidateBlock": false,
+      "groupId": null,
+      "subtitle": null,
+      "candidates": [],
+      "radioCount": 0,
+      "topk": [
+        {
+          "breed": "柯利牧羊犬",
+          "scoreText": "63.91%"
+        },
+        {
+          "breed": "标准贵宾犬",
+          "scoreText": "11.07%"
+        },
+        {
+          "breed": "阿富汗猎犬",
+          "scoreText": "5.38%"
+        }
+      ],
+      "userChoice": null,
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nn02088094_1479.jpg\n35 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #22\nTop-1\n柯利牧羊犬\n63.9%\n63.91%\nTop-2\n标准贵宾犬\n11.1%\n11.07%\nTop-3\n阿富汗猎犬\n5.4%\n5.38%\n推理耗时\n2.4 ms\n预处理耗时\n1.9 ms\n服务端总耗时\n111.5 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    },
+    "beagle": {
+      "hasCandidateBlock": false,
+      "groupId": null,
+      "subtitle": null,
+      "candidates": [],
+      "radioCount": 0,
+      "topk": [
+        {
+          "breed": "比格犬",
+          "scoreText": "98.69%"
+        },
+        {
+          "breed": "英国猎狐犬",
+          "scoreText": "1.05%"
+        },
+        {
+          "breed": "玩具梗",
+          "scoreText": "0.08%"
+        }
+      ],
+      "userChoice": null,
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\nbeagle_101.jpg\n88 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #23\nTop-1\n比格犬\n98.7%\n98.69%\nTop-2\n英国猎狐犬\n1%\n1.05%\nTop-3\n玩具梗\n0.1%\n0.08%\n推理耗时\n3.4 ms\n预处理耗时\n1.6 ms\n服务端总耗时\n105.2 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    }
+  }
+}

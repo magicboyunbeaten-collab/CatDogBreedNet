@@ -1,0 +1,2 @@
+split,tag,weights,class_names,n_samples,n_classes,batch_size,image_size,device,elapsed_seconds,accuracy,macro_f1,weighted_f1,evaluated_at,test_split_access_count
+val,exp07,artifacts\v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42\best_model.pth,artifacts\v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42\class_names.json,2079,136,32,224,cuda,6.87,0.789322,0.796905,0.788739,2026-10-20T10:44:15.305946+00:00,0

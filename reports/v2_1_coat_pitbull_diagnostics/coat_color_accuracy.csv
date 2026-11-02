@@ -1,0 +1,15 @@
+class,coat,coat_zh,n,correct,accuracy,to_other_class,other_class_rate,top_wrong_target,note
+collie,black_white,黑白色,11,6,0.5455,5,0.4545,border_collie,
+collie,tricolor,三色,11,10,0.9091,1,0.0909,border_collie,
+collie,sable,貂色,19,19,1.0,0,0.0,,
+collie,merle,陨石色,9,5,0.5556,2,0.2222,border_collie,
+collie,red_white,红白/黄白,9,9,1.0,0,0.0,,
+collie,other,其他毛色,10,9,0.9,0,0.0,giant_schnauzer,
+collie,uncertain,待人工复核,84,74,0.881,9,0.1071,border_collie,
+border_collie,black_white,黑白色,22,21,0.9545,1,0.0455,collie,
+border_collie,tricolor,三色,3,3,1.0,0,0.0,,
+border_collie,sable,貂色,0,0,0.0,0,0.0,,无样本（分母 0）
+border_collie,merle,陨石色,21,19,0.9048,0,0.0,boston_bull,
+border_collie,red_white,红白/黄白,0,0,0.0,0,0.0,,无样本（分母 0）
+border_collie,other,其他毛色,15,13,0.8667,0,0.0,siberian_husky,
+border_collie,uncertain,待人工复核,83,78,0.9398,2,0.0241,collie,

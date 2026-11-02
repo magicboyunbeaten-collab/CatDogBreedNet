@@ -1,0 +1,102 @@
+path,status,tracked,added_lines,deleted_lines,task_group,runtime_required,has_mixed_changes,mixed_change_sources,commit_suggestion,reason
+backend/app/config.py, M,True,38,3,G1 U5.5 默认模型接入与 136 类中文名,True,False,,建议提交,生产推理路径必需；服务端代码
+backend/app/main.py, M,True,18,1,G1 U5.5 默认模型接入与 136 类中文名,True,True,U5.5 class_names_path 透传 + health model_weights; U5.2 候选组接线早前改动,整文件提交 + 说明（含多任务混合改动）,生产推理路径必需；服务端代码；含多个任务的混合改动，不可按任务简单拆分
+backend/app/routes/predict.py, M,True,11,0,G2 U5.2 四类候选策略,True,False,,建议提交,生产推理路径必需；服务端代码
+backend/app/schemas.py, M,True,57,0,G1 U5.5 默认模型接入与 136 类中文名,True,False,,建议提交,生产推理路径必需；服务端代码
+backend/app/services/predictor.py, M,True,33,2,G1 U5.5 默认模型接入与 136 类中文名,True,True,U5.5 错配明确失败（class count mismatch 含两侧计数）; U5.2 probabilities 透传给候选组,整文件提交 + 说明（含多任务混合改动）,生产推理路径必需；服务端代码；含多个任务的混合改动，不可按任务简单拆分
+frontend/src/components/PredictionResult.vue, M,True,242,1,G2 U5.2 四类候选策略,True,True,U5.3 图例候选数量动态化（candidateCount）; U6.2 group_id 渲染 + collie-pair 副标题; U6.2 不保证候选中一定包含正确品种声明; U5.2 候选区既有实现,整文件提交 + 说明（含多任务混合改动）,生产推理路径必需；前端源码；含多个任务的混合改动，不可按任务简单拆分
+frontend/src/utils/breedNames.js, M,True,133,11,G1 U5.5 默认模型接入与 136 类中文名,True,False,,建议提交,生产推理路径必需；前端源码
+frontend/tests/breedNames.test.js, M,True,90,17,G1 U5.5 默认模型接入与 136 类中文名,False,True,U5.5 136 类映射完整性 + 旧 37 类兼容; U5.2 候选四类中文名断言,整文件提交 + 说明（含多任务混合改动）,自动化测试；含多个任务的混合改动，不可按任务简单拆分
+frontend/tests/historyView.test.js, M,True,35,2,G1 U5.5 默认模型接入与 136 类中文名,False,True,U5.5 136 类中文名（border_collie 等不再回退英文）; U5 早前历史页测试,整文件提交 + 说明（含多任务混合改动）,自动化测试；含多个任务的混合改动，不可按任务简单拆分
+ml/dataset.py, M,True,15,7,G4 训练基础设施修复（U4/U6-C）,False,True,U6-C image_size 参数（build_datasets / build_dataloaders）; U4 早前 AUGMENT_PRESETS / build_transforms,整文件提交 + 说明（含多任务混合改动）,服务端代码；含多个任务的混合改动，不可按任务简单拆分
+ml/predict.py, M,True,15,2,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,服务端代码
+ml/predictor.py, M,True,8,3,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,服务端代码
+ml/train.py, M,True,289,18,G4 训练基础设施修复（U4/U6-C）,False,True,U6-C pair-only 训练通道（--pair-color-jitter / --pair-sampler-weight）; U6-C --image-size 透传（exp04/exp06 分辨率实验）; U6 warm-start 分类头继承修复（initialize_from_checkpoint）; U4 早前训练扩展（--init-from / --monitor / --lr-head 等）,整文件提交 + 说明（含多任务混合改动）,服务端代码；含多个任务的混合改动，不可按任务简单拆分
+tests/test_api.py, M,True,25,0,G2 U5.2 四类候选策略,False,True,U5.5 health model_weights 断言; U5.2 候选组响应断言,整文件提交 + 说明（含多任务混合改动）,自动化测试；含多个任务的混合改动，不可按任务简单拆分
+tests/test_predictor_service.py, M,True,37,0,G2 U5.2 四类候选策略,False,True,U5.5 class_names_path 与错配失败用例; U5.2 候选组安全返回用例,整文件提交 + 说明（含多任务混合改动）,自动化测试；含多个任务的混合改动，不可按任务简单拆分
+tests/test_train_extensions.py, M,True,181,1,G4 训练基础设施修复（U4/U6-C）,False,True,U6-C 训练能力（pair-only / image_size / head_transferred）; U4 早前训练扩展,整文件提交 + 说明（含多任务混合改动）,自动化测试；含多个任务的混合改动，不可按任务简单拆分
+"""\345\220\257\345\212\250\345\220\216\347\253\257.bat""", M,True,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,见分组
+"""\345\220\257\345\212\250\347\263\273\347\273\237.bat""", M,True,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,见分组
+artifacts/_v2_1_smoke/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_1_136classes_seed42/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp01_pair_color_jitter_seed42/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp02_pair_sampler_seed42/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp04_resolution_seed2024/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp04_resolution_seed42/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp04_resolution_seed7/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed2024/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed7/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+artifacts/v2_2_border_collie_exp08_pair_sampler_lowlr_seed42/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+backend/app/services/candidate_group.py,??,False,0,0,G2 U5.2 四类候选策略,True,False,,建议提交,新增文件；生产推理路径必需；服务端代码
+frontend/tests/colliePairCandidate.test.js,??,False,0,0,G3 U6.2 collie-pair 候选策略,False,False,,建议提交,新增文件；自动化测试
+frontend/tests/predictionResult.test.js,??,False,0,0,G2 U5.2 四类候选策略,False,False,,建议提交,新增文件；自动化测试
+frontend/tests/predictionResultAcceptance.test.js,??,False,0,0,G2 U5.2 四类候选策略,False,False,,建议提交,新增文件；自动化测试
+"""md/U5.2_\346\226\271\346\241\210B1\345\233\233\347\261\273\347\233\270\350\277\221\347\212\254\347\247\215\345\200\231\351\200\211\347\273\204\346\255\243\345\274\217\345\256\236\347\216\260\344\273\273\345\212\241.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/U5.4_\345\200\231\351\200\211\347\273\204\345\220\214\345\233\276\344\270\200\350\207\264\346\200\247\344\270\216\345\211\215\347\253\257\345\233\236\345\275\222\346\265\213\350\257\225\344\273\273\345\212\241.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/U5.5_V2.1\346\255\243\345\274\217\346\216\245\345\205\245\344\270\216\350\276\271\347\211\247\345\207\206\347\241\256\347\216\207\346\224\271\350\277\233\350\256\241\345\210\222.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/U5_1_APBT\347\272\263\345\205\245\345\233\233\347\261\273\345\200\231\351\200\211\347\273\204\347\246\273\347\272\277\350\257\204\344\274\260\344\273\273\345\212\241.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/U6.1_\344\275\216\345\255\246\344\271\240\347\216\207\347\272\240\345\201\217\344\270\216\350\276\271\347\211\247\344\270\223\351\241\271\345\257\271\347\205\247\345\256\236\351\252\214\344\273\273\345\212\241.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/U6.2_\346\237\257\345\210\251\344\270\216\350\276\271\345\242\203\347\211\247\347\276\212\347\212\254\345\217\214\345\200\231\351\200\211\346\217\220\347\244\272\345\256\236\346\226\275\344\273\273\345\212\241.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/U6.3_\351\273\230\350\256\244\345\220\257\345\212\250\350\241\214\344\270\272\346\240\270\351\252\214\344\270\216\345\256\211\345\205\250\345\233\272\345\214\226.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/V2.1_136\347\261\273\345\210\253\346\250\241\345\236\213\350\256\255\347\273\203\344\273\273\345\212\241.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/V2.1_\347\233\270\350\277\221\347\212\254\347\247\215\345\200\231\351\200\211\346\217\220\347\244\272\344\270\216\350\276\271\347\211\247\345\244\215\346\240\270\346\225\264\345\220\210\344\273\273\345\212\241.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/V2.1_\350\257\257\345\210\206\347\261\273\350\257\212\346\226\255\344\270\216APBT_AmStaff\346\225\260\346\215\256\345\256\241\350\256\241\344\273\273\345\212\241.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+"""md/u6_border_collie_improvement_plan_\344\277\256\350\256\242\347\211\210.md""",??,False,0,0,G7 无法明确归属或更早任务的既有改动,False,False,,建议提交,新增文件
+ml/u6_pair_training.py,??,False,0,0,G4 训练基础设施修复（U4/U6-C）,False,False,,建议提交,新增文件；服务端代码
+reports/u5_5_v2_1_integration/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/u6_1_low_lr/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/u6_2_collie_pair_candidate/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/u6_3_default_runtime_and_freeze/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/u6_border_collie/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/v2_1_apbt_four_breed_candidate_eval/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/v2_1_candidate_ui_review/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/v2_1_coat_pitbull_diagnostics/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/v2_1_diagnostics/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/v2_1_four_breed_candidate_implementation/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/v2_1_four_breed_consistency_review/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+reports/v2_1_four_breed_page_acceptance/,??,False,0,0,G6 报告/截图/CSV/临时 runtime/冒烟产物/checkpoint,False,False,,不提交,新增文件；实验/报告产物，体积大且与运行代码无关
+scripts/accept_candidate_group_api.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/accept_collie_pair_api.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/accept_four_breed_candidate_api.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/accept_v2_1_integration.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/audit_cross_class_duplicates.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/audit_external_sources.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/audit_pitbull_labels.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/build_manual_review_queue.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/check_candidate_consistency.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/diagnose_coat_color.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/diagnose_v2_1.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/diagnostic_protection_snapshot.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/evaluate_apbt_four_group.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/evaluate_v2_1_subsets.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/export_candidate_triggers_val.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/finalize_v2_1_candidate.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/generate_breed_mapping.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/page_accept_collie_pair.mjs,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/page_accept_four_breed.mjs,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/page_accept_v2_1_integration.mjs,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/reconcile_u5_2_numbers.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/run_four_breed_backend.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/summarize_coat_review.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/summarize_coat_test.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_2_collie_pair_threshold.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_3_git_inventory.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_3_page_probe.mjs,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_3_runtime_probe.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_3_static_audit.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_3_verify_switch_off.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_baseline_val.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_build_u6_1_reports.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_collect_s0.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_collect_s0_snapshot.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_compare_candidates.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_freeze_criteria.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_parse_reviews.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_run_experiment.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/u6_warm_start_audit.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/validate_candidate_group_thresholds.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+scripts/verify_apbt_candidate_limit.py,??,False,0,0,G5 验收与诊断脚本,False,False,,建议提交,新增文件
+tests/test_candidate_group.py,??,False,0,0,G2 U5.2 四类候选策略,False,False,,建议提交,新增文件；自动化测试
+tests/test_collie_pair_candidate.py,??,False,0,0,G3 U6.2 collie-pair 候选策略,False,False,,建议提交,新增文件；自动化测试

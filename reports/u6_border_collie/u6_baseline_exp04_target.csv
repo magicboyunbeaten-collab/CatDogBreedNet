@@ -1,0 +1,4 @@
+class,support,true_positive,precision,recall,f1,recall_wilson_low,recall_wilson_high,top_error_destinations,tag,split
+collie,16,10,0.7142857142857143,0.625,0.6666666666666666,0.3864,0.8152,border_collie:4; pembroke:1; shetland_sheepdog:1,exp04,val
+border_collie,15,13,0.5909090909090909,0.8666666666666667,0.7027027027027027,0.6212,0.9626,collie:2,exp04,val
+BIDIRECTIONAL,31,25,nan,nan,nan,,,collie->border_collie 4/16; border_collie->collie 2/15; 合计 6/31,exp04,val

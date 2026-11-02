@@ -1,0 +1,22 @@
+INFO:     Started server process [68392]
+INFO:     Waiting for application startup.
+INFO:     database ready: app.db
+INFO:     class mapping verified against class_names.json (136 classes)
+INFO:     model ready: version=v2_1_136classes_candidate arch=resnet18 classes=136 device=cuda (weights: best_model.pth)
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55245 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55246 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55247 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55248 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55250 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55251 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55253 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55254 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55255 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55256 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55257 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55258 - "POST /api/predict HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55259 - "POST /api/predict HTTP/1.1" 200 OK

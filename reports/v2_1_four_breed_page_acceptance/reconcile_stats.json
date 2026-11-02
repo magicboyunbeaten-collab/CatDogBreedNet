@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-10-19T12:56:56.892259+00:00",
+  "sources_read": [
+    "E:\\CatDogBreedNet\\reports\\v2_1_apbt_four_breed_candidate_eval\\newly_triggered_by_apbt.csv",
+    "E:\\CatDogBreedNet\\reports\\v2_1_apbt_four_breed_candidate_eval\\triggered_by_both_strategies.csv",
+    "E:\\CatDogBreedNet\\reports\\v2_1_apbt_four_breed_candidate_eval\\out_of_group_trigger_examples.csv",
+    "E:\\CatDogBreedNet\\reports\\v2_1_four_breed_candidate_implementation\\validation_samples_four_breed.csv",
+    "E:\\CatDogBreedNet\\reports\\v2_1_four_breed_candidate_implementation\\acceptance_api_responses.json"
+  ],
+  "per_source_record_counts": {
+    "newly_triggered_by_apbt": 7,
+    "triggered_by_both": 5,
+    "out_of_group": 4
+  },
+  "source_record_total": 16,
+  "unique_image_count_across_sources": 12,
+  "duplicate_records": {
+    "E:\\CatDogBreedNet\\data\\v2_processed\\val\\bull_mastiff\\n02108422_3297.jpg": 2,
+    "E:\\CatDogBreedNet\\data\\v2_processed\\val\\bull_mastiff\\n02108422_5619.jpg": 2,
+    "E:\\CatDogBreedNet\\data\\v2_processed\\val\\kelpie\\n02105412_133.jpg": 2,
+    "E:\\CatDogBreedNet\\data\\v2_processed\\val\\rhodesian_ridgeback\\n02087394_9698.jpg": 2
+  },
+  "sample_csv": {
+    "rows": 16,
+    "unique_sample_ids": 12,
+    "by_source": {
+      "newly_triggered_by_apbt": 7,
+      "triggered_by_both": 5,
+      "out_of_group": 4
+    },
+    "triggered_flag_counts": {
+      "true": 16
+    }
+  },
+  "acceptance_json": {
+    "check_items": 160,
+    "passed": 160,
+    "evidence_triggered_records": 16,
+    "evidence_triggered_unique_images": 12,
+    "evidence_triggered_true": 16,
+    "controls": 3,
+    "switch_off": 12
+  },
+  "relations": {
+    "nineteen_is": "source records 16 + controls 3 = 19 条记录；对应唯一图片 15 张",
+    "sixteen_is": "7 (newly) + 5 (both) + 4 (out_of_group) = 16 条记录",
+    "twelve_is": "7 (newly) + 5 (both) = 12 张唯一触发图；out_of_group 的 4 张全部已包含在这 12 张内",
+    "newly_vs_both_overlap": 0,
+    "out_of_group_only_new_images": 0,
+    "out_of_group_is_subset_of_12": true
+  }
+}

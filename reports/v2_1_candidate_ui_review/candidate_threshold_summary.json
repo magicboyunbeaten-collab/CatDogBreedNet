@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-10-19T05:28:29.400683+00:00",
+  "model_dir": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42",
+  "val_dir": "E:\\CatDogBreedNet\\data\\v2_processed\\val",
+  "val_images": 2079,
+  "split_used": "validation only (test split never read)",
+  "candidate_group": [
+    "american_staffordshire_terrier",
+    "staffordshire_bull_terrier",
+    "american_bulldog"
+  ],
+  "top1_in_candidate_group": 36,
+  "top1_in_candidate_group_ratio": 0.017316,
+  "group_mass_distribution_all_val": {
+    "n": 2079,
+    "min": 0.0,
+    "p25": 0.0,
+    "median": 1e-06,
+    "p75": 2e-05,
+    "p90": 0.0005,
+    "max": 0.999901
+  },
+  "group_mass_distribution_subpopulation": {
+    "n": 36,
+    "min": 0.379363,
+    "p25": 0.630382,
+    "median": 0.865364,
+    "p75": 0.996491,
+    "p90": 0.999204,
+    "max": 0.999901
+  },
+  "group_margin_distribution_subpopulation": {
+    "n": 36,
+    "min": 0.071797,
+    "p25": 0.53815,
+    "median": 0.762459,
+    "p75": 0.97298,
+    "p90": 0.995512,
+    "max": 0.999882
+  },
+  "target_coverage_range_of_subpopulation": [
+    0.05,
+    0.5
+  ],
+  "current_module_thresholds": {
+    "mass": 0.2,
+    "margin": 0.2
+  },
+  "chosen_thresholds": {
+    "mass_threshold": 0.3,
+    "margin_threshold": 0.4,
+    "triggered_count": 5,
+    "subpopulation": 36,
+    "coverage_of_subpopulation": 0.138889,
+    "coverage_of_all_val": 0.002405,
+    "true_label_in_group": 2,
+    "true_label_in_group_ratio": 0.4,
+    "top1_of_triggered": "american_staffordshire_terrier:4; staffordshire_bull_terrier:1"
+  },
+  "grid_rows": 72
+}

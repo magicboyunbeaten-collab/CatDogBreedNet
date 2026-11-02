@@ -1,0 +1,59 @@
+{
+  "scenario": "off",
+  "generatedAt": "2026-10-19T13:58:24.008Z",
+  "baseUrl": "http://127.0.0.1:5173/predict",
+  "samples": {
+    "competition": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_11.jpg",
+    "apbtTop1": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\american_pit_bull_terrier\\american_pit_bull_terrier_132.jpg",
+    "sbtTop1": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\staffordshire_bull_terrier\\staffordshire_bull_terrier_160.jpg",
+    "cat": "E:\\CatDogBreedNet\\data\\v2_processed\\val\\Abyssinian\\Abyssinian_10.jpg"
+  },
+  "checks": [
+    {
+      "check": "7: 候选区消失",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "7: \"你选择的品种\"不出现",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "7: 原始 Top-K 仍为 3 行",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "7: 原始 Top-1 仍为\"美国比特斗牛梗\"（预测不受开关影响）",
+      "passed": true,
+      "detail": "美国比特斗牛梗"
+    }
+  ],
+  "passed": 4,
+  "total": 4,
+  "evidence": {
+    "switchOff": {
+      "hasCandidateBlock": false,
+      "legend": null,
+      "candidates": [],
+      "radioCount": 0,
+      "topk": [
+        {
+          "breed": "美国比特斗牛梗",
+          "scoreText": "46.72%"
+        },
+        {
+          "breed": "美国斯塔福郡梗",
+          "scoreText": "39.06%"
+        },
+        {
+          "breed": "玩具梗",
+          "scoreText": "8.12%"
+        }
+      ],
+      "userChoice": null,
+      "bodyText": "猫狗品种分类识别系统\n图片识别\n识别历史\n识别统计\n模型已就绪\n图片识别\n查看识别历史\n上传一张猫或狗的图片，系统将基于 ResNet18 模型预测最可能的品种（Top-3）并给出 Softmax 分数。\n1. 选择图片\namerican_pit_bull_terrier_132.jpg\n16 KB\n移除图片\n重新选择\n开始识别\n一键清空\n识别结果\n记录 #5\nTop-1\n美国比特斗牛梗\n46.7%\n46.72%\nTop-2\n美国斯塔福郡梗\n39.1%\n39.06%\nTop-3\n玩具梗\n8.1%\n8.12%\n推理耗时\n193.0 ms\n预处理耗时\n2.1 ms\n服务端总耗时\n230.0 ms\nconfidence is a softmax score over the trained class set, not a true probability；识别范围仅限训练时包含的 136 个品种， 不保证能识别训练类别之外的动物、物体或无效图片。\n基于 ResNet18 的 37 类猫狗品种分类（Oxford-IIIT Pet Dataset）· 预测分数为 Softmax 归一化分数，非真实正确概率"
+    }
+  }
+}

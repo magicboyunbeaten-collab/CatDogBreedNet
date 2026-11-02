@@ -1,0 +1,154 @@
+﻿# U6.5 阶段 A：只读 Git 同步核验原文
+
+## 1. git rev-parse HEAD
+ca86b0b7bdbb1530f1c96896c3316e48a81f9868
+
+## 2. git branch --show-current
+master
+
+## 3. git log -4 --oneline
+ca86b0b Extend training infrastructure for warm-start and pair experiments
+62c86bf Use V2.1 defaults in Windows launchers
+bfb9fd0 Add regression tests for prediction and candidate UX
+52165ca Integrate V2.1 136-class prediction and candidate groups
+
+## 4. git status --short
+?? artifacts/_v2_1_smoke/
+?? artifacts/v2_1_136classes_seed42/
+?? artifacts/v2_2_border_collie_exp01_pair_color_jitter_seed42/
+?? artifacts/v2_2_border_collie_exp02_pair_sampler_seed42/
+?? artifacts/v2_2_border_collie_exp04_resolution_seed2024/
+?? artifacts/v2_2_border_collie_exp04_resolution_seed42/
+?? artifacts/v2_2_border_collie_exp04_resolution_seed7/
+?? artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed2024/
+?? artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed42/
+?? artifacts/v2_2_border_collie_exp06_resolution256_lowlr_seed7/
+?? artifacts/v2_2_border_collie_exp07_pair_color_jitter_lowlr_seed42/
+?? artifacts/v2_2_border_collie_exp08_pair_sampler_lowlr_seed42/
+?? md/U5.2_方案B1四类相近犬种候选组正式实现任务.md
+?? md/U5.4_候选组同图一致性与前端回归测试任务.md
+?? md/U5.5_V2.1正式接入与边牧准确率改进计划.md
+?? md/U5_1_APBT纳入四类候选组离线评估任务.md
+?? md/U6.1_低学习率纠偏与边牧专项对照实验任务.md
+?? md/U6.2_柯利与边境牧羊犬双候选提示实施任务.md
+?? md/U6.3_默认启动行为核验与安全固化.md
+?? md/U6.4.1_测试修复与Git正式固化执行.md
+?? md/U6.4_Git安全固化_审核与提交计划.md
+?? md/U6.5_远端同步核验与阶段收尾_修订版.md
+?? md/V2.1_136类别模型训练任务.md
+?? md/V2.1_相近犬种候选提示与边牧复核整合任务.md
+?? md/V2.1_误分类诊断与APBT_AmStaff数据审计任务.md
+?? md/u6_border_collie_improvement_plan_修订版.md
+?? reports/u5_5_v2_1_integration/
+?? reports/u6_1_low_lr/
+?? reports/u6_2_collie_pair_candidate/
+?? reports/u6_3_default_runtime_and_freeze/
+?? reports/u6_4_1_git_finalization/
+?? reports/u6_4_git_freeze_review/
+?? reports/u6_border_collie/
+?? reports/v2_1_apbt_four_breed_candidate_eval/
+?? reports/v2_1_candidate_ui_review/
+?? reports/v2_1_coat_pitbull_diagnostics/
+?? reports/v2_1_diagnostics/
+?? reports/v2_1_four_breed_candidate_implementation/
+?? reports/v2_1_four_breed_consistency_review/
+?? reports/v2_1_four_breed_page_acceptance/
+?? scripts/accept_candidate_group_api.py
+?? scripts/accept_collie_pair_api.py
+?? scripts/accept_four_breed_candidate_api.py
+?? scripts/accept_v2_1_integration.py
+?? scripts/audit_cross_class_duplicates.py
+?? scripts/audit_external_sources.py
+?? scripts/audit_pitbull_labels.py
+?? scripts/build_manual_review_queue.py
+?? scripts/check_candidate_consistency.py
+?? scripts/diagnose_coat_color.py
+?? scripts/diagnose_v2_1.py
+?? scripts/diagnostic_protection_snapshot.py
+?? scripts/evaluate_apbt_four_group.py
+?? scripts/evaluate_v2_1_subsets.py
+?? scripts/export_candidate_triggers_val.py
+?? scripts/finalize_v2_1_candidate.py
+?? scripts/generate_breed_mapping.py
+?? scripts/page_accept_collie_pair.mjs
+?? scripts/page_accept_four_breed.mjs
+?? scripts/page_accept_v2_1_integration.mjs
+?? scripts/reconcile_u5_2_numbers.py
+?? scripts/run_four_breed_backend.py
+?? scripts/summarize_coat_review.py
+?? scripts/summarize_coat_test.py
+?? scripts/u6_2_collie_pair_threshold.py
+?? scripts/u6_3_git_inventory.py
+?? scripts/u6_3_page_probe.mjs
+?? scripts/u6_3_runtime_probe.py
+?? scripts/u6_3_static_audit.py
+?? scripts/u6_3_verify_switch_off.py
+?? scripts/u6_4_1_remaining_inventory.py
+?? scripts/u6_4_capture_baseline.py
+?? scripts/u6_4_git_review.py
+?? scripts/u6_baseline_val.py
+?? scripts/u6_build_u6_1_reports.py
+?? scripts/u6_collect_s0.py
+?? scripts/u6_collect_s0_snapshot.py
+?? scripts/u6_compare_candidates.py
+?? scripts/u6_freeze_criteria.py
+?? scripts/u6_parse_reviews.py
+?? scripts/u6_run_experiment.py
+?? scripts/u6_warm_start_audit.py
+?? scripts/validate_candidate_group_thresholds.py
+?? scripts/verify_apbt_candidate_limit.py
+
+## 5. git diff --cached --name-status（须为空）
+(空)
+
+## 6. git diff --name-status（须为空）
+(空)
+
+## 7. git ls-remote origin refs/heads/master（实际读取远端）
+ca86b0b7bdbb1530f1c96896c3316e48a81f9868	refs/heads/master
+LS_REMOTE_EXIT=0
+
+
+## 8. 四个提交的祖先关系（证明均在远端 master 上）
+52165ca  merge-base --is-ancestor 52165ca HEAD -> True（是 HEAD 祖先）
+bfb9fd0  merge-base --is-ancestor bfb9fd0 HEAD -> True（是 HEAD 祖先）
+62c86bf  merge-base --is-ancestor 62c86bf HEAD -> True（是 HEAD 祖先）
+ca86b0b  merge-base --is-ancestor ca86b0b HEAD -> True（是 HEAD 祖先）
+
+## 9. 本地 remote-tracking ref（**附带对照，不作判据**）
+origin/master = ca86b0b7bdbb1530f1c96896c3316e48a81f9868
+
+## 10. 判据汇总
+| # | 判据 | 结果 |
+|---|---|---|
+| 1 | HEAD == ca86b0b7bdbb1530f1c96896c3316e48a81f9868 | PASS |
+| 2 | 远端 SHA 与本地 HEAD 逐字符相同 | PASS |
+| 3 | git diff --cached --name-status 为空 | PASS |
+| 4 | git status --short 中 M（已跟踪未暂存修改）为 0 | PASS（实际 0）|
+| 5 | 四个提交均可达自 HEAD（故在远端 master 上）| PASS（4/4 True）|
+
+## 11. 未跟踪项说明
+git status --short 中的 ?? 条目是 U6.4.1 明确有意排除的报告、一次性脚本、任务单与实验产物，
+**不是提交遗漏**，也不要求工作区完全干净。当前 ?? 条目 84 项 =
+U6.4.1 结束时的 83 项 + md/U6.5_远端同步核验与阶段收尾_修订版.md（本任务单 1 项）。
+
+## 12. 收尾复核时的一次网络失败（如实记录）
+
+阶段 A 判据处的 **首次** `git ls-remote origin refs/heads/master` **成功**（见 §7），
+返回 `ca86b0b7bdbb1530f1c96896c3316e48a81f9868`，`LS_REMOTE_EXIT=0`。
+**本任务对该远端已同步的结论完全依据那次成功读取。**
+
+收尾复核时**再次**执行同一命令遇到网络瞬时故障，原始错误：
+
+`
+error: RPC failed; curl 28 Failed to connect to github.com:443 after 21067 ms: Could not connect to server
+fatal: expected flush after ref listing
+`
+
+退出码非 0，无 ref 输出。该失败**不影响结论**：
+- 结论依据是首次成功读取的原始输出，已固化在本文件 §7；
+- 本任务全程**未执行 fetch / pull / push**，远端不可能因本任务而变化；
+- 重试未成功，因此**不能**用本次输出去否定或替代 §7 的结果。
+
+如需再次确认远端状态，请在网络稳定时重跑：
+`git ls-remote origin refs/heads/master`（只读）。

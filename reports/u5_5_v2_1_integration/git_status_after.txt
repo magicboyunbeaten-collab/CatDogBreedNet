@@ -1,0 +1,62 @@
+﻿ M backend/app/config.py
+ M backend/app/main.py
+ M backend/app/routes/predict.py
+ M backend/app/schemas.py
+ M backend/app/services/predictor.py
+ M frontend/src/components/PredictionResult.vue
+ M frontend/src/utils/breedNames.js
+ M frontend/tests/breedNames.test.js
+ M frontend/tests/historyView.test.js
+ M ml/predict.py
+ M ml/predictor.py
+ M ml/train.py
+ M tests/test_api.py
+ M tests/test_predictor_service.py
+ M tests/test_train_extensions.py
+ M 启动后端.bat
+ M 启动系统.bat
+?? artifacts/_v2_1_smoke/
+?? artifacts/v2_1_136classes_seed42/
+?? backend/app/services/candidate_group.py
+?? frontend/tests/predictionResult.test.js
+?? frontend/tests/predictionResultAcceptance.test.js
+?? md/U5.2_方案B1四类相近犬种候选组正式实现任务.md
+?? md/U5.4_候选组同图一致性与前端回归测试任务.md
+?? md/U5.5_V2.1正式接入与边牧准确率改进计划.md
+?? md/U5_1_APBT纳入四类候选组离线评估任务.md
+?? md/V2.1_136类别模型训练任务.md
+?? md/V2.1_相近犬种候选提示与边牧复核整合任务.md
+?? md/V2.1_误分类诊断与APBT_AmStaff数据审计任务.md
+?? reports/u5_5_v2_1_integration/
+?? reports/v2_1_apbt_four_breed_candidate_eval/
+?? reports/v2_1_candidate_ui_review/
+?? reports/v2_1_coat_pitbull_diagnostics/
+?? reports/v2_1_diagnostics/
+?? reports/v2_1_four_breed_candidate_implementation/
+?? reports/v2_1_four_breed_consistency_review/
+?? reports/v2_1_four_breed_page_acceptance/
+?? scripts/accept_candidate_group_api.py
+?? scripts/accept_four_breed_candidate_api.py
+?? scripts/accept_v2_1_integration.py
+?? scripts/audit_cross_class_duplicates.py
+?? scripts/audit_external_sources.py
+?? scripts/audit_pitbull_labels.py
+?? scripts/build_manual_review_queue.py
+?? scripts/check_candidate_consistency.py
+?? scripts/diagnose_coat_color.py
+?? scripts/diagnose_v2_1.py
+?? scripts/diagnostic_protection_snapshot.py
+?? scripts/evaluate_apbt_four_group.py
+?? scripts/evaluate_v2_1_subsets.py
+?? scripts/export_candidate_triggers_val.py
+?? scripts/finalize_v2_1_candidate.py
+?? scripts/generate_breed_mapping.py
+?? scripts/page_accept_four_breed.mjs
+?? scripts/page_accept_v2_1_integration.mjs
+?? scripts/reconcile_u5_2_numbers.py
+?? scripts/run_four_breed_backend.py
+?? scripts/summarize_coat_review.py
+?? scripts/summarize_coat_test.py
+?? scripts/validate_candidate_group_thresholds.py
+?? scripts/verify_apbt_candidate_limit.py
+?? tests/test_candidate_group.py

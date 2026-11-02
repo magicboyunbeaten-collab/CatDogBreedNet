@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-10-21T03:44:36.597707+00:00",
+  "weights": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\best_model.pth",
+  "class_names": "E:\\CatDogBreedNet\\artifacts\\v2_1_136classes_seed42\\class_names.json",
+  "val_images": 2079,
+  "num_classes": 136,
+  "test_split_access_count": 0,
+  "top1_in_pair_subset": 39,
+  "true_pair_total": 31,
+  "mass_grid": [
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.4,
+    0.5
+  ],
+  "margin_grid": [
+    0.02,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.4
+  ],
+  "grid_combinations": 56
+}

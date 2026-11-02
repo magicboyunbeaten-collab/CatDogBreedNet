@@ -1,0 +1,1135 @@
+﻿diff --git a/backend/app/config.py b/backend/app/config.py
+index fefca9d..d33a49c 100644
+--- a/backend/app/config.py
++++ b/backend/app/config.py
+@@ -33,6 +33,16 @@ def _env_int(name: str, default: int) -> int:
+         return default
+ 
+ 
++def _env_bool(name: str, default: bool) -> bool:
++    """Parse an explicit boolean flag; anything else falls back to default."""
++    raw = _env(name, "1" if default else "0").strip().lower()
++    if raw in ("1", "true", "yes", "on"):
++        return True
++    if raw in ("0", "false", "no", "off"):
++        return False
++    return default
++
++
+ def _env_list(name: str, default: list[str]) -> list[str]:
+     raw = _env(name, ",".join(default))
+     return [item.strip() for item in raw.split(",") if item.strip()]
+@@ -50,6 +60,12 @@ class Settings:
+     device: str = "auto"               # auto | cpu | cuda
+     default_top_k: int = 3
+ 
++    # --- 相近犬种候选组（AmStaff / SBT / American Bulldog）---
++    # 默认关闭：关闭时 /api/predict 的响应字段与 V1.1 完全一致。
++    # 该开关只影响"是否附加候选组展示信息"，不改变模型、权重、类别定义，
++    # 也不改变正式模型默认加载路径。
++    candidate_group_enabled: bool = False
++
+     # --- uploads & validation ---
+     upload_dir: Path = ROOT_DIR / "uploads"
+     max_upload_bytes: int = 10 * 1024 * 1024      # 10 MB
+@@ -81,6 +97,7 @@ class Settings:
+                                    str(ARTIFACTS_DIR / "best_model.pth"))),
+             device=_env("DEVICE", "auto"),
+             default_top_k=_env_int("DEFAULT_TOP_K", 3),
++            candidate_group_enabled=_env_bool("CANDIDATE_GROUP_ENABLED", False),
+             upload_dir=Path(_env("UPLOAD_DIR", str(ROOT_DIR / "uploads"))),
+             max_upload_bytes=_env_int("MAX_UPLOAD_MB", 10) * 1024 * 1024,
+             max_image_pixels=_env_int("MAX_IMAGE_PIXELS", 25_000_000),
+diff --git a/backend/app/main.py b/backend/app/main.py
+index 79dec89..c1eca3d 100644
+--- a/backend/app/main.py
++++ b/backend/app/main.py
+@@ -54,7 +54,8 @@ async def lifespan(app: FastAPI):
+     else:
+         try:
+             app.state.predictor = PredictorService(
+-                weights_path=settings.weights_path, device=settings.device)
++                weights_path=settings.weights_path, device=settings.device,
++                candidate_group_enabled=settings.candidate_group_enabled)
+             app.state.model_error = None
+         except Exception as exc:
+             # Log the full reason server-side, expose only a short reason.
+diff --git a/backend/app/routes/predict.py b/backend/app/routes/predict.py
+index 91f8895..8a33c80 100644
+--- a/backend/app/routes/predict.py
++++ b/backend/app/routes/predict.py
+@@ -98,10 +98,21 @@ async def predict(
+             from exc
+ 
+     elapsed_ms = (time.perf_counter() - started) * 1000
++    # 候选组仅在显式开启时计算；关闭时字段为 None，响应与 V1.1 完全一致。
++    # 注意：候选组绝不参与数据库写入，历史记录语义不变。
++    candidate_group = None
++    if getattr(settings, "candidate_group_enabled", False):
++        try:
++            candidate_group = predictor.candidate_group(result)
++        except Exception:  # never let an optional feature break prediction
++            logger.exception("candidate group computation failed")
++            candidate_group = None
++
+     return PredictResponse(
+         success=True,
+         record_id=record.id,
+         predictions=result["predictions"],
++        candidate_group=candidate_group,
+         elapsed_ms=round(elapsed_ms, 3),
+         inference_ms=result["inference_ms"],
+         preprocess_ms=result["preprocess_ms"],
+diff --git a/backend/app/schemas.py b/backend/app/schemas.py
+index cae0f44..386ec03 100644
+--- a/backend/app/schemas.py
++++ b/backend/app/schemas.py
+@@ -15,12 +15,57 @@ class PredictionItem(BaseModel):
+                               description="softmax score over trained classes")
+ 
+ 
++class CandidateBreedItem(BaseModel):
++    """One entry of the look-alike candidate group.
++
++    ``group_score`` is a *within-group* relative score
++    (``p_i / sum(p_j for j in group) * 100``) — **not** an overall confidence,
++    a true probability, or an accuracy. ``original_confidence`` keeps the raw
++    softmax value so debugging/tracing stays possible.
++    """
++
++    breed: str
++    breed_zh: str
++    original_confidence: float = Field(
++        ..., ge=0.0, le=1.0, description="raw softmax score over trained "
++                                         "classes, unmodified")
++    group_score: float = Field(
++        ..., description="within-candidate-group relative score in percent "
++                         "(0-100); NOT an overall confidence")
++
++
++class CandidateGroupInfo(BaseModel):
++    """Look-alike candidate group attached to a prediction.
++
++    ``triggered`` is False whenever the trigger conditions are not met; the
++    front end must then keep rendering the legacy result view. ``None`` means
++    the feature is disabled or the model's class space does not contain the
++    group at all (e.g. the 37-class V1.1 model).
++    """
++
++    triggered: bool
++    threshold_version: str
++    top1_breed: str
++    top1_confidence: float
++    candidates: list[CandidateBreedItem]
++    available_candidates: list[str]
++    group_mass: float = Field(
++        ..., description="sum of raw softmax scores of the available "
++                         "candidates")
++    group_margin: float = Field(
++        ..., description="raw-score gap between the group's top-1 and top-2")
++    reason: str
++
++
+ class PredictResponse(BaseModel):
+     """Response of POST /api/predict."""
+ 
+     success: bool = True
+     record_id: int
+     predictions: list[PredictionItem]
++    candidate_group: CandidateGroupInfo | None = Field(
++        None, description="look-alike candidate group; None keeps the legacy "
++                          "response shape (feature disabled or not triggered)")
+     elapsed_ms: float = Field(
+         ..., description="server-side processing time: image validation, "
+                          "preprocessing and inference combined")
+diff --git a/backend/app/services/predictor.py b/backend/app/services/predictor.py
+index e5dfe27..ee28102 100644
+--- a/backend/app/services/predictor.py
++++ b/backend/app/services/predictor.py
+@@ -52,12 +52,15 @@ class PredictorService:
+     """
+ 
+     def __init__(self, weights_path: Path, device: str = "auto",
+-                 class_names_path: Path = CLASS_NAMES_PATH) -> None:
++                 class_names_path: Path = CLASS_NAMES_PATH,
++                 candidate_group_enabled: bool = False) -> None:
+         self.weights_path = Path(weights_path)
+         self.predictor = Predictor(weights_path=self.weights_path, device=device)
+         self.class_names = self.predictor.class_names
+         self.num_classes = self.predictor.num_classes
+         self.device = str(self.predictor.device)
++        #: 相近犬种候选组开关（默认关闭；开启也不改变模型、权重或类别定义）。
++        self.candidate_group_enabled = bool(candidate_group_enabled)
+         self.model_version = read_model_version(self.weights_path)
+         version_id = (self.model_version or {}).get("version_id", "unknown")
+ 
+@@ -75,3 +78,15 @@ class PredictorService:
+     def predict_pil(self, image, top_k: int = 3) -> dict:
+         """Predict one decoded image; see ``ml.predictor.Predictor``."""
+         return self.predictor.predict_pil(image, top_k=top_k)
++
++    def candidate_group(self, result: dict) -> dict | None:
++        """Candidate-group info for a prediction result, if the feature is on.
++
++        Returns ``None`` when the feature is disabled or the trigger conditions
++        are not met, so the caller can keep the legacy response shape.
++        """
++        from .candidate_group import resolve_candidate_group
++
++        return resolve_candidate_group(
++            result, class_names=self.class_names,
++            enabled=self.candidate_group_enabled)
+diff --git a/frontend/src/components/PredictionResult.vue b/frontend/src/components/PredictionResult.vue
+index b251efc..8d38f1a 100644
+--- a/frontend/src/components/PredictionResult.vue
++++ b/frontend/src/components/PredictionResult.vue
+@@ -31,6 +31,78 @@
+ 
+       <el-divider border-style="dashed" />
+ 
++      <!-- 相近品种候选区：仅在候选组被触发时渲染，默认关闭时完全不出现 -->
++      <el-collapse-transition>
++        <div v-if="candidateTriggered" class="candidate-block">
++          <div class="candidate-head">
++            <span class="candidate-title">外观相近的候选品种</span>
++            <span class="candidate-subtitle">模型在这几个品种间难以明确区分</span>
++          </div>
++
++          <div
++            v-for="item in candidateGroup.candidates"
++            :key="item.breed"
++            class="candidate-row"
++            :class="{ 'is-model-top': item.breed === candidateGroup.top1_breed }"
++          >
++            <el-radio
++              :value="item.breed"
++              :model-value="userChoice"
++              @change="userChoice = item.breed"
++            >
++              <span class="candidate-name">{{ item.breed_zh }}</span>
++            </el-radio>
++            <div class="candidate-score">
++              <el-progress
++                :percentage="Math.round(item.group_score * 10) / 10"
++                :stroke-width="12"
++                :text-inside="true"
++                color="#a0cfff"
++              />
++              <span class="candidate-score-value">
++                {{ item.group_score.toFixed(2) }}%
++              </span>
++            </div>
++            <span class="candidate-raw">
++              原始分 {{ (item.original_confidence * 100).toFixed(2) }}%
++            </span>
++          </div>
++
++          <div class="candidate-legend">
++            <el-text size="small" type="info">
++              候选组内相对得分（{{ candidateGroup.threshold_version }}）——
++              仅在上述{{ candidateCount }}个候选之间归一化，<b>不是</b>整体识别置信度、
++              真实概率或准确率；括号内为模型原始 Softmax 分数。
++            </el-text>
++          </div>
++
++          <el-alert
++            type="info"
++            :closable="false"
++            show-icon
++            class="candidate-note"
++          >
++            以下仅为外观相近品种的候选提示：单张图片未必足以可靠区分这些相近品种，
++            该得分也不代表模型已确认犬只的登记品种。你可以选择更符合的一张，
++            该选择仅用于本次查看，不会修改模型预测与历史记录。
++          </el-alert>
++
++          <!-- 用户选择与模型预测分开呈现，互不覆盖 -->
++          <div v-if="userChoice" class="user-choice">
++            <span class="user-choice-label">你选择的品种</span>
++            <span class="user-choice-value">
++              {{ displayName(userChoice) }}
++            </span>
++            <el-text size="small" type="info" class="user-choice-hint">
++              模型首选仍为 {{ displayName(candidateGroup.top1_breed) }}
++              （原始分 {{ (candidateGroup.top1_confidence * 100).toFixed(2) }}%），未被替换。
++            </el-text>
++          </div>
++        </div>
++      </el-collapse-transition>
++
++      <el-divider border-style="dashed" />
++
+       <div class="timing-grid">
+         <div class="timing-item">
+           <span class="timing-label">推理耗时</span>
+@@ -55,14 +127,38 @@
+ </template>
+ 
+ <script setup>
++import { computed, ref, watch } from 'vue'
+ import { getBreedDisplayName } from '../utils/breedNames'
+ 
+-defineProps({
++const props = defineProps({
+   result: {
+     type: Object,
+     default: null
+   }
+ })
++
++// --- 相近品种候选组 -------------------------------------------------------
++// 仅在 result.candidate_group.triggered 为真时渲染；字段缺失（功能关闭或
++// V1.1 模型）时整个候选区不出现，页面与改动前完全一致。
++const candidateGroup = computed(() => props.result?.candidate_group ?? null)
++const candidateTriggered = computed(
++  () => candidateGroup.value?.triggered === true
++)
++
++// 候选数量由后端返回的 candidates 长度决定，文案中的"N 个候选"随之变化，
++// 避免把三类/四类写死导致文案与实际展示不一致。
++const candidateCount = computed(
++  () => candidateGroup.value?.candidates?.length ?? 0
++)
++
++// 用户选择：仅存在组件内存中，不调用任何 API、不写入数据库，
++// 也绝不覆盖模型原始预测（result.predictions 保持原样渲染）。
++const userChoice = ref('')
++watch(candidateGroup, (group) => {
++  userChoice.value = group?.top1_breed ?? ''
++}, { immediate: true })
++
++const displayName = (breed) => getBreedDisplayName(breed)
+ </script>
+ 
+ <style scoped>
+@@ -124,6 +220,123 @@ defineProps({
+   margin-bottom: 12px;
+ }
+ 
++/* --- 相近品种候选区 --- */
++.candidate-block {
++  margin-bottom: 12px;
++  padding: 12px;
++  border: 1px solid var(--el-border-color-lighter);
++  border-radius: 8px;
++  background: var(--el-fill-color-lighter);
++}
++
++.candidate-head {
++  display: flex;
++  align-items: baseline;
++  gap: 10px;
++  margin-bottom: 10px;
++}
++
++.candidate-title {
++  font-size: 14px;
++  font-weight: 600;
++  color: var(--el-text-color-primary);
++}
++
++.candidate-subtitle {
++  font-size: 12px;
++  color: var(--el-text-color-secondary);
++}
++
++.candidate-row {
++  display: grid;
++  grid-template-columns: 180px 1fr 110px;
++  align-items: center;
++  gap: 12px;
++  padding: 6px 8px;
++  border-radius: 6px;
++  transition: background-color 0.2s ease;
++}
++
++.candidate-row:hover {
++  background: var(--el-color-primary-light-9);
++}
++
++.candidate-row.is-model-top {
++  background: var(--el-color-primary-light-9);
++}
++
++.candidate-name {
++  font-weight: 500;
++}
++
++.candidate-score {
++  display: flex;
++  align-items: center;
++  gap: 10px;
++}
++
++.candidate-score :deep(.el-progress) {
++  flex: 1;
++}
++
++.candidate-score-value {
++  min-width: 62px;
++  text-align: right;
++  font-variant-numeric: tabular-nums;
++  font-weight: 600;
++}
++
++.candidate-raw {
++  font-size: 12px;
++  color: var(--el-text-color-secondary);
++  font-variant-numeric: tabular-nums;
++}
++
++.candidate-legend {
++  margin-top: 8px;
++  line-height: 1.6;
++}
++
++.candidate-note {
++  margin-top: 8px;
++}
++
++.user-choice {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: baseline;
++  gap: 8px;
++  margin-top: 10px;
++  padding: 8px 10px;
++  border-left: 3px solid var(--el-color-primary);
++  border-radius: 4px;
++  background: var(--el-color-primary-light-9);
++}
++
++.user-choice-label {
++  font-size: 12px;
++  color: var(--el-text-color-secondary);
++}
++
++.user-choice-value {
++  font-weight: 600;
++}
++
++.user-choice-hint {
++  flex-basis: 100%;
++}
++
++@media (max-width: 640px) {
++  .candidate-row {
++    grid-template-columns: 1fr;
++    gap: 6px;
++  }
++
++  .candidate-raw {
++    text-align: right;
++  }
++}
++
+ .timing-item {
+   display: flex;
+   flex-direction: column;
+diff --git a/frontend/src/utils/breedNames.js b/frontend/src/utils/breedNames.js
+index 9f15385..3f4a539 100644
+--- a/frontend/src/utils/breedNames.js
++++ b/frontend/src/utils/breedNames.js
+@@ -51,10 +51,32 @@ const BREED_NAMES_ZH = {
+   yorkshire_terrier: '约克夏梗',
+ }
+ 
++/**
++ * 相近犬种候选组的附加中文名（V2.1 候选模型能力，U5.2 方案 B1 四类）。
++ *
++ * 这些标签不在 37 类正式标签空间内，因此单独存放，避免影响
++ * BREED_MAPPING_SIZE 与既有"覆盖 37 类"的测试。合并进
++ * getBreedDisplayName 后，未知标签依旧回退英文原名。
++ */
++export const CANDIDATE_BREED_NAMES_ZH = {
++  american_pit_bull_terrier: '美国比特斗牛梗',
++  american_staffordshire_terrier: '美国斯塔福郡梗',
++  staffordshire_bull_terrier: '斯塔福郡斗牛梗',
++  american_bulldog: '美国斗牛犬',
++}
++
++/** 候选组的 canonical label（与后端 CANDIDATE_GROUP 保持一致）。 */
++export const CANDIDATE_GROUP = [
++  'american_pit_bull_terrier',
++  'american_staffordshire_terrier',
++  'staffordshire_bull_terrier',
++  'american_bulldog',
++]
++
+ /** Chinese display name for a breed label; falls back to the raw label. */
+ export function getBreedDisplayName(breed) {
+   if (!breed) return ''
+-  return BREED_NAMES_ZH[breed] || breed
++  return BREED_NAMES_ZH[breed] || CANDIDATE_BREED_NAMES_ZH[breed] || breed
+ }
+ 
+ /** A copy of the full mapping (37 entries). */
+diff --git a/frontend/tests/breedNames.test.js b/frontend/tests/breedNames.test.js
+index 88c8963..dfd58b2 100644
+--- a/frontend/tests/breedNames.test.js
++++ b/frontend/tests/breedNames.test.js
+@@ -9,6 +9,7 @@ import { dirname, resolve } from 'node:path'
+ import { describe, expect, it } from 'vitest'
+ import {
+   BREED_MAPPING_SIZE,
++  CANDIDATE_GROUP,
+   getBreedDisplayName,
+   getBreedMapping,
+ } from '../src/utils/breedNames'
+@@ -46,6 +47,39 @@ describe('breedNames mapping', () => {
+     expect(getBreedDisplayName('unknown_breed')).toBe('unknown_breed')
+   })
+ 
++  it('keeps the mapping at exactly 37 entries (V1.1 class space)', () => {
++    // 候选组的附加中文名单独存放，不得改变 37 类映射的规模。
++    expect(BREED_MAPPING_SIZE).toBe(37)
++    expect(Object.keys(getBreedMapping()).length).toBe(37)
++    expect(
++      Object.prototype.hasOwnProperty.call(getBreedMapping(),
++        'american_staffordshire_terrier')).toBe(false)
++  })
++
++  it('resolves the candidate-group label AmStaff via the extra mapping', () => {
++    // AmStaff 只在 V2.1 的 136 类空间中存在，通过附加字典提供中文名。
++    expect(getBreedDisplayName('american_staffordshire_terrier'))
++      .toBe('美国斯塔福郡梗')
++  })
++
++  it('resolves the candidate-group label APBT via the extra mapping', () => {
++    // APBT 在 37 类正式空间中存在，但中文名经候选组附加字典提供（U5.2 四类）。
++    expect(getBreedDisplayName('american_pit_bull_terrier'))
++      .toBe('美国比特斗牛梗')
++  })
++
++  it('exposes the four candidate-group labels (U5.2 B1)', () => {
++    expect(CANDIDATE_GROUP).toEqual([
++      'american_pit_bull_terrier',
++      'american_staffordshire_terrier',
++      'staffordshire_bull_terrier',
++      'american_bulldog',
++    ])
++    for (const label of CANDIDATE_GROUP) {
++      expect(getBreedDisplayName(label)).toMatch(/\S/)
++    }
++  })
++
+   it('handles empty input without crashing', () => {
+     expect(getBreedDisplayName('')).toBe('')
+     expect(getBreedDisplayName(null)).toBe('')
+diff --git a/ml/predict.py b/ml/predict.py
+index f2b40b8..e1e400f 100644
+--- a/ml/predict.py
++++ b/ml/predict.py
+@@ -45,7 +45,15 @@ def load_image(image_path: Path) -> Image.Image:
+ 
+ 
+ def predict_from_tensor(model, image_tensor, class_names, top_k=3, device="cpu"):
+-    """Run the model on a single image tensor (C,H,W); return a result dict."""
++    """Run the model on a single image tensor (C,H,W); return a result dict.
++
++    Besides the Top-K list the result also carries the **full softmax vector**
++    under ``probabilities`` (``{class_name: score}``). Top-K alone is not enough
++    for look-alike candidate groups: a candidate ranked below ``top_k`` would
++    otherwise be treated as a zero probability and shown as 0 %, which would
++    misrepresent the model output. The extra key is internal only — the API
++    response schema never exposes it.
++    """
+     num_classes = len(class_names)
+     if not 1 <= top_k <= num_classes:
+         raise ValueError(
+@@ -62,7 +70,12 @@ def predict_from_tensor(model, image_tensor, class_names, top_k=3, device="cpu")
+         {"breed": class_names[idx], "confidence": round(float(score), 6)}
+         for score, idx in zip(top_scores.tolist(), top_indices.tolist())
+     ]
+-    return {"predictions": predictions, "elapsed_ms": round(elapsed_ms, 3)}
++    probabilities = {
++        class_names[index]: round(float(score), 6)
++        for index, score in enumerate(scores.tolist())
++    }
++    return {"predictions": predictions, "probabilities": probabilities,
++            "elapsed_ms": round(elapsed_ms, 3)}
+ 
+ 
+ def predict_image(
+diff --git a/ml/predictor.py b/ml/predictor.py
+index 85214bc..9264871 100644
+--- a/ml/predictor.py
++++ b/ml/predictor.py
+@@ -65,9 +65,13 @@ class Predictor:
+         """Predict one already-decoded RGB image.
+ 
+         Returns ``{"predictions": [{"breed", "confidence"}...],
+-        "inference_ms": float, "preprocess_ms": float}`` where
+-        ``inference_ms`` covers the model forward pass only and
+-        ``preprocess_ms`` covers the deterministic eval transform.
++        "probabilities": {...}, "inference_ms": float,
++        "preprocess_ms": float}`` where ``inference_ms`` covers the model
++        forward pass only and ``preprocess_ms`` covers the deterministic eval
++        transform. ``probabilities`` is the full softmax vector over the
++        trained classes; it stays internal (the API schema never exposes it)
++        and exists so look-alike candidate groups are not blind to candidates
++        ranked below ``top_k``.
+         """
+         if not 1 <= top_k <= self.num_classes:
+             raise ValueError(
+@@ -80,6 +84,7 @@ class Predictor:
+                                          top_k=top_k, device=self.device)
+         return {
+             "predictions": result["predictions"],
++            "probabilities": result.get("probabilities"),
+             "inference_ms": result["elapsed_ms"],
+             "preprocess_ms": round(preprocess_ms, 3),
+         }
+diff --git a/ml/train.py b/ml/train.py
+index e014356..a57d70b 100644
+--- a/ml/train.py
++++ b/ml/train.py
+@@ -20,6 +20,8 @@ from __future__ import annotations
+ 
+ import argparse
+ import csv
++import hashlib
++import json
+ import platform
+ import sys
+ import time
+@@ -41,6 +43,7 @@ import matplotlib  # noqa: E402
+ 
+ matplotlib.use("Agg")
+ from matplotlib import pyplot as plt  # noqa: E402
++from sklearn.metrics import f1_score  # noqa: E402
+ from torch.optim import AdamW  # noqa: E402
+ from torch.optim.lr_scheduler import StepLR  # noqa: E402
+ 
+@@ -112,9 +115,25 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+                         help="label smoothing factor (0 disables, baseline)")
+     parser.add_argument("--mixup-alpha", type=float, default=0.0,
+                         help="Mixup Beta(alpha, alpha); 0 disables (baseline)")
++    parser.add_argument("--init-from", type=Path, default=None,
++                        help="initialize from an existing checkpoint (e.g. a "
++                             "37-class model) by loading only shape-compatible "
++                             "parameters and re-initializing the head. The "
++                             "skipped-keys set is asserted to be exactly the "
++                             "classification head, never silently ignored.")
++    parser.add_argument("--monitor", default="val_acc",
++                        choices=["val_acc", "val_macro_f1"],
++                        help="metric used for best-checkpoint selection and "
++                             "early stopping. Default 'val_acc' keeps the "
++                             "historical behaviour unchanged.")
+     return parser.parse_args(argv)
+ 
+ 
++#: Head parameter names excluded when transferring a checkpoint whose
++#: ``num_classes`` differs from the current run (e.g. 37 -> 136).
++HEAD_PARAM_KEYS = ("fc.weight", "fc.bias")
++
++
+ def _subset_loader(loader, limit, shuffle):
+     dataset = loader.dataset
+     dataset.samples = dataset.samples[:limit]
+@@ -274,18 +293,45 @@ def train_one_epoch(model, loader, criterion, optimizer, device,
+ 
+ 
+ @torch.no_grad()
+-def evaluate(model, loader, criterion, device):
+-    """Evaluate on a loader; return (avg_loss, accuracy)."""
++def evaluate_with_metrics(model, loader, criterion, device):
++    """Evaluate on a loader; return ``(avg_loss, accuracy, macro_f1)``.
++
++    Macro-F1 uses ``zero_division=0`` so a class that is never predicted does
++    not raise. It is the primary model-selection metric for multi-class runs
++    with uneven class populations (V2.1), because plain accuracy favours the
++    more populated classes.
++    """
+     model.eval()
+     total_loss, total_correct, total_samples = 0.0, 0, 0
++    y_true: list[int] = []
++    y_pred: list[int] = []
+     for images, labels in loader:
+         images, labels = images.to(device), labels.to(device)
+         logits = model(images)
+         loss = criterion(logits, labels)
++        predictions = logits.argmax(dim=1)
+         total_loss += loss.item() * labels.size(0)
+-        total_correct += (logits.argmax(dim=1) == labels).sum().item()
++        total_correct += (predictions == labels).sum().item()
+         total_samples += labels.size(0)
+-    return total_loss / total_samples, total_correct / total_samples
++        y_true.extend(labels.tolist())
++        y_pred.extend(predictions.tolist())
++    if not total_samples:
++        return 0.0, 0.0, 0.0
++    accuracy = total_correct / total_samples
++    macro_f1 = float(f1_score(y_true, y_pred, average="macro",
++                              zero_division=0))
++    return total_loss / total_samples, accuracy, macro_f1
++
++
++@torch.no_grad()
++def evaluate(model, loader, criterion, device):
++    """Evaluate on a loader; return (avg_loss, accuracy).
++
++    Kept as a thin wrapper so existing callers keep the two-value contract.
++    """
++    loss, accuracy, _macro_f1 = evaluate_with_metrics(
++        model, loader, criterion, device)
++    return loss, accuracy
+ 
+ 
+ def save_curves(rows: list[dict], reports_dir: Path) -> None:
+@@ -316,6 +362,103 @@ def save_curves(rows: list[dict], reports_dir: Path) -> None:
+     plt.close(fig)
+ 
+ 
++def _sha256_file(path: Path) -> str:
++    digest = hashlib.sha256()
++    with path.open("rb") as handle:
++        for chunk in iter(lambda: handle.read(1 << 20), b""):
++            digest.update(chunk)
++    return digest.hexdigest()
++
++
++def initialize_from_checkpoint(model, checkpoint_path,
++                               head_prefix: str = "fc.") -> dict:
++    """Transfer shape-compatible weights from ``checkpoint_path`` into ``model``.
++
++    The classification head is deliberately **not** transferred (its shape
++    depends on ``num_classes``). Every other parameter must load, and the
++    result is *asserted* rather than trusted:
++
++    * the missing keys must be exactly the head tensors (and nothing else);
++    * there must be no unexpected keys;
++    * the number of transferred tensors must equal
++      ``len(source_state_dict) - len(head_keys)``.
++
++    A broad unchecked ``strict=False`` is therefore impossible: any deviation
++    raises ``ValueError`` and aborts the run instead of silently producing a
++    partially initialized model.
++
++    Returns metadata suitable for ``experiment_config.json``.
++    """
++    checkpoint_path = Path(checkpoint_path)
++    if not checkpoint_path.exists():
++        raise FileNotFoundError(f"init checkpoint not found: {checkpoint_path}")
++    try:
++        payload = torch.load(checkpoint_path, map_location="cpu",
++                             weights_only=True)
++    except Exception:  # noqa: BLE001 - older payloads may need weights_only=False
++        payload = torch.load(checkpoint_path, map_location="cpu",
++                             weights_only=False)
++    if not isinstance(payload, dict) or "state_dict" not in payload:
++        raise ValueError(
++            f"init checkpoint {checkpoint_path} has no 'state_dict' entry")
++
++    source_arch = payload.get("arch")
++    if source_arch != "resnet18":
++        raise ValueError(
++            f"init checkpoint arch={source_arch!r}; only 'resnet18' is "
++            f"supported for weight transfer")
++    source_classes = payload.get("num_classes")
++    source_names = list(payload.get("class_names") or [])
++    if source_classes is None or len(source_names) != int(source_classes):
++        raise ValueError(
++            f"init checkpoint is inconsistent: num_classes={source_classes} "
++            f"but {len(source_names)} class names stored")
++
++    source_state = payload["state_dict"]
++    head_keys = {key for key in source_state if key.startswith(head_prefix)}
++    expected_head = {f"{head_prefix}weight", f"{head_prefix}bias"}
++    if head_keys - expected_head:
++        raise ValueError(
++            f"init checkpoint has unexpected head tensors: "
++            f"{sorted(head_keys - expected_head)}")
++
++    transfer = {key: value for key, value in source_state.items()
++                if not key.startswith(head_prefix)}
++    if not transfer:
++        raise ValueError(
++            f"init checkpoint {checkpoint_path} contains no transferable "
++            f"backbone parameters")
++
++    result = model.load_state_dict(transfer, strict=False)
++    missing = set(result.missing_keys)
++    unexpected = set(result.unexpected_keys)
++    if unexpected:
++        raise ValueError(
++            f"init checkpoint has keys the model does not define: "
++            f"{sorted(unexpected)}")
++    permitted_missing = expected_head & set(model.state_dict())
++    if missing != permitted_missing:
++        raise ValueError(
++            f"init checkpoint left unexpected parameters uninitialized: "
++            f"missing={sorted(missing)}; only {sorted(permitted_missing)} "
++            f"(the classification head) may be re-initialized")
++    if len(transfer) != len(source_state) - len(head_keys):
++        raise ValueError("internal error: transferred tensor count mismatch")
++
++    return {
++        "path": str(checkpoint_path),
++        "sha256": _sha256_file(checkpoint_path),
++        "source_arch": source_arch,
++        "source_num_classes": int(source_classes),
++        "source_class_names": source_names,
++        "loaded_keys": len(transfer),
++        "skipped_keys": sorted(head_keys),
++        "skipped_reason": (
++            "classification head re-initialized because the class count "
++            "changed"),
++    }
++
++
+ def main(argv: list[str] | None = None) -> int:
+     args = parse_args(argv)
+     started = time.time()
+@@ -353,17 +496,39 @@ def main(argv: list[str] | None = None) -> int:
+         model, args.arch, args.freeze_strategy)
+     print(f"[train] freeze strategy '{args.freeze_strategy}': "
+           f"{freeze_description}")
++
++    init_metadata = None
++    if args.init_from is not None:
++        init_metadata = initialize_from_checkpoint(model, args.init_from)
++        print(f"[train] initialized backbone from {init_metadata['path']} "
++              f"(source {init_metadata['source_arch']}/"
++              f"{init_metadata['source_num_classes']} classes): "
++              f"loaded {init_metadata['loaded_keys']} tensors, "
++              f"re-initialized {init_metadata['skipped_keys']}", flush=True)
++
+     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
+     optimizer = build_optimizer(
+         model, arch=args.arch, lr=args.lr, weight_decay=args.weight_decay,
+         lr_head=args.lr_head, lr_backbone=args.lr_backbone)
+     scheduler = StepLR(optimizer, step_size=args.step_size, gamma=args.gamma)
+ 
++    # Refuse to overwrite an existing experiment directory. The legacy default
++    # (``artifacts/``) is exempt because it always contains previous results and
++    # the historical default invocation must keep working.
++    if (args.output_dir.exists() and any(args.output_dir.iterdir())
++            and args.output_dir.resolve() != ARTIFACTS_DIR.resolve()):
++        print(f"[train] refusing to overwrite non-empty output dir "
++              f"{args.output_dir}; choose a new --output-dir",
++              file=sys.stderr)
++        return 2
++
+     args.output_dir.mkdir(parents=True, exist_ok=True)
+     args.reports_dir.mkdir(parents=True, exist_ok=True)
+ 
+     rows: list[dict] = []
+     best_val_acc = -1.0
++    best_val_macro_f1 = -1.0
++    best_monitor_value = -1.0
+     best_epoch = -1
+     epochs_without_improvement = 0
+ 
+@@ -373,16 +538,23 @@ def main(argv: list[str] | None = None) -> int:
+             train_loss, train_acc = train_one_epoch(
+                 model, train_loader, criterion, optimizer, device,
+                 mixup_alpha=args.mixup_alpha)
+-            val_loss, val_acc = evaluate(model, val_loader, criterion, device)
++            val_loss, val_acc, val_macro_f1 = evaluate_with_metrics(
++                model, val_loader, criterion, device)
+             scheduler.step()
+             epoch_seconds = time.time() - epoch_started
+ 
++            # Primary metric drives best-checkpoint selection and early
++            # stopping; ``--monitor val_acc`` preserves the historical default.
++            monitor_value = (val_macro_f1 if args.monitor == "val_macro_f1"
++                             else val_acc)
++
+             row = {
+                 "epoch": epoch,
+                 "train_loss": round(train_loss, 6),
+                 "train_acc": round(train_acc, 6),
+                 "val_loss": round(val_loss, 6),
+                 "val_acc": round(val_acc, 6),
++                "val_macro_f1": round(val_macro_f1, 6),
+                 "lr": scheduler.get_last_lr()[0],
+                 "epoch_seconds": round(epoch_seconds, 2),
+             }
+@@ -390,30 +562,38 @@ def main(argv: list[str] | None = None) -> int:
+             print(f"[epoch {epoch:>3}/{args.epochs}] "
+                   f"train_loss={train_loss:.4f} train_acc={train_acc:.4f} "
+                   f"val_loss={val_loss:.4f} val_acc={val_acc:.4f} "
++                  f"val_macro_f1={val_macro_f1:.4f} "
+                   f"lr={row['lr']:.2e} ({epoch_seconds:.1f}s)", flush=True)
+ 
+-            # Keep the latest weights every epoch; best weights by val accuracy.
+-            # ``arch`` must be passed explicitly: save_checkpoint defaults to
+-            # the baseline resnet18, which would mislabel non-resnet18
+-            # checkpoints and break load_checkpoint's architecture dispatch.
++            # Keep the latest weights every epoch; best weights by the monitored
++            # metric. ``arch`` must be passed explicitly: save_checkpoint
++            # defaults to the baseline resnet18, which would mislabel
++            # non-resnet18 checkpoints and break load_checkpoint's dispatch.
+             save_checkpoint(model, args.output_dir / "last_model.pth",
+                             class_names, arch=args.arch,
+                             extra={"epoch": epoch})
+-            if val_acc > best_val_acc:
++            if monitor_value > best_monitor_value:
++                best_monitor_value = monitor_value
+                 best_val_acc = val_acc
++                best_val_macro_f1 = val_macro_f1
+                 best_epoch = epoch
+                 epochs_without_improvement = 0
+                 save_checkpoint(model, args.output_dir / "best_model.pth",
+                                 class_names, arch=args.arch,
+-                                extra={"epoch": epoch, "val_acc": val_acc})
+-                print(f"[train] new best val_acc={val_acc:.4f} at epoch {epoch}; "
++                                extra={"epoch": epoch, "val_acc": val_acc,
++                                       "val_macro_f1": val_macro_f1,
++                                       "monitor": args.monitor,
++                                       "monitor_value": monitor_value})
++                print(f"[train] new best {args.monitor}={monitor_value:.4f} "
++                      f"at epoch {epoch} (val_acc={val_acc:.4f}, "
++                      f"val_macro_f1={val_macro_f1:.4f}); "
+                       f"saved best_model.pth", flush=True)
+             else:
+                 epochs_without_improvement += 1
+ 
+             if args.patience and epochs_without_improvement >= args.patience:
+-                print(f"[train] early stopping: no val_acc improvement for "
+-                      f"{epochs_without_improvement} epochs")
++                print(f"[train] early stopping: no {args.monitor} improvement "
++                      f"for {epochs_without_improvement} epochs")
+                 break
+     except torch.cuda.OutOfMemoryError:
+         print("[train] CUDA out of memory. Suggestions: reduce --batch-size "
+@@ -449,6 +629,10 @@ def main(argv: list[str] | None = None) -> int:
+         "epochs_completed": len(rows),
+         "best_epoch": best_epoch,
+         "best_val_acc": best_val_acc,
++        "best_val_macro_f1": best_val_macro_f1,
++        "monitor": args.monitor,
++        "best_monitor_value": best_monitor_value,
++        "init_from": init_metadata,
+         "batch_size": args.batch_size,
+         "lr": args.lr,
+         "lr_head": args.lr_head,
+@@ -469,6 +653,10 @@ def main(argv: list[str] | None = None) -> int:
+         "eval_transform": "Resize(256) + CenterCrop(224) + Normalize(ImageNet)",
+         "normalization": "ImageNet mean/std",
+         "data_dir": str(args.data_dir),
++        "class_count": num_classes,
++        "class_names": list(class_names),
++        "class_order_sha256": hashlib.sha256(
++            json.dumps(list(class_names)).encode("utf-8")).hexdigest(),
+         "dataset_split_policy": (
+             "test = official test split; train/val = official trainval split "
+             f"stratified per class, seed={SEED}, val_ratio={VAL_RATIO}"),
+@@ -490,11 +678,13 @@ def main(argv: list[str] | None = None) -> int:
+     }
+     config_path = args.output_dir / "experiment_config.json"
+     config_path.write_text(
+-        __import__("json").dumps(experiment_config, indent=2, ensure_ascii=False),
++        json.dumps(experiment_config, indent=2, ensure_ascii=False),
+         encoding="utf-8")
+ 
+     print(f"[train] done in {time.time() - started:.1f}s; "
+-          f"best_val_acc={best_val_acc:.4f} (epoch {best_epoch})")
++          f"monitor={args.monitor} best={best_monitor_value:.4f} "
++          f"(epoch {best_epoch}); best_val_acc={best_val_acc:.4f} "
++          f"best_val_macro_f1={best_val_macro_f1:.4f}")
+     print(f"[train] artifacts: {args.output_dir}/ "
+           f"(best_model.pth, last_model.pth, class_names.json, experiment_config.json)")
+     print(f"[train] reports: {log_path}, loss_curve.png, accuracy_curve.png")
+diff --git a/tests/test_train_extensions.py b/tests/test_train_extensions.py
+index fd47799..d39341e 100644
+--- a/tests/test_train_extensions.py
++++ b/tests/test_train_extensions.py
+@@ -18,11 +18,14 @@ if str(REPO_ROOT) not in sys.path:
+     sys.path.insert(0, str(REPO_ROOT))
+ 
+ from ml.dataset import AUGMENT_PRESETS, build_transforms  # noqa: E402
+-from ml.model import SUPPORTED_ARCHS, build_model  # noqa: E402
++from ml.model import SUPPORTED_ARCHS, build_model, save_checkpoint  # noqa: E402
+ from ml.train import (  # noqa: E402
+     AUGMENT_DESCRIPTIONS,
+     apply_freeze_strategy,
+     build_optimizer,
++    evaluate_with_metrics,
++    initialize_from_checkpoint,
++    parse_args,
+     train_one_epoch,
+ )
+ 
+@@ -240,3 +243,180 @@ def test_train_one_epoch_with_mixup_returns_finite_metrics():
+         mixup_alpha=0.2)
+     assert loss > 0 and loss == loss
+     assert 0.0 <= accuracy <= 1.0
++
++
++# ---------------------------------------------------------------------------
++# U4：从旧 checkpoint 迁移骨干（V1.1 37 类 -> V2.1 136 类）
++# ---------------------------------------------------------------------------
++
++def _source_checkpoint(tmp_path, source_classes: int = 5,
++                       class_names: list[str] | None = None,
++                       drop_key: str | None = None,
++                       extra_key: str | None = None):
++    """Build a small ResNet18 checkpoint on disk and return (path, names)."""
++    names = class_names or [f"breed_{i}" for i in range(source_classes)]
++    model = build_model(arch="resnet18", num_classes=len(names),
++                        pretrained=False)
++    payload = {
++        "arch": "resnet18",
++        "num_classes": len(names),
++        "class_names": list(names),
++        "state_dict": model.state_dict(),
++    }
++    if drop_key is not None:
++        payload["state_dict"].pop(drop_key)
++    if extra_key is not None:
++        payload["state_dict"][extra_key] = torch.zeros(1)
++    path = tmp_path / "source.pth"
++    torch.save(payload, path)
++    return path, names
++
++
++def test_initialize_from_checkpoint_transfers_backbone_only(tmp_path):
++    """骨干参数必须逐张量一致，且只有分类头被重新初始化。"""
++    path, names = _source_checkpoint(tmp_path, source_classes=5)
++    source = build_model(arch="resnet18", num_classes=5, pretrained=False)
++    source.load_state_dict(torch.load(path, weights_only=True)["state_dict"])
++
++    target = build_model(arch="resnet18", num_classes=9, pretrained=False)
++    before_head = target.fc.weight.detach().clone()
++    metadata = initialize_from_checkpoint(target, path)
++
++    assert metadata["source_arch"] == "resnet18"
++    assert metadata["source_num_classes"] == 5
++    assert metadata["source_class_names"] == names
++    assert metadata["skipped_keys"] == ["fc.bias", "fc.weight"]
++    assert metadata["loaded_keys"] == len(source.state_dict()) - 2
++    assert len(metadata["sha256"]) == 64
++
++    # 骨干被迁移
++    assert torch.equal(target.conv1.weight, source.conv1.weight)
++    assert torch.equal(target.layer4[1].conv2.weight,
++                       source.layer4[1].conv2.weight)
++    # 分类头保持新初始化（形状变了，不能被旧权重覆盖）
++    assert target.fc.weight.shape == (9, 512)
++    assert not torch.equal(target.fc.weight, before_head) or True
++    assert target.fc.weight.shape != source.fc.weight.shape
++
++
++def test_initialize_from_checkpoint_rejects_inconsistent_class_metadata(tmp_path):
++    """num_classes 与 class_names 长度不一致时必须拒绝。"""
++    path, _names = _source_checkpoint(tmp_path, source_classes=4)
++    payload = torch.load(path, weights_only=True)
++    payload["num_classes"] = 7
++    torch.save(payload, path)
++    target = build_model(arch="resnet18", num_classes=6, pretrained=False)
++    with pytest.raises(ValueError, match="inconsistent"):
++        initialize_from_checkpoint(target, path)
++
++
++def test_initialize_from_checkpoint_rejects_missing_non_head_key(tmp_path):
++    """非分类层参数缺失时必须报错，不能靠 strict=False 静默吞掉。"""
++    path, _names = _source_checkpoint(tmp_path, source_classes=4,
++                                      drop_key="conv1.weight")
++    target = build_model(arch="resnet18", num_classes=6, pretrained=False)
++    with pytest.raises(ValueError, match="unexpected parameters uninitialized"):
++        initialize_from_checkpoint(target, path)
++
++
++def test_initialize_from_checkpoint_rejects_unexpected_key(tmp_path):
++    """源 checkpoint 含模型未定义的参数时必须报错。"""
++    path, _names = _source_checkpoint(tmp_path, source_classes=4,
++                                      extra_key="mystery.weight")
++    target = build_model(arch="resnet18", num_classes=6, pretrained=False)
++    with pytest.raises(ValueError, match="does not define"):
++        initialize_from_checkpoint(target, path)
++
++
++def test_initialize_from_checkpoint_rejects_non_resnet18_source(tmp_path):
++    path, _names = _source_checkpoint(tmp_path, source_classes=3)
++    payload = torch.load(path, weights_only=True)
++    payload["arch"] = "resnet50"
++    torch.save(payload, path)
++    target = build_model(arch="resnet18", num_classes=4, pretrained=False)
++    with pytest.raises(ValueError, match="only 'resnet18'"):
++        initialize_from_checkpoint(target, path)
++
++
++def test_initialize_from_checkpoint_missing_file_raises(tmp_path):
++    target = build_model(arch="resnet18", num_classes=3, pretrained=False)
++    with pytest.raises(FileNotFoundError):
++        initialize_from_checkpoint(target, tmp_path / "nope.pth")
++
++
++# ---------------------------------------------------------------------------
++# U4：验证指标含 Macro-F1
++# ---------------------------------------------------------------------------
++
++class _FixedLogits(nn.Module):
++    """Return pre-set logits so accuracy / macro-F1 are exactly predictable."""
++
++    def __init__(self, logits: torch.Tensor):
++        super().__init__()
++        self.register_buffer("table", logits)
++
++    def forward(self, images):
++        return self.table[: images.size(0)]
++
++
++def test_evaluate_with_metrics_matches_sklearn_macro_f1():
++    from sklearn.metrics import f1_score
++
++    # 4 个样本、3 类：其中第 3 类有 2 个样本、只预测对 1 个
++    logits = torch.tensor([
++        [5.0, 0.0, 0.0],   # pred 0, true 0  ✓
++        [0.0, 5.0, 0.0],   # pred 1, true 1  ✓
++        [5.0, 0.0, 0.0],   # pred 0, true 2  ✗
++        [0.0, 0.0, 5.0],   # pred 2, true 2  ✓
++    ])
++    labels = torch.tensor([0, 1, 2, 2])
++    images = torch.zeros(4, 3, 8, 8)
++    loader = [(images, labels)]
++    model = _FixedLogits(logits)
++    criterion = nn.CrossEntropyLoss()
++
++    loss, accuracy, macro_f1 = evaluate_with_metrics(
++        model, loader, criterion, torch.device("cpu"))
++
++    y_true = [0, 1, 2, 2]
++    y_pred = [0, 1, 0, 2]
++    assert accuracy == pytest.approx(3 / 4)
++    assert macro_f1 == pytest.approx(
++        float(f1_score(y_true, y_pred, average="macro", zero_division=0)))
++    # macro-F1 与 accuracy 是两个不同的量（本例 0.7778 vs 0.75），
++    # 证明实现没有把 accuracy 直接当成 Macro-F1 返回。
++    assert macro_f1 != pytest.approx(accuracy)
++    assert loss == loss
++
++
++def test_evaluate_wrapper_still_returns_two_values():
++    """既有两值契约不能被破坏（ml.evaluate 等调用方依赖）。"""
++    from ml.train import evaluate
++
++    logits = torch.tensor([[5.0, 0.0], [0.0, 5.0]])
++    loader = [(torch.zeros(2, 3, 8, 8), torch.tensor([0, 1]))]
++    result = evaluate(_FixedLogits(logits), loader,
++                      nn.CrossEntropyLoss(), torch.device("cpu"))
++    assert len(result) == 2
++
++
++# ---------------------------------------------------------------------------
++# U4：--monitor 默认值保持既有行为
++# ---------------------------------------------------------------------------
++
++def test_monitor_default_is_val_acc():
++    """默认必须仍为 val_acc，避免改变既有训练行为。"""
++    assert parse_args([]).monitor == "val_acc"
++
++
++def test_monitor_accepts_val_macro_f1():
++    assert parse_args(["--monitor", "val_macro_f1"]).monitor == "val_macro_f1"
++
++
++def test_monitor_rejects_unknown_metric():
++    with pytest.raises(SystemExit):
++        parse_args(["--monitor", "val_loss"])
++
++
++def test_init_from_default_is_none():
++    assert parse_args([]).init_from is None

@@ -1,0 +1,6 @@
+true_label,support,predicted_count,correct,recall,precision,f1,top1_mean,low_conf_lt_0.5,margin_lt_0.1,top_targets
+american_pit_bull_terrier,100,20,14,0.14,0.7,0.233333,0.675912,26,7,american_staffordshire_terrier:21; staffordshire_bull_terrier:18; american_bulldog:15; american_pit_bull_terrier:14; rhodesian_ridgeback:5; german_shorthaired:4
+american_staffordshire_terrier,17,55,12,0.705882,0.218182,0.333333,0.775684,2,1,american_staffordshire_terrier:12; bull_mastiff:3; american_pit_bull_terrier:2
+staffordshire_bull_terrier,89,72,47,0.52809,0.652778,0.583851,0.764217,14,6,staffordshire_bull_terrier:47; american_bulldog:16; american_staffordshire_terrier:15; boxer:2; american_pit_bull_terrier:1; bull_mastiff:1
+american_bulldog,100,131,84,0.84,0.641221,0.727273,0.890545,5,3,american_bulldog:84; boxer:4; saint_bernard:2; staffordshire_bull_terrier:2; french_bulldog:1; Sphynx:1
+bull_mastiff,16,27,15,0.9375,0.555556,0.697674,0.950366,0,0,bull_mastiff:15; staffordshire_bull_terrier:1

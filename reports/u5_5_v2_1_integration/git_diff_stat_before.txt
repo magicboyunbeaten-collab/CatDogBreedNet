@@ -1,0 +1,13 @@
+﻿ backend/app/config.py                        |  17 ++
+ backend/app/main.py                          |   3 +-
+ backend/app/routes/predict.py                |  11 ++
+ backend/app/schemas.py                       |  45 ++++++
+ backend/app/services/predictor.py            |  17 +-
+ frontend/src/components/PredictionResult.vue | 215 +++++++++++++++++++++++++-
+ frontend/src/utils/breedNames.js             |  24 ++-
+ frontend/tests/breedNames.test.js            |  34 ++++
+ ml/predict.py                                |  17 +-
+ ml/predictor.py                              |  11 +-
+ ml/train.py                                  | 222 +++++++++++++++++++++++++--
+ tests/test_train_extensions.py               | 182 +++++++++++++++++++++-
+ 12 files changed, 772 insertions(+), 26 deletions(-)

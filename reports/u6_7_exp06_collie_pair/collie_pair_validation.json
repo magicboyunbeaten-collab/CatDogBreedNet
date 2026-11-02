@@ -1,0 +1,377 @@
+{
+  "generated_at": "2026-10-21T07:13:55.783194+00:00",
+  "weights": "artifacts\\v2_2_border_collie_exp06_resolution256_lowlr_seed42\\best_model.pth",
+  "image_size": 256,
+  "split": "val",
+  "split_total": 2079,
+  "test_split_access_count": 0,
+  "definition": {
+    "pair_mass": "p_collie + p_border_collie（完整 136 维 softmax）",
+    "pair_margin": "abs(p_collie - p_border_collie)，v1 使用的绝对分差",
+    "pair_share": "min(p_collie, p_border_collie) / pair_mass，组内相对份额；与 softmax 绝对尺度无关",
+    "precondition": "原始 Top-1 必须属于 {collie, border_collie}"
+  },
+  "top1_in_pair": {
+    "count": 36,
+    "true_pair_total": 31,
+    "note": "前置条件挡住的数量 = true_pair_total - top1_in_pair 中真实属于两类的图；用于区分『前置条件导致无法触发』与『绝对阈值导致无法触发』"
+  },
+  "target_class_confusion": {
+    "collie": {
+      "support": 16,
+      "correct": 11,
+      "accuracy": 0.6875,
+      "confused_with_sibling": 4
+    },
+    "border_collie": {
+      "support": 15,
+      "correct": 13,
+      "accuracy": 0.866667,
+      "confused_with_sibling": 1
+    }
+  },
+  "legacy_rule": {
+    "rule": "top1 in pair AND pair_mass >= 0.3 AND pair_margin <= 0.3",
+    "triggered": 0,
+    "trigger_rate_overall": 0.0,
+    "triggered_true_in_pair": 0,
+    "triggered_true_out_of_pair": 0,
+    "true_label_breakdown": {},
+    "triggered_images": []
+  },
+  "share_rule_grid": {
+    "rule_template": "top1 in pair AND pair_mass >= 0.3 AND pair_share >= theta",
+    "grid": {
+      "0.10": {
+        "triggered": 6,
+        "trigger_rate_overall": 0.002886,
+        "triggered_true_in_pair": 6,
+        "triggered_true_out_of_pair": 0,
+        "true_label_breakdown": {
+          "border_collie": 6
+        },
+        "triggered_images": [
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_204.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.77148444,
+            "pair_margin": 0.59881907,
+            "pair_share": 0.11190464
+          },
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_321.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.97954744,
+            "pair_margin": 0.76369375,
+            "pair_share": 0.11018031
+          },
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_416.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.99521279,
+            "pair_margin": 0.40563715,
+            "pair_share": 0.29620582
+          },
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_5047.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.80893973,
+            "pair_margin": 0.64351377,
+            "pair_share": 0.10224863
+          },
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_549.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.98363189,
+            "pair_margin": 0.57882006,
+            "pair_share": 0.20577405
+          },
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_884.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.63830402,
+            "pair_margin": 0.32813826,
+            "pair_share": 0.24296084
+          }
+        ]
+      },
+      "0.15": {
+        "triggered": 3,
+        "trigger_rate_overall": 0.001443,
+        "triggered_true_in_pair": 3,
+        "triggered_true_out_of_pair": 0,
+        "true_label_breakdown": {
+          "border_collie": 3
+        },
+        "triggered_images": [
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_416.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.99521279,
+            "pair_margin": 0.40563715,
+            "pair_share": 0.29620582
+          },
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_549.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.98363189,
+            "pair_margin": 0.57882006,
+            "pair_share": 0.20577405
+          },
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_884.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.63830402,
+            "pair_margin": 0.32813826,
+            "pair_share": 0.24296084
+          }
+        ]
+      },
+      "0.20": {
+        "triggered": 3,
+        "trigger_rate_overall": 0.001443,
+        "triggered_true_in_pair": 3,
+        "triggered_true_out_of_pair": 0,
+        "true_label_breakdown": {
+          "border_collie": 3
+        },
+        "triggered_images": [
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_416.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.99521279,
+            "pair_margin": 0.40563715,
+            "pair_share": 0.29620582
+          },
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_549.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.98363189,
+            "pair_margin": 0.57882006,
+            "pair_share": 0.20577405
+          },
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_884.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.63830402,
+            "pair_margin": 0.32813826,
+            "pair_share": 0.24296084
+          }
+        ]
+      },
+      "0.25": {
+        "triggered": 1,
+        "trigger_rate_overall": 0.000481,
+        "triggered_true_in_pair": 1,
+        "triggered_true_out_of_pair": 0,
+        "true_label_breakdown": {
+          "border_collie": 1
+        },
+        "triggered_images": [
+          {
+            "image_path": "data/v2_processed/val/border_collie/n02106166_416.jpg",
+            "true_label": "border_collie",
+            "top1_label": "border_collie",
+            "pair_mass": 0.99521279,
+            "pair_margin": 0.40563715,
+            "pair_share": 0.29620582
+          }
+        ]
+      },
+      "0.30": {
+        "triggered": 0,
+        "trigger_rate_overall": 0.0,
+        "triggered_true_in_pair": 0,
+        "triggered_true_out_of_pair": 0,
+        "true_label_breakdown": {},
+        "triggered_images": []
+      },
+      "0.35": {
+        "triggered": 0,
+        "trigger_rate_overall": 0.0,
+        "triggered_true_in_pair": 0,
+        "triggered_true_out_of_pair": 0,
+        "true_label_breakdown": {},
+        "triggered_images": []
+      },
+      "0.40": {
+        "triggered": 0,
+        "trigger_rate_overall": 0.0,
+        "triggered_true_in_pair": 0,
+        "triggered_true_out_of_pair": 0,
+        "true_label_breakdown": {},
+        "triggered_images": []
+      }
+    }
+  },
+  "target_class_share_distribution": [
+    {
+      "pair_share": 0.29620582,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_416.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.24296084,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_884.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.20577405,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_549.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.11190464,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_204.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.11018031,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_321.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.10224863,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_5047.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.09119295,
+      "image_path": "data/v2_processed/val/collie/n02106030_15771.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.06214477,
+      "image_path": "data/v2_processed/val/collie/n02106030_14677.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.0536888,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_930.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.04209199,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_340.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.03564518,
+      "image_path": "data/v2_processed/val/collie/n02106030_10057.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.0346787,
+      "image_path": "data/v2_processed/val/collie/n02106030_10246.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.02464027,
+      "image_path": "data/v2_processed/val/collie/n02106030_16186.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.02258427,
+      "image_path": "data/v2_processed/val/collie/n02106030_15619.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.01659237,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_7454.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.00962681,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_1983.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.00912729,
+      "image_path": "data/v2_processed/val/collie/n02106030_17923.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.00818392,
+      "image_path": "data/v2_processed/val/collie/n02106030_19433.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.00581983,
+      "image_path": "data/v2_processed/val/collie/n02106030_18142.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.00427299,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_7543.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.00241022,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_7074.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.00229022,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_2000.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.00099976,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_1663.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.00062123,
+      "image_path": "data/v2_processed/val/border_collie/n02106166_3429.jpg",
+      "true_label": "border_collie"
+    },
+    {
+      "pair_share": 0.00045622,
+      "image_path": "data/v2_processed/val/collie/n02106030_14736.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.00038148,
+      "image_path": "data/v2_processed/val/collie/n02106030_17232.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.00036652,
+      "image_path": "data/v2_processed/val/collie/n02106030_15074.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 0.00018089,
+      "image_path": "data/v2_processed/val/collie/n02106030_5041.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 6.15e-05,
+      "image_path": "data/v2_processed/val/collie/n02106030_16188.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 1.354e-05,
+      "image_path": "data/v2_processed/val/collie/n02106030_16671.jpg",
+      "true_label": "collie"
+    },
+    {
+      "pair_share": 4e-08,
+      "image_path": "data/v2_processed/val/collie/n02106030_16181.jpg",
+      "true_label": "collie"
+    }
+  ],
+  "evidence_csv": "reports/u6_7_exp06_collie_pair/raw_eval/val_pair_256.csv"
+}
